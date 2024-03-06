@@ -17,7 +17,10 @@ const colorsLight = {
 	subHeading:'#8F8F94',
 	loginBtnTextColor:'#31313F',
 	termsLinkColor:'#27D4FA',
-	bottomTabBackground:'#22222E'
+	bottomTabBackground:'#22222E',
+	headerBackgroundColor:'#0D0D1B',
+	backButtonColor:'#96A7AF',
+	cardBackgroundColor:'#222230',
 } as const;
 
 const colorsDark = {
@@ -30,9 +33,10 @@ const colorsDark = {
 	purple500: '#A6A4F0',
 	purple100: '#252732',
 	purple50: '#1B1A23',
+	screenBackgroundColor: "#09070E",
 } as const;
 
-const sizes = [12, 16, 24, 32, 40, 80] as const;
+const sizes = [12,14, 16,18, 24, 32, 40, 80] as const;
 
 export const config = {
 	colors: colorsLight,
@@ -49,7 +53,7 @@ export const config = {
 	},
 	navigationColors: {
 		...DarkTheme.colors,
-		background: colorsLight.gray50,
+		background: colorsLight.screenBackgroundColor,
 		card: colorsLight.gray50,
 	},
 	variants: {

@@ -54,13 +54,6 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   };
 
-  const openTermsAndCondition = () => {
-    Linking.openURL("https://www.examfactor.com/terms-and-conditions/");
-  };
-
-  const openPrivacyPolicy = () => {
-    Linking.openURL("https://www.examfactor.com/privacy-policy/");
-  };
 
   const handleUsernameLogin = () => {
     navigation.reset({
@@ -249,7 +242,7 @@ const LoginScreen = () => {
             </KeyboardAvoidingView>
           </View>
           <View style={{ marginTop: "4%" }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("ForgotPasswordScreen")}>
               <Text
                 style={[
                   fonts.size_16,
@@ -279,7 +272,7 @@ const LoginScreen = () => {
               </Text>
               <TouchableOpacity
                 style={{ marginRight: "2%" }}
-                onPress={openTermsAndCondition}
+                // onPress={openTermsAndCondition}
               >
                 <Text
                   style={[
@@ -298,7 +291,9 @@ const LoginScreen = () => {
               >
                 and
               </Text>
-              <TouchableOpacity onPress={openPrivacyPolicy}>
+              <TouchableOpacity 
+              // onPress={openPrivacyPolicy}
+              >
                 <Text
                   style={[
                     fonts.size_12,

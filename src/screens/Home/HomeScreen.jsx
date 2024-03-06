@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
+import { Header, SafeScreen } from "@/components/template";
 
 const HomeScreen = () => {
   const {
@@ -14,15 +15,11 @@ const HomeScreen = () => {
     backgrounds,
   } = useTheme();
   return (
-    <View
-      style={[
-        backgrounds.screenBackgroundColor,
-        layout.paddingForFullScreen,
-        layout.flex_1,
-      ]}
-    >
-      <Text>HomeScreen</Text>
-    </View>
+    <SafeScreen>
+      <View style={[{backgroundColor:colors.headerBackgroundColor}]}>
+        <Header/>
+      </View>
+    </SafeScreen>
   );
 };
 
