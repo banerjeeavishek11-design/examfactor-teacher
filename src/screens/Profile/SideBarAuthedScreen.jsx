@@ -21,6 +21,8 @@ import Teacher from "@/theme/assets/images/teacher.png";
 import ClassTeacher from "@/theme/assets/images/classteacher.png"
 import { Divider } from "react-native-paper";
 import ChangeRoleBottomSheet from "@/components/BottomSheet/ChangeRoleBottomSheet";
+import RateUsBottomSheet from "@/components/BottomSheet/RateUsBottomSheet";
+
 
 const SideBarAuthedScreen = (props) => {
   // console.log('first',props)
@@ -57,7 +59,16 @@ const SideBarAuthedScreen = (props) => {
     setChangeRoleBottomSheetVisible(false)
   }
 
+  const openRateUsModal = ()=>{
+    setRateUsModalVisible(true)
+  }
+
+  const closeRateUsModal = ()=>{
+    setRateUsModalVisible(false)
+  }
+
   const [teacher, setTeacher] = useState(true);
+  const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
 
   const toggleTeacher = ()=>{
     setTeacher((prev)=> !prev)
@@ -256,6 +267,7 @@ const SideBarAuthedScreen = (props) => {
             },
           ]}
           //   onPress={() => navigation.navigate("SupportScreen")}
+          onPress={openRateUsModal}
         >
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
@@ -308,7 +320,7 @@ const SideBarAuthedScreen = (props) => {
               marginTop: "3%",
             },
           ]}
-          //   onPress={() => navigation.navigate("SupportScreen")}
+            onPress={() => navigation.navigate("SupportScreen")}
         >
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
@@ -361,7 +373,7 @@ const SideBarAuthedScreen = (props) => {
               marginTop: "3%",
             },
           ]}
-          //   onPress={() => navigation.navigate("SupportScreen")}
+            onPress={() => navigation.navigate("AppGuideScreen")}
         >
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
@@ -479,6 +491,10 @@ const SideBarAuthedScreen = (props) => {
           changeRoleBottomSheetVisible={changeRoleBottomSheetVisible}
           teacher = {teacher}
           toggleTeacher={toggleTeacher}
+        />
+        <RateUsBottomSheet
+        closeModal={closeRateUsModal}
+        visible={rateUsModalVisible}
         />
       </View>
     </SafeScreen>

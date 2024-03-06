@@ -18,6 +18,7 @@ const HomeScreen = () => {
     <SafeScreen>
       <View style={[{backgroundColor:colors.headerBackgroundColor}]}>
         <Header/>
+
       </View>
     </SafeScreen>
   );
