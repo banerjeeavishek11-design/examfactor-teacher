@@ -44,9 +44,6 @@ const LoginScreen = () => {
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-
-s
-
   const handleUsernameLogin = () => {
     navigation.reset({
       index: 0,
@@ -247,7 +244,7 @@ s
               </Text>
               <TouchableOpacity
                 style={{ marginRight: "2%" }}
-                onPress={openTermsAndCondition}
+                // onPress={openTermsAndCondition}
               >
                 <Text
                   style={[
@@ -266,7 +263,9 @@ s
               >
                 and
               </Text>
-              <TouchableOpacity onPress={openPrivacyPolicy}>
+              <TouchableOpacity 
+              // onPress={openPrivacyPolicy}
+              >
                 <Text
                   style={[
                     fonts.size_12,

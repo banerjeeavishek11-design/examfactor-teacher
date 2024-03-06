@@ -36,7 +36,7 @@ const colorsDark = {
 	screenBackgroundColor: "#09070E",
 } as const;
 
-const sizes = [12,14, 16,18, 24, 32, 40, 80] as const;
+const sizes = [12,14, 16,18,20, 24, 32, 40, 80] as const;
 
 export const config = {
 	colors: colorsLight,
