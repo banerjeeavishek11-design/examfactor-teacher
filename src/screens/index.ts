@@ -6,3 +6,7 @@ export { default as HomeScreen } from './Home/HomeScreen';
 export { default as SchoolWorkScreen } from './SchoolWork/SchoolWorkScreen';
 export { default as ReportsScreen } from './Reports/ReportsScreen';
 export { default as ActivateScreen} from './Activate/ActivateScreen';
+export { default as ForgotPasswordScreen} from './Login/ForgotPasswordScreen';
+export { default as ForgotPasswordSuccessfulScreen} from './Login/ForgotPasswordSuccessfulScreen';
+export { default as SideBarAuthedScreen} from './Profile/SideBarAuthedScreen';
+export { default as ProfileDetailsScreen} from './Profile/ProfileDetailsScreen';

@@ -81,8 +81,15 @@ export default {
 	paddingForFullScreen: {
 		padding: '4%',
 	  },
+	  paddingForCard: {
+		padding: '4%',
+	  },
 	  display: {
 		display: 'flex'
+	  },
+	  rowHCenter: {
+		flexDirection: 'row',
+		alignItems: 'center',
 	  },
   
 } as const satisfies Record<string, ViewStyle>;

@@ -45,13 +45,7 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   };
 
-  const openTermsAndCondition = () => {
-    Linking.openURL("https://www.examfactor.com/terms-and-conditions/");
-  };
-
-  const openPrivacyPolicy = () => {
-    Linking.openURL("https://www.examfactor.com/privacy-policy/");
-  };
+s
 
   const handleUsernameLogin = () => {
     navigation.reset({
@@ -223,7 +217,7 @@ const LoginScreen = () => {
             </View>
           </KeyboardAvoidingView>
           <View style={{ marginTop: "4%" }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("ForgotPasswordScreen")}>
               <Text
                 style={[
                   fonts.size_16,

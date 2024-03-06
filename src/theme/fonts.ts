@@ -30,8 +30,14 @@ export const staticFontStyles = {
 	bold: {
 		fontWeight: 'bold',
 	},
-	small:{
+	fontWeight_small:{
 		fontWeight:'400'
+	},
+	fontWeight_extraSmall:{
+     fontWeight:'800'
+	},
+	fontWeignt_600:{
+		fontWeight:'600'
 	},
 	uppercase: {
 		textTransform: 'uppercase',

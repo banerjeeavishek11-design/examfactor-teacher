@@ -29,10 +29,8 @@ function ApplicationNavigator() {
 			<Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
 				<Stack.Screen name="Startup" component={Startup} />
 				<Stack.Screen name="Example" component={Example} />
-				<Stack.Screen name="LandingScreen" component={LandingScreen} />
-				<Stack.Screen name="LoginScreen" component={LoginScreen} />
-				<Stack.Screen name="AuthorizedStack" component={AuthorizedStack} />
 				<Stack.Screen name="UnAuthorizedStack" component={UnAuthorizedStack} />
+				<Stack.Screen name="AuthorizedStack" component={AuthorizedStack} />
 			</Stack.Navigator>
 			{/* </View> */}
 		</NavigationContainer>
