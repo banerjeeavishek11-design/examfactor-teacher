@@ -18,8 +18,9 @@ import AppGuide from "@/theme/assets/images/appguide.png";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import User from "@/theme/assets/images/user.png";
 import Teacher from "@/theme/assets/images/teacher.png";
+import ClassTeacher from "@/theme/assets/images/classteacher.png"
 import { Divider } from "react-native-paper";
-import ChangeRoleBottomSheet from "@/components/template/BottomSheet/ChangeRoleBottomSheet";
+import ChangeRoleBottomSheet from "@/components/BottomSheet/ChangeRoleBottomSheet";
 
 const SideBarAuthedScreen = (props) => {
   // console.log('first',props)
@@ -49,9 +50,22 @@ const SideBarAuthedScreen = (props) => {
     Linking.openURL("https://www.examfactor.com/privacy-policy/");
   };
 
+  const openModal = ()=>{
+    setChangeRoleBottomSheetVisible(true)
+  }
+  const closeModal = ()=>{
+    setChangeRoleBottomSheetVisible(false)
+  }
+
+  const [teacher, setTeacher] = useState(true);
+
+  const toggleTeacher = ()=>{
+    setTeacher((prev)=> !prev)
+  }
+
   return (
     <SafeScreen>
-      <View style={[layout.paddingForFullScreen]}>
+      <View style={[layout.paddingForFullScreen,{flex:1}]}>
         <TouchableOpacity onPress={closeDrawer}>
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
@@ -71,10 +85,10 @@ const SideBarAuthedScreen = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        {/* <DrawerContentScrollView
+        <DrawerContentScrollView
           {...props}
           showsVerticalScrollIndicator={false}
-        > */}
+        >
         <View
           style={[
             layout.fullWidth,
@@ -188,7 +202,7 @@ const SideBarAuthedScreen = (props) => {
               <ImageVariant
                 testID="brand-img"
                 style={{ width: 15, height: 22 }}
-                source={Teacher}
+                source={teacher ? Teacher : ClassTeacher}
                 resizeMode="contain"
               />
               <Text
@@ -203,7 +217,7 @@ const SideBarAuthedScreen = (props) => {
               </Text>
             </View>
             <TouchableOpacity
-              onPress={() => setChangeRoleBottomSheetVisible(true)}
+              onPress={() => openModal()}
             >
               <Text
                 style={[
@@ -459,11 +473,13 @@ const SideBarAuthedScreen = (props) => {
             APP VERSION 123
           </Text>
         </View>
-        {/* <ChangeRoleBottomSheet
-          setChangeRoleBottomSheetVisible={setChangeRoleBottomSheetVisible}
-          changeRoleBottomSheetVisibl={changeRoleBottomSheetVisible}
-        /> */}
-        {/* </DrawerContentScrollView> */}
+        </DrawerContentScrollView>
+        <ChangeRoleBottomSheet
+          closeModal={closeModal}
+          changeRoleBottomSheetVisible={changeRoleBottomSheetVisible}
+          teacher = {teacher}
+          toggleTeacher={toggleTeacher}
+        />
       </View>
     </SafeScreen>
   );
