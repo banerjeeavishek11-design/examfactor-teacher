@@ -45,7 +45,6 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   };
 
-s
 
   const handleUsernameLogin = () => {
     navigation.reset({
@@ -247,7 +246,7 @@ s
               </Text>
               <TouchableOpacity
                 style={{ marginRight: "2%" }}
-                onPress={openTermsAndCondition}
+                // onPress={openTermsAndCondition}
               >
                 <Text
                   style={[
@@ -266,7 +265,9 @@ s
               >
                 and
               </Text>
-              <TouchableOpacity onPress={openPrivacyPolicy}>
+              <TouchableOpacity 
+              // onPress={openPrivacyPolicy}
+              >
                 <Text
                   style={[
                     fonts.size_12,
