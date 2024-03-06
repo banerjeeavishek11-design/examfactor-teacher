@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
@@ -16,6 +17,14 @@ import rightArrow from "@/theme/assets/images/rightarrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
+import {
+  moderateScale,
+  moderateVerticalScale,
+  verticalScale,
+} from "react-native-size-matters";
+
+const screenWidth = Dimensions.get("window").width;
+const isTablet = screenWidth >= 600;
 
 const LoginScreen = () => {
   const {
@@ -60,19 +69,34 @@ const LoginScreen = () => {
     });
   };
 
+  console.log("Istablet::", isTablet);
+
   return (
+    <View style={[backgrounds.screenBackgroundColor,layout.flex_1]}>
     <View
       style={[
         backgrounds.screenBackgroundColor,
         layout.paddingForFullScreen,
         layout.flex_1,
+        isTablet
+          ? {
+              justifyContent: "center",
+              alignSelf: 'center',
+              alignItems: "flex-start",
+              width: moderateScale(300),
+              // paddingBottom: verticalScale(40),
+            }
+          : null,
       ]}
     >
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
         <View style={{ marginTop: "30%" }}>
           <ImageVariant
             testID="brand-img"
-            style={{ width: 172, height: 175 }}
+            style={{
+              width: moderateScale(80),
+              height: moderateVerticalScale(80),
+            }}
             source={Logo}
             resizeMode="contain"
           />
@@ -98,59 +122,60 @@ const LoginScreen = () => {
               Login with Username & Password
             </Text>
           </View>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            enabled={true}
-          >
-            <View style={{ marginTop: "3%" }}>
-              <Controller
-                name="username"
-                control={control}
-                rules={{
-                  required: "This feild is required",
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View
-                    style={[
-                      layout.display,
-                      layout.row,
-                      layout.itemsCenter,
-                      styles.mobileNumberInput,
-                      {
-                        paddingHorizontal: 10,
-                        borderColor: errors.username
-                          ? "#FF575F"
-                          : "rgba(255, 255, 255, 0.3)",
-                      },
-                    ]}
-                  >
-                    <TextInput
+          <View style={isTablet ? { marginTop: moderateScale(-5) } : null}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              enabled={true}
+            >
+              <View style={{ marginTop: "3%" }}>
+                <Controller
+                  name="username"
+                  control={control}
+                  rules={{
+                    required: "This feild is required",
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View
                       style={[
-                        layout.fullWidth,
-                        layout.justifyCenter,
-                        fonts.size_16,
+                        layout.display,
+                        layout.row,
+                        layout.itemsCenter,
+                        styles.mobileNumberInput,
                         {
-                          color: colors.white,
-                          textAlign: "left",
-                          paddingLeft: "0%",
+                          paddingHorizontal: 10,
+                          borderColor: errors.username
+                            ? "#FF575F"
+                            : "rgba(255, 255, 255, 0.3)",
                         },
                       ]}
-                      placeholder="Username"
-                      placeholderTextColor="#94939B"
-                      onBlur={onBlur}
-                      // onChangeText={(value) => {
-                      //   onChange(value);
-                      //   setTextInputValues((prevState) => ({
-                      //     ...prevState,
-                      //     username: value,
-                      //   }));
-                      // }}
-                      // value={textInputValues.username}
-                    />
-                  </View>
-                )}
-              />
-              {/* {errors.username && (
+                    >
+                      <TextInput
+                        style={[
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.white,
+                            textAlign: "left",
+                            paddingLeft: "0%",
+                          },
+                        ]}
+                        placeholder="Username"
+                        placeholderTextColor="#94939B"
+                        onBlur={onBlur}
+                        // onChangeText={(value) => {
+                        //   onChange(value);
+                        //   setTextInputValues((prevState) => ({
+                        //     ...prevState,
+                        //     username: value,
+                        //   }));
+                        // }}
+                        // value={textInputValues.username}
+                      />
+                    </View>
+                  )}
+                />
+                {/* {errors.username && (
                 <Text
                   style={{
                     color: "#FF575F",
@@ -160,58 +185,58 @@ const LoginScreen = () => {
                 </Text>
               )} */}
 
-              <Controller
-                name="password"
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "this feild is required",
-                  },
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View
-                    style={[
-                      layout.display,
-                      layout.row,
-                      layout.itemsCenter,
-                      styles.mobileNumberInput,
-                      {
-                        paddingHorizontal: 10,
-                        borderColor: errors.username
-                          ? "#FF575F"
-                          : "rgba(255, 255, 255, 0.3)",
-                      },
-                    ]}
-                  >
-                    <TextInput
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "this feild is required",
+                    },
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <View
                       style={[
-                        layout.fullWidth,
-                        layout.justifyCenter,
-                        fonts.size_16,
+                        layout.display,
+                        layout.row,
+                        layout.itemsCenter,
+                        styles.mobileNumberInput,
                         {
-                          color: colors.white,
-                          textAlign: "left",
-                          paddingLeft: "0%",
+                          paddingHorizontal: 10,
+                          borderColor: errors.username
+                            ? "#FF575F"
+                            : "rgba(255, 255, 255, 0.3)",
                         },
                       ]}
-                      placeholder="Password"
-                      placeholderTextColor="#94939B"
-                      secureTextEntry={true}
-                      //   onBlur={onBlur}
-                      //   onChangeText={(value) => {
-                      //     onChange(value);
-                      //     setTextInputValues((prevState) => ({
-                      //       ...prevState,
-                      //       password: value,
-                      //     }));
-                      //   }}
-                      //   value={textInputValues.password}
-                    />
-                  </View>
-                )}
-              />
-              {/* {errors.password && (
+                    >
+                      <TextInput
+                        style={[
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.white,
+                            textAlign: "left",
+                            paddingLeft: "0%",
+                          },
+                        ]}
+                        placeholder="Password"
+                        placeholderTextColor="#94939B"
+                        secureTextEntry={true}
+                        //   onBlur={onBlur}
+                        //   onChangeText={(value) => {
+                        //     onChange(value);
+                        //     setTextInputValues((prevState) => ({
+                        //       ...prevState,
+                        //       password: value,
+                        //     }));
+                        //   }}
+                        //   value={textInputValues.password}
+                      />
+                    </View>
+                  )}
+                />
+                {/* {errors.password && (
                 <Text
                 style={{
                   color: "#FF575F",
@@ -220,8 +245,9 @@ const LoginScreen = () => {
                   This is required.
                 </Text>
               )} */}
-            </View>
-          </KeyboardAvoidingView>
+              </View>
+            </KeyboardAvoidingView>
+          </View>
           <View style={{ marginTop: "4%" }}>
             <TouchableOpacity>
               <Text
@@ -303,6 +329,7 @@ const LoginScreen = () => {
                     borderRadius: 12,
                     backgroundColor: colors.termsLinkColor,
                   },
+                  isTablet ? {width: moderateScale(220)} : null
                 ]}
               >
                 {/* <PrimaryGradient
@@ -340,6 +367,7 @@ const LoginScreen = () => {
         </View>
       </TouchableWithoutFeedback>
     </View>
+    </View>
   );
 };
 
@@ -350,7 +378,7 @@ const styles = StyleSheet.create({
     marginTop: "2%",
   },
   subheading: {
-    marginTop: "2%",
+    marginTop: isTablet ? moderateScale(5) : "2%",
   },
   mobileNumberInput: {
     width: "100%",
