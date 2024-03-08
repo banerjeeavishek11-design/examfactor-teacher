@@ -17,6 +17,7 @@ import UpArrow from "@/theme/assets/images/UpArrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import RightArrow from '@/theme/assets/images/rightarrow.png'
 import PracticeActive from "@/theme/assets/images/practiceactive.png";
+import { DrawerActions } from "@react-navigation/native";
 
 const AppGuideScreen = ({ navigation }) => {
   const [allAccordian, setAllAccordian] = useState({
@@ -75,7 +76,8 @@ const AppGuideScreen = ({ navigation }) => {
               { display: "flex" },
             ]}
           >
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => {navigation.goBack() 
+              navigation.dispatch(DrawerActions.openDrawer())}}>
               <View style={[layout.rowHCenter, layout.display]}>
                 <ImageVariant
                   testID="brand-img"

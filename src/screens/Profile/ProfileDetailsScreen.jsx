@@ -6,31 +6,61 @@ import { ImageVariant } from "@/components/atoms";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import Profile from "@/theme/assets/images/profile.png";
 import EditPersonalDetailBottomSheet from "@/components/BottomSheet/EditPersonalDetailBottomSheet";
+import ChangePasswordBottomSheet from "@/components/BottomSheet/ChangePasswordBottomSheet";
+import { DrawerActions } from "@react-navigation/native";
 
-const ProfileData = [
-  { key: "Full Name", value: "Vinay Dua" },
-  { key: "DOB", value: "18" },
-  { key: "City", value: "New Delhi" },
-  { key: "Email Address", value: "vin****a@gmail.com" },
-  { key: "Emergency Phone Number", value: "9*****32412" },
-];
+const ProfileData = {
+  fullName: "Vinay Dua",
+  dob: "18",
+  email: "vin****a@gmail.com",
+  gender: "Male",
+  city: "New Delhi",
+  mobile: "9988776655",
+  emergencyContact: "9*****32412",
+  address: "axyz, Abc Street, new delhi, pin -700001 ",
+};
 
-const ProfileDetailsScreen = ({navigation}) => {
+const ProfileDetailsScreen = ({ navigation }) => {
+  const [profileData, setProfileData] = useState(ProfileData);
+  const [
+    personalDetailBottomSheetVisible,
+    setPersonalDetailBottomSheetVisible,
+  ] = useState(false);
+  const [changePasswordBottomSheetVisible,
+    setChangePasswordBottomSheetVisible] = useState(false)
+    
+  const saveNewData = (newData)=>{
+    setProfileData(prevData => ({
+      ...prevData,
+      ...newData
+    }))
+   }
 
-  const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible ] = useState(false)
+  const openEditPersonalDetailModal = () => {
+    setPersonalDetailBottomSheetVisible(true);
+  };
+  const closeEditPersonalDetailModal = () => {
+    setPersonalDetailBottomSheetVisible(false);
+  };
 
-  const openEditPersonalDetailModal = ()=>{
-    setPersonalDetailBottomSheetVisible(true)
+  const openChangePasswordModal = ()=>{
+    setChangePasswordBottomSheetVisible(true)
   }
-  const closeEditPersonalDetailModal = ()=>{
-    setPersonalDetailBottomSheetVisible(false)
+
+  const closeChangePasswordModal = ()=>{
+    setChangePasswordBottomSheetVisible(false)
   }
 
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen, { flex: 1 }]}>
-        <TouchableOpacity onPress={()=>navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+            navigation.dispatch(DrawerActions.openDrawer());
+          }}
+        >
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
               testID="brand-img"
@@ -50,18 +80,22 @@ const ProfileDetailsScreen = ({navigation}) => {
           </View>
         </TouchableOpacity>
         <View
-          style={[layout.justifyCenter, layout.itemsCenter, { marginTop: '10%' }]}
+          style={[
+            layout.justifyCenter,
+            layout.itemsCenter,
+            { marginTop: "10%" },
+          ]}
         >
           <Image source={Profile} />
           <TouchableOpacity>
-          <Text
-            style={[
-              fonts.size_12,
-              { color: colors.termsLinkColor, marginTop: "2%" },
-            ]}
-          >
-            Add Image
-          </Text>
+            <Text
+              style={[
+                fonts.size_12,
+                { color: colors.termsLinkColor, marginTop: "2%" },
+              ]}
+            >
+              Add Image
+            </Text>
           </TouchableOpacity>
         </View>
         <View
@@ -100,39 +134,173 @@ const ProfileDetailsScreen = ({navigation}) => {
               backgroundColor: colors.cardBackgroundColor,
               borderRadius: 14,
               marginTop: "3%",
-              paddingTop: 0
+              paddingTop: 0,
             },
           ]}
         >
-          {ProfileData.map((item, index) => (
+          <View>
             <View
-              key={item}
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                index + 1 != ProfileData.length
-                  ? {
-                      borderBottomWidth: 0.5,
-                      borderBottomColor: colors.gray200,
-                      paddingVertical: "5%",
-                    }
-                  : {paddingTop: '5%'},
+                styles.dataFeild,
               ]}
             >
               <Text
-                style={[fonts.size_16,fonts.fontWeight_small, { color: colors.white, opacity: 0.4 }]}
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
               >
-                {item.key}
+                Full Name
               </Text>
               <Text
-                style={[fonts.size_16,fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
               >
-                {item.value}
+                {profileData.fullName}
               </Text>
             </View>
-          ))}
+            <View
+              style={[
+                layout.rowHCenter,
+                layout.justifyBetween,
+                styles.dataFeild,
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
+                DOB
+              </Text>
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
+              >
+                {profileData.dob}
+              </Text>
+            </View>
+            <View
+              style={[
+                layout.rowHCenter,
+                layout.justifyBetween,
+                styles.dataFeild,
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
+                Gender
+              </Text>
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
+              >
+                {profileData.gender}
+              </Text>
+            </View>
+            <View
+              style={[
+                layout.rowHCenter,
+                layout.justifyBetween,
+                styles.dataFeild,
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
+                City
+              </Text>
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
+              >
+                {profileData.city}
+              </Text>
+            </View>
+            <View
+              style={[
+                layout.rowHCenter,
+                layout.justifyBetween,
+                styles.dataFeild,
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
+                Email Address
+              </Text>
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
+              >
+                {profileData.email}
+              </Text>
+            </View>
+            <View
+              style={[
+                layout.rowHCenter,
+                layout.justifyBetween,
+                {
+                  paddingTop: "5%",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
+                Emergency Contact Number
+              </Text>
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.6 },
+                ]}
+              >
+                {profileData.emergencyContact}
+              </Text>
+            </View>
+          </View>
         </View>
-        <View style={[
+        <View
+          style={[
             layout.fullWidth,
             layout.paddingForCard,
             layout.rowHCenter,
@@ -140,46 +308,70 @@ const ProfileDetailsScreen = ({navigation}) => {
             {
               backgroundColor: colors.cardBackgroundColor,
               borderRadius: 14,
-              height: 72,
+              height: 60,
               marginTop: "5%",
             },
-          ]}>
-            <Text
-                style={[fonts.size_16,fonts.fontWeight_small, { color: colors.white, opacity: 0.4 }]}
-              >
-                Phone Number
-              </Text>
-              <Text
-                style={[fonts.size_16,fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
-              >
-                9876543210
-              </Text>
-          </View>
-          <TouchableOpacity>
-          <View
-          style={[
-            layout.rowHCenter,
-            layout.justifyBetween,
-            { marginTop: "5%" },
           ]}
         >
           <Text
             style={[
-              fonts.size_14,
-              fonts.bold,
-              { color: colors.termsLinkColor },
+              fonts.size_16,
+              fonts.fontWeight_small,
+              { color: colors.white, opacity: 0.4 },
             ]}
           >
-            CHANGE PASSWORD
+            Phone Number
           </Text>
+          <Text
+            style={[
+              fonts.size_16,
+              fonts.fontWeight_small,
+              { color: colors.white, opacity: 0.6 },
+            ]}
+          >
+            9876543210
+          </Text>
+        </View>
+        <TouchableOpacity onPress={openChangePasswordModal}>
+          <View
+            style={[
+              layout.rowHCenter,
+              layout.justifyBetween,
+              { marginTop: "5%" },
+            ]}
+          >
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.bold,
+                { color: colors.termsLinkColor },
+              ]}
+            >
+              CHANGE PASSWORD
+            </Text>
           </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
-      <EditPersonalDetailBottomSheet closeModal={closeEditPersonalDetailModal} personalDetailBottomSheetVisible={personalDetailBottomSheetVisible} />
+      <EditPersonalDetailBottomSheet
+        closeModal={closeEditPersonalDetailModal}
+        personalDetailBottomSheetVisible={personalDetailBottomSheetVisible}
+        profileData = {profileData}
+        saveNewData={saveNewData}
+      />
+      <ChangePasswordBottomSheet
+      visible={changePasswordBottomSheetVisible}
+      closeModal={closeChangePasswordModal}
+      />
     </SafeScreen>
   );
 };
 
 export default ProfileDetailsScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  dataFeild: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#BABABA",
+    paddingVertical: "5%",
+  },
+});

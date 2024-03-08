@@ -13,6 +13,7 @@ import { ImageVariant } from "@/components/atoms";
 import { SafeScreen } from "@/components/template";
 import UpArrow from "@/theme/assets/images/supportUpArrow.png";
 import DownArrow from "@/theme/assets/images/supportDownArrow.png";
+import { DrawerActions } from "@react-navigation/native";
 
 const SupportScreen = ({ navigation }) => {
   const [allAccordian, setAllAccordian] = useState({
@@ -86,7 +87,12 @@ const SupportScreen = ({ navigation }) => {
               { display: "flex" },
             ]}
           >
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+                navigation.dispatch(DrawerActions.openDrawer());
+              }}
+            >
               <View style={[layout.rowHCenter, layout.display]}>
                 <ImageVariant
                   testID="brand-img"
@@ -144,15 +150,9 @@ const SupportScreen = ({ navigation }) => {
                       </Text>
                     </View>
                     {ele.isExpand ? (
-                      <ImageVariant
-                        source={UpArrow}
-                        resizeMode="contain"
-                      />
+                      <ImageVariant source={UpArrow} resizeMode="contain" />
                     ) : (
-                      <ImageVariant
-                        source={DownArrow}
-                        resizeMode="contain"
-                      />
+                      <ImageVariant source={DownArrow} resizeMode="contain" />
                     )}
                   </View>
                   <View>

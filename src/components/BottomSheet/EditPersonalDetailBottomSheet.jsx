@@ -1,4 +1,6 @@
 import {
+  Keyboard,
+  TouchableWithoutFeedback,
   Modal,
   StyleSheet,
   Text,
@@ -9,14 +11,21 @@ import {
 } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
-// import AntDesign from 'react-native-vector-icons/AntDesign'
-import {Formik} from 'formik'
+import RightArrow from '@/theme/assets/images/rightarrow.png'
+import { Formik } from "formik";
+import { ImageVariant } from "../atoms";
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
   closeModal,
+  profileData,
+  saveNewData
 }) => {
   const { fonts, colors, layout } = useTheme();
+
+  const handleOutsideTap = () => {
+    Keyboard.dismiss();
+  };
 
   return (
     <Modal
@@ -24,61 +33,302 @@ const EditPersonalDetailBottomSheet = ({
       animationType="slide"
       transparent={true}
     >
-      <View style={[styles.modalContainer,]}>
+      <TouchableWithoutFeedback onPress={handleOutsideTap}>
+      <View style={[styles.modalContainer]}>
         <View
           style={[
             styles.bottomSheetContent,
-            { padding: "4%", backgroundColor: colors.bottomTabBackground , height: '90%'},
+            {
+              padding: "4%",
+              backgroundColor:"#1C1827",
+              height: "90%",
+            },
           ]}
         >
-            <TouchableOpacity
-              onPress={closeModal}
-              style={{ position: "absolute", top: -35, left: "98%" }}
-            >
-              {/* <AntDesign name="close" size={24} color="gray" /> */}
-              <Text style={[fonts.size_18,{color: 'white'}]} >X</Text>
-            </TouchableOpacity>
-          <ScrollView>
-
-
-            <Text style={[fonts.size_18,fonts.fontWeignt_600,{ color: "white" }]}>
-              Edit personal details
-            </Text>
+          <TouchableOpacity
+            onPress={closeModal}
+            style={{ position: "absolute", top: -35, left: "98%" }}
+          >
+            {/* <AntDesign name="close" size={24} color="gray" /> */}
+            <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
+          </TouchableOpacity>
+          <Text
+            style={[fonts.size_18, fonts.bold, { color: "white" }]}
+          >
+            Edit personal details
+          </Text>
             <Formik
-            initialValues={{
-                fullname: '',
-                dob: '',
-                gender: '',
-                city: '',
-                email: '',
-                mobile: '',
-                emergerncyContact: '',
-                address: ''
-            }}
-            onSubmit={(values)=>{
+              initialValues={{
+                fullname: "",
+                dob: "",
+                gender: "",
+                city: "",
+                email: "",
+                mobile: "",
+                emergerncyContact: "",
+                address: "",
+              }}
+              onSubmit={(values, actions) => {
+                saveNewData(values);
                 console.log(values);
-            }}
+                actions.setSubmitting(false);
+                closeModal()
+              }}
             >
-            {
-                (formikProps)=>{(
-                    <View style={{flex:1, borderColor: 'red', borderWidth: 1}}>
-                        <Text style={{color: 'white'}}>Full Name</Text>
-                        <TextInput
-                        onChangeText={formikProps.handleChange('fullname')}
-                        value={formikProps.values.fullname}
-                        />
-                        <TouchableOpacity onPress={formikProps.handleSubmit}>
-                            <Text>Submit</Text>
-                        </TouchableOpacity>
+              {({ handleChange, handleSubmit, values }) => {
+                return (
+                  <View style={{ marginTop: "8%" }}>
+                    <ScrollView style={{height: "90%"}}>
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Full Name</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                            backgroundColor: "#22222F"
+                          },
+                        ]}
+                        editable={false}
+                        placeholder={profileData.fullName}
+                        placeholderTextColor={colors.gray200}
+                        onChangeText={handleChange("fullname")}
+                        value={values.fullname}
+                      />
                     </View>
-                )}
-            }
+
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>DOB</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                          },
+                        ]}
+                        placeholder={profileData.dob}
+                        placeholderTextColor={colors.gray400}
+                        onChangeText={handleChange("dob")}
+                        value={values.dob}
+                      />
+                    </View>
+
+                    <View  style={styles.inputContainer}>
+                    <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Gender</Text>
+                        <View style={[layout.row, layout.justifyBetween,{marginTop: "2%"}]}>
+                        <TouchableOpacity
+                            style={{
+                              backgroundColor: profileData.gender === "Male" ? "#2F2B39" : "#22222F",
+                              width: "45%",
+                              paddingVertical: 12,
+                              paddingHorizontal: 12,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRadius: 14,
+                              borderWidth: 1,
+                              borderColor: profileData.gender === "Male"
+                                ? colors.gray400
+                                : "transparent",
+                            }}
+                            onPress={() => {}}
+                          >
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                layout.textCenter,
+                                {
+                                  color: profileData.gender === "Male"
+                                    ? "#7AF4FC"
+                                    : "#7A7A82",
+                                },
+                              ]}
+                            >
+                              Male
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{
+                              backgroundColor: profileData.gender !== "Male" ? "#2F2B39" : "#22222F",
+                              width: "45%",
+                              paddingHorizontal: 12,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRadius: 14,
+                              borderWidth: 1,
+                              borderColor: profileData.gender !== "Male"
+                              ? colors.gray400
+                              : "transparent",
+                            }}
+                            onPress={() => {}}
+                          >
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                layout.textCenter,
+                                {
+                                  color: profileData.gender !== "Male"
+                                    ? "#7AF4FC"
+                                    : "#7A7A82",
+                                },
+                              ]}
+                            >
+                              Female
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Email</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                            backgroundColor: "#22222F"
+                          },
+                        ]}
+                        editable={false}
+                        placeholder={profileData.email}
+                        placeholderTextColor={colors.gray200}
+                        onChangeText={handleChange("email")}
+                        value={values.email}
+                      />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Mobile Number</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                          },
+                        ]}
+                        keyboardType="phone-pad"
+                        placeholder={profileData.mobile}
+                        placeholderTextColor={colors.gray400}
+                        onChangeText={handleChange("mobile")}
+                        value={values.mobile}
+                      />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Emergency Contact Number</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                          },
+                        ]}
+                        keyboardType="phone-pad"
+                        placeholder={profileData.emergencyContact}
+                        placeholderTextColor={colors.gray400}
+                        onChangeText={handleChange("emergerncyContact")}
+                        value={values.emergerncyContact}
+                      />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <Text style={[fonts.size_18,{color: colors.white, marginBottom: '2%', opacity: 0.8}]}>Address</Text>
+                      <TextInput
+                        style={[
+                          styles.inputField,
+                          layout.fullWidth,
+                          layout.justifyCenter,
+                          // Fonts.textCenter,
+                          fonts.size_16,
+                          {
+                            color: colors.gray200,
+                            textAlign: "left",
+                            paddingLeft: "3%",
+                          },
+                        ]}
+                        placeholder={profileData.address}
+                        placeholderTextColor={colors.gray400}
+                        onChangeText={handleChange("address")}
+                        value={values.address}
+                      />
+                    </View>
+                    </ScrollView>
+                    <TouchableOpacity
+                style={[
+                  styles.buttonContainer,
+                  {
+                    height: 48,
+                    borderRadius: 12,
+                    backgroundColor: colors.termsLinkColor,
+                    position: 'fixed'
+                  },
+                ]}
+                
+              >
+                <TouchableOpacity
+                  style={[styles.submitButton, layout.justifyCenter]}
+                  onPress={handleSubmit}
+                >
+                  <View
+                    style={[layout.display, layout.row, layout.itemsCenter]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        { color: colors.loginBtnTextColor },
+                      ]}
+                    >
+                      SAVE
+                    </Text>
+                    <ImageVariant
+                      testID="brand-img"
+                      style={{ width: 16, height: 9, left: 5 }}
+                      source={RightArrow}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </TouchableOpacity>
+              </TouchableOpacity>
+
+                  </View>
+                );
+              }}
             </Formik>
-
-
-          </ScrollView>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -96,12 +346,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
-  bottomSheetContent: {
-    height: 320,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderTopWidth: 2,
-    borderColor: "#8F8F94",
+  scrollContentContainer: {
+    flexGrow: 1,
+    paddingBottom: "5%",
   },
   center: {
     display: "flex",
@@ -115,60 +362,83 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf: "center",
   },
-  line: {
-    position: "absolute",
-    top: "70%",
-    left: 18,
-    right: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: "white",
-  },
 
+  inputContainer: {
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#fff",
+    color: "white",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 16,
+  },
+  inputField: {
+    height: 48,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.3)",
+    borderRadius: 12,
+  },
+  errorText: {
+    color: "red",
+  },
+  genderContainer: {
+    flexDirection: "row",
+    marginBottom: 16,
+  },
+  genderOption: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  selectedGenderOption: {
+    backgroundColor: "blue",
+  },
+  selectedGenderText: {
+    color: "white",
+  },
+  submitButton: {
+    height: 32,
+    width: 311,
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  submitButtonText: {
+    color: "#22222D",
+    fontWeight: "bold",
+  },
+  footerContainer: {
+    justifyContent: "flex-end",
+  },
+  previousAndNextBtn: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    borderRadius: 12,
+    paddingVertical: 12,
+    marginBottom: "4%",
+    backgroundColor: "#22222F",
+  },
+  selectedOptionText: {
+    color: "blue",
+  },
   buttonContainer: {
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {
-    padding: 10,
-    paddingTop: 11,
-    width: "100%",
-    borderRadius: 9,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+  bottomSheetContent: {
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    borderTopWidth: 2,
+    borderColor: "#8F8F94",
   },
-  radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    backgroundColor: "#22222F",
-    borderRadius: 12,
-    height: 52,
-    marginTop: 5,
-    width: "100%",
-  },
-  radioButtonContainer1: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    backgroundColor: "#22222F",
-    borderRadius: 12,
-    height: 52,
-    marginTop: 8,
-    width: "100%",
-  },
-  radioButtonContainer2: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    backgroundColor: "#22222F",
-    borderRadius: 12,
-    height: 52,
-    marginTop: 8,
-  },
-  radioButtonText: {
-    marginLeft: 8,
-    color: "white",
-  },
+
 });
