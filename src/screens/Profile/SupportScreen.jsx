@@ -16,6 +16,7 @@ import DownArrow from "@/theme/assets/images/supportDownArrow.png";
 import { DrawerActions } from "@react-navigation/native";
 
 const SupportScreen = ({ navigation }) => {
+  
   const [allAccordian, setAllAccordian] = useState({
     name: "FREQUENTLY ASKED QUESTIONS",
     buttonDetails: [
@@ -63,6 +64,7 @@ const SupportScreen = ({ navigation }) => {
       },
     ],
   });
+
   const toggleExpanded = (id, isExpand) => {
     let obj = {
       ...allAccordian,
@@ -76,104 +78,100 @@ const SupportScreen = ({ navigation }) => {
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>
-      <View style={[styles.container]}>
-        <StatusBar backgroundColor="#0D0D1B" barStyle="light-content" />
-        <View style={{ padding: "4%" }}>
-          <View
-            style={[
-              layout.row,
-              layout.justifyBetween,
-              layout.itemsCenter,
-              { display: "flex" },
-            ]}
+      {/* <StatusBar backgroundColor="#0D0D1B" barStyle="light-content" /> */}
+      <View style={[layout.paddingForFullScreen]}>
+        <View
+          style={[
+            layout.row,
+            layout.justifyBetween,
+            layout.itemsCenter,
+            layout.display,
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+              navigation.dispatch(DrawerActions.openDrawer());
+            }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-                navigation.dispatch(DrawerActions.openDrawer());
-              }}
-            >
-              <View style={[layout.rowHCenter, layout.display]}>
-                <ImageVariant
-                  testID="brand-img"
-                  style={{ width: 7, height: 11 }}
-                  source={LeftArrow}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    { color: colors.backButtonColor, left: 5 },
-                  ]}
-                >
-                  Support
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <ScrollView>
-          <View style={[layout.paddingForFullScreen, { paddingTop: "4%" }]}>
-            <View style={{ marginTop: "5%" }}>
+            <View style={[layout.rowHCenter, layout.display]}>
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 7, height: 11 }}
+                source={LeftArrow}
+                resizeMode="contain"
+              />
               <Text
                 style={[
-                  fonts.size_14,
-                  fonts.fontWeignt_600,
-                  { color: colors.white, opacity: 0.4, marginBottom: "2%" },
+                  fonts.size_16,
+                  fonts.bold,
+                  { color: colors.backButtonColor, left: 5 },
                 ]}
               >
-                {allAccordian.name}
+                Support
               </Text>
             </View>
-            {allAccordian.buttonDetails.map((ele) => (
-              <View
-                style={[
-                  styles.arrowView,
-                  { backgroundColor: colors.cardBackgroundColor },
-                ]}
-                key={ele.id}
+          </TouchableOpacity>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ marginTop: "3%" }}>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.fontWeignt_600,
+                { color: colors.white, opacity: 0.4,},
+              ]}
+            >
+              {allAccordian.name}
+            </Text>
+          </View>
+          {allAccordian.buttonDetails.map((ele) => (
+            <View
+              style={[
+                styles.arrowView,
+                { backgroundColor: colors.cardBackgroundColor },
+              ]}
+              key={ele.id}
+            >
+              <TouchableOpacity
+                onPress={() => toggleExpanded(ele.id, ele.isExpand)}
               >
-                <TouchableOpacity
-                  onPress={() => toggleExpanded(ele.id, ele.isExpand)}
-                >
-                  <View style={[layout.row, layout.justifyBetween]}>
-                    <View style={{ width: "95%" }}>
+                <View style={[layout.row, layout.justifyBetween]}>
+                  <View style={{ width: "95%" }}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white },
+                      ]}
+                    >
+                      {ele.title}
+                    </Text>
+                  </View>
+                  {ele.isExpand ? (
+                    <ImageVariant source={UpArrow} resizeMode="contain" />
+                  ) : (
+                    <ImageVariant source={DownArrow} resizeMode="contain" />
+                  )}
+                </View>
+                <View>
+                  {ele.isExpand ? (
+                    <View style={{ marginTop: 12 }}>
                       <Text
                         style={[
                           fonts.size_14,
                           fonts.fontWeight_small,
-                          { color: colors.white },
+                          { color: colors.white, opacity: 0.7 },
                         ]}
                       >
-                        {ele.title}
+                        {ele.subTitle}
                       </Text>
                     </View>
-                    {ele.isExpand ? (
-                      <ImageVariant source={UpArrow} resizeMode="contain" />
-                    ) : (
-                      <ImageVariant source={DownArrow} resizeMode="contain" />
-                    )}
-                  </View>
-                  <View>
-                    {ele.isExpand ? (
-                      <View style={{ marginTop: 12 }}>
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white, opacity: 0.7 },
-                          ]}
-                        >
-                          {ele.subTitle}
-                        </Text>
-                      </View>
-                    ) : null}
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+                  ) : null}
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
         </ScrollView>
       </View>
     </SafeScreen>
@@ -183,11 +181,6 @@ const SupportScreen = ({ navigation }) => {
 export default SupportScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09070E",
-    width: "100%",
-  },
   arrowView: {
     borderRadius: 16,
     overflow: "hidden",

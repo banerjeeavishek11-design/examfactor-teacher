@@ -258,9 +258,10 @@ const LoginScreen = () => {
                 style={[
                   fonts.size_12,
                   fonts.fontWeight_small,
+                  fonts.alignCenter,
                   {
                     color: colors.white,
-                    textAlign: "center",
+              
                     marginRight: "2%",
                     opacity: 0.7,
                   },

@@ -44,7 +44,8 @@ const ForgotPasswordSuccessfulScreen = () => {
             style={[
               fonts.size_16,
               fonts.bold,
-              { color: colors.white, textAlign: "center" },
+              fonts.alignCenter,
+              { color: colors.white,},
             ]}
           >
             New Password has been sent successfully!

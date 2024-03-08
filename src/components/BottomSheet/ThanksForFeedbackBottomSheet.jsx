@@ -52,10 +52,10 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[
                     fonts.size_24,
                     fonts.fontWeignt_600,
+                    fonts.alignCenter,
                     {
                       color: colors.white,
                       marginTop: "5%",
-                      textAlign: "center",
                     },
                   ]}
                 >
@@ -73,10 +73,10 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[
                     fonts.size_14,
                     fonts.fontWeight_small,
+                    fonts.alignCenter,
                     {
                       color: colors.white,
                       width: "75%",
-                      textAlign: "center",
                       alignSelf: "center",
                       opacity: 0.6,
                     },
@@ -101,7 +101,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[styles.loginButton, layout.justifyCenter]}
                 >
                   <View
-                    style={[layout.display, layout.row, layout.itemsCenter]}
+                    style={[layout.display, layout.row, layout.itemsCenter,]}
                   >
                     <Text
                       style={[

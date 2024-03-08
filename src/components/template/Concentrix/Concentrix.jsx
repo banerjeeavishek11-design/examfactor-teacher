@@ -110,30 +110,34 @@ const Concentrix = (props) => {
             />
           </>
         )}
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <View style={[layout.itemsCenter, layout.justifyCenter]}>
           {scorePercentage ? (
             <Text
-              style={{
-                color: "white",
-                textAlign: "center",
-                marginTop: "20%",
-                fontSize: 20,
-                fontWeight: 700,
-                fontFamily: "Poppins-Bold",
-              }}
+              style={[
+                fonts.alignCenter,
+                fonts.size_20,
+                fonts.bold,
+                {
+                  color: colors.white,
+                  marginTop: "20%",
+                  fontFamily: "Poppins-Bold",
+                },
+              ]}
             >
               {scorePercentage}/100
             </Text>
           ) : (
             <Text
-              style={{
-                color: "white",
-                textAlign: "center",
-                marginTop: "20%",
-                fontSize: 20,
-                fontWeight: 700,
-                fontFamily: "Poppins-Bold",
-              }}
+              style={[
+                fonts.alignCenter,
+                fonts.size_20,
+                fonts.bold,
+                {
+                  color: colors.white,
+                  marginTop: "20%",
+                  fontFamily: "Poppins-Bold",
+                },
+              ]}
             >
               0
             </Text>
@@ -142,9 +146,9 @@ const Concentrix = (props) => {
             style={[
               fonts.size_14,
               fonts.fontWeight_small,
+              fonts.alignCenter,
               {
                 color: colors.white,
-                textAlign: "center",
                 marginTop: "2%",
                 fontFamily: "Poppins-Regular",
               },
@@ -157,9 +161,9 @@ const Concentrix = (props) => {
             style={[
               fonts.size_14,
               fonts.fontWeight_small,
+              fonts.alignCenter,
               {
                 color: colors.white,
-                textAlign: "center",
                 fontFamily: "Poppins-Regular",
               },
             ]}
@@ -171,9 +175,9 @@ const Concentrix = (props) => {
             style={[
               fonts.size_12,
               fonts.fontWeight_small,
+              fonts.alignCenter,
               {
                 color: colors.white,
-                textAlign: "center",
                 width: "55%",
                 fontFamily: "Poppins-Regular",
                 opacity: 0.5,

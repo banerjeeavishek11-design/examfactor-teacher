@@ -153,8 +153,8 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
                   ))}
                 </View>
                 <View style={styles.row}>
-                  <Text style={styles.text}>Not satisfied</Text>
-                  <Text style={styles.text}>Great</Text>
+                  <Text style={[fonts.alignCenter,{color:colors.backButtonColor}]}>Not satisfied</Text>
+                  <Text style={[fonts.alignCenter,{color:colors.backButtonColor}]}>Great</Text>
                 </View>
                 {selectedRating > 0 && (
                   <View style={{ marginTop: "8%" }}>
@@ -349,9 +349,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 4,
-  },
-  text: {
-    textAlign: "center",
-    color: "#96A7AF",
   },
 });

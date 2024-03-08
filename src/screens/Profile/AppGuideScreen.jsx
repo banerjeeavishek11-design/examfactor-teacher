@@ -13,7 +13,7 @@ import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { SafeScreen } from "@/components/template";
 import Youtube from "@/theme/assets/images/youtubeVideo.png";
-// import UpArrow from "@/theme/assets/images/UpArrow.png";
+import UpArrow from "@/theme/assets/images/uparrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import RightArrow from '@/theme/assets/images/rightarrow.png'
 import PracticeActive from "@/theme/assets/images/practiceactive.png";
@@ -135,7 +135,7 @@ const AppGuideScreen = ({ navigation }) => {
                     {ele.isExpand ? (
                       <ImageVariant
                         style={{ width: 10, height: 11 }}
-                        source={DownArrow}
+                        source={UpArrow}
                         resizeMode="contain"
                       />
                     ) : (

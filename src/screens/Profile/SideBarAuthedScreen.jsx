@@ -125,15 +125,13 @@ const SideBarAuthedScreen = (props) => {
           >
             <View style={[layout.display, layout.rowHCenter]}>
               <View
-                style={{
+                style={[layout.justifyCenter,layout.itemsCenter,{
                   height: 42,
                   width: 42,
                   borderRadius: 100,
                   opacity: 0.5,
                   backgroundColor: colors.white,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                }]}
               >
                 <ImageVariant
                   testID="brand-img"
@@ -178,7 +176,7 @@ const SideBarAuthedScreen = (props) => {
               </View>
             </View>
           </TouchableOpacity>
-          <View style={{ paddingHorizontal: "4%", alignItems: "center" }}>
+          <View style={[layout.itemsCenter,{ paddingHorizontal: "4%"}]}>
             <Divider
               style={{
                 marginTop: "0%",
@@ -425,7 +423,8 @@ const SideBarAuthedScreen = (props) => {
               style={[
                 fonts.size_14,
                 fonts.bold,
-                { color: colors.termsLinkColor, textAlign: "center" },
+                fonts.alignCenter,
+                { color: colors.termsLinkColor},
               ]}
             >
               LOGOUT
@@ -441,11 +440,11 @@ const SideBarAuthedScreen = (props) => {
                 style={[
                   fonts.size_14,
                   fonts.bold,
-
+ fonts.alignCenter,
                   {
                     color: colors.termsLinkColor,
                     marginRight: "4%",
-                    textAlign: "center",
+                  
                   },
                 ]}
               >
@@ -460,10 +459,11 @@ const SideBarAuthedScreen = (props) => {
                 style={[
                   fonts.size_14,
                   fonts.bold,
+                   fonts.alignCenter,
                   {
                     color: colors.termsLinkColor,
                     marginLeft: "4%",
-                    textAlign: "center",
+            
                   },
                 ]}
               >
@@ -475,10 +475,11 @@ const SideBarAuthedScreen = (props) => {
             style={[
               fonts.size_14,
               fonts.bold,
+               fonts.alignCenter,
               {
                 color: colors.backButtonColor,
                 marginTop: "2%",
-                textAlign: "center",
+            
               },
             ]}
           >
