@@ -21,6 +21,8 @@ const colorsLight = {
 	headerBackgroundColor:'#0D0D1B',
 	backButtonColor:'#96A7AF',
 	cardBackgroundColor:'#222230',
+	bottomSheetBackgroundColor:'#1C1827',
+	lineBackgroundColor:'#474752',
 } as const;
 
 const colorsDark = {
@@ -36,7 +38,7 @@ const colorsDark = {
 	screenBackgroundColor: "#09070E",
 } as const;
 
-const sizes = [12,14, 16,18, 24, 32, 40, 80] as const;
+const sizes = [10,12,14, 16,18,20, 24, 32, 40, 80] as const;
 
 export const config = {
 	colors: colorsLight,

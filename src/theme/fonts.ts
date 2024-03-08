@@ -39,6 +39,9 @@ export const staticFontStyles = {
 	fontWeignt_600:{
 		fontWeight:'600'
 	},
+	// fontWeignt_600:{
+	// 	fontWeight:'600'
+	// },
 	uppercase: {
 		textTransform: 'uppercase',
 	},

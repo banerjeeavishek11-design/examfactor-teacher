@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BottomtabNavigator from "./BottomtabNavigator";
 import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen } from "@/screens";
 
+
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createStackNavigator();

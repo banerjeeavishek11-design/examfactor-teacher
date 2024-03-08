@@ -53,8 +53,6 @@ const LoginScreen = () => {
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-
-
   const handleUsernameLogin = () => {
     navigation.reset({
       index: 0,

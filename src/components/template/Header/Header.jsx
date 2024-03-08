@@ -5,8 +5,9 @@ import {
   Image,
   TouchableOpacity,
   RefreshControl,
+  ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import Logo from "@/theme/assets/images/examfactorlogo.png";
@@ -14,23 +15,57 @@ import DownArrow from "@/theme/assets/images/Downarrow.png";
 import User from "@/theme/assets/images/user.png";
 import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
+import SelectClassBottomSheet from "@/components/BottomSheet/SelectClassBottomSheet";
+
 
 
 const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
-    const {
-        colors,
-        variant,
-        changeTheme,
-        layout,
-        gutters,
-        fonts,
-        components,
-        backgrounds,
-      } = useTheme();
-    const navigation = useNavigation();
+  const {
+    colors,
+    variant,
+    changeTheme,
+    layout,
+    gutters,
+    fonts,
+    components,
+    backgrounds,
+  } = useTheme();
+  const navigation = useNavigation();
+  const scrollViewRef = useRef(null);
+  const productScrollRef = useRef(null);
+
+  const [subjects, setSubjects] = useState([
+    { id: 1, subjectName: "Physics", isChecked: true },
+    { id: 2, subjectName: "Chemistry", isChecked: false },
+    { id: 3, subjectName: "Mathematics", isChecked: false },
+    { id: 4, subjectName: "Bengali", isChecked: false },
+    { id: 5, subjectName: "English", isChecked: false },
+  ]);
+  const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] =
+    useState(false);
+    const [showSelecTedClass,setShowSelectedClass] = useState('10-B')
 
   const handleOpenDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
+  };
+
+  const handleButtonPress = (index) => {
+    const updatedSubjects = subjects.map((subject, i) => {
+      if (i === index) {
+        return { ...subject, isChecked: true };
+      } else {
+        return { ...subject, isChecked: false };
+      }
+    });
+    setSubjects(updatedSubjects);
+    const buttonWidth = 100;
+    const scrollX = index * buttonWidth;
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
+    }
+    if (productScrollRef.current) {
+      productScrollRef.current?.scrollTo({ x: 0, animated: true });
+    }
   };
 
   return (
@@ -45,7 +80,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
         ]}
       >
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
             <View style={[layout.rowHCenter]}>
               <Text
                 style={[
@@ -60,7 +95,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                Class 10-B
+                Class {showSelecTedClass}
               </Text>
 
               <ImageVariant
@@ -74,7 +109,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
         </View>
         <View>
           <TouchableOpacity
-              onPress={()=>handleOpenDrawer()}
+            onPress={() => handleOpenDrawer()}
             style={[layout.rowHCenter, layout.justifyBetween, { width: "10%" }]}
           >
             <ImageVariant
@@ -92,6 +127,49 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{}}
+      >
+        <View style={[layout.display, layout.rowHCenter]}>
+          {subjects.map((ele, i) => (
+            <TouchableOpacity
+              key={i}
+              style={[
+                styles.button,
+                {
+                  borderColor: ele.isChecked ? "#27D4FA" : "#22222F",
+                  borderWidth: ele.isChecked ? 2 : 0,
+                },
+              ]}
+              onPress={() => {
+                handleButtonPress(i, ele);
+              }}
+            >
+              <Text
+                style={[
+                  ele.isChecked == true
+                    ? styles.activeButton
+                    : styles.buttonText,
+                  fonts.size_14,
+                  fonts.bold,
+                ]}
+              >
+                {ele.subjectName}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+      <SelectClassBottomSheet
+        openSelectClassBottmSheet={openSelectClassBottmSheet}
+        setOpenSelectClassBottomSheet={setOpenSelectClassBottomSheet}
+        setShowSelectedClass={setShowSelectedClass}
+        showSelecTedClass={showSelecTedClass}
+      />
     </View>
   );
 };
@@ -99,37 +177,6 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
 export default Header;
 
 const styles = StyleSheet.create({
-  button: {
-    height: 42,
-    borderRadius: 12,
-    backgroundColor: "#22222F",
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 6,
-    borderWidth: 1,
-    borderColor: "#22222F",
-  },
-  activeButton: {
-    borderColor: "#27D4FA",
-  },
-  buttonText: {
-    color: "#94939B",
-  },
-  activeButtonText: {
-    color: "#27D4FA",
-  },
-  container: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  icon: {
-    width: 38,
-    height: 38,
-    marginTop: "-10%",
-    marginRight: "5%",
-  },
   badge: {
     backgroundColor: "#E53777",
     borderRadius: 12,
@@ -146,5 +193,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "white",
+  },
+  button: {
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: "#22222F",
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+    marginTop: "3%",
+  },
+  activeButton: {
+    color: "#27D4FA",
+  },
+  buttonText: {
+    color: "#7A7A82",
   },
 });

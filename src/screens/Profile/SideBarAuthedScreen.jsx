@@ -183,7 +183,7 @@ const SideBarAuthedScreen = (props) => {
               style={{
                 marginTop: "0%",
                 width: "100%",
-                backgroundColor: "#474752",
+                backgroundColor:colors.lineBackgroundColor,
               }}
             />
           </View>
