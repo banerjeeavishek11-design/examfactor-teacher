@@ -14,7 +14,7 @@ import RateUsStart from "@/theme/assets/images/rateusstar.png";
 import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
 import { ImageVariant } from "../atoms";
-import Cross from "@/theme/assets/images/cross.png";
+
 
 const starRatings = [
   { id: 1, selected: false },
