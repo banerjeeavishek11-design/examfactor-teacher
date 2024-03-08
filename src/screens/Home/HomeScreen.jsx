@@ -5,13 +5,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import { Concentrix, Header, SafeScreen } from "@/components/template";
 import Arrow from "@/theme/assets/images/arrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { Divider } from "react-native-paper";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
+import Line from "@/theme/assets/images/line.png";
+import Info from "@/theme/assets/images/info.png";
+import UpArrow from "@/theme/assets/images/uparrow.png";
+import Progressbar from "@/components/template/Progressbar/Progressbar";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const {
@@ -24,6 +29,16 @@ const HomeScreen = () => {
     components,
     backgrounds,
   } = useTheme();
+  const navigation = useNavigation();
+  const homeworkProgress = 60 / 100;
+  const diagnosticProgress = 50 / 100;
+  const [showContent, setShowContent] = useState(false);
+
+  const toggleContent = () => {
+    setShowContent(!showContent);
+    // console.log("showContent:", showContent);
+  };
+
   return (
     <SafeScreen>
       <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
@@ -47,7 +62,10 @@ const HomeScreen = () => {
           >
             CLASS PREPAREDNESS
           </Text>
-          <TouchableOpacity style={[layout.display, layout.rowHCenter]}>
+          <TouchableOpacity
+            style={[layout.display, layout.rowHCenter]}
+            onPress={() => navigation.navigate("SubjectDetailsScreen")}
+          >
             <Text
               style={[
                 fonts.size_14,
@@ -99,7 +117,7 @@ const HomeScreen = () => {
             <Divider
               style={{
                 width: "100%",
-                backgroundColor: "#474752",
+                backgroundColor: colors.lineBackgroundColor,
               }}
             />
           </View>
@@ -136,8 +154,11 @@ const HomeScreen = () => {
                 { color: colors.white },
               ]}
             >
-              0% Complete
+              60% Complete
             </Text>
+          </View>
+          <View style={{ marginTop: "3%" }}>
+            <Progressbar progress={homeworkProgress} color={"#3DD598"} />
           </View>
           <View
             style={[
@@ -163,8 +184,11 @@ const HomeScreen = () => {
                 { color: colors.white },
               ]}
             >
-              0% Complete
+              50% Complete
             </Text>
+          </View>
+          <View style={{ marginTop: "3%" }}>
+            <Progressbar progress={diagnosticProgress} color={"#BBA041"} />
           </View>
         </View>
         <View
@@ -318,7 +342,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </ScrollView>
 
-        <View
+        {/* <View
           style={[
             layout.fullWidth,
             {
@@ -339,6 +363,455 @@ const HomeScreen = () => {
           >
             Students data not available
           </Text>
+        </View> */}
+
+        <View
+          style={[
+            layout.fullWidth,
+            layout.paddingForCard,
+
+            {
+              backgroundColor: colors.cardBackgroundColor,
+              height: "auto",
+              marginTop: "4%",
+              borderRadius: 14,
+            },
+          ]}
+        >
+          <View style={[layout.display, layout.rowHCenter]}>
+            <View style={{ width: "30%" }}>
+              <Text
+                style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+              >
+                75%
+              </Text>
+              <Text
+                style={[
+                  fonts.size_10,
+                  fonts.fontWeight_small,
+                  { color: colors.white },
+                ]}
+              >
+                Achievable Score
+              </Text>
+            </View>
+            <ImageVariant
+              testID="brand-img"
+              style={{
+                // width: 60,
+                height: 70,
+                tintColor: colors.lineBackgroundColor,
+                right: 6,
+              }}
+              source={Line}
+              resizeMode="contain"
+            />
+            <View style={{ width: "60%" }}>
+              <Text
+                style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+              >
+                Shashank Kumar
+              </Text>
+              <View style={[layout.display, layout.rowHCenter]}>
+                <View style={{ width: "30%" }}>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.fontWeight_small,
+                      { color: colors.backButtonColor },
+                    ]}
+                  >
+                    Home Work
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Progressbar progress={0.5} color={"#3DD598"} />
+                </View>
+                <View style={{ width: "20%" }}>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.bold,
+                      { color: colors.white, left: 5 },
+                    ]}
+                  >
+                    60%
+                  </Text>
+                </View>
+              </View>
+
+              <View style={[layout.display, layout.rowHCenter]}>
+                <View style={{ width: "30%" }}>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.fontWeight_small,
+                      { color: colors.backButtonColor },
+                    ]}
+                  >
+                    Diagnostic
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Progressbar progress={0.3} color={"#FF575F"} />
+                </View>
+                <View style={{ width: "20%" }}>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.bold,
+                      { color: colors.white, left: 5 },
+                    ]}
+                  >
+                    27%
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={{ width: "10%" }}>
+              <TouchableOpacity onPress={toggleContent}>
+                <ImageVariant
+                  testID="brand-img"
+                  style={{
+                    width: 12,
+                    height: 8,
+                    tintColor: colors.white,
+                  }}
+                  source={showContent ? UpArrow : DownArrow}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {showContent && (
+            <>
+              <Divider
+                style={{
+                  marginTop: "2%",
+                  width: "100%",
+                  backgroundColor: colors.lineBackgroundColor,
+                }}
+              />
+              <View
+                style={[
+                  layout.display,
+                  layout.rowHCenter,
+                  layout.justifyBetween,
+                  { marginTop: "2%" },
+                ]}
+              >
+                <View style={{ width: "35%" }}>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeignt_600,
+                      { color: colors.white },
+                    ]}
+                  >
+                    8 days ago
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.fontWeight_small,
+                      { color: colors.white, opacity: 0.9 },
+                    ]}
+                  >
+                    Last practice
+                  </Text>
+                </View>
+                <View style={{ width: "45%" }}>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeignt_600,
+                      { color: colors.white },
+                    ]}
+                  >
+                    55 Min
+                  </Text>
+                  <View style={[layout.display, layout.rowHCenter]}>
+                    <Text
+                      style={[
+                        fonts.size_10,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.9 },
+                      ]}
+                    >
+                      Avg. Study Time
+                    </Text>
+                    <ImageVariant
+                      testID="brand-img"
+                      style={{
+                        width: 10,
+                        height: 10,
+                        tintColor: "#A9A9AD",
+                        left: 6,
+                      }}
+                      source={Info}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </View>
+                <View style={{ width: "25%" }}>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeignt_600,
+                      { color: colors.white },
+                    ]}
+                  >
+                    75%
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_10,
+                      fonts.fontWeight_small,
+                      { color: colors.white, opacity: 0.9 },
+                    ]}
+                  >
+                    Last test score
+                  </Text>
+                </View>
+              </View>
+            </>
+          )}
+        </View>
+
+        <View
+          style={[
+            layout.fullWidth,
+            layout.paddingForCard,
+            layout.display,
+            layout.rowHCenter,
+            {
+              backgroundColor: colors.cardBackgroundColor,
+              height: 92,
+              marginTop: "4%",
+              borderRadius: 14,
+            },
+          ]}
+        >
+          <View style={{ width: "30%" }}>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.bold,
+                { color: colors.white, left: 5 },
+              ]}
+            >
+              0%
+            </Text>
+            <Text
+              style={[
+                fonts.size_10,
+                fonts.fontWeight_small,
+                { color: colors.white },
+              ]}
+            >
+              Achievable Score
+            </Text>
+          </View>
+          <ImageVariant
+            testID="brand-img"
+            style={{
+              // width: 60,
+              height: 70,
+              tintColor: colors.lineBackgroundColor,
+              right: 6,
+            }}
+            source={Line}
+            resizeMode="contain"
+          />
+          <View style={{ width: "60%" }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+              Rahul Gupta
+            </Text>
+            <View style={[layout.display, layout.rowHCenter]}>
+              <View style={{ width: "30%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.fontWeight_small,
+                    { color: colors.backButtonColor },
+                  ]}
+                >
+                  Home Work
+                </Text>
+              </View>
+              <View style={{ width: "50%" }}>
+                <Progressbar progress={0} color={"#3DD598"} />
+              </View>
+              <View style={{ width: "20%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.bold,
+                    { color: colors.white, left: 5 },
+                  ]}
+                >
+                  0%
+                </Text>
+              </View>
+            </View>
+
+            <View style={[layout.display, layout.rowHCenter]}>
+              <View style={{ width: "30%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.fontWeight_small,
+                    { color: colors.backButtonColor },
+                  ]}
+                >
+                  Diagnostic
+                </Text>
+              </View>
+              <View style={{ width: "50%" }}>
+                <Progressbar progress={0} color={"#3DD598"} />
+              </View>
+              <View style={{ width: "20%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.bold,
+                    { color: colors.white, left: 5 },
+                  ]}
+                >
+                  0%
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={{ width: "10%" }}>
+            <TouchableOpacity>
+              <ImageVariant
+                testID="brand-img"
+                style={{
+                  width: 12,
+                  height: 8,
+                  tintColor: colors.white,
+                }}
+                source={DownArrow}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View
+          style={[
+            layout.fullWidth,
+            layout.paddingForCard,
+            layout.display,
+            layout.rowHCenter,
+            {
+              backgroundColor: colors.cardBackgroundColor,
+              height: 92,
+              marginTop: "4%",
+              borderRadius: 14,
+            },
+          ]}
+        >
+          <View style={{ width: "30%" }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+              52%
+            </Text>
+            <Text
+              style={[
+                fonts.size_10,
+                fonts.fontWeight_small,
+                { color: colors.white },
+              ]}
+            >
+              Achievable Score
+            </Text>
+          </View>
+          <ImageVariant
+            testID="brand-img"
+            style={{
+              // width: 60,
+              height: 70,
+              tintColor: colors.lineBackgroundColor,
+              right: 6,
+            }}
+            source={Line}
+            resizeMode="contain"
+          />
+          <View style={{ width: "60%" }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+              Utkarsh Sharma
+            </Text>
+            <View style={[layout.display, layout.rowHCenter]}>
+              <View style={{ width: "30%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.fontWeight_small,
+                    { color: colors.backButtonColor },
+                  ]}
+                >
+                  Home Work
+                </Text>
+              </View>
+              <View style={{ width: "50%" }}>
+                <Progressbar progress={0.7} color={"#FFAB48"} />
+              </View>
+              <View style={{ width: "20%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.bold,
+                    { color: colors.white, left: 5 },
+                  ]}
+                >
+                  45%
+                </Text>
+              </View>
+            </View>
+
+            <View style={[layout.display, layout.rowHCenter]}>
+              <View style={{ width: "30%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.fontWeight_small,
+                    { color: colors.backButtonColor },
+                  ]}
+                >
+                  Diagnostic
+                </Text>
+              </View>
+              <View style={{ width: "50%" }}>
+                <Progressbar progress={0.6} color={"#3DD598"} />
+              </View>
+              <View style={{ width: "20%" }}>
+                <Text
+                  style={[
+                    fonts.size_10,
+                    fonts.bold,
+                    { color: colors.white, left: 5 },
+                  ]}
+                >
+                  60%
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={{ width: "10%" }}>
+            <TouchableOpacity>
+              <ImageVariant
+                testID="brand-img"
+                style={{
+                  width: 12,
+                  height: 8,
+                  tintColor: colors.white,
+                }}
+                source={DownArrow}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeScreen>

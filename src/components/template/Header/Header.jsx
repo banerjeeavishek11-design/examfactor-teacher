@@ -15,6 +15,9 @@ import DownArrow from "@/theme/assets/images/Downarrow.png";
 import User from "@/theme/assets/images/user.png";
 import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
+import SelectClassBottomSheet from "@/components/BottomSheet/SelectClassBottomSheet";
+
+
 
 const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
   const {
@@ -38,6 +41,9 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
     { id: 4, subjectName: "Bengali", isChecked: false },
     { id: 5, subjectName: "English", isChecked: false },
   ]);
+  const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] =
+    useState(false);
+    const [showSelecTedClass,setShowSelectedClass] = useState('10-B')
 
   const handleOpenDrawer = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -74,7 +80,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
         ]}
       >
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
             <View style={[layout.rowHCenter]}>
               <Text
                 style={[
@@ -89,7 +95,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                Class 10-B
+                Class {showSelecTedClass}
               </Text>
 
               <ImageVariant
@@ -158,6 +164,12 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
           ))}
         </View>
       </ScrollView>
+      <SelectClassBottomSheet
+        openSelectClassBottmSheet={openSelectClassBottmSheet}
+        setOpenSelectClassBottomSheet={setOpenSelectClassBottomSheet}
+        setShowSelectedClass={setShowSelectedClass}
+        showSelecTedClass={showSelecTedClass}
+      />
     </View>
   );
 };

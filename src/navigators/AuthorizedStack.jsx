@@ -3,7 +3,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomtabNavigator from "./BottomtabNavigator";
-import { ProfileDetailsScreen, SideBarAuthedScreen } from "@/screens";
+import { ProfileDetailsScreen, SideBarAuthedScreen, SubjectDetailsScreen } from "@/screens";
 
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
@@ -32,6 +32,14 @@ const AuthorizedStack = () => {
        <Stack.Screen
         name="ProfileDetailsScreen"
         component={ProfileDetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="SubjectDetailsScreen"
+        component={SubjectDetailsScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
