@@ -14,7 +14,7 @@ import { Divider } from "react-native-paper";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import Line from "@/theme/assets/images/line.png";
 import Info from "@/theme/assets/images/info.png";
-import UpArrow from "@/theme/assets/images/uparrow.png";
+// import UpArrow from "@/theme/assets/images/uparrow.png";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 
@@ -477,7 +477,7 @@ const HomeScreen = () => {
                     height: 8,
                     tintColor: colors.white,
                   }}
-                  source={showContent ? UpArrow : DownArrow}
+                  source={showContent ? DownArrow : DownArrow}
                   resizeMode="contain"
                 />
               </TouchableOpacity>
