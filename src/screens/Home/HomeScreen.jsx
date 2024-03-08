@@ -17,6 +17,8 @@ import Info from "@/theme/assets/images/info.png";
 // import UpArrow from "@/theme/assets/images/uparrow.png";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
+import SortbyBottomSheet from "@/components/BottomSheet/SortbyBottomSheet";
+import PracticeDurationBottomSheet from "@/components/BottomSheet/PracticeDurationBottomSheet";
 
 const HomeScreen = () => {
   const {
@@ -34,15 +36,33 @@ const HomeScreen = () => {
   const diagnosticProgress = 50 / 100;
   const [showContent, setShowContent] = useState(false);
 
+  //Sort By Modal handling
+  const [sortByValue, setSortbyValue] = useState(null);
+  const [sortbyModalVisible, setSortbyModalVisible] = useState(false);
+  const closeSortbyModal = () => {
+    setSortbyModalVisible(false);
+  };
+
+  //Practice Duration Modal Handling
+  const [practiceDurationValue, setPracticeDurationValue] = useState(null);
+  const [practiceDurationModalVisible, setPracticeDurationModalVisible] =
+    useState(false);
+  const closePracticeDurationModal = () => {
+    setPracticeDurationModalVisible(false);
+  };
+
   const toggleContent = () => {
     setShowContent(!showContent);
     // console.log("showContent:", showContent);
   };
 
+  console.log("Sortby selected value:: ", sortByValue);
+  console.log("Practice Duration selected value:: ", practiceDurationValue);
+
   return (
     <SafeScreen>
-      <View style={[{backgroundColor:colors.headerBackgroundColor}]}>
-        <Header/>
+      <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
+        <Header />
       </View>
       <ScrollView
         contentContainerStyle={[
@@ -231,6 +251,9 @@ const HomeScreen = () => {
           ]}
         >
           <TouchableOpacity
+            onPress={() => {
+              setSortbyModalVisible(true);
+            }}
             style={[
               layout.justifyCenter,
               layout.display,
@@ -238,6 +261,9 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
+                borderWidth: 0.5,
+                borderColor:
+                  sortByValue !== null ? colors.termsLinkColor : null,
                 width: 72,
                 height: 28,
                 borderRadius: 4,
@@ -250,7 +276,12 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: colors.white, opacity: 0.3, textAlign: "center" },
+                {
+                  color:
+                    sortByValue !== null ? colors.termsLinkColor : colors.white,
+                  opacity: 0.3,
+                  textAlign: "center",
+                },
               ]}
             >
               Sort By
@@ -268,6 +299,7 @@ const HomeScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={()=>setPracticeDurationModalVisible(true)}
             style={[
               layout.justifyCenter,
               layout.display,
@@ -275,6 +307,9 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
+                borderWidth: 0.5,
+                borderColor:
+                  practiceDurationValue !== null ? colors.termsLinkColor : null,
                 width: 169,
                 height: 28,
                 borderRadius: 4,
@@ -287,7 +322,7 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: colors.white, opacity: 0.3, textAlign: "center" },
+                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, opacity: 0.3, textAlign: "center" },
               ]}
             >
               Not Practiced in 7 Days
@@ -814,6 +849,16 @@ const HomeScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <SortbyBottomSheet
+        visible={sortbyModalVisible}
+        closeModal={closeSortbyModal}
+        setSortbyValue={setSortbyValue}
+      />
+      <PracticeDurationBottomSheet
+        visible={practiceDurationModalVisible}
+        closeModal={closePracticeDurationModal}
+        setPracticeDurationValue={setPracticeDurationValue}
+      />
     </SafeScreen>
   );
 };

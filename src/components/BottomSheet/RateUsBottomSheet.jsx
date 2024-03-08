@@ -11,7 +11,10 @@ import {
 import { useTheme } from "@/theme";
 import React, { useState, useEffect } from "react";
 import RateUsStart from "@/theme/assets/images/rateusstar.png";
+import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
+import { ImageVariant } from "../atoms";
+
 
 const starRatings = [
   { id: 1, selected: false },
@@ -97,22 +100,20 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
         <View
           style={[
             styles.bottomSheetContent,
-            { padding: "4%", backgroundColor: "#1C1827" },
+            layout.paddingForFullScreen,
+            {backgroundColor: colors.bottomSheetBackgroundColor},
           ]}
         >
           <TouchableOpacity
             onPress={closeModal}
             style={{ position: "absolute", top: -35, left: "98%" }}
           >
-            <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
+              <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
           </TouchableOpacity>
 
-          <View
-          //   style={styles.center}
-          >
+          <View>
             <TouchableOpacity
               style={styles.slideIndicator}
-              // onPress={handleSlideDown}
             >
               <Text>-</Text>
             </TouchableOpacity>
@@ -130,10 +131,10 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
                 </Text>
               </View>
               <ScrollView
-                contentContainerStyle={{ paddingBottom: "0%" }}
+                // contentContainerStyle={{ paddingBottom: "0%" }}
                 showsVerticalScrollIndicator={false}
               >
-                <View style={styles.row}>
+                <View style={[layout.row, layout.justifyBetween, layout.itemsCenter,{marginTop: "5%"}]}>
                   {starRatings.map((rating) => (
                     <TouchableOpacity
                       key={rating.id}
@@ -152,44 +153,35 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
                     </TouchableOpacity>
                   ))}
                 </View>
-                <View style={styles.row}>
-                  <Text style={styles.text}>Not satisfied</Text>
-                  <Text style={styles.text}>Great</Text>
+                <View style={[layout.row, layout.justifyBetween, layout.itemsCenter,{marginTop: "5%"}]}>
+                  <Text style={[fonts.alignCenter,{color: colors.backButtonColor}]}>Not satisfied</Text>
+                  <Text style={[fonts.alignCenter,{color: colors.backButtonColor}]}>Great</Text>
                 </View>
                 {selectedRating > 0 && (
                   <View style={{ marginTop: "8%" }}>
                     <View
-                      style={{
-                        flexDirection: "column",
-                      }}
+                      style={[layout.col]}
                     >
                       <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          flexWrap: "wrap",
+                        style={[layout.row, layout.justifyCenter, layout.wrap,{
                           rowGap: 10,
                           columnGap: 10,
                           marginBottom: 10,
-                        }}
+                        }]}
                       >
                         {lessThanThreeOptions.map((ele) => (
                           <TouchableOpacity
                             key={ele.id}
-                            style={{
-                              backgroundColor: "#22222F",
-                              //   opacity: 0.1,
+                            style={[layout.justifyCenter, layout.itemsCenter,{
+                              backgroundColor: colors.bottomTabBackground,
                               height: 42,
                               paddingHorizontal: 12,
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
                               borderRadius: 4,
                               borderWidth: 2,
                               borderColor: selectedIssues.includes(ele.name)
                                 ? "#7AF4FC"
                                 : "transparent",
-                            }}
+                            }]}
                             onPress={() => toggleSelection(ele.name)}
                           >
                             <Text
@@ -244,8 +236,10 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
 
                     <TouchableOpacity
                       style={[
-                        styles.buttonContainer,
+                        layout.justifyCenter,
+                        layout.itemsCenter,
                         {
+                          width:"100%",
                           height: 48,
                           borderRadius: 12,
                           backgroundColor: colors.termsLinkColor,
@@ -269,7 +263,7 @@ const RateUsBottomSheet = ({ visible, closeModal }) => {
                         >
                           <Text
                             style={[
-                              fonts.size_16,
+                              fonts.size_18,
                               fonts.bold,
                               { color: colors.loginBtnTextColor },
                             ]}
@@ -306,17 +300,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   bottomSheetContent: {
-    // height: 500,
-    // minHeight: bottomSheetHeight,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
     borderColor: "#8F8F94",
-  },
-  center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   },
   slideIndicator: {
     width: 88,
@@ -325,33 +312,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf: "center",
   },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "5%",
-  },
-  buttonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    padding: 10,
-    paddingTop: 11,
-    width: "100%",
-    borderRadius: 9,
-    alignItems: "center",
-    marginTop: "5%",
-  },
   inputField: {
     height: 48,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 4,
-  },
-  text: {
-    textAlign: "center",
-    color: "#96A7AF",
   },
 });

@@ -15,7 +15,7 @@ import rightArrow from "@/theme/assets/images/rightarrow.png";
 const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();
   return (
-    <View style={styles.container}>
+    <View >
       <Modal visible={visible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
@@ -31,7 +31,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
             >
               <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
             </TouchableOpacity>
-            <View style={styles.center}>
+            <View >
               <TouchableOpacity
                 style={styles.slideIndicator}
                 onPress={closeModal}
@@ -52,10 +52,10 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[
                     fonts.size_24,
                     fonts.fontWeignt_600,
+                    fonts.alignCenter,
                     {
                       color: colors.white,
                       marginTop: "5%",
-                      textAlign: "center",
                     },
                   ]}
                 >
@@ -73,10 +73,10 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[
                     fonts.size_14,
                     fonts.fontWeight_small,
+                    fonts.alignCenter,
                     {
                       color: colors.white,
                       width: "75%",
-                      textAlign: "center",
                       alignSelf: "center",
                       opacity: 0.6,
                     },
@@ -87,7 +87,8 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
               </View>
               <TouchableOpacity
                 style={[
-                  styles.buttonContainer,
+                  layout.justifyCenter,
+                  layout.itemsCenter,
                   {
                     height: 48,
                     borderRadius: 12,
@@ -98,7 +99,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                 onPress={closeModal}
               >
                 <TouchableOpacity
-                  style={[styles.loginButton, layout.justifyCenter]}
+                  style={[layout.justifyCenter]}
                 >
                   <View
                     style={[layout.display, layout.row, layout.itemsCenter]}
@@ -132,11 +133,6 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
 export default ThanksForFeedbackBottomSheet;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
@@ -148,37 +144,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderColor: "#8F8F94",
   },
-  center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   slideIndicator: {
     width: 88,
     height: 8,
     backgroundColor: "#2F2B3A",
     borderRadius: 20,
     alignSelf: "center",
-  },
-  line: {
-    position: "absolute",
-    top: "70%",
-    left: 18,
-    right: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: "#8F8F94",
-  },
-  buttonContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    backgroundColor: "#7AF4FC",
-    padding: 10,
-    paddingTop: 11,
-    borderRadius: 9,
-    alignItems: "center",
-    marginTop: "5%",
   },
 });

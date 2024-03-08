@@ -65,9 +65,9 @@ const AppGuideScreen = ({ navigation }) => {
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>
-      <View style={[styles.container]}>
+      <View style={[layout.paddingForFullScreen]}>
         <StatusBar backgroundColor="#0D0D1B" barStyle="light-content" />
-        <View style={{ padding: "4%" }}>
+        <View style={[]}>
           <View
             style={[
               layout.row,
@@ -98,8 +98,7 @@ const AppGuideScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
-          <View style={[layout.paddingForFullScreen, { paddingTop: "4%" }]}>
+          <View style={{ marginTop: "5%" }}>
             {allAccordian.buttonDetails.map((ele, index) => (
               <View
                 style={[
@@ -186,7 +185,6 @@ const AppGuideScreen = ({ navigation }) => {
               </View>
             ))}
           </View>
-        </ScrollView>
       </View>
     </SafeScreen>
   );
@@ -195,11 +193,6 @@ const AppGuideScreen = ({ navigation }) => {
 export default AppGuideScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09070E",
-    width: "100%",
-  },
   arrowView: {
     borderRadius: 16,
     overflow: "hidden",

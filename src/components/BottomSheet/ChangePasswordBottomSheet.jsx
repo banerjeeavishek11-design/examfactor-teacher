@@ -5,26 +5,21 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
-  Keyboard,
-  TouchableWithoutFeedback
 } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
 import { Formik } from "formik";
 import { ImageVariant } from "../atoms";
 import RightArrow from '@/theme/assets/images/rightarrow.png'
+import Cross from "@/theme/assets/images/cross.png";
+
 
 
 const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
   const { layout, colors, fonts } = useTheme();
-  const handleOutsideTap = () => {
-    Keyboard.dismiss();
-  };
-
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <TouchableWithoutFeedback onPress={handleOutsideTap}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -36,7 +31,7 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
               onPress={closeModal}
               style={{ position: "absolute", top: -35, left: "98%" }}
             >
-              <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
+              <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
             </TouchableOpacity>
             <View style={styles.center}>
               <TouchableOpacity
@@ -186,7 +181,6 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
             </Formik>
           </View>
         </View>
-        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );

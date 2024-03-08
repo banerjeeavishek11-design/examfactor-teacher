@@ -144,6 +144,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
+                {borderBottomColor: colors.gray200}
               ]}
             >
               <Text
@@ -169,7 +170,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,
+                styles.dataFeild,,
+                {borderBottomColor: colors.gray200}
               ]}
             >
               <Text
@@ -195,7 +197,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,
+                styles.dataFeild,,
+                {borderBottomColor: colors.gray200}
               ]}
             >
               <Text
@@ -221,7 +224,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,
+                styles.dataFeild,,
+                {borderBottomColor: colors.gray200}
               ]}
             >
               <Text
@@ -247,7 +251,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,
+                styles.dataFeild,,
+                {borderBottomColor: colors.gray200}
               ]}
             >
               <Text
@@ -371,7 +376,6 @@ export default ProfileDetailsScreen;
 const styles = StyleSheet.create({
   dataFeild: {
     borderBottomWidth: 0.5,
-    borderBottomColor: "#BABABA",
     paddingVertical: "5%",
   },
 });

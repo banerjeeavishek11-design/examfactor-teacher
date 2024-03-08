@@ -76,9 +76,9 @@ const SupportScreen = ({ navigation }) => {
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>
-      <View style={[styles.container]}>
+      <View style={[ layout.paddingForFullScreen]}>
         <StatusBar backgroundColor="#0D0D1B" barStyle="light-content" />
-        <View style={{ padding: "4%" }}>
+        <View style={[]}>
           <View
             style={[
               layout.row,
@@ -113,9 +113,8 @@ const SupportScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
-          <View style={[layout.paddingForFullScreen, { paddingTop: "4%" }]}>
-            <View style={{ marginTop: "5%" }}>
+          <View style={{ marginTop: "10%" }}>
+            <View>
               <Text
                 style={[
                   fonts.size_14,
@@ -174,7 +173,6 @@ const SupportScreen = ({ navigation }) => {
               </View>
             ))}
           </View>
-        </ScrollView>
       </View>
     </SafeScreen>
   );
@@ -183,11 +181,6 @@ const SupportScreen = ({ navigation }) => {
 export default SupportScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#09070E",
-    width: "100%",
-  },
   arrowView: {
     borderRadius: 16,
     overflow: "hidden",
