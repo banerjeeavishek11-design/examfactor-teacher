@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,7 +15,7 @@ import { Divider } from "react-native-paper";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import Line from "@/theme/assets/images/line.png";
 import Info from "@/theme/assets/images/info.png";
-// import UpArrow from "@/theme/assets/images/uparrow.png";
+import UpArrow from "@/theme/assets/images/uparrow.png";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/SortbyBottomSheet";
@@ -124,7 +125,8 @@ const HomeScreen = () => {
             style={[
               fonts.size_20,
               fonts.fontWeight_small,
-              { color: colors.white, textAlign: "center", marginTop: "3%" },
+              fonts.alignCenter,
+              { color: colors.white, marginTop: "3%" },
             ]}
           >
             Physics
@@ -133,7 +135,7 @@ const HomeScreen = () => {
           <View style={{ marginTop: "1%", alignItems: "center" }}>
             <Concentrix scorePercentage={20} />
           </View>
-          <View style={{ alignItems: "center", marginTop: "-20%" }}>
+          <View style={[layout.itemsCenter, { marginTop: "-20%" }]}>
             <Divider
               style={{
                 width: "100%",
@@ -276,12 +278,8 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                {
-                  color:
-                    sortByValue !== null ? colors.termsLinkColor : colors.white,
-                  opacity: 0.3,
-                  textAlign: "center",
-                },
+                fonts.alignCenter,
+                { color: colors.white, opacity: 0.3 },
               ]}
             >
               Sort By
@@ -322,7 +320,8 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, opacity: 0.3, textAlign: "center" },
+                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, opacity: 0.3,},
+                fonts.alignCenter,
               ]}
             >
               Not Practiced in 7 Days
@@ -358,7 +357,8 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: colors.white, opacity: 0.3, textAlign: "center" },
+                fonts.alignCenter,
+                { color: colors.white, opacity: 0.3 },
               ]}
             >
               Achievable Score 90+
@@ -393,7 +393,8 @@ const HomeScreen = () => {
             style={[
               fonts.size_20,
               fonts.fontWeignt_600,
-              { color: colors.white, textAlign: "center" },
+               fonts.alignCenter,
+              { color: colors.white,},
             ]}
           >
             Students data not available
@@ -441,7 +442,7 @@ const HomeScreen = () => {
               source={Line}
               resizeMode="contain"
             />
-            <View style={{ width: "60%" }}>
+            <View style={{ width: "65%" }}>
               <Text
                 style={[fonts.size_14, fonts.bold, { color: colors.white }]}
               >
@@ -505,16 +506,11 @@ const HomeScreen = () => {
             </View>
             <View style={{ width: "10%" }}>
               <TouchableOpacity onPress={toggleContent}>
-                <ImageVariant
-                  testID="brand-img"
-                  style={{
-                    width: 12,
-                    height: 8,
-                    tintColor: colors.white,
-                  }}
-                  source={showContent ? DownArrow : DownArrow}
-                  resizeMode="contain"
-                />
+                {showContent ? (
+                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain"/>
+                ) : (
+                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain"/>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -658,7 +654,7 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "60%" }}>
+          <View style={{ width: "65%" }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
               Rahul Gupta
             </Text>
@@ -773,7 +769,7 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "60%" }}>
+          <View style={{ width: "65%" }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
               Utkarsh Sharma
             </Text>

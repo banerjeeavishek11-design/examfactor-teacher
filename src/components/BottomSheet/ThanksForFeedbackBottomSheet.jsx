@@ -102,7 +102,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   style={[layout.justifyCenter]}
                 >
                   <View
-                    style={[layout.display, layout.row, layout.itemsCenter]}
+                    style={[layout.display, layout.row, layout.itemsCenter,]}
                   >
                     <Text
                       style={[

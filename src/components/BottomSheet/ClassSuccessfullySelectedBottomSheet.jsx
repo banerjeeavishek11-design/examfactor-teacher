@@ -77,7 +77,8 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                   style={[
                     fonts.size_16,
                     fonts.bold,
-                    { color: colors.white, textAlign: "center", },
+                    fonts.alignCenter,
+                    { color: colors.white,},
                   ]}
                 >
                   Class successfully Selected!
@@ -88,7 +89,8 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                   style={[
                     fonts.size_14,
                     fonts.fontWeight_small,
-                    { color: colors.white, textAlign: "center", opacity: 0.7 },
+                    fonts.alignCenter,
+                    { color: colors.white,opacity: 0.7 },
                   ]}
                 >
                   Your has been selected Class {showSelecTedClass}

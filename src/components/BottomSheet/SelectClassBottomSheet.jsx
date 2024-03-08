@@ -152,7 +152,8 @@ const ReferandearnBottomsheet = (props) => {
                   style={[
                     fonts.size_14,
                     fonts.fontWeignt_600,
-                    { color: colors.termsLinkColor, textAlign: "center" },
+                    fonts.alignCenter,
+                    { color: colors.termsLinkColor,},
                   ]}
                 >
                   Cancel
@@ -172,7 +173,8 @@ const ReferandearnBottomsheet = (props) => {
                   style={[
                     fonts.size_14,
                     fonts.fontWeignt_600,
-                    { color: colors.loginBtnTextColor, textAlign: "center" },
+                    fonts.alignCenter,
+                    { color: colors.loginBtnTextColor,},
                   ]}
                 >
                   Apply
