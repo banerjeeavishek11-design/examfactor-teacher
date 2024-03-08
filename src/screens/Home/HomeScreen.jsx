@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -41,8 +42,8 @@ const HomeScreen = () => {
 
   return (
     <SafeScreen>
-      <View style={[{backgroundColor:colors.headerBackgroundColor}]}>
-        <Header/>
+      <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
+        <Header />
       </View>
       <ScrollView
         contentContainerStyle={[
@@ -105,7 +106,7 @@ const HomeScreen = () => {
               fonts.size_20,
               fonts.fontWeight_small,
               fonts.alignCenter,
-              { color: colors.white,marginTop: "3%" },
+              { color: colors.white, marginTop: "3%" },
             ]}
           >
             Physics
@@ -114,7 +115,7 @@ const HomeScreen = () => {
           <View style={{ marginTop: "1%", alignItems: "center" }}>
             <Concentrix scorePercentage={20} />
           </View>
-          <View style={[layout.itemsCenter,{marginTop: "-20%" }]}>
+          <View style={[layout.itemsCenter, { marginTop: "-20%" }]}>
             <Divider
               style={{
                 width: "100%",
@@ -252,7 +253,7 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_small,
                 fonts.alignCenter,
-                { color: colors.white, opacity: 0.3,},
+                { color: colors.white, opacity: 0.3 },
               ]}
             >
               Sort By
@@ -290,7 +291,7 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_small,
                 fonts.alignCenter,
-                { color: colors.white, opacity: 0.3,},
+                { color: colors.white, opacity: 0.3 },
               ]}
             >
               Not Practiced in 7 Days
@@ -327,7 +328,7 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_small,
                 fonts.alignCenter,
-                { color: colors.white, opacity: 0.3,},
+                { color: colors.white, opacity: 0.3 },
               ]}
             >
               Achievable Score 90+
@@ -411,7 +412,7 @@ const HomeScreen = () => {
               source={Line}
               resizeMode="contain"
             />
-            <View style={{ width: "60%" }}>
+            <View style={{ width: "65%" }}>
               <Text
                 style={[fonts.size_14, fonts.bold, { color: colors.white }]}
               >
@@ -475,16 +476,11 @@ const HomeScreen = () => {
             </View>
             <View style={{ width: "10%" }}>
               <TouchableOpacity onPress={toggleContent}>
-                <ImageVariant
-                  testID="brand-img"
-                  style={{
-                    width: 12,
-                    height: 8,
-                    tintColor: colors.white,
-                  }}
-                  source={showContent ? UpArrow : DownArrow}
-                  resizeMode="contain"
-                />
+                {showContent ? (
+                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain"/>
+                ) : (
+                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain"/>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -628,7 +624,7 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "60%" }}>
+          <View style={{ width: "65%" }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
               Rahul Gupta
             </Text>
@@ -743,7 +739,7 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "60%" }}>
+          <View style={{ width: "65%" }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
               Utkarsh Sharma
             </Text>
