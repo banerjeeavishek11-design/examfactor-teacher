@@ -23,6 +23,7 @@ const colorsLight = {
 	cardBackgroundColor:'#222230',
 	bottomSheetBackgroundColor:'#1C1827',
 	lineBackgroundColor:'#474752',
+	subjectDetailsAcheivableScoreColor:'#BDBDC0'
 } as const;
 
 const colorsDark = {

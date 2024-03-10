@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
-import { Concentrix, Header, SafeScreen } from "@/components/template";
+import { Concentrix, Header, SafeScreen,BarChart } from "@/components/template";
 import Arrow from "@/theme/assets/images/arrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { Divider } from "react-native-paper";
@@ -20,6 +20,7 @@ import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/PracticeDurationBottomSheet";
+
 
 const HomeScreen = () => {
   const {
@@ -54,11 +55,8 @@ const HomeScreen = () => {
 
   const toggleContent = () => {
     setShowContent(!showContent);
-    // console.log("showContent:", showContent);
   };
 
-  console.log("Sortby selected value:: ", sortByValue);
-  console.log("Practice Duration selected value:: ", practiceDurationValue);
 
   return (
     <SafeScreen>
@@ -213,7 +211,7 @@ const HomeScreen = () => {
             <Progressbar progress={diagnosticProgress} color={"#BBA041"} />
           </View>
         </View>
-        <View
+        {/* <View
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -224,7 +222,8 @@ const HomeScreen = () => {
               marginTop: "4%",
             },
           ]}
-        ></View>
+        ></View> */}
+        <BarChart />
         <View
           style={[
             layout.display,
@@ -263,7 +262,7 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
-                borderWidth: 0.5,
+                borderWidth: 1,
                 borderColor:
                   sortByValue !== null ? colors.termsLinkColor : null,
                 width: 72,
@@ -277,9 +276,13 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
-                { color: colors.white, opacity: 0.3 },
+                {
+                  color:
+                    sortByValue !== null ? colors.termsLinkColor : colors.white,
+                  opacity: sortByValue !== null ? null : 0.3,
+                },
               ]}
             >
               Sort By
@@ -287,17 +290,19 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
-                tintColor: colors.white,
-                opacity: 0.4,
+                tintColor:
+                  sortByValue !== null ? colors.termsLinkColor : colors.white,
+                opacity: sortByValue !== null ? null : 0.4,
               }}
               source={DownArrow}
               resizeMode="contain"
             />
           </TouchableOpacity>
+
           <TouchableOpacity
-          onPress={()=>setPracticeDurationModalVisible(true)}
+            onPress={() => setPracticeDurationModalVisible(true)}
             style={[
               layout.justifyCenter,
               layout.display,
@@ -305,7 +310,7 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
-                borderWidth: 0.5,
+                borderWidth: 1,
                 borderColor:
                   practiceDurationValue !== null ? colors.termsLinkColor : null,
                 width: 169,
@@ -319,8 +324,14 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
-                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, opacity: 0.3,},
+                fonts.fontWeight_extraSmall,
+                {
+                  color:
+                    practiceDurationValue !== null
+                      ? colors.termsLinkColor
+                      : colors.white,
+                  opacity: practiceDurationValue !== null ? null : 0.3,
+                },
                 fonts.alignCenter,
               ]}
             >
@@ -329,10 +340,13 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
-                tintColor: colors.white,
-                opacity: 0.4,
+                tintColor:
+                  practiceDurationValue !== null
+                    ? colors.termsLinkColor
+                    : colors.white,
+                opacity: practiceDurationValue !== null ? null : 0.4,
               }}
               source={DownArrow}
               resizeMode="contain"
@@ -356,7 +370,7 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 { color: colors.white, opacity: 0.3 },
               ]}
@@ -366,7 +380,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: colors.white,
                 opacity: 0.4,
@@ -507,9 +521,17 @@ const HomeScreen = () => {
             <View style={{ width: "10%" }}>
               <TouchableOpacity onPress={toggleContent}>
                 {showContent ? (
-                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain"/>
+                  <Image
+                    style={{ width: 12, height: 8 }}
+                    source={UpArrow}
+                    resizeMode="contain"
+                  />
                 ) : (
-                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain"/>
+                  <Image
+                    style={{ width: 12, height: 8 }}
+                    source={DownArrow}
+                    resizeMode="contain"
+                  />
                 )}
               </TouchableOpacity>
             </View>
