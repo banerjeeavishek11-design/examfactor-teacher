@@ -8,20 +8,21 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
-} from 'react-native';
-import React, { useState } from 'react';
-import { useTheme } from '@/theme';
-import Logo from '@/theme/assets/images/examfactorlogo.png';
-import rightArrow from '@/theme/assets/images/rightarrow.png';
-import { ImageVariant } from '@/components/atoms';
-import { Controller, useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import React, { useState } from "react";
+import { useTheme } from "@/theme";
+import Logo from "@/theme/assets/images/examfactorlogo.png";
+import rightArrow from "@/theme/assets/images/rightarrow.png";
+import { ImageVariant } from "@/components/atoms";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
 import {
   moderateScale,
   moderateVerticalScale,
-} from 'react-native-size-matters';
+} from "react-native-size-matters";
+import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get("window").width;
 const isTablet = screenWidth >= 600;
 
 const Login = () => {
@@ -42,10 +43,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const [textInputValues, setTextInputValues] = useState({
-    username: '',
-    password: '',
-    referralCode: '',
-    mobileNumber: '',
+    username: "",
+    password: "",
+    referralCode: "",
+    mobileNumber: "",
   });
 
   const handleOutsideTap = () => {
@@ -54,7 +55,7 @@ const Login = () => {
   const handleUsernameLogin = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: 'AuthorizedStack' }],
+      routes: [{ name: "AuthorizedStack" }],
     });
   };
 
@@ -66,9 +67,9 @@ const Login = () => {
           layout.paddingForFullScreen,
           isTablet
             ? {
-                justifyContent: 'center',
-                alignSelf: 'center',
-                alignItems: 'flex-start',
+                justifyContent: "center",
+                alignSelf: "center",
+                alignItems: "flex-start",
                 width: moderateScale(300),
                 // paddingBottom: verticalScale(40),
               }
@@ -81,13 +82,13 @@ const Login = () => {
               <ImageVariant
                 testID="brand-img"
                 style={{
-                  width: moderateScale(80),
-                  height: moderateVerticalScale(80),
+                  width: moderateScale(110),
+                  height: moderateVerticalScale(112),
                 }}
                 source={Logo}
                 resizeMode="contain"
               />
-              <View style={{ width: '80%' }}>
+              <View style={{ width: "80%" }}>
                 <Text
                   style={[
                     fonts.size_32,
@@ -111,15 +112,15 @@ const Login = () => {
               </View>
               <View style={isTablet ? { marginTop: moderateScale(-5) } : null}>
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                  behavior={Platform.OS === "ios" ? "padding" : "height"}
                   enabled={true}
                 >
-                  <View style={{ marginTop: '3%' }}>
+                  <View style={{ marginTop: "3%" }}>
                     <Controller
                       name="username"
                       control={control}
                       rules={{
-                        required: 'This feild is required',
+                        required: "This feild is required",
                       }}
                       render={({ field: { onChange, onBlur, value } }) => (
                         <View
@@ -131,8 +132,8 @@ const Login = () => {
                             {
                               paddingHorizontal: 10,
                               borderColor: errors.username
-                                ? '#FF575F'
-                                : 'rgba(255, 255, 255, 0.3)',
+                                ? "#FF575F"
+                                : "rgba(255, 255, 255, 0.3)",
                             },
                           ]}
                         >
@@ -141,10 +142,11 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
-                                textAlign: 'left',
-                                paddingLeft: '0%',
+                                textAlign: "left",
+                                paddingLeft: "0%",
                               },
                             ]}
                             placeholder="Username"
@@ -178,7 +180,7 @@ const Login = () => {
                       rules={{
                         required: {
                           value: true,
-                          message: 'this feild is required',
+                          message: "this feild is required",
                         },
                       }}
                       render={({ field: { onChange, onBlur, value } }) => (
@@ -191,8 +193,8 @@ const Login = () => {
                             {
                               paddingHorizontal: 10,
                               borderColor: errors.username
-                                ? '#FF575F'
-                                : 'rgba(255, 255, 255, 0.3)',
+                                ? "#FF575F"
+                                : "rgba(255, 255, 255, 0.3)",
                             },
                           ]}
                         >
@@ -201,10 +203,11 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
-                                textAlign: 'left',
-                                paddingLeft: '0%',
+                                textAlign: "left",
+                                paddingLeft: "0%",
                               },
                             ]}
                             placeholder="Password"
@@ -235,9 +238,9 @@ const Login = () => {
                   </View>
                 </KeyboardAvoidingView>
               </View>
-              <View style={{ marginTop: '4%' }}>
+              <View style={{ marginTop: "4%" }}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('ForgotPasswordScreen')}
+                  onPress={() => navigation.navigate("ForgotPasswordScreen")}
                 >
                   <Text
                     style={[
@@ -261,7 +264,7 @@ const Login = () => {
                     {
                       color: colors.white,
 
-                      marginRight: '2%',
+                      marginRight: "2%",
                       opacity: 0.7,
                     },
                   ]}
@@ -269,12 +272,13 @@ const Login = () => {
                   By logging in, you agree to
                 </Text>
                 <TouchableOpacity
-                  style={{ marginRight: '2%' }}
+                  style={{ marginRight: "2%" }}
                   // onPress={openTermsAndCondition}
                 >
                   <Text
                     style={[
                       fonts.size_12,
+                      fonts.fontWeight_small,
                       { color: colors.termsLinkColor, opacity: 0.7 },
                     ]}
                   >
@@ -284,7 +288,8 @@ const Login = () => {
                 <Text
                   style={[
                     fonts.size_12,
-                    { color: colors.white, opacity: 0.7, marginRight: '2%' },
+                    fonts.fontWeight_small,
+                    { color: colors.white, opacity: 0.7, marginRight: "2%" },
                   ]}
                 >
                   and
@@ -295,6 +300,7 @@ const Login = () => {
                   <Text
                     style={[
                       fonts.size_12,
+                      fonts.fontWeight_small,
                       { color: colors.termsLinkColor, opacity: 0.7 },
                     ]}
                   >
@@ -303,17 +309,16 @@ const Login = () => {
                 </TouchableOpacity>
               </View>
 
-              <View
+              {/* <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  marginTop: '5%',
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  marginTop: "5%",
                 }}
               >
                 <TouchableOpacity
                   onPress={handleUsernameLogin}
-                  // disabled={isLoading}
                   style={[
                     styles.loginButton,
                     layout.justifyCenter,
@@ -325,16 +330,6 @@ const Login = () => {
                     isTablet ? { width: moderateScale(220) } : null,
                   ]}
                 >
-                  {/* <PrimaryGradient
-                    styleProp={[
-                      styles.loginButton,
-                      layout.justifyCenter,
-                      { height: 48, borderRadius: 12 },
-                    ]}
-                  > */}
-                  {/* {isLoading ? (
-                      <ActivityIndicator size="large" color={Colors.black} />
-                    ) : ( */}
                   <View
                     style={[layout.display, layout.row, layout.itemsCenter]}
                   >
@@ -354,10 +349,35 @@ const Login = () => {
                       resizeMode="contain"
                     />
                   </View>
-                  {/* )} */}
-                  {/* </PrimaryGradient> */}
                 </TouchableOpacity>
-              </View>
+              </View> */}
+
+              <TouchableOpacity
+                onPress={handleUsernameLogin}
+                // disabled={isLoading}
+              >
+                <PrimaryGradient
+                  styleProp={[styles.loginButton, layout.justifyCenter]}
+                >
+                  <View style={[layout.display, layout.rowHCenter]}>
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        { color: colors.loginBtnTextColor },
+                      ]}
+                    >
+                      LOGIN
+                    </Text>
+                    <ImageVariant
+                      testID="brand-img"
+                      style={{ width: 16, height: 9, left: 5 }}
+                      source={rightArrow}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </PrimaryGradient>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -370,33 +390,34 @@ export default Login;
 
 const styles = StyleSheet.create({
   heading: {
-    marginTop: '2%',
+    marginTop: "2%",
   },
   subheading: {
-    marginTop: isTablet ? moderateScale(5) : '2%',
+    marginTop: isTablet ? moderateScale(5) : "2%",
   },
   mobileNumberInput: {
-    width: '100%',
+    width: "100%",
     height: 48,
-    color: 'rgba(255, 255, 255, 0.3)',
+    color: "rgba(255, 255, 255, 0.3)",
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 10,
     marginTop: 12,
   },
   termsAndConditions: {
-    marginRight: '4%',
-    width: '100%',
+    marginRight: "4%",
+    width: "100%",
     height: 18,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   loginButton: {
-    height: 32,
-    width: '100%',
+    height: 48,
+    width: "100%",
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });

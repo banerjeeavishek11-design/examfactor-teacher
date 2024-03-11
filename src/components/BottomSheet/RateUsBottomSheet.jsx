@@ -15,6 +15,7 @@ import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
 import { ImageVariant } from "../atoms";
 
+
 const starRatings = [
   { id: 1, selected: false },
   { id: 2, selected: false },
