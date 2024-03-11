@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
-import { Concentrix, Header, SafeScreen } from "@/components/template";
+import { Concentrix, Header, SafeScreen,BarChart } from "@/components/template";
 import Arrow from "@/theme/assets/images/arrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { Divider } from "react-native-paper";
@@ -20,6 +20,7 @@ import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/PracticeDurationBottomSheet";
+
 
 const HomeScreen = () => {
   const {
@@ -54,11 +55,8 @@ const HomeScreen = () => {
 
   const toggleContent = () => {
     setShowContent(!showContent);
-    // console.log("showContent:", showContent);
   };
 
-  console.log("Sortby selected value:: ", sortByValue);
-  console.log("Practice Duration selected value:: ", practiceDurationValue);
 
   return (
     <SafeScreen>
@@ -213,7 +211,7 @@ const HomeScreen = () => {
             <Progressbar progress={diagnosticProgress} color={"#BBA041"} />
           </View>
         </View>
-        <View
+        {/* <View
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -224,7 +222,8 @@ const HomeScreen = () => {
               marginTop: "4%",
             },
           ]}
-        ></View>
+        ></View> */}
+        <BarChart />
         <View
           style={[
             layout.display,
@@ -277,7 +276,7 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 { color: sortByValue !== null ? colors.termsLinkColor : colors.white, 
                   opacity: sortByValue !== null ? 1: 0.3 },
@@ -288,7 +287,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: sortByValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: sortByValue !== null ? 1 : 0.4,
@@ -297,8 +296,9 @@ const HomeScreen = () => {
               resizeMode="contain"
             />
           </TouchableOpacity>
+
           <TouchableOpacity
-          onPress={()=>setPracticeDurationModalVisible(true)}
+            onPress={() => setPracticeDurationModalVisible(true)}
             style={[
               layout.justifyCenter,
               layout.display,
@@ -331,7 +331,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: practiceDurationValue !== null ? 1: 0.4,
@@ -358,7 +358,7 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 { color: colors.white, opacity: 0.3 },
               ]}
@@ -368,7 +368,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: colors.white,
                 opacity: 0.4,
@@ -509,9 +509,17 @@ const HomeScreen = () => {
             <View style={{ width: "10%" }}>
               <TouchableOpacity onPress={toggleContent}>
                 {showContent ? (
-                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain"/>
+                  <Image
+                    style={{ width: 12, height: 8 }}
+                    source={UpArrow}
+                    resizeMode="contain"
+                  />
                 ) : (
-                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain"/>
+                  <Image
+                    style={{ width: 12, height: 8 }}
+                    source={DownArrow}
+                    resizeMode="contain"
+                  />
                 )}
               </TouchableOpacity>
             </View>

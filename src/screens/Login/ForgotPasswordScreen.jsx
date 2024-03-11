@@ -13,6 +13,7 @@ import { ImageVariant } from "@/components/atoms";
 import Logo from "@/theme/assets/images/examfactorlogo.png";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
 import { Controller, useForm } from "react-hook-form";
+import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
 const ForgotPasswordScreen = () => {
   const {
@@ -45,7 +46,7 @@ const ForgotPasswordScreen = () => {
       <View style={{ marginTop: "30%" }}>
         <ImageVariant
           testID="brand-img"
-          style={{ width: 172, height: 175 }}
+          style={{ width: 110, height: 112 }}
           source={Logo}
           resizeMode="contain"
         />
@@ -57,11 +58,7 @@ const ForgotPasswordScreen = () => {
       </View>
       <View style={{ marginTop: "5%" }}>
         <Text
-          style={[
-            fonts.size_16,
-            fonts.small,
-            { color: colors.subHeading },
-          ]}
+          style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}
         >
           Please enter your email address to get the one time password
         </Text>
@@ -119,38 +116,14 @@ const ForgotPasswordScreen = () => {
             )}
           />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignContent: "center",
-            marginTop: "20%",
-          }}
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("ForgotPasswordSuccessfulScreen")}
         >
-          <TouchableOpacity
-            onPress={()=>navigation.navigate('ForgotPasswordSuccessfulScreen')}
-            // disabled={isLoading}
-            style={[
-              styles.loginButton,
-              layout.justifyCenter,
-              {
-                height: 48,
-                borderRadius: 12,
-                backgroundColor: colors.termsLinkColor,
-              },
-            ]}
+          <PrimaryGradient
+            styleProp={[styles.loginButton, layout.justifyCenter]}
           >
-            {/* <PrimaryGradient
-                  styleProp={[
-                    styles.loginButton,
-                    layout.justifyCenter,
-                    { height: 48, borderRadius: 12 },
-                  ]}
-                > */}
-            {/* {isLoading ? (
-                    <ActivityIndicator size="large" color={Colors.black} />
-                  ) : ( */}
-            <View style={[layout.display, layout.row, layout.itemsCenter]}>
+            <View style={[layout.display, layout.rowHCenter]}>
               <Text
                 style={[
                   fonts.size_16,
@@ -167,10 +140,9 @@ const ForgotPasswordScreen = () => {
                 resizeMode="contain"
               />
             </View>
-            {/* )} */}
-            {/* </PrimaryGradient> */}
-          </TouchableOpacity>
-        </View>
+          </PrimaryGradient>
+        </TouchableOpacity>
+        
       </KeyboardAvoidingView>
     </View>
   );
@@ -189,12 +161,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   loginButton: {
-    height: 32,
-    width: 311,
+    height: 48,
+    width: "100%",
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: "5%",
   },
 });

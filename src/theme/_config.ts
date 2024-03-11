@@ -17,12 +17,14 @@ const colorsLight = {
 	subHeading:'#8F8F94',
 	loginBtnTextColor:'#31313F',
 	termsLinkColor:'#27D4FA',
+	linearGradientColor:'#7AF4FC',
 	bottomTabBackground:'#22222E',
 	headerBackgroundColor:'#0D0D1B',
 	backButtonColor:'#96A7AF',
 	cardBackgroundColor:'#222230',
 	bottomSheetBackgroundColor:'#1C1827',
 	lineBackgroundColor:'#474752',
+	subjectDetailsAcheivableScoreColor:'#BDBDC0'
 } as const;
 
 const colorsDark = {

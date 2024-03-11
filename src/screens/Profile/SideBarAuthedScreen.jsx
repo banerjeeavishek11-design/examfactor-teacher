@@ -25,7 +25,6 @@ import ChangeRoleBottomSheet from "@/components/BottomSheet/ChangeRoleBottomShee
 import RateUsBottomSheet from "@/components/BottomSheet/RateUsBottomSheet";
 
 const SideBarAuthedScreen = (props) => {
-  // console.log('first',props)
   const {
     colors,
     variant,
@@ -57,8 +56,6 @@ const SideBarAuthedScreen = (props) => {
   const openRateUsModal = () => {
     setRateUsModalVisible(true);
   };
-
-  console.log("userRole", userRole);
 
   return (
     <SafeScreen>
