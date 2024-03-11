@@ -3,7 +3,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomtabNavigator from "./BottomtabNavigator";
-import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen, NewPasswordStatusScreen } from "@/screens";
+import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen, NewPasswordStatusScreen, SubjectDetailsScreen, TopicWiseDetailsScreen } from "@/screens";
  
  
 const AuthorizedStack = () => {
@@ -49,6 +49,22 @@ const AuthorizedStack = () => {
       <Stack.Screen
         name="SupportScreen"
         component={SupportScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="SubjectDetailsScreen"
+        component={SubjectDetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="TopicWiseDetailsScreen"
+        component={TopicWiseDetailsScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
