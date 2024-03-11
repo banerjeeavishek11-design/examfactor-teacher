@@ -263,7 +263,7 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
-                borderWidth: 0.5,
+                borderWidth: 1,
                 borderColor:
                   sortByValue !== null ? colors.termsLinkColor : null,
                 width: 72,
@@ -279,7 +279,8 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_small,
                 fonts.alignCenter,
-                { color: colors.white, opacity: 0.3 },
+                { color: sortByValue !== null ? colors.termsLinkColor : colors.white, 
+                  opacity: sortByValue !== null ? 1: 0.3 },
               ]}
             >
               Sort By
@@ -289,8 +290,8 @@ const HomeScreen = () => {
               style={{
                 width: 7,
                 height: 10,
-                tintColor: colors.white,
-                opacity: 0.4,
+                tintColor: sortByValue !== null ? colors.termsLinkColor : colors.white,
+                opacity: sortByValue !== null ? 1 : 0.4,
               }}
               source={DownArrow}
               resizeMode="contain"
@@ -305,7 +306,7 @@ const HomeScreen = () => {
               layout.justifyBetween,
               {
                 backgroundColor: colors.bottomTabBackground,
-                borderWidth: 0.5,
+                borderWidth: 1,
                 borderColor:
                   practiceDurationValue !== null ? colors.termsLinkColor : null,
                 width: 169,
@@ -320,7 +321,8 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, opacity: 0.3,},
+                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, 
+                  opacity: practiceDurationValue !== null ? 1: 0.3},
                 fonts.alignCenter,
               ]}
             >
@@ -331,8 +333,8 @@ const HomeScreen = () => {
               style={{
                 width: 7,
                 height: 10,
-                tintColor: colors.white,
-                opacity: 0.4,
+                tintColor: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
+                opacity: practiceDurationValue !== null ? 1: 0.4,
               }}
               source={DownArrow}
               resizeMode="contain"

@@ -12,3 +12,4 @@ export { default as SideBarAuthedScreen } from "./Profile/SideBarAuthedScreen";
 export { default as ProfileDetailsScreen } from "./Profile/ProfileDetailsScreen";
 export { default as AppGuideScreen } from "./Profile/AppGuideScreen";
 export { default as SupportScreen } from "./Profile/SupportScreen";
+export { default as NewPasswordStatusScreen } from "./Profile/NewPasswordStatusScreen";

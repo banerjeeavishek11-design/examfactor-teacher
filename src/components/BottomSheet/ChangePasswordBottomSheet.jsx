@@ -12,179 +12,196 @@ import React from "react";
 import { useTheme } from "@/theme";
 import { Formik } from "formik";
 import { ImageVariant } from "../atoms";
-import RightArrow from '@/theme/assets/images/rightarrow.png'
+import RightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
+import { useNavigation } from "@react-navigation/native";
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
 };
 
 const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
+  const navigation = useNavigation();
   const { layout, colors, fonts } = useTheme();
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <TouchableWithoutFeedback onPress={handleOutsideTap}>
-          <View
-            style={[
-              styles.bottomSheetContent,
-              { backgroundColor: "#1C1827", padding: "4%" },
-            ]}
-          >
-            <TouchableOpacity
-              onPress={closeModal}
-              style={{ position: "absolute", top: -35, left: "98%" }}
-            >
-              <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
-            </TouchableOpacity>
-            <View style={styles.center}>
-              <TouchableOpacity
-                style={styles.slideIndicator}
-                onPress={closeModal}
-              >
-                <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
-              </TouchableOpacity>
-            </View>
-            <Text
+            <View
               style={[
-                fonts.size_18,
-                fonts.bold,
-                { color: "white", marginVertical: "5%" },
+                styles.bottomSheetContent,
+                { backgroundColor: "#1C1827", padding: "4%" },
               ]}
             >
-              Set a new password
-            </Text>
-            <Formik
-              initialValues={{
-                currentPassword: "",
-                newPassword: "",
-                retypePassword: "",
-              }}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
-            >
-              {({ handleChange, handleSubmit, values, errors }) => {
-                return (
-                  <View>
-                    <View style={{ marginTop: "4%" }}>
-                      <View style={styles.inputContainer}>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
-                              backgroundColor: "#22222F",
-                            },
-                          ]}
-                          placeholder="Current Password"
-                          placeholderTextColor={colors.gray200}
-                          onChangeText={handleChange("currentPassword")}
-                          value={values.currentPassword}
-                        />
-                      </View>
-                      <View style={styles.inputContainer}>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
-                              backgroundColor: "#22222F",
-                            },
-                          ]}
-                          placeholder="New Password"
-                          placeholderTextColor={colors.gray200}
-                          onChangeText={handleChange("newPassword")}
-                          value={values.newPassword}
-                        />
-                      </View>
-                      <View style={styles.inputContainer}>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
-                              backgroundColor: "#22222F",
-                            },
-                          ]}
-                          placeholder="Retype new Password"
-                          placeholderTextColor={colors.gray200}
-                          onChangeText={handleChange("retypePassword")}
-                          value={values.retypePassword}
-                        />
-                      </View>
-                    </View>
-                    <Text style={[fonts.size_14,{ color: colors.gray200, width: "66%" }]}>
-                      Length : 6-24 characters
-                    </Text>
-                    <Text style={[fonts.size_14,{ color: colors.gray200, width: "66%" }]}>
-                    Contain : At least 1 numeric digit
-                    </Text>
-                    <TouchableOpacity
-                style={[
-                  styles.buttonContainer,
-                  {
-                    height: 48,
-                    borderRadius: 12,
-                    backgroundColor: colors.termsLinkColor,
-                    position: 'fixed',
-                    marginVertical: "5%"
-                  },
-                ]}
-                
+              <TouchableOpacity
+                onPress={closeModal}
+                style={{ position: "absolute", top: -35, left: "98%" }}
               >
-                <TouchableOpacity
-                  style={[styles.submitButton, layout.justifyCenter,]}
-                  onPress={()=>{
-                    handleSubmit();
-                    closeModal();
-                  }}
-                >
-                  <View
-                    style={[layout.display, layout.row, layout.itemsCenter]}
-                  >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      SAVE
-                    </Text>
-                    <ImageVariant
-                      testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5 }}
-                      source={RightArrow}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </TouchableOpacity>
+                <ImageVariant
+                  style={{ width: 18, height: 18 }}
+                  source={Cross}
+                />
               </TouchableOpacity>
-                  </View>
-                );
-              }}
-            </Formik>
-          </View>
+              <View style={styles.center}>
+                <TouchableOpacity
+                  style={styles.slideIndicator}
+                  onPress={closeModal}
+                >
+                  <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
+                </TouchableOpacity>
+              </View>
+              <Text
+                style={[
+                  fonts.size_18,
+                  fonts.bold,
+                  { color: "white", marginVertical: "5%" },
+                ]}
+              >
+                Set a new password
+              </Text>
+              <Formik
+                initialValues={{
+                  currentPassword: "",
+                  newPassword: "",
+                  retypePassword: "",
+                }}
+                onSubmit={(values) => {
+                  console.log(values);
+                }}
+              >
+                {({ handleChange, handleSubmit, values, errors }) => {
+                  return (
+                    <View>
+                      <View style={{ marginTop: "4%" }}>
+                        <View style={styles.inputContainer}>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: "left",
+                                paddingLeft: "3%",
+                                backgroundColor: "#22222F",
+                              },
+                            ]}
+                            placeholder="Current Password"
+                            placeholderTextColor={colors.gray200}
+                            onChangeText={handleChange("currentPassword")}
+                            value={values.currentPassword}
+                          />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: "left",
+                                paddingLeft: "3%",
+                                backgroundColor: "#22222F",
+                              },
+                            ]}
+                            placeholder="New Password"
+                            placeholderTextColor={colors.gray200}
+                            onChangeText={handleChange("newPassword")}
+                            value={values.newPassword}
+                          />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: "left",
+                                paddingLeft: "3%",
+                                backgroundColor: "#22222F",
+                              },
+                            ]}
+                            placeholder="Retype new Password"
+                            placeholderTextColor={colors.gray200}
+                            onChangeText={handleChange("retypePassword")}
+                            value={values.retypePassword}
+                          />
+                        </View>
+                      </View>
+                      <Text
+                        style={[
+                          fonts.size_14,
+                          { color: colors.gray200, width: "66%" },
+                        ]}
+                      >
+                        Length : 6-24 characters
+                      </Text>
+                      <Text
+                        style={[
+                          fonts.size_14,
+                          { color: colors.gray200, width: "66%" },
+                        ]}
+                      >
+                        Contain : At least 1 numeric digit
+                      </Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.buttonContainer,
+                          {
+                            height: 48,
+                            borderRadius: 12,
+                            backgroundColor: colors.termsLinkColor,
+                            position: "fixed",
+                            marginVertical: "5%",
+                          },
+                        ]}
+                        onPress={() => {
+                          handleSubmit();
+                          closeModal();
+                          navigation.navigate("NewPasswordStatusScreen", {
+                            data: "Updated",
+                          });
+                        }}
+                      >
+                        <View
+                          style={[
+                            layout.display,
+                            layout.row,
+                            layout.itemsCenter,
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              fonts.size_16,
+                              fonts.bold,
+                              { color: colors.loginBtnTextColor },
+                            ]}
+                          >
+                            SAVE
+                          </Text>
+                          <ImageVariant
+                            testID="brand-img"
+                            style={{ width: 16, height: 9, left: 5 }}
+                            source={RightArrow}
+                            resizeMode="contain"
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              </Formik>
+            </View>
           </TouchableWithoutFeedback>
         </View>
       </Modal>

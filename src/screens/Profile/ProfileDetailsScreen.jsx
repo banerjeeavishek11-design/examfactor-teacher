@@ -51,6 +51,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
     setChangePasswordBottomSheetVisible(false)
   }
 
+  console.log("PROF DATA::", profileData);
+
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>
@@ -170,7 +172,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,,
+                styles.dataFeild,
                 {borderBottomColor: colors.gray200}
               ]}
             >
@@ -197,7 +199,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,,
+                styles.dataFeild,
                 {borderBottomColor: colors.gray200}
               ]}
             >
@@ -224,7 +226,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,,
+                styles.dataFeild,
                 {borderBottomColor: colors.gray200}
               ]}
             >
@@ -251,7 +253,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
               style={[
                 layout.rowHCenter,
                 layout.justifyBetween,
-                styles.dataFeild,,
+                styles.dataFeild,
                 {borderBottomColor: colors.gray200}
               ]}
             >
@@ -334,7 +336,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
               { color: colors.white, opacity: 0.6 },
             ]}
           >
-            9876543210
+            {profileData.mobile}
           </Text>
         </View>
         <TouchableOpacity onPress={openChangePasswordModal}>

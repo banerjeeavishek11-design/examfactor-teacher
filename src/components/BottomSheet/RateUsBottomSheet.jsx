@@ -14,7 +14,6 @@ import RateUsStart from "@/theme/assets/images/rateusstar.png";
 import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
 import { ImageVariant } from "../atoms";
-import Cross from "@/theme/assets/images/cross.png";
 
 const starRatings = [
   { id: 1, selected: false },
@@ -141,7 +140,7 @@ const RateUsBottomSheet = (props) => {
                   contentContainerStyle={{ paddingBottom: "0%" }}
                   showsVerticalScrollIndicator={false}
                 >
-                  <View style={styles.row}>
+                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
                     {starRatings.map((rating) => (
                       <TouchableOpacity
                         key={rating.id}
@@ -162,7 +161,7 @@ const RateUsBottomSheet = (props) => {
                       </TouchableOpacity>
                     ))}
                   </View>
-                  <View style={styles.row}>
+                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
                     <Text
                       style={[
                         fonts.alignCenter,
@@ -286,25 +285,18 @@ const RateUsBottomSheet = (props) => {
                         }}
                       >
                         <TouchableOpacity
-                          style={[styles.loginButton, layout.justifyCenter]}
+                          style={[styles.loginButton, layout.justifyCenter, layout.itemsCenter, fonts.alignCenter]}
                         >
-                          <View
-                            style={[
-                              layout.display,
-                              layout.row,
-                              layout.itemsCenter,
-                            ]}
-                          >
                             <Text
                               style={[
                                 fonts.size_16,
                                 fonts.bold,
+                                fonts.alignCenter,
                                 { color: colors.loginBtnTextColor },
                               ]}
                             >
                               Submit
                             </Text>
-                          </View>
                         </TouchableOpacity>
                       </TouchableOpacity>
                     </View>
@@ -354,5 +346,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 4,
+  },
+  loginButton: {
+    height: 32,
+    width: '100%',
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
 });

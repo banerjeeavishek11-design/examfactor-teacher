@@ -29,11 +29,10 @@ const LandingScreen = ({navigation}) => {
       <View style={[layout.itemsCenter, layout.justifyCenter, { flex: 1, flexDirection: 'row' }]}>
         <ImageVariant
           testID="brand-img"
-          style={{ width: moderateScale(60), height: moderateVerticalScale(60) }}
+          style={{ width: moderateScale(170), height: moderateVerticalScale(170) }}
           source={Logo}
           resizeMode='contain'
         />
-        <Text style={[fonts.size_40,fonts.bold,{color: 'white', marginLeft: moderateScale(10)}]}>Examfactor</Text>
       </View>
     </View>
   );

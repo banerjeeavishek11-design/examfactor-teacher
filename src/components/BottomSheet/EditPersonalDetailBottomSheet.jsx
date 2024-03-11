@@ -8,13 +8,19 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Image
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import RightArrow from "@/theme/assets/images/rightarrow.png";
 import { Formik } from "formik";
 import { ImageVariant } from "../atoms";
 import Cross from "@/theme/assets/images/cross.png";
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import Calender from '@/theme/assets/images/calendar.png'
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -23,10 +29,16 @@ const EditPersonalDetailBottomSheet = ({
   saveNewData,
 }) => {
   const { fonts, colors, layout } = useTheme();
+  const [openCalender, setOpenCalender] = useState(false);
+  const [selectedDob, setSelectedDob] = useState("");
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
+
+  console.log("Recied prof data in child::",profileData);
+
+  console.log("SELECTED DATE::", selectedDob);
 
   return (
     <Modal
@@ -57,23 +69,19 @@ const EditPersonalDetailBottomSheet = ({
             </Text>
             <Formik
               initialValues={{
-                fullname: "",
-                dob: "",
-                gender: "",
-                city: "",
-                email: "",
-                mobile: "",
-                emergerncyContact: "",
+                dob: profileData.dob,
+                mobile: profileData.mobile,
+                emergencyContact: profileData.emergencyContact,
                 address: "",
               }}
               onSubmit={(values, actions) => {
                 saveNewData(values);
-                console.log(values);
+                console.log("OnSUBMIT values::",values);
                 actions.setSubmitting(false);
                 closeModal();
               }}
             >
-              {({ handleChange, handleSubmit, values }) => {
+              {({ handleChange, handleSubmit, values, setFieldValue }) => {
                 return (
                   <View style={{ marginTop: "8%" }}>
                     <ScrollView
@@ -110,8 +118,7 @@ const EditPersonalDetailBottomSheet = ({
                           editable={false}
                           placeholder={profileData.fullName}
                           placeholderTextColor={colors.gray200}
-                          onChangeText={handleChange("fullname")}
-                          value={values.fullname}
+                          value={profileData.fullName}
                         />
                       </View>
 
@@ -128,24 +135,42 @@ const EditPersonalDetailBottomSheet = ({
                         >
                           DOB
                         </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
-                            },
-                          ]}
-                          placeholder={profileData.dob}
-                          placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange("dob")}
-                          value={values.dob}
-                        />
+                        <View style={[layout.row, layout.itemsCenter, layout.justifyBetween, styles.inputField]}>
+                          <TextInput
+                            style={[
+                              layout.justifyCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: "left",
+                                paddingLeft: "3%",
+                                width: "90%",
+                              },
+                            ]}
+                            editable={false}
+                            placeholder={profileData.dob}
+                            placeholderTextColor={colors.gray400}
+                            value={selectedDob}
+                          />
+                          <TouchableOpacity
+                            onPress={() => {
+                              setOpenCalender(true);
+                            }}
+                          >
+                            <Image source={Calender} style={{width: 20, height:20, marginLeft: "5%"}} />
+                          </TouchableOpacity>
+                          <DateTimePicker
+                            mode="date"
+                            onConfirm={(date) => {
+                              setSelectedDob(moment(date).format("DD-MM-YYYY"));
+                              setOpenCalender(false);
+                            }}
+                            isVisible={openCalender}
+                            onCancel={() => {
+                              setOpenCalender(false);
+                            }}
+                          />
+                        </View>
                       </View>
 
                       <View style={styles.inputContainer}>
@@ -276,8 +301,7 @@ const EditPersonalDetailBottomSheet = ({
                           editable={false}
                           placeholder={profileData.email}
                           placeholderTextColor={colors.gray200}
-                          onChangeText={handleChange("email")}
-                          value={values.email}
+                          value={profileData.email}
                         />
                       </View>
 
@@ -344,8 +368,8 @@ const EditPersonalDetailBottomSheet = ({
                           keyboardType="phone-pad"
                           placeholder={profileData.emergencyContact}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange("emergerncyContact")}
-                          value={values.emergerncyContact}
+                          onChangeText={handleChange("emergencyContact")}
+                          value={values.emergencyContact}
                         />
                       </View>
 
@@ -386,6 +410,8 @@ const EditPersonalDetailBottomSheet = ({
                       style={[
                         layout.justifyCenter,
                         layout.itemsCenter,
+                        layout.display,
+                        layout.rowHCenter,
                         {
                           height: 48,
                           borderRadius: 12,
@@ -393,35 +419,26 @@ const EditPersonalDetailBottomSheet = ({
                           position: "fixed",
                         },
                       ]}
+                      onPress={()=>{
+                        setFieldValue('dob', selectedDob)
+                        handleSubmit()
+                      }}
                     >
-                      <TouchableOpacity
-                        style={[layout.justifyCenter]}
-                        onPress={handleSubmit}
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          { color: colors.loginBtnTextColor },
+                        ]}
                       >
-                        <View
-                          style={[
-                            layout.display,
-                            layout.row,
-                            layout.itemsCenter,
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              fonts.size_16,
-                              fonts.bold,
-                              { color: colors.loginBtnTextColor },
-                            ]}
-                          >
-                            SAVE
-                          </Text>
-                          <ImageVariant
-                            testID="brand-img"
-                            style={{ width: 16, height: 9, left: 5 }}
-                            source={RightArrow}
-                            resizeMode="contain"
-                          />
-                        </View>
-                      </TouchableOpacity>
+                        SAVE
+                      </Text>
+                      <ImageVariant
+                        testID="brand-img"
+                        style={{ width: 16, height: 9, left: 5 }}
+                        source={RightArrow}
+                        resizeMode="contain"
+                      />
                     </TouchableOpacity>
                   </View>
                 );
