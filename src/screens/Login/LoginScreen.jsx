@@ -142,6 +142,7 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
                                 textAlign: "left",
@@ -202,6 +203,7 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
                                 textAlign: "left",
@@ -276,6 +278,7 @@ const Login = () => {
                   <Text
                     style={[
                       fonts.size_12,
+                      fonts.fontWeight_small,
                       { color: colors.termsLinkColor, opacity: 0.7 },
                     ]}
                   >
@@ -285,6 +288,7 @@ const Login = () => {
                 <Text
                   style={[
                     fonts.size_12,
+                    fonts.fontWeight_small,
                     { color: colors.white, opacity: 0.7, marginRight: "2%" },
                   ]}
                 >
@@ -296,6 +300,7 @@ const Login = () => {
                   <Text
                     style={[
                       fonts.size_12,
+                      fonts.fontWeight_small,
                       { color: colors.termsLinkColor, opacity: 0.7 },
                     ]}
                   >
@@ -373,7 +378,6 @@ const Login = () => {
                   </View>
                 </PrimaryGradient>
               </TouchableOpacity>
-
             </View>
           </View>
         </TouchableWithoutFeedback>
