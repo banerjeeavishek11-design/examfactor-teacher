@@ -11,11 +11,13 @@ import { useTheme } from "@/theme";
 import Feedback from "@/theme/assets/images/feedback.png";
 import { ImageVariant } from "../atoms";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
+import Cross from "@/theme/assets/images/cross.png";
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();
   return (
-    <View >
+    <View>
       <Modal visible={visible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
@@ -29,9 +31,14 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
               onPress={closeModal}
               style={{ position: "absolute", top: -35, left: "98%" }}
             >
-              <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 16, height: 16, tintColor: "white" }}
+                source={Cross}
+                resizeMode="contain"
+              />
             </TouchableOpacity>
-            <View >
+            <View>
               <TouchableOpacity
                 style={styles.slideIndicator}
                 onPress={closeModal}
@@ -85,25 +92,16 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                   Your appreciation motivate us to provide better quality.
                 </Text>
               </View>
+
               <TouchableOpacity
-                style={[
-                  layout.justifyCenter,
-                  layout.itemsCenter,
-                  {
-                    height: 48,
-                    borderRadius: 12,
-                    backgroundColor: colors.termsLinkColor,
-                    marginVertical: "8%",
-                  },
-                ]}
-                onPress={closeModal}
+                onPress={() => {
+                  closeModal();
+                }}
               >
-                <TouchableOpacity
-                  style={[layout.justifyCenter]}
+                <PrimaryGradient
+                  styleProp={[styles.loginButton, layout.justifyCenter]}
                 >
-                  <View
-                    style={[layout.display, layout.row, layout.itemsCenter,]}
-                  >
+                  <View style={[layout.display, layout.rowHCenter]}>
                     <Text
                       style={[
                         fonts.size_16,
@@ -111,7 +109,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                         { color: colors.loginBtnTextColor },
                       ]}
                     >
-                      RATE US ON APP STORE
+                      Submit
                     </Text>
                     <ImageVariant
                       testID="brand-img"
@@ -120,7 +118,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                       resizeMode="contain"
                     />
                   </View>
-                </TouchableOpacity>
+                </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
@@ -150,5 +148,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#2F2B3A",
     borderRadius: 20,
     alignSelf: "center",
+  },
+  loginButton: {
+    height: 48,
+    width: "100%",
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });

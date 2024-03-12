@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Image
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
-import RightArrow from "@/theme/assets/images/rightarrow.png";
+import rightArrow from "@/theme/assets/images/rightarrow.png";
 import { Formik } from "formik";
 import { ImageVariant } from "../atoms";
 import Cross from "@/theme/assets/images/cross.png";
@@ -20,7 +20,8 @@ import Cross from "@/theme/assets/images/cross.png";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import Calender from '@/theme/assets/images/calendar.png'
+import Calender from "@/theme/assets/images/calendar.png";
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -36,7 +37,7 @@ const EditPersonalDetailBottomSheet = ({
     Keyboard.dismiss();
   };
 
-  console.log("Recied prof data in child::",profileData);
+  console.log("Recied prof data in child::", profileData);
 
   console.log("SELECTED DATE::", selectedDob);
 
@@ -76,7 +77,7 @@ const EditPersonalDetailBottomSheet = ({
               }}
               onSubmit={(values, actions) => {
                 saveNewData(values);
-                console.log("OnSUBMIT values::",values);
+                console.log("OnSUBMIT values::", values);
                 actions.setSubmitting(false);
                 closeModal();
               }}
@@ -135,7 +136,14 @@ const EditPersonalDetailBottomSheet = ({
                         >
                           DOB
                         </Text>
-                        <View style={[layout.row, layout.itemsCenter, layout.justifyBetween, styles.inputField]}>
+                        <View
+                          style={[
+                            layout.row,
+                            layout.itemsCenter,
+                            layout.justifyBetween,
+                            styles.inputField,
+                          ]}
+                        >
                           <TextInput
                             style={[
                               layout.justifyCenter,
@@ -157,7 +165,14 @@ const EditPersonalDetailBottomSheet = ({
                               setOpenCalender(true);
                             }}
                           >
-                            <Image source={Calender} style={{width: 20, height:20, marginLeft: "5%"}} />
+                            <Image
+                              source={Calender}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                marginLeft: "5%",
+                              }}
+                            />
                           </TouchableOpacity>
                           <DateTimePicker
                             mode="date"
@@ -406,39 +421,34 @@ const EditPersonalDetailBottomSheet = ({
                         />
                       </View>
                     </ScrollView>
+                    
                     <TouchableOpacity
-                      style={[
-                        layout.justifyCenter,
-                        layout.itemsCenter,
-                        layout.display,
-                        layout.rowHCenter,
-                        {
-                          height: 48,
-                          borderRadius: 12,
-                          backgroundColor: colors.termsLinkColor,
-                          position: "fixed",
-                        },
-                      ]}
-                      onPress={()=>{
-                        setFieldValue('dob', selectedDob)
-                        handleSubmit()
+                      onPress={() => {
+                        setFieldValue("dob", selectedDob);
+                        handleSubmit();
                       }}
                     >
-                      <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          { color: colors.loginBtnTextColor },
-                        ]}
+                      <PrimaryGradient
+                        styleProp={[styles.loginButton, layout.justifyCenter]}
                       >
-                        SAVE
-                      </Text>
-                      <ImageVariant
-                        testID="brand-img"
-                        style={{ width: 16, height: 9, left: 5 }}
-                        source={RightArrow}
-                        resizeMode="contain"
-                      />
+                        <View style={[layout.display, layout.rowHCenter]}>
+                          <Text
+                            style={[
+                              fonts.size_16,
+                              fonts.bold,
+                              { color: colors.loginBtnTextColor },
+                            ]}
+                          >
+                            Submit
+                          </Text>
+                          <ImageVariant
+                            testID="brand-img"
+                            style={{ width: 16, height: 9, left: 5 }}
+                            source={rightArrow}
+                            resizeMode="contain"
+                          />
+                        </View>
+                      </PrimaryGradient>
                     </TouchableOpacity>
                   </View>
                 );
@@ -473,5 +483,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 14,
     borderTopWidth: 2,
     borderColor: "#8F8F94",
+  },
+  loginButton: {
+    height: 48,
+    width: "100%",
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

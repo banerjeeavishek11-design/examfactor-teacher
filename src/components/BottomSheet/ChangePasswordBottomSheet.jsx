@@ -15,6 +15,7 @@ import { ImageVariant } from "../atoms";
 import RightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
 import { useNavigation } from "@react-navigation/native";
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
@@ -154,32 +155,20 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                       >
                         Contain : At least 1 numeric digit
                       </Text>
+                      
                       <TouchableOpacity
-                        style={[
-                          styles.buttonContainer,
-                          {
-                            height: 48,
-                            borderRadius: 12,
-                            backgroundColor: colors.termsLinkColor,
-                            position: "fixed",
-                            marginVertical: "5%",
-                          },
-                        ]}
-                        onPress={() => {
-                          handleSubmit();
-                          closeModal();
-                          navigation.navigate("NewPasswordStatusScreen", {
-                            data: "Updated",
-                          });
-                        }}
+                      onPress={() => {
+                        handleSubmit();
+                        closeModal();
+                        navigation.navigate("NewPasswordStatusScreen", {
+                          data: "Updated",
+                        });
+                      }}
+                    >
+                      <PrimaryGradient
+                        styleProp={[styles.loginButton, layout.justifyCenter]}
                       >
-                        <View
-                          style={[
-                            layout.display,
-                            layout.row,
-                            layout.itemsCenter,
-                          ]}
-                        >
+                        <View style={[layout.display, layout.rowHCenter]}>
                           <Text
                             style={[
                               fonts.size_16,
@@ -187,7 +176,7 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                               { color: colors.loginBtnTextColor },
                             ]}
                           >
-                            SAVE
+                            Save
                           </Text>
                           <ImageVariant
                             testID="brand-img"
@@ -196,7 +185,8 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             resizeMode="contain"
                           />
                         </View>
-                      </TouchableOpacity>
+                      </PrimaryGradient>
+                    </TouchableOpacity>
                     </View>
                   );
                 }}
@@ -277,5 +267,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 16,
+  },
+  loginButton: {
+    height: 48,
+    width: "100%",
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });

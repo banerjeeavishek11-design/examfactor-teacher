@@ -14,7 +14,7 @@ import RateUsStart from "@/theme/assets/images/rateusstar.png";
 import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
 import { ImageVariant } from "../atoms";
-
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const starRatings = [
   { id: 1, selected: false },
@@ -141,7 +141,14 @@ const RateUsBottomSheet = (props) => {
                   contentContainerStyle={{ paddingBottom: "0%" }}
                   showsVerticalScrollIndicator={false}
                 >
-                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: "3%" },
+                    ]}
+                  >
                     {starRatings.map((rating) => (
                       <TouchableOpacity
                         key={rating.id}
@@ -162,7 +169,14 @@ const RateUsBottomSheet = (props) => {
                       </TouchableOpacity>
                     ))}
                   </View>
-                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: "3%" },
+                    ]}
+                  >
                     <Text
                       style={[
                         fonts.alignCenter,
@@ -271,34 +285,26 @@ const RateUsBottomSheet = (props) => {
                       </View>
 
                       <TouchableOpacity
-                        style={[
-                          styles.buttonContainer,
-                          {
-                            height: 48,
-                            borderRadius: 12,
-                            backgroundColor: colors.termsLinkColor,
-                            marginVertical: "8%",
-                          },
-                        ]}
                         onPress={() => {
-                          closeModal();
+                          handleSlideDown();
                           openThanksForFeedbackModal();
                         }}
                       >
-                        <TouchableOpacity
-                          style={[styles.loginButton, layout.justifyCenter, layout.itemsCenter, fonts.alignCenter]}
+                        <PrimaryGradient
+                          styleProp={[styles.loginButton, layout.justifyCenter]}
                         >
+                          <View style={[layout.display, layout.rowHCenter]}>
                             <Text
                               style={[
                                 fonts.size_16,
                                 fonts.bold,
-                                fonts.alignCenter,
                                 { color: colors.loginBtnTextColor },
                               ]}
                             >
                               Submit
                             </Text>
-                        </TouchableOpacity>
+                          </View>
+                        </PrimaryGradient>
                       </TouchableOpacity>
                     </View>
                   )}
@@ -349,10 +355,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   loginButton: {
-    height: 32,
-    width: '100%',
+    height: 48,
+    width: "100%",
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });
