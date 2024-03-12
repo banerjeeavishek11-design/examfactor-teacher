@@ -67,10 +67,11 @@ const TabBar = (props) => {
         <Text
           style={[
             fonts.size_12,
+            fonts.alignCenter,
             {
               fontWeight: props.state.index === 0 ? "700" : "500",
               color: props.state.index === 0 ? "#fff" : "#77747D",
-              textAlign: "center",
+            
               lineHeight: 18,
             },
           ]}
@@ -97,10 +98,11 @@ const TabBar = (props) => {
         <Text
           style={[
             fonts.size_12,
+            fonts.alignCenter,
             {
               fontWeight: props.state.index === 1 ? "700" : "500",
               color: props.state.index === 1 ? "#fff" : "#77747D",
-              textAlign: "center",
+          
               lineHeight: 18,
             },
           ]}
@@ -127,10 +129,10 @@ const TabBar = (props) => {
         <Text
           style={[
             fonts.size_12,
+            fonts.alignCenter,
             {
               fontWeight: props.state.index === 2 ? "700" : "500",
               color: props.state.index === 2 ? "#fff" : "#77747D",
-              textAlign: "center",
               lineHeight: 18,
             },
           ]}
@@ -158,10 +160,10 @@ const TabBar = (props) => {
         <Text
           style={[
             fonts.size_12,
+            fonts.alignCenter,
             {
               fontWeight: props.state.index === 4 ? "700" : "500",
               color: props.state.index === 3 ? "#fff" : "#77747D",
-              textAlign: "center",
               lineHeight: 18,
             },
           ]}

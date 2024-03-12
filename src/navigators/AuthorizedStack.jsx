@@ -3,6 +3,8 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomtabNavigator from "./BottomtabNavigator";
+import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen, NewPasswordStatusScreen } from "@/screens";
+
 
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
@@ -18,6 +20,7 @@ const AuthorizedStack = () => {
         },
         swipeEnabled: false,
       }}
+      drawerContent={(props) => <SideBarAuthedScreen {...props} />}
     >
       <Stack.Screen
         name="BottomtabNavigator"
@@ -27,6 +30,39 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
+       <Stack.Screen
+        name="ProfileDetailsScreen"
+        component={ProfileDetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="AppGuideScreen"
+        component={AppGuideScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="SupportScreen"
+        component={SupportScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="NewPasswordStatusScreen"
+        component={NewPasswordStatusScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+
     </Drawer.Navigator>
   );
 };

@@ -15,8 +15,9 @@ function SafeScreen({ children }: PropsWithChildren) {
 			]}
 		>
 			<StatusBar
-				barStyle={variant === 'dark' ? 'light-content' : 'dark-content'}
-				backgroundColor={navigationTheme.colors.background}
+				// barStyle={variant === 'dark' ? 'light-content' : 'dark-content'}
+				// backgroundColor={navigationTheme.colors.background}
+				
 			/>
 			{children}
 		</SafeAreaView>
