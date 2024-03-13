@@ -9,34 +9,33 @@ import {
   } from "react-native";
 import React, {useState} from 'react'
 import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../atoms";
-import RadioButton from "../RadioButton/RadioButton";
+import { ImageVariant } from "../../atoms";
+import RadioButton from "../../RadioButton/RadioButton";
 import { useTheme } from '@/theme'
-import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 
-const sortBy = [
-    {id:1, sortBy: "Practice Progress: High To Low"},
-    {id:2, sortBy: "Practice Progress: Low To High"},
-    {id:3, sortBy: "Achievable Score: High To Low"},
-    {id:4, sortBy: "Achievable Score: Low to High"},
-    {id:5, sortBy: "Last Test Score: High To Low"},
-    {id:6, sortBy: "Last Test Score: Low to High"},
+const practiceDuration = [
+    {id:1, practiceDuration: "All Students in class"},
+    {id:2, practiceDuration: "Not Practiced yesterday"},
+    {id:3, practiceDuration: "Not Practiced in 3 Days"},
+    {id:3, practiceDuration: "Not Practiced in 7 Days"},
+    {id:3, practiceDuration: "Not Practiced in 15 Days"},
+    {id:3, practiceDuration: "Not Practiced in 30 Days"}
   ];
 
-const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
-    const {fonts, layout, colors} = useTheme();
+const PracticeDurationBottomSheet = ({visible, closeModal, setPracticeDurationValue}) => {
+    const {fonts, layout, colors}=useTheme();
     const [option, setOption] = useState("first");
     const handleOptionChange = (op) => {
         setOption(op);
-        console.log("selected sortby: ", op);
+        console.log("selected practice duration: ", op);
       };
 
       const handleApply = () => {
-        setSortbyValue(option);
+        setPracticeDurationValue(option);
         closeModal()
       };
-
   return (
     <View style={styles.container}>
     <Modal
@@ -77,21 +76,21 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
                 { color: colors.white, paddingBottom: "2%" },
               ]}
             >
-              Sort By
+             Practice Duration
             </Text>
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: "5%" }}
             >
-              {sortBy?.map((ele) => (
+              {practiceDuration?.map((ele) => (
                 <TouchableOpacity
-                  key={ele.id}
+                  key={ele.practiceDuration}
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange(ele.sortBy)}
+                  onPress={() => handleOptionChange(ele.practiceDuration)}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === ele.sortBy} />
+                    <RadioButton isActive={option === ele.practiceDuration} />
                   </View>
                   <Text
                     style={[
@@ -100,7 +99,7 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
                       fonts.fontWeignt_600,
                     ]}
                   >
-                    {ele.sortBy}
+                    {ele.practiceDuration}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -163,9 +162,10 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
   )
 }
 
-export default SortbyBottomSheet
+export default PracticeDurationBottomSheet
 
 const styles = StyleSheet.create({
+    
     container: {
         flex: 1,
         justifyContent: "center",

@@ -9,10 +9,10 @@ import {
 import React from "react";
 import { useTheme } from "@/theme";
 import Feedback from "@/theme/assets/images/feedback.png";
-import { ImageVariant } from "../atoms";
+import { ImageVariant } from "../../atoms";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
-import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();

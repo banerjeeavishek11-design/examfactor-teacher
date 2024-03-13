@@ -18,8 +18,8 @@ import Info from "@/theme/assets/images/info.png";
 import UpArrow from "@/theme/assets/images/uparrow.png";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
-import SortbyBottomSheet from "@/components/BottomSheet/SortbyBottomSheet";
-import PracticeDurationBottomSheet from "@/components/BottomSheet/PracticeDurationBottomSheet";
+import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
+import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
 
 
 const HomeScreen = () => {

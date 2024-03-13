@@ -13,8 +13,8 @@ import React, { useState, useEffect } from "react";
 import RateUsStart from "@/theme/assets/images/rateusstar.png";
 import Cross from "@/theme/assets/images/cross.png";
 import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
-import { ImageVariant } from "../atoms";
-import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+import { ImageVariant } from "../../atoms";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const starRatings = [
   { id: 1, selected: false },

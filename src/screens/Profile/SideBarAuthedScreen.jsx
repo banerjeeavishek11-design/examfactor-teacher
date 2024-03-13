@@ -21,8 +21,8 @@ import User from "@/theme/assets/images/user.png";
 import Teacher from "@/theme/assets/images/teacher.png";
 import ClassTeacher from "@/theme/assets/images/classteacher.png";
 import { Divider } from "react-native-paper";
-import ChangeRoleBottomSheet from "@/components/BottomSheet/ChangeRoleBottomSheet";
-import RateUsBottomSheet from "@/components/BottomSheet/RateUsBottomSheet";
+import ChangeRoleBottomSheet from "@/components/BottomSheet/Profile/ChangeRoleBottomSheet";
+import RateUsBottomSheet from "@/components/BottomSheet/Profile/RateUsBottomSheet";
 
 const SideBarAuthedScreen = (props) => {
   const {

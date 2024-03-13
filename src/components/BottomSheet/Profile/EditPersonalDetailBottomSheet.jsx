@@ -14,14 +14,14 @@ import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
 import { Formik } from "formik";
-import { ImageVariant } from "../atoms";
+import { ImageVariant } from "../../atoms";
 import Cross from "@/theme/assets/images/cross.png";
 // import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import Calender from "@/theme/assets/images/calendar.png";
-import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -36,10 +36,6 @@ const EditPersonalDetailBottomSheet = ({
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-
-  console.log("Recied prof data in child::", profileData);
-
-  console.log("SELECTED DATE::", selectedDob);
 
   return (
     <Modal
@@ -77,7 +73,6 @@ const EditPersonalDetailBottomSheet = ({
               }}
               onSubmit={(values, actions) => {
                 saveNewData(values);
-                console.log("OnSUBMIT values::", values);
                 actions.setSubmitting(false);
                 closeModal();
               }}
