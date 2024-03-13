@@ -15,6 +15,7 @@ import { ImageVariant } from "../atoms";
 import RadioButton from "../RadioButton/RadioButton";
 import Teacher from "@/theme/assets/images/teacher.png";
 import ClassTeacher from "@/theme/assets/images/classteacher.png";
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const studentClass = [
   { id: 1, class: "10-A" },
@@ -31,7 +32,7 @@ const studentClass = [
   { id: 1, class: "12-D" },
 ];
 
-const ReferandearnBottomsheet = (props) => {
+const ChangeRoleBottomSheet = (props) => {
   const {
     setChangeRoleBottomSheetVisible,
     changeRoleBottomSheetVisible,
@@ -116,7 +117,7 @@ const ReferandearnBottomsheet = (props) => {
                   </View>
                   <ImageVariant
                     testID="brand-img"
-                    style={{ width: 15, height: 20,left:8 }}
+                    style={{ width: 15, height: 20, left: 8 }}
                     source={Teacher}
                     resizeMode="contain"
                   />
@@ -133,7 +134,7 @@ const ReferandearnBottomsheet = (props) => {
                   </View>
                   <ImageVariant
                     testID="brand-img"
-                    style={{ width: 19, height: 23,left:8 }}
+                    style={{ width: 19, height: 23, left: 8 }}
                     source={ClassTeacher}
                     resizeMode="contain"
                   />
@@ -154,7 +155,7 @@ const ReferandearnBottomsheet = (props) => {
               >
                 <Text
                   style={[
-                    fonts.size_14,
+                    fonts.size_16,
                     fonts.fontWeignt_600,
                     fonts.alignCenter,
                     { color: colors.termsLinkColor },
@@ -163,6 +164,7 @@ const ReferandearnBottomsheet = (props) => {
                   Cancel
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={[
                   layout.justifyCenter,
@@ -173,16 +175,23 @@ const ReferandearnBottomsheet = (props) => {
                 ]}
                 onPress={handleApply}
               >
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeignt_600,
-                    fonts.alignCenter,
-                    { color: colors.loginBtnTextColor },
+                <PrimaryGradient
+                  styleProp={[
+                    layout.justifyCenter,
+                    { height: "100%", borderRadius: 8 },
                   ]}
                 >
-                  Apply
-                </Text>
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.fontWeignt_600,
+                      fonts.alignCenter,
+                      { color: colors.loginBtnTextColor },
+                    ]}
+                  >
+                    Apply
+                  </Text>
+                </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
@@ -286,4 +295,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReferandearnBottomsheet;
+export default ChangeRoleBottomSheet;

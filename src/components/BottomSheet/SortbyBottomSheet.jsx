@@ -12,6 +12,8 @@ import Cross from "@/theme/assets/images/cross.png";
 import { ImageVariant } from "../atoms";
 import RadioButton from "../RadioButton/RadioButton";
 import { useTheme } from '@/theme'
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+
 
 const sortBy = [
     {id:1, sortBy: "Practice Progress: High To Low"},
@@ -117,7 +119,7 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
             >
               <Text
                 style={[
-                  fonts.size_14,
+                  fonts.size_16,
                   fonts.fontWeignt_600,
                   { color: colors.termsLinkColor, textAlign: "center" },
                 ]}
@@ -126,25 +128,33 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                layout.justifyCenter,
-                styles.footerButton,
-                {
-                  backgroundColor: colors.termsLinkColor,
-                },
-              ]}
-              onPress={handleApply}
-            >
-              <Text
                 style={[
-                  fonts.size_14,
-                  fonts.fontWeignt_600,
-                  { color: colors.loginBtnTextColor, textAlign: "center" },
+                  layout.justifyCenter,
+                  styles.footerButton,
+                  {
+                    backgroundColor: colors.termsLinkColor,
+                  },
                 ]}
+                onPress={handleApply}
               >
-                Apply
-              </Text>
-            </TouchableOpacity>
+                <PrimaryGradient
+                  styleProp={[
+                    layout.justifyCenter,
+                    { height: "100%", borderRadius: 8 },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.fontWeignt_600,
+                      fonts.alignCenter,
+                      { color: colors.loginBtnTextColor },
+                    ]}
+                  >
+                    Apply
+                  </Text>
+                </PrimaryGradient>
+              </TouchableOpacity>
           </View>
         </View>
       </View>

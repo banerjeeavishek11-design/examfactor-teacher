@@ -48,7 +48,7 @@ const EditPersonalDetailBottomSheet = ({
       transparent={true}
     >
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
-        <View style={[styles.modalContainer]}>
+        <View style={[styles.modalContainer,{marginBottom:'8%'}]}>
           <View
             style={[
               styles.bottomSheetContent,
@@ -427,6 +427,7 @@ const EditPersonalDetailBottomSheet = ({
                         setFieldValue("dob", selectedDob);
                         handleSubmit();
                       }}
+                      
                     >
                       <PrimaryGradient
                         styleProp={[styles.loginButton, layout.justifyCenter]}
@@ -439,7 +440,7 @@ const EditPersonalDetailBottomSheet = ({
                               { color: colors.loginBtnTextColor },
                             ]}
                           >
-                            Submit
+                            Save
                           </Text>
                           <ImageVariant
                             testID="brand-img"

@@ -14,6 +14,7 @@ import Cross from "@/theme/assets/images/cross.png";
 import { ImageVariant } from "../atoms";
 import RadioButton from "../RadioButton/RadioButton";
 import ClassSuccessfullySelectedBottomSheet from "./ClassSuccessfullySelectedBottomSheet";
+import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
 
 const studentClass = [
   { id: 1, class: "10-A" },
@@ -150,10 +151,10 @@ const ReferandearnBottomsheet = (props) => {
               >
                 <Text
                   style={[
-                    fonts.size_14,
-                    fonts.fontWeignt_600,
+                    fonts.size_16,
+                    fonts.bold,
                     fonts.alignCenter,
-                    { color: colors.termsLinkColor,},
+                    { color: colors.termsLinkColor },
                   ]}
                 >
                   Cancel
@@ -169,16 +170,23 @@ const ReferandearnBottomsheet = (props) => {
                 ]}
                 onPress={handleApply}
               >
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeignt_600,
-                    fonts.alignCenter,
-                    { color: colors.loginBtnTextColor,},
+                <PrimaryGradient
+                  styleProp={[
+                    layout.justifyCenter,
+                    { height: "100%", borderRadius: 8 },
                   ]}
                 >
-                  Apply
-                </Text>
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.loginBtnTextColor },
+                    ]}
+                  >
+                    Apply
+                  </Text>
+                </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
