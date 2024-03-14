@@ -1,7 +1,7 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
-import { ImageVariant } from "../atoms";
+import { ImageVariant } from "../../atoms";
 import Cross from "@/theme/assets/images/cross.png";
 import Success from "@/theme/assets/images/forgotsuccess.png";
 

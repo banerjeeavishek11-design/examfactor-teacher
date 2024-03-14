@@ -5,8 +5,8 @@ import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import Profile from "@/theme/assets/images/profile.png";
-import EditPersonalDetailBottomSheet from "@/components/BottomSheet/EditPersonalDetailBottomSheet";
-import ChangePasswordBottomSheet from "@/components/BottomSheet/ChangePasswordBottomSheet";
+import EditPersonalDetailBottomSheet from "@/components/BottomSheet/Profile/EditPersonalDetailBottomSheet";
+import ChangePasswordBottomSheet from "@/components/BottomSheet/Profile/ChangePasswordBottomSheet";
 import { DrawerActions } from "@react-navigation/native";
 
 const ProfileData = {

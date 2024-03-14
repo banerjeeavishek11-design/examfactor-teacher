@@ -15,7 +15,7 @@ import DownArrow from "@/theme/assets/images/Downarrow.png";
 import User from "@/theme/assets/images/user.png";
 import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
-import SelectClassBottomSheet from "@/components/BottomSheet/SelectClassBottomSheet";
+import SelectClassBottomSheet from "@/components/BottomSheet/Home/SelectClassBottomSheet";
 
 
 

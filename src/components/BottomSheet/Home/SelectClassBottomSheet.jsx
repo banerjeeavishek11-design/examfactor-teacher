@@ -11,10 +11,10 @@ import {
 } from "react-native";
 import ModalClose from "@/theme/assets/images/modalclose.png";
 import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../atoms";
-import RadioButton from "../RadioButton/RadioButton";
-import Teacher from "@/theme/assets/images/teacher.png";
-import ClassTeacher from "@/theme/assets/images/classteacher.png";
+import { ImageVariant } from "../../atoms";
+import RadioButton from "../../RadioButton/RadioButton";
+import ClassSuccessfullySelectedBottomSheet from "./ClassSuccessfullySelectedBottomSheet";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const studentClass = [
   { id: 1, class: "10-A" },
@@ -33,9 +33,10 @@ const studentClass = [
 
 const ReferandearnBottomsheet = (props) => {
   const {
-    setChangeRoleBottomSheetVisible,
-    changeRoleBottomSheetVisible,
-    setUserRole,
+    setOpenSelectClassBottomSheet,
+    openSelectClassBottmSheet,
+    setShowSelectedClass,
+    showSelecTedClass,
   } = props;
   const {
     colors,
@@ -47,10 +48,14 @@ const ReferandearnBottomsheet = (props) => {
     components,
     backgrounds,
   } = useTheme();
-  const [option, setOption] = useState("Teacher");
+  const [option, setOption] = useState("first");
+  const [
+    openClassSuccessfullySelectedBottomSheet,
+    setOpenClassSuccessfullySelectedBottomSheet,
+  ] = useState(false);
 
   const handleSlideDown = () => {
-    setChangeRoleBottomSheetVisible(false);
+    setOpenSelectClassBottomSheet(false);
   };
 
   const handleOptionChange = (op) => {
@@ -59,14 +64,15 @@ const ReferandearnBottomsheet = (props) => {
   };
 
   const handleApply = () => {
-    setChangeRoleBottomSheetVisible(false);
-    setUserRole(option);
+    setOpenSelectClassBottomSheet(false);
+    setShowSelectedClass(option);
+    setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 
   return (
     <View style={styles.container}>
       <Modal
-        visible={changeRoleBottomSheetVisible}
+        visible={openSelectClassBottmSheet}
         animationType="slide"
         transparent={true}
       >
@@ -74,6 +80,7 @@ const ReferandearnBottomsheet = (props) => {
           <View
             style={[
               styles.bottomSheetContent,
+
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -102,48 +109,38 @@ const ReferandearnBottomsheet = (props) => {
                   { color: colors.white, paddingBottom: "2%" },
                 ]}
               >
-                Select Your Role
+                Select Class
               </Text>
-
-              <View>
-                <TouchableOpacity
-                  style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange("Teacher")}
-                  activeOpacity={1}
-                >
-                  <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === "Teacher"} />
-                  </View>
-                  <ImageVariant
-                    testID="brand-img"
-                    style={{ width: 15, height: 20,left:8 }}
-                    source={Teacher}
-                    resizeMode="contain"
-                  />
-                  <Text style={styles.radioButtonText}>Teacher</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange("Class Teacher")}
-                  activeOpacity={1}
-                >
-                  <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === "Class Teacher"} />
-                  </View>
-                  <ImageVariant
-                    testID="brand-img"
-                    style={{ width: 19, height: 23,left:8 }}
-                    source={ClassTeacher}
-                    resizeMode="contain"
-                  />
-                  <Text style={styles.radioButtonText}>Class Teacher</Text>
-                </TouchableOpacity>
-              </View>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: "5%" }}
+              >
+                {studentClass?.map((ele) => (
+                  <TouchableOpacity
+                    key={ele.class}
+                    style={styles.radioButtonContainer}
+                    onPress={() => handleOptionChange(ele.class)}
+                    activeOpacity={1}
+                  >
+                    <View style={{ marginLeft: 10 }}>
+                      <RadioButton isActive={option === ele.class} />
+                    </View>
+                    <Text
+                      style={[
+                        styles.radioButtonText,
+                        fonts.size_14,
+                        fonts.fontWeignt_600,
+                      ]}
+                    >
+                      {ele.class}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
             </View>
             <View style={styles.footer}>
               <TouchableOpacity
-                onPress={() => setChangeRoleBottomSheetVisible(false)}
+                onPress={() => setOpenSelectClassBottomSheet(false)}
                 style={[
                   layout.justifyCenter,
                   styles.footerButton,
@@ -154,8 +151,8 @@ const ReferandearnBottomsheet = (props) => {
               >
                 <Text
                   style={[
-                    fonts.size_14,
-                    fonts.fontWeignt_600,
+                    fonts.size_16,
+                    fonts.bold,
                     fonts.alignCenter,
                     { color: colors.termsLinkColor },
                   ]}
@@ -173,21 +170,37 @@ const ReferandearnBottomsheet = (props) => {
                 ]}
                 onPress={handleApply}
               >
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeignt_600,
-                    fonts.alignCenter,
-                    { color: colors.loginBtnTextColor },
+                <PrimaryGradient
+                  styleProp={[
+                    layout.justifyCenter,
+                    { height: "100%", borderRadius: 8 },
                   ]}
                 >
-                  Apply
-                </Text>
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.loginBtnTextColor },
+                    ]}
+                  >
+                    Apply
+                  </Text>
+                </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
+      <ClassSuccessfullySelectedBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={
+          setOpenClassSuccessfullySelectedBottomSheet
+        }
+        openClassSuccessfullySelectedBottomSheet={
+          openClassSuccessfullySelectedBottomSheet
+        }
+        showSelecTedClass={showSelecTedClass}
+      />
     </View>
   );
 };
@@ -204,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   bottomSheetContent: {
-    height: 350,
+    height: 550,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
@@ -257,7 +270,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   radioButtonText: {
-    marginLeft: 15,
+    marginLeft: 8,
     color: "#fff",
   },
   scrollContainer: {
@@ -273,16 +286,6 @@ const styles = StyleSheet.create({
     width: "48%",
     height: 48,
     borderRadius: 8,
-  },
-  radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 20,
-    backgroundColor: "#22222F",
-    borderRadius: 12,
-    height: 52,
-    marginTop: 5,
-    width: "100%",
   },
 });
 

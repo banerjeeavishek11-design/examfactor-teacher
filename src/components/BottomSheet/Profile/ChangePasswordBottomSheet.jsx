@@ -11,11 +11,11 @@ import {
 import React from "react";
 import { useTheme } from "@/theme";
 import { Formik } from "formik";
-import { ImageVariant } from "../atoms";
+import { ImageVariant } from "../../atoms";
 import RightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
 import { useNavigation } from "@react-navigation/native";
-import PrimaryGradient from "../template/LinearGradient/PrimaryGradient";
+import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
