@@ -8,23 +8,57 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/theme";
-import { Header, SafeScreen } from "@/components/template";
+import { SafeScreen } from "@/components/template";
 import { ImageVariant } from "@/components/atoms";
+import RightArrow from "@/theme/assets/images/arrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
-import reportChapterDetails from "./ReportChapterDetails";
 import Filter from "@/theme/assets/images/questionAnalysisFilter.png";
-// import SelectChapterQABottomSheet from "@/components/BottomSheet/Reports/SelectChapterQABottomSheet";
+import SelectChapterQABottomSheet from "@/components/BottomSheet/Reports/SelectChapterQABottomSheet";
+import questions from "./QuestionAnalysisDummyQuestions";
+import Weak from "@/theme/assets/images/subtopicWeakIcon.png";
+import Bookmark from "@/theme/assets/images/questionBookmark.png";
+import MostlyFilterBottomSheet from "@/components/BottomSheet/Reports/MostlyFilterBottomSheet";
+import Cross from "@/theme/assets/images/cross.png";
+import { useNavigation } from "@react-navigation/native";
+
 
 const QuestionAnalysisScreen = () => {
+    const navigation = useNavigation()
   const { fonts, layout, colors } = useTheme();
+  const [chapterQuestions, setChapterQuestions] = useState([]);
   const [selectedChapter, setSelectedChapter] = useState(null);
-  const [selectChapterModalVisible, setSelectChapterQAModalVisible] =
+  const [selectChapterQAModalVisible, setSelectChapterQAModalVisible] =
     useState(false);
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const closeFilterModal = () => {
+    setFilterModalVisible(false);
+  };
   const closeSelectChapterQAModal = () => {
     setSelectChapterQAModalVisible(false);
   };
-  const selectedQuestionType = null;
+  const [selectedQuestionType, setSelectedQuestionType] = useState(null);
+
+  useEffect(() => {
+    if (selectedChapter !== null) {
+      const result = questions.find(
+        (chapter) => chapter.chapterId === selectedChapter?.chapterId
+      );
+      //result.data may come undefined because project is using limited dummy data
+      if (result?.data === undefined) {
+        setChapterQuestions([]);
+        return;
+      }
+    //   console.log("RESULTED QUESTION:::", result?.data);
+      setChapterQuestions(result?.data);
+      setSelectedQuestionType(true);
+    }
+  }, [selectedChapter]);
+
+//   console.log("FINAL SELECTED:", selectedChapter);
+//   console.log("SELECTED FILTER:", selectedFilter);
+
   return (
     <SafeScreen>
       <ScrollView
@@ -112,7 +146,9 @@ const QuestionAnalysisScreen = () => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => setSelectAreaModalVisible(true)}
+                onPress={() => {
+                  setSelectChapterQAModalVisible(true);
+                }}
                 style={[
                   layout.justifyCenter,
                   layout.display,
@@ -165,15 +201,156 @@ const QuestionAnalysisScreen = () => {
                 />
               </TouchableOpacity>
             </ScrollView>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setFilterModalVisible(true)}>
               <Image source={Filter} />
             </TouchableOpacity>
           </View>
 
+          {selectedFilter && selectedChapter !== null ? (
+            <View style={{ marginTop: "2%" }}>
+              <TouchableOpacity
+                style={[
+                  layout.justifyCenter,
+                  layout.display,
+                  layout.rowHCenter,
+                  layout.justifyAround,
+                  {
+                    backgroundColor: colors.bottomTabBackground,
+                    width: selectedFilter === "Mostly Incorrect" ? 120 : 145,
+                    height: 28,
+                    borderRadius: 4,
+                    paddingHorizontal: 6,
+                    marginRight: 5,
+                  },
+                ]}
+                onPress={() => setSelectedFilter(null)}
+              >
+                <Text
+                  style={[
+                    fonts.size_12,
+                    fonts.fontWeight_extraSmall,
+                    fonts.alignCenter,
+                    {
+                      color: colors.termsLinkColor,
+                      opacity: 0.8,
+                    },
+                  ]}
+                >
+                  {selectedFilter}
+                </Text>
+                  <ImageVariant
+                    testID="brand-img"
+                    style={{
+                      width: 10,
+                      height: 10,
+                      tintColor: colors.termsLinkColor,
+                      opacity: 0.8,
+                    }}
+                    source={Cross}
+                    resizeMode="contain"
+                  />
+              </TouchableOpacity>
+            </View>
+          ) : null}
+
           <View>
-            {selectedQuestionType !== null ? (
+            {selectedChapter !== null ? (
               <View>
-                <Text>Question analysis questions here</Text>
+                {chapterQuestions.map((ele) => {
+                  return (
+                    <View key={ele.qNo}>
+                      <View
+                        style={[
+                          layout.fullWidth,
+                          layout.paddingForCard,
+                          {
+                            height: "auto",
+                            backgroundColor: colors.cardBackgroundColor,
+                            borderRadius: 16,
+                            marginTop: "5%",
+                          },
+                        ]}
+                      >
+                        <View style={[layout.row, { width: "80%", gap: 10 }]}>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeight_small,
+                              { color: colors.white },
+                            ]}
+                          >
+                            {ele.qNo}.
+                          </Text>
+                          <View>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.fontWeight_small,
+                                { color: colors.white },
+                              ]}
+                            >
+                              {ele.question}
+                            </Text>
+                            <View
+                              style={[
+                                layout.rowHCenter,
+                                layout.itemsCenter,
+                                { marginTop: "4%", gap: 8 },
+                              ]}
+                            >
+                              <Image
+                                source={Weak}
+                                style={{ width: 20, height: 20 }}
+                              />
+                              <Text
+                                style={[
+                                  fonts.size_12,
+                                  fonts.fontWeight_small,
+                                  { color: colors.gray100 },
+                                ]}
+                              >
+                                Weak for 68% of the student
+                              </Text>
+                            </View>
+                            <View
+                              style={[
+                                layout.row,
+                                layout.justifyBetween,
+                                { marginTop: "5%" },
+                              ]}
+                            >
+                              <TouchableOpacity
+                                style={[layout.rowHCenter, { gap: 2 }]}
+                                onPress={()=>navigation.navigate("SolutionScreen")}
+                              >
+                                <Text
+                                  style={[
+                                    fonts.size_12,
+                                    fonts.fontWeight_small,
+                                    { color: colors.termsLinkColor },
+                                  ]}
+                                >
+                                  View Solution
+                                </Text>
+                                <Image
+                                  style={{
+                                    width: 10,
+                                    height: 8,
+                                    tintColor: colors.termsLinkColor,
+                                  }}
+                                  source={RightArrow}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                          <TouchableOpacity style={[layout.justifyEnd]}>
+                            <Image source={Bookmark} />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  );
+                })}
               </View>
             ) : (
               <View
@@ -206,7 +383,7 @@ const QuestionAnalysisScreen = () => {
                 </Text>
                 <TouchableOpacity
                   style={{ width: "85%" }}
-                  onPress={() => setSelectChapterModalVisible(true)}
+                  onPress={() => setSelectChapterQAModalVisible(true)}
                 >
                   <PrimaryGradient
                     styleProp={[
@@ -231,7 +408,16 @@ const QuestionAnalysisScreen = () => {
           </View>
         </View>
       </ScrollView>
-      {/* <SelectChapterQABottomSheet visible={selectChapterModalVisible} closeModal={closeSelectChapterQAModal} /> */}
+      <SelectChapterQABottomSheet
+        setSelectedChapter={setSelectedChapter}
+        visible={selectChapterQAModalVisible}
+        closeModal={closeSelectChapterQAModal}
+      />
+      <MostlyFilterBottomSheet
+        setSelectedFilter={setSelectedFilter}
+        visible={filterModalVisible}
+        closeModal={closeFilterModal}
+      />
     </SafeScreen>
   );
 };

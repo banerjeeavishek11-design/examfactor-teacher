@@ -7,7 +7,13 @@ import RadioButton from "../../RadioButton/RadioButton";
 import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
-const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) => {
+const questionType =[
+  {id:1, questionType:"Diagnostic"},  
+  {id:2, questionType:"Practice"},
+  {id:3, questionType:"Test"},
+]
+
+const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedValue,setSelectedChapter}) => {
   const {fonts, layout, colors} = useTheme()
     const [option, setOption] = useState("first");
     const handleOptionChange = (op) => {
@@ -15,10 +21,14 @@ const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) =
         console.log("op", op);
       };
       const handleApply = () => {
-        setSelectedArea(option);
+        setSelectedChapter({
+          ...selectedValue,
+          option
+        });
         closeModal()
       };
-      console.log("passed data of chapter from select chap to select qa:", selectedChapter);
+      
+      // console.log("passed data of chapter from select chap to select qa:", selectedValue);
   return (
     <View style={styles.container}>
     <Modal visible={visible} animationType="slide" transparent={true}>
@@ -61,15 +71,15 @@ const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) =
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: "5%" }}
             >
-              {area?.map((ele) => (
+              {questionType?.map((ele) => (
                 <TouchableOpacity
                   key={ele.id}
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange(ele.area)}
+                  onPress={() => handleOptionChange(ele.questionType)}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === ele.area} />
+                    <RadioButton isActive={option === ele.questionType} />
                   </View>
                   <Text
                     style={[
@@ -78,7 +88,7 @@ const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) =
                       fonts.fontWeignt_600,
                     ]}
                   >
-                    {ele.area}
+                    {ele.questionType}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -113,7 +123,7 @@ const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) =
                   backgroundColor: colors.termsLinkColor,
                 },
               ]}
-                // onPress={handleApply}
+                onPress={handleApply}
             >
               <PrimaryGradient
                 styleProp={[

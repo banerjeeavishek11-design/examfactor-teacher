@@ -15,3 +15,4 @@ export { default as SupportScreen } from "./Profile/SupportScreen";
 export { default as NewPasswordStatusScreen } from "./Profile/NewPasswordStatusScreen";
 export { default as SubjectDetailsScreen } from "./Home/SubjectDetailsScreen";
 export { default as TopicWiseDetailsScreen } from "./Home/TopicWiseDetailsScreen";
+export { default as SolutionScreen } from "./Reports/SolutionScreen";
