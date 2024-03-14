@@ -14,7 +14,7 @@ import DownArrow from "@/theme/assets/images/Downarrow.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 import reportChapterDetails from "./ReportChapterDetails";
 import Filter from "@/theme/assets/images/questionAnalysisFilter.png";
-import SelectChapterQABottomSheet from "@/components/BottomSheet/Reports/SelectChapterQABottomSheet";
+// import SelectChapterQABottomSheet from "@/components/BottomSheet/Reports/SelectChapterQABottomSheet";
 
 const QuestionAnalysisScreen = () => {
   const { fonts, layout, colors } = useTheme();
@@ -231,7 +231,7 @@ const QuestionAnalysisScreen = () => {
           </View>
         </View>
       </ScrollView>
-      <SelectChapterQABottomSheet visible={selectChapterModalVisible} closeModal={closeSelectChapterQAModal} />
+      {/* <SelectChapterQABottomSheet visible={selectChapterModalVisible} closeModal={closeSelectChapterQAModal} /> */}
     </SafeScreen>
   );
 };
