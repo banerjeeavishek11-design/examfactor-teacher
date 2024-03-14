@@ -8,7 +8,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
-import { Concentrix, Header, SafeScreen,BarChart } from "@/components/template";
+import {
+  Concentrix,
+  Header,
+  SafeScreen,
+  BarChart,
+} from "@/components/template";
 import Arrow from "@/theme/assets/images/arrow.png";
 import { ImageVariant } from "@/components/atoms";
 import { Divider } from "react-native-paper";
@@ -20,7 +25,6 @@ import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
-
 
 const HomeScreen = () => {
   const {
@@ -56,7 +60,6 @@ const HomeScreen = () => {
   const toggleContent = () => {
     setShowContent(!showContent);
   };
-
 
   return (
     <SafeScreen>
@@ -174,7 +177,7 @@ const HomeScreen = () => {
                 { color: colors.white },
               ]}
             >
-              60% Complete
+              {`${homeworkProgress * 100}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: "3%" }}>
@@ -204,7 +207,7 @@ const HomeScreen = () => {
                 { color: colors.white },
               ]}
             >
-              50% Complete
+               {`${diagnosticProgress * 100}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: "3%" }}>
@@ -278,8 +281,11 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
-                { color: sortByValue !== null ? colors.termsLinkColor : colors.white, 
-                  opacity: sortByValue !== null ? 1: 0.3 },
+                {
+                  color:
+                    sortByValue !== null ? colors.termsLinkColor : colors.white,
+                  opacity: sortByValue !== null ? 1 : 0.3,
+                },
               ]}
             >
               Sort By
@@ -289,7 +295,8 @@ const HomeScreen = () => {
               style={{
                 width: 10,
                 height: 10,
-                tintColor: sortByValue !== null ? colors.termsLinkColor : colors.white,
+                tintColor:
+                  sortByValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: sortByValue !== null ? 1 : 0.4,
               }}
               source={DownArrow}
@@ -321,8 +328,13 @@ const HomeScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white, 
-                  opacity: practiceDurationValue !== null ? 1: 0.3},
+                {
+                  color:
+                    practiceDurationValue !== null
+                      ? colors.termsLinkColor
+                      : colors.white,
+                  opacity: practiceDurationValue !== null ? 1 : 0.3,
+                },
                 fonts.alignCenter,
               ]}
             >
@@ -333,8 +345,11 @@ const HomeScreen = () => {
               style={{
                 width: 10,
                 height: 10,
-                tintColor: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
-                opacity: practiceDurationValue !== null ? 1: 0.4,
+                tintColor:
+                  practiceDurationValue !== null
+                    ? colors.termsLinkColor
+                    : colors.white,
+                opacity: practiceDurationValue !== null ? 1 : 0.4,
               }}
               source={DownArrow}
               resizeMode="contain"

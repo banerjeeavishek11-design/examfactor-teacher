@@ -67,7 +67,6 @@ const SubjectDetailsScreen = () => {
     backgrounds,
   } = useTheme();
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = React.useState("");
   const [searchChapterName, setSearchChapterName] = useState([]);
 
   const goToTopicWiseDetailsScreen = (chapterName, progress) => {

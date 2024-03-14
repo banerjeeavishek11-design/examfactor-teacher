@@ -2,8 +2,10 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import BottomtabNavigator from "./BottomtabNavigator";
 import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen, NewPasswordStatusScreen, SubjectDetailsScreen, TopicWiseDetailsScreen } from "@/screens";
+import TopTabNavigator from "./TopTabNavigator";
+import BottomTabNavigator from "./BottomTabNavigator";
+import StudentWiseReportScreen from "@/screens/Reports/StudentWiseReportScreen";
  
  
 const AuthorizedStack = () => {
@@ -23,8 +25,16 @@ const AuthorizedStack = () => {
       drawerContent={(props) => <SideBarAuthedScreen {...props} />}
     >
       <Stack.Screen
-        name="BottomtabNavigator"
-        component={BottomtabNavigator}
+        name="BottomTabNavigator"
+        component={BottomTabNavigator}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="TopTabNavigator"
+        component={TopTabNavigator}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
@@ -73,6 +83,14 @@ const AuthorizedStack = () => {
       <Stack.Screen
         name="NewPasswordStatusScreen"
         component={NewPasswordStatusScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="StudentWiseReportScreen"
+        component={StudentWiseReportScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },

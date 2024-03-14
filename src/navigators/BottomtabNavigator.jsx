@@ -36,16 +36,7 @@ const S = StyleSheet.create({
 });
 
 const TabBar = (props) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { layout, fonts } = useTheme();
   return (
     <View style={S.container}>
       <TouchableOpacity
@@ -71,7 +62,7 @@ const TabBar = (props) => {
             {
               fontWeight: props.state.index === 0 ? "700" : "500",
               color: props.state.index === 0 ? "#fff" : "#77747D",
-            
+
               lineHeight: 18,
             },
           ]}
@@ -102,7 +93,7 @@ const TabBar = (props) => {
             {
               fontWeight: props.state.index === 1 ? "700" : "500",
               color: props.state.index === 1 ? "#fff" : "#77747D",
-          
+
               lineHeight: 18,
             },
           ]}
@@ -175,7 +166,7 @@ const TabBar = (props) => {
   );
 };
 
-const BottomtabNavigator = () => {
+const BottomTabNavigator = () => {
   return (
     // <Tab.Navigator
     //   screenOptions={{
@@ -197,6 +188,6 @@ const BottomtabNavigator = () => {
   );
 };
 
-export default BottomtabNavigator;
+export default BottomTabNavigator;
 
 const styles = StyleSheet.create({});
