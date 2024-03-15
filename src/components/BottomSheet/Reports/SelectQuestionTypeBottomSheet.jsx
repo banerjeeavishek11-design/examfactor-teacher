@@ -1,148 +1,171 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity,ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 
-import React,{useState} from 'react'
+import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
 import RadioButton from "../../RadioButton/RadioButton";
 import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
-const SelectQuestionTypeBottomSheet = ({visible, closeModal, selectedChapter}) => {
-  const {fonts, layout, colors} = useTheme()
-    const [option, setOption] = useState("first");
-    const handleOptionChange = (op) => {
-        setOption(op);
-        console.log("op", op);
-      };
-      const handleApply = () => {
-        setSelectedArea(option);
-        closeModal()
-      };
-      console.log("passed data of chapter from select chap to select qa:", selectedChapter);
+const questionType = [
+  { id: 1, questionType: "Diagnostic" },
+  { id: 2, questionType: "Practice" },
+  { id: 3, questionType: "Test" },
+];
+
+const SelectQuestionTypeBottomSheet = ({
+  visible,
+  closeModal,
+  selectedValue,
+  setSelectedChapter,
+  changeQuestionType,
+}) => {
+  const { fonts, layout, colors } = useTheme();
+  const [option, setOption] = useState("first");
+  const handleOptionChange = (op) => {
+    setOption(op);
+    console.log("op", op);
+  };
+  const handleApply = () => {
+    setSelectedChapter({
+      ...selectedValue,
+      option,
+    });
+    changeQuestionType(option);
+    closeModal();
+  };
+
   return (
     <View style={styles.container}>
-    <Modal visible={visible} animationType="slide" transparent={true}>
-      <View style={styles.modalContainer}>
-        <View
-          style={[
-            styles.bottomSheetContent,
+      <Modal visible={visible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View
+            style={[
+              styles.bottomSheetContent,
 
-            { backgroundColor: colors.bottomSheetBackgroundColor },
-          ]}
-        >
-          <TouchableOpacity
-            onPress={closeModal}
-            style={[{ position: "absolute", top: -35, left: "92%" }]}
+              { backgroundColor: colors.bottomSheetBackgroundColor },
+            ]}
           >
-            <ImageVariant
-              testID="brand-img"
-              style={{ width: 16, height: 16, tintColor: "white" }}
-              source={Cross}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={styles.center}>
             <TouchableOpacity
-              style={styles.slideIndicator}
               onPress={closeModal}
-            ></TouchableOpacity>
-          </View>
-          <View style={[layout.paddingForCard, styles.scrollContainer]}>
-            <Text
-              style={[
-                fonts.size_20,
-                fonts.bold,
-                { color: colors.white, paddingBottom: "2%" },
-              ]}
+              style={[{ position: "absolute", top: -35, left: "92%" }]}
             >
-              Select Chapter
-            </Text>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: "5%" }}
-            >
-              {area?.map((ele) => (
-                <TouchableOpacity
-                  key={ele.id}
-                  style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange(ele.area)}
-                  activeOpacity={1}
-                >
-                  <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === ele.area} />
-                  </View>
-                  <Text
-                    style={[
-                      styles.radioButtonText,
-                      fonts.size_14,
-                      fonts.fontWeignt_600,
-                    ]}
-                  >
-                    {ele.area}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          <View style={styles.footer}>
-            <TouchableOpacity
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 16, height: 16, tintColor: "white" }}
+                source={Cross}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <View style={styles.center}>
+              <TouchableOpacity
+                style={styles.slideIndicator}
                 onPress={closeModal}
-              style={[
-                layout.justifyCenter,
-                styles.footerButton,
-                {
-                  backgroundColor: colors.cardBackgroundColor,
-                },
-              ]}
-            >
+              ></TouchableOpacity>
+            </View>
+            <View style={[layout.paddingForCard, styles.scrollContainer]}>
               <Text
                 style={[
-                  fonts.size_16,
+                  fonts.size_20,
                   fonts.bold,
-                  fonts.alignCenter,
-                  { color: colors.termsLinkColor },
+                  { color: colors.white, paddingBottom: "2%" },
                 ]}
               >
-                Cancel
+                Select Question Type
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                layout.justifyCenter,
-                styles.footerButton,
-                {
-                  backgroundColor: colors.termsLinkColor,
-                },
-              ]}
-                // onPress={handleApply}
-            >
-              <PrimaryGradient
-                styleProp={[
-                  layout.justifyCenter,
-                  { height: "100%", borderRadius: 8 },
-                ]}
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: "5%" }}
               >
-                <Text
+                {questionType?.map((ele) => (
+                  <TouchableOpacity
+                    key={ele.id}
+                    style={styles.radioButtonContainer}
+                    onPress={() => handleOptionChange(ele.questionType)}
+                    activeOpacity={1}
+                  >
+                    <View style={{ marginLeft: 10 }}>
+                      <RadioButton isActive={option === ele.questionType} />
+                    </View>
+                    <Text
+                      style={[
+                        styles.radioButtonText,
+                        fonts.size_14,
+                        fonts.fontWeignt_600,
+                      ]}
+                    >
+                      {ele.questionType}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  onPress={closeModal}
                   style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    fonts.alignCenter,
-                    { color: colors.loginBtnTextColor },
+                    layout.justifyCenter,
+                    styles.footerButton,
+                    {
+                      backgroundColor: colors.cardBackgroundColor,
+                    },
                   ]}
                 >
-                  Apply
-                </Text>
-              </PrimaryGradient>
-            </TouchableOpacity>
-          </View>
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.termsLinkColor },
+                    ]}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    layout.justifyCenter,
+                    styles.footerButton,
+                    {
+                      backgroundColor: colors.termsLinkColor,
+                    },
+                  ]}
+                  onPress={handleApply}
+                >
+                  <PrimaryGradient
+                    styleProp={[
+                      layout.justifyCenter,
+                      { height: "100%", borderRadius: 8 },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        fonts.alignCenter,
+                        { color: colors.loginBtnTextColor },
+                      ]}
+                    >
+                      Apply
+                    </Text>
+                  </PrimaryGradient>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
-  </View>
-  )
-}
+      </Modal>
+    </View>
+  );
+};
 
-export default SelectQuestionTypeBottomSheet
+export default SelectQuestionTypeBottomSheet;
 
 const styles = StyleSheet.create({
   container: {
@@ -218,7 +241,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-  //   padding: 20,
+    //   padding: 20,
     paddingBottom: 20,
     paddingTop: 10,
     backgroundColor: "transparent", // Change if needed
