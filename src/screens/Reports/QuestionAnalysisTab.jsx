@@ -60,6 +60,7 @@ const QuestionAnalysisScreen = () => {
   }
 
 console.log("QESTION TYPE", selectedQuestionType);
+console.log("CHASPTER TYPEX TYPE", selectedChapter);
 
   return (
     <SafeScreen>
@@ -333,7 +334,11 @@ console.log("QESTION TYPE", selectedQuestionType);
                             >
                               <TouchableOpacity
                                 style={[layout.rowHCenter, { gap: 2 }]}
-                                onPress={()=>navigation.navigate("SolutionScreen")}
+                                onPress={()=>navigation.navigate("QuestionSolutionScreen", {
+                                  AllQuestions: chapterQuestions,
+                                  currentQuestionId: ele.qNo,
+                                  currentQuestion: ele.question
+                                })}
                               >
                                 <Text
                                   style={[

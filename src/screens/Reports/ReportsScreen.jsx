@@ -12,13 +12,6 @@ const ReportsScreen = ({}) => {
       <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
         <Header />
       </View>
-      {/* {
-        selectedScreen === "insights" ? <InsightsScreen /> : null
-      }
-      {
-        selectedScreen === "questionAnalysis" ? <QuestionAnalysisScreen/> : null
-      } */}
-      {/* <TopTabNavigator /> */}
       <ReportsTopTabNavigator />
     </SafeScreen>
   );

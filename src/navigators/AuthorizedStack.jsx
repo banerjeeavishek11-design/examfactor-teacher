@@ -13,10 +13,11 @@ import {
   StudentWiseReportScreen,
   HomeWorkDetailsScreen,
   ClassWorkdetailsScreen,
-  SolutionScreen,
+  QuestionSolutionScreen,
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
+
 
 
 const AuthorizedStack = () => {
@@ -125,8 +126,8 @@ const AuthorizedStack = () => {
         }}
       />
        <Stack.Screen
-        name="SolutionScreen"
-        component={SolutionScreen}
+        name="QuestionSolutionScreen"
+        component={QuestionSolutionScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
