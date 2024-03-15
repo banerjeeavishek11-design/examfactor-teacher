@@ -1,31 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { useTheme } from '@/theme';
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { useTheme } from "@/theme";
+import { Header, SafeScreen } from "@/components/template";
+import SchoolWorkTopTabNavigator from "@/navigators/SchoolWorkTopTabNavigator";
 
 const SchoolWorkScreen = () => {
-    const {
-        colors,
-        variant,
-        changeTheme,
-        layout,
-        gutters,
-        fonts,
-        components,
-        backgrounds,
-      } = useTheme();
+  const {
+    colors,
+    variant,
+    changeTheme,
+    layout,
+    gutters,
+    fonts,
+    components,
+    backgrounds,
+  } = useTheme();
   return (
-    <View
-      style={[
-        backgrounds.screenBackgroundColor,
-        layout.paddingForFullScreen,
-        layout.flex_1,
-      ]}
-    >
-      <Text>SchoolWorkScreen</Text>
-    </View>
-  )
-}
+    <SafeScreen>
+      <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
+        <Header />
+      </View>
+      <SchoolWorkTopTabNavigator />
+    </SafeScreen>
+  );
+};
 
-export default SchoolWorkScreen
+export default SchoolWorkScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

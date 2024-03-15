@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
 import { Header, SafeScreen } from "@/components/template";
-import TopTabNavigator from "@/navigators/TopTabNavigator";
+import ReportsTopTabNavigator from "@/navigators/ReportsTopTabNavigator";
 
 const ReportsScreen = ({}) => {
   const { colors } = useTheme();
@@ -18,7 +18,8 @@ const ReportsScreen = ({}) => {
       {
         selectedScreen === "questionAnalysis" ? <QuestionAnalysisScreen/> : null
       } */}
-      <TopTabNavigator />
+      {/* <TopTabNavigator /> */}
+      <ReportsTopTabNavigator />
     </SafeScreen>
   );
 };

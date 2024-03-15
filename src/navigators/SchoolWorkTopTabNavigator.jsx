@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
 import InsightsScreen from "@/screens/Reports/InsightsScreen";
@@ -61,7 +68,7 @@ const TabBar = (props) => {
               },
             ]}
           >
-            Insights
+            Home work
           </Text>
         </Pressable>
         <Pressable
@@ -96,7 +103,7 @@ const TabBar = (props) => {
               },
             ]}
           >
-            Question Analysis
+            Diagnostic
           </Text>
         </Pressable>
         <Pressable
@@ -131,7 +138,7 @@ const TabBar = (props) => {
               },
             ]}
           >
-            Student Level
+            Class work
           </Text>
         </Pressable>
       </View>
@@ -139,7 +146,7 @@ const TabBar = (props) => {
   );
 };
 
-const TopTabNavigator = () => {
+const SchoolWorkTopTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -157,6 +164,6 @@ const TopTabNavigator = () => {
   );
 };
 
-export default TopTabNavigator;
+export default SchoolWorkTopTabNavigator;
 
 const styles = StyleSheet.create({});

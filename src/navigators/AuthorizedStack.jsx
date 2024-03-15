@@ -14,7 +14,7 @@ import {
   HomeWorkDetailsScreen,
   ClassWorkdetailsScreen,
 } from "@/screens";
-import TopTabNavigator from "./TopTabNavigator";
+import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 
 const AuthorizedStack = () => {

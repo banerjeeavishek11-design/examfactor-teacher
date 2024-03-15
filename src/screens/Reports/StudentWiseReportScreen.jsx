@@ -573,7 +573,7 @@ const StudentWiseReportScreen = () => {
                 marginTop: "3%",
               },
             ]}
-            // onPress={() => goToStudentWiseReportScreen(ele)}/
+            // onPress={() => goToStudentWiseReportScreen(ele)}
           >
             <View
               style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
