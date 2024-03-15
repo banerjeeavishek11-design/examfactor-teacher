@@ -18,4 +18,4 @@ export { default as TopicWiseDetailsScreen } from "./Home/TopicWiseDetailsScreen
 export { default as StudentWiseReportScreen } from "./Reports/StudentWiseReportScreen";
 export { default as HomeWorkDetailsScreen } from "./Reports/HomeWorkDetailsScreen";
 export { default as ClassWorkdetailsScreen } from "./Reports/ClassWorkdetailsScreen";
-export { default as SolutionScreen } from "./Reports/SolutionScreen";
+export { default as QuestionSolutionScreen} from "./Reports/QuestionSolutionScreen";
