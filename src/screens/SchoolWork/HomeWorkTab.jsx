@@ -14,6 +14,9 @@ import Progressbar from "@/components/template/Progressbar/Progressbar";
 import UpArrow from "@/theme/assets/images/uparrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import { Divider } from "react-native-paper";
+import RemindStudentBottomSheet from "@/components/BottomSheet/SchoolWork/RemindStudentBottomSheet";
+import { useRoute, useNavigation } from "@react-navigation/native";
+
 
 const topic = [
   {
@@ -46,7 +49,10 @@ const leaderboardData = [
 
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
+  const navigation = useNavigation();
   const [expandedCards, setExpandedCards] = useState({});
+  const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] =
+    useState(false);
 
   const toggleContent = (id) => {
     setExpandedCards((prevState) => ({
@@ -134,7 +140,7 @@ const HomeWorkTab = () => {
                 </View>
               </View>
               <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>setOpenRemindStudentBottomSheet(true)}>
                   <Text
                     style={[
                       fonts.size_12,
@@ -266,6 +272,7 @@ const HomeWorkTab = () => {
           );
         })}
       </ScrollView>
+      <RemindStudentBottomSheet setOpenRemindStudentBottomSheet={setOpenRemindStudentBottomSheet} openRemindStudentBottomSheet={openRemindStudentBottomSheet}/>
     </SafeScreen>
   );
 };

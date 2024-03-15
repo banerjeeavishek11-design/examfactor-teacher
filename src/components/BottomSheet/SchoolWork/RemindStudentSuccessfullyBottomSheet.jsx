@@ -6,19 +6,32 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@/theme";
-import Feedback from "@/theme/assets/images/feedback.png";
+import Feedback from "@/theme/assets/images/forgotsuccess.png";
 import { ImageVariant } from "../../atoms";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
-const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
+const RemindStudentSuccessfullyBottomSheet = (props) => {
+  const { setOpenRemindStudentSuccessfully, openRemindStudentSuccessfully } =
+    props;
   const { fonts, colors, layout } = useTheme();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setOpenRemindStudentSuccessfully(false);
+    },5000);
+  }, [openRemindStudentSuccessfully]);
+
   return (
     <View>
-      <Modal visible={visible} animationType="slide" transparent={true}>
+      <Modal
+        visible={openRemindStudentSuccessfully}
+        animationType="slide"
+        transparent={true}
+      >
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -28,7 +41,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => setOpenRemindStudentSuccessfully(false)}
               style={{ position: "absolute", top: -35, left: "98%" }}
             >
               <ImageVariant
@@ -41,7 +54,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
             <View>
               <TouchableOpacity
                 style={styles.slideIndicator}
-                onPress={closeModal}
+                onPress={() => setOpenRemindStudentSuccessfully(false)}
               >
                 <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
               </TouchableOpacity>
@@ -57,7 +70,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
               <View style={{ width: "100%", alignSelf: "center" }}>
                 <Text
                   style={[
-                    fonts.size_20,
+                    fonts.size_16,
                     fonts.bold,
                     fonts.alignCenter,
                     {
@@ -66,7 +79,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                     },
                   ]}
                 >
-                  Thanks for your feedback!
+                  Remind to students to complete Home Work Successfully!
                 </Text>
               </View>
 
@@ -85,40 +98,13 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                       color: colors.white,
                       width: "75%",
                       alignSelf: "center",
+                      opacity: 0.6,
                     },
                   ]}
                 >
-                  Your appreciation motivate us to provide better quality.
+                  All students with pending homework will get reminded.
                 </Text>
               </View>
-
-              <TouchableOpacity
-                onPress={() => {
-                  closeModal();
-                }}
-              >
-                <PrimaryGradient
-                  styleProp={[styles.loginButton, layout.justifyCenter]}
-                >
-                  <View style={[layout.display, layout.rowHCenter]}>
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      RATE US ON APP STORE 
-                    </Text>
-                    <ImageVariant
-                      testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5,top:-2 }}
-                      source={rightArrow}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </PrimaryGradient>
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -127,7 +113,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   );
 };
 
-export default ThanksForFeedbackBottomSheet;
+export default RemindStudentSuccessfullyBottomSheet;
 
 const styles = StyleSheet.create({
   modalContainer: {
