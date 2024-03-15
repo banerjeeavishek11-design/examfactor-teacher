@@ -39,6 +39,7 @@ const SelectChapterQABottomSheet = ({
   visible,
   closeModal,
   setSelectedChapter,
+  changeQuestionType
 }) => {
   const { fonts, layout, colors } = useTheme();
 
@@ -188,6 +189,7 @@ const SelectChapterQABottomSheet = ({
         </View>
       </Modal>
       <SelectQuestionTypeBottomSheet
+      changeQuestionType={changeQuestionType}
         setSelectedChapter={setSelectedChapter}
         selectedValue={selectedValue}
         visible={openQuestionTypeModal}

@@ -50,14 +50,16 @@ const QuestionAnalysisScreen = () => {
         setChapterQuestions([]);
         return;
       }
-    //   console.log("RESULTED QUESTION:::", result?.data);
       setChapterQuestions(result?.data);
-      setSelectedQuestionType(true);
+      // setSelectedQuestionType(true);
     }
   }, [selectedChapter]);
 
-//   console.log("FINAL SELECTED:", selectedChapter);
-//   console.log("SELECTED FILTER:", selectedFilter);
+  const changeQuestionType = (option)=>{
+    setSelectedQuestionType(option)
+  }
+
+console.log("QESTION TYPE", selectedQuestionType);
 
   return (
     <SafeScreen>
@@ -161,7 +163,15 @@ const QuestionAnalysisScreen = () => {
                       selectedQuestionType !== null
                         ? colors.termsLinkColor
                         : null,
-                    width: 120,
+                    width: selectedQuestionType !== null
+                    ? Math.min(
+                        170,
+                        Math.max(
+                          55,
+                          selectedQuestionType.length * 10
+                        )
+                      )
+                    : 120,
                     height: 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
@@ -183,7 +193,9 @@ const QuestionAnalysisScreen = () => {
                     fonts.alignCenter,
                   ]}
                 >
-                  Question Type
+                  {
+                    selectedQuestionType !== null ? selectedQuestionType : "Question Type"
+                  }
                 </Text>
                 <ImageVariant
                   testID="brand-img"
@@ -412,6 +424,7 @@ const QuestionAnalysisScreen = () => {
         setSelectedChapter={setSelectedChapter}
         visible={selectChapterQAModalVisible}
         closeModal={closeSelectChapterQAModal}
+        changeQuestionType={changeQuestionType}
       />
       <MostlyFilterBottomSheet
         setSelectedFilter={setSelectedFilter}
