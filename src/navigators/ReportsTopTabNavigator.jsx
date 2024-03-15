@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
-import InsightsScreen from "@/screens/Reports/InsightsScreen";
-import QuestionAnalysisScreen from "@/screens/Reports/QuestionAnalysisScreen";
-import StudentLevelScreen from "@/screens/Reports/StudentLevelScreen";
+import InsightsScreen from "@/screens/Reports/InsightsTab";
+import QuestionAnalysisScreen from "@/screens/Reports/QuestionAnalysisTab";
+import StudentLevelScreen from "@/screens/Reports/StudentLevelTab";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();

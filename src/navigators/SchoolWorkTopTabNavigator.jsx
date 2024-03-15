@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import React from "react";
 import { useTheme } from "@/theme";
-import InsightsScreen from "@/screens/Reports/InsightsScreen";
-import QuestionAnalysisScreen from "@/screens/Reports/QuestionAnalysisScreen";
-import StudentLevelScreen from "@/screens/Reports/StudentLevelScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import HomeWorkTab from "@/screens/SchoolWork/HomeWorkTab";
+import DiagnosticTab from "@/screens/SchoolWork/DiagnosticTab";
+import ClassWorkTab from "@/screens/SchoolWork/ClassWorkTab";
 
 const Tab = createMaterialTopTabNavigator();
 const S = StyleSheet.create({
@@ -47,7 +47,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo("InsightsTab");
+            props.navigation.jumpTo("HomeWorkTab");
           }}
         >
           <Text
@@ -82,7 +82,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo("QuestionAnalysisTab");
+            props.navigation.jumpTo("DiagnosticTab");
           }}
         >
           <Text
@@ -117,7 +117,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo("StudentLevelTab");
+            props.navigation.jumpTo("ClassWorkTab");
           }}
         >
           <Text
@@ -154,12 +154,12 @@ const SchoolWorkTopTabNavigator = () => {
       }}
       tabBar={(props) => <TabBar {...props} />}
     >
-      <Tab.Screen name="InsightsTab" component={InsightsScreen} />
+      <Tab.Screen name="HomeWorkTab" component={HomeWorkTab} />
       <Tab.Screen
-        name="QuestionAnalysisTab"
-        component={QuestionAnalysisScreen}
+        name="DiagnosticTab"
+        component={DiagnosticTab}
       />
-      <Tab.Screen name="StudentLevelTab" component={StudentLevelScreen} />
+      <Tab.Screen name="ClassWorkTab" component={ClassWorkTab} />
     </Tab.Navigator>
   );
 };

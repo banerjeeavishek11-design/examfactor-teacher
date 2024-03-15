@@ -2,15 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableOpacity,
-  RefreshControl,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import Logo from "@/theme/assets/images/examfactorlogo.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import User from "@/theme/assets/images/user.png";
 import { useTheme } from "@/theme";

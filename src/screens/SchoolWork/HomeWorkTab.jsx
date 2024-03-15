@@ -6,16 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTheme } from "@/theme";
-import { useRoute, useNavigation } from "@react-navigation/native";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import UpArrow from "@/theme/assets/images/uparrow.png";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
 import { SafeScreen } from "@/components/template";
 import Circularprogressbar from "@/components/template/CircularProgressBar/Circularprogressbar";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
+import UpArrow from "@/theme/assets/images/uparrow.png";
+import DownArrow from "@/theme/assets/images/Downarrow.png";
+import { Divider } from "react-native-paper";
 
 const topic = [
   {
@@ -36,18 +34,6 @@ const topic = [
     subTitle: "Rate of Change of Velocity",
     progress: 50,
   },
-  {
-    id: 4,
-    topicName: "Graphical Representation...",
-    subTitle: "Based on concepts covered till date",
-    progress: 70,
-  },
-  {
-    id: 5,
-    topicName: "Equations of Motion by Gr...",
-    subTitle: "Students completed the homework",
-    progress: 68,
-  },
 ];
 
 const leaderboardData = [
@@ -58,11 +44,8 @@ const leaderboardData = [
   { name: "Anmol S.", progress: 78, achievable: 84 },
 ];
 
-const TopicWiseDetailsScreen = () => {
+const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { topicName } = route.params || {};
   const [expandedCards, setExpandedCards] = useState({});
 
   const toggleContent = (id) => {
@@ -72,53 +55,18 @@ const TopicWiseDetailsScreen = () => {
     }));
   };
 
-  useEffect(() => {
-    const initialExpandedState = {};
-    topic.forEach((ele) => {
-      initialExpandedState[ele.id] = false;
-    });
-    setExpandedCards(initialExpandedState);
-  }, []);
-
   return (
     <SafeScreen>
-      <View
-        style={[
-          layout.fullWidth,
-          layout.paddingForFullScreen,
-          {
-            height: 50,
-            backgroundColor: colors.headerBackgroundColor,
-          },
-        ]}
-      >
-        <TouchableOpacity
-          style={[layout.display, layout.rowHCenter]}
-          onPress={() => navigation.navigate("SubjectDetailsScreen")}
+      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
+        <Text
+          style={[
+            fonts.size_14,
+            fonts.bold,
+            { color: colors.white, opacity: 0.4 },
+          ]}
         >
-          <ImageVariant
-            testID="brand-img"
-            style={{
-              width: 10,
-              height: 11,
-              tintColor: colors.backButtonColor,
-              top: 2,
-            }}
-            source={LeftArrow}
-            resizeMode="contain"
-          />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
-            {topicName}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
+          Last 7 Days Assigned homework
+        </Text>
         {topic.map((ele) => {
           const progressPercentage = ele.progress / 100;
           return (
@@ -126,10 +74,9 @@ const TopicWiseDetailsScreen = () => {
               key={ele.topicName}
               style={[
                 layout.fullWidth,
-                // layout.paddingForCard,
                 {
                   backgroundColor: colors.cardBackgroundColor,
-                  height: expandedCards[ele.id] ? "auto" : 100,
+                  height: expandedCards[ele.id] ? "auto" : 130,
                   borderRadius: 14,
                   marginTop: "3%",
                 },
@@ -144,7 +91,7 @@ const TopicWiseDetailsScreen = () => {
                   { paddingBottom: "0%" },
                 ]}
               >
-                <View style={{ width: "50%" }}>
+                <View style={{ width: "55%" }}>
                   <Text
                     numberOfLines={2}
                     style={[
@@ -159,7 +106,7 @@ const TopicWiseDetailsScreen = () => {
                     style={[
                       fonts.size_10,
                       fonts.fontWeight_small,
-                      { color: colors.backButtonColor, marginTop: "3%" },
+                      { color: colors.backButtonColor, marginBottom: "5%" },
                     ]}
                   >
                     {ele.subTitle}
@@ -186,6 +133,22 @@ const TopicWiseDetailsScreen = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+              <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
+                <TouchableOpacity>
+                  <Text
+                    style={[
+                      fonts.size_12,
+                      fonts.fontWeignt_600,
+                      {
+                        color: colors.termsLinkColor,
+                        textDecorationLine: "underline",
+                      },
+                    ]}
+                  >
+                    Remind Students
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
               {expandedCards[ele.id] ? (
                 <View>
@@ -195,17 +158,18 @@ const TopicWiseDetailsScreen = () => {
                         fonts.size_12,
                         fonts.fontWeight_small,
                         {
-                          color: "#3DD598",
-                          // marginTop: "5%",
+                          color: "#7A7A82",
                         },
                       ]}
                     >
-                      Progress {`${ele.progress}%`}
+                      Reminded on Aug 28, 2023
                     </Text>
-                    <View style={{ marginTop: "4%" }}>
-                      <Progressbar
-                        progress={progressPercentage}
-                        color={"#3DD598"}
+                    <View style={[layout.itemsCenter]}>
+                      <Divider
+                        style={{
+                          width: "100%",
+                          backgroundColor: colors.lineBackgroundColor,
+                        }}
                       />
                     </View>
                   </View>
@@ -306,7 +270,7 @@ const TopicWiseDetailsScreen = () => {
   );
 };
 
-export default TopicWiseDetailsScreen;
+export default HomeWorkTab;
 
 const styles = StyleSheet.create({
   header: {
