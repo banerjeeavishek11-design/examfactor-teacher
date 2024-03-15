@@ -2,12 +2,21 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ProfileDetailsScreen, SideBarAuthedScreen, SupportScreen, AppGuideScreen, NewPasswordStatusScreen, SubjectDetailsScreen, TopicWiseDetailsScreen } from "@/screens";
+import {
+  ProfileDetailsScreen,
+  SideBarAuthedScreen,
+  SupportScreen,
+  AppGuideScreen,
+  NewPasswordStatusScreen,
+  SubjectDetailsScreen,
+  TopicWiseDetailsScreen,
+  StudentWiseReportScreen,
+  HomeWorkDetailsScreen,
+  ClassWorkdetailsScreen,
+} from "@/screens";
 import TopTabNavigator from "./TopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
-import StudentWiseReportScreen from "@/screens/Reports/StudentWiseReportScreen";
- 
- 
+
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createStackNavigator();
@@ -40,7 +49,7 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="ProfileDetailsScreen"
         component={ProfileDetailsScreen}
         options={{
@@ -96,11 +105,27 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
- 
+
+      <Stack.Screen
+        name="HomeWorkDetailsScreen"
+        component={HomeWorkDetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+      <Stack.Screen
+        name="ClassWorkdetailsScreen"
+        component={ClassWorkdetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
     </Drawer.Navigator>
   );
 };
- 
+
 export default AuthorizedStack;
- 
+
 const styles = StyleSheet.create({});

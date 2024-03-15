@@ -15,3 +15,6 @@ export { default as SupportScreen } from "./Profile/SupportScreen";
 export { default as NewPasswordStatusScreen } from "./Profile/NewPasswordStatusScreen";
 export { default as SubjectDetailsScreen } from "./Home/SubjectDetailsScreen";
 export { default as TopicWiseDetailsScreen } from "./Home/TopicWiseDetailsScreen";
+export { default as StudentWiseReportScreen } from "./Reports/StudentWiseReportScreen";
+export { default as HomeWorkDetailsScreen } from "./Reports/HomeWorkDetailsScreen";
+export { default as ClassWorkdetailsScreen } from "./Reports/ClassWorkdetailsScreen";

@@ -1,5 +1,7 @@
 import {
+  Image,
   LayoutAnimation,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +15,7 @@ import { BarChart, Concentrix, SafeScreen } from "@/components/template";
 import { ImageVariant } from "@/components/atoms";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import Arrow from "@/theme/assets/images/arrow.png";
+import RightArrow from "@/theme/assets/images/rightarrow.png";
 import UpFullArrow from "@/theme/assets/images/upfullarrow.png";
 import { useRoute } from "@react-navigation/native";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
@@ -24,7 +27,9 @@ const StudentWiseReportScreen = () => {
   const { studentDetails } = route.params || {};
   console.log("studentDetails", studentDetails);
   const { colors, layout, fonts } = useTheme();
-  const overallProgress = studentDetails.progressPercentage / 100;
+  const overallProgress = studentDetails
+    ? studentDetails.progressPercentage / 100
+    : 0;
   const [maxTime, setMaxTime] = useState(1000);
   const [thisWeek, setThisWeek] = useState(564);
   const [lastWeek, setLastWeek] = useState(675);
@@ -81,7 +86,7 @@ const StudentWiseReportScreen = () => {
               { color: colors.white, opacity: 0.5 },
             ]}
           >
-            {`${studentDetails.name}'S REPORT`}
+            {`${studentDetails?.name}'S REPORT`}
           </Text>
           <View
             style={[
@@ -156,7 +161,7 @@ const StudentWiseReportScreen = () => {
               HOME WORK INSIGHTS
             </Text>
             <TouchableOpacity
-            // onPress={() => navigation.navigate("SubjectDetailsScreen")}
+              onPress={() => navigation.navigate("HomeWorkDetailsScreen",{studentDetails:studentDetails})}
             >
               <Text
                 style={[
@@ -464,7 +469,7 @@ const StudentWiseReportScreen = () => {
               CLASS WORK INSIGHTS
             </Text>
             <TouchableOpacity
-            // onPress={() => navigation.navigate("SubjectDetailsScreen")}
+            onPress={() => navigation.navigate("ClassWorkdetailsScreen",{studentDetails:studentDetails})}
             >
               <Text
                 style={[
@@ -478,6 +483,123 @@ const StudentWiseReportScreen = () => {
             </TouchableOpacity>
           </View>
 
+          <View
+            style={[
+              layout.fullWidth,
+              layout.paddingForCard,
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                borderRadius: 14,
+                height: "auto",
+                marginTop: "4%",
+              },
+            ]}
+          >
+            <View
+              style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
+            >
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.7 },
+                ]}
+              >
+                Number of test taken
+              </Text>
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeight_small,
+                  { color: colors.white },
+                ]}
+              >
+                24
+              </Text>
+            </View>
+            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+              <Divider
+                style={{
+                  width: "100%",
+                  backgroundColor: colors.lineBackgroundColor,
+                }}
+              />
+            </View>
+            <View
+              style={[
+                layout.display,
+                layout.rowHCenter,
+                layout.justifyBetween,
+                { marginTop: "2%" },
+              ]}
+            >
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.7 },
+                ]}
+              >
+                Accuracy percentage
+              </Text>
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeight_small,
+                  { color: colors.white },
+                ]}
+              >
+                55%
+              </Text>
+            </View>
+            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+              <Divider
+                style={{
+                  width: "100%",
+                  backgroundColor: colors.lineBackgroundColor,
+                }}
+              />
+            </View>
+          </View>
+
+          <Pressable
+            style={[
+              layout.fullWidth,
+              layout.paddingForCard,
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                height: 53,
+                borderRadius: 8,
+                marginTop: "3%",
+              },
+            ]}
+            // onPress={() => goToStudentWiseReportScreen(ele)}/
+          >
+            <View
+              style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
+            >
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeight_small,
+                  { color: colors.white, opacity: 0.7 },
+                ]}
+              >
+                See bookmarked questions (18)
+              </Text>
+              <TouchableOpacity>
+                <Image
+                  source={RightArrow}
+                  resizeMode="contain"
+                  style={{
+                    width: 16,
+                    height: 10,
+                    tintColor: colors.termsLinkColor,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeScreen>
