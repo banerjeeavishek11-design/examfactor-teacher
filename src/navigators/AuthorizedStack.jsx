@@ -14,6 +14,7 @@ import {
   HomeWorkDetailsScreen,
   ClassWorkdetailsScreen,
   QuestionSolutionScreen,
+  BookmarkedQuestionsScreen
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -133,6 +134,15 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
+       <Stack.Screen
+        name="BookmarkedQuestionsScreen"
+        component={BookmarkedQuestionsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+
     </Drawer.Navigator>
   );
 };
