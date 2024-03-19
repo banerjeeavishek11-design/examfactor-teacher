@@ -13,6 +13,7 @@ import {
   Header,
   SafeScreen,
   BarChart,
+  BarChartsCarousel,
 } from "@/components/template";
 import Arrow from "@/theme/assets/images/arrow.png";
 import { ImageVariant } from "@/components/atoms";
@@ -26,7 +27,8 @@ import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
 
-const data = ["03", "06", "09", "12",];
+
+const data = ["03", "06", "09", "12"];
 const barchartColor = ["#7AF4FC", "#27D4FA"];
 const width = 300;
 const height = 250;
@@ -243,6 +245,7 @@ const HomeScreen = () => {
           xAxisTitle={xAxisTitle}
           yAxisTitle={yAxisTitle}
         />
+        {/* <BarChartsCarousel /> */}
         <View
           style={[
             layout.display,

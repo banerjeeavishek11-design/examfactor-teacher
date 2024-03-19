@@ -272,7 +272,7 @@ const SubjectDetailsScreen = () => {
                 >
                   <Text
                     style={[
-                      fonts.size_13,
+                      fonts.size_12,
                       fonts.fontWeight_small,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,
@@ -283,7 +283,7 @@ const SubjectDetailsScreen = () => {
                   </Text>
                   <Text
                     style={[
-                      fonts.size_13,
+                      fonts.size_12,
                       fonts.bold,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,

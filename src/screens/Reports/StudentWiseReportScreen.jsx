@@ -11,7 +11,12 @@ import {
 import React, { useState } from "react";
 import { useTheme } from "@/theme";
 import { useNavigation } from "@react-navigation/native";
-import { BarChart, Concentrix, SafeScreen } from "@/components/template";
+import {
+  BarChart,
+  Concentrix,
+  SafeScreen,
+  StudentLevelBarChart,
+} from "@/components/template";
 import { ImageVariant } from "@/components/atoms";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import Arrow from "@/theme/assets/images/arrow.png";
@@ -21,14 +26,32 @@ import { useRoute } from "@react-navigation/native";
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { Divider } from "react-native-paper";
 
+const data = [
+  [20, 20, 10, 4, 80],
+  [10, 20, 30, 40, 40],
+  // [10, 20, 30, 40, 50],
+  // [70, 30, 40, 10, 50],
+];
+const barChartColor = [
+  ["#FF575F", "#FF575F"],
+  ["#27d4fa", "#7af4fc"],
+  // ["#7a74fc", "#a7d4fa"],
+  // ["#7af41c", "#2714fa"],
+];
+const width = 300;
+const height = 320;
+const borderRadius = 2;
+const xAxisTitle = "Chapters";
+const yAxisTitle = "Achievable Score %";
+
 const StudentWiseReportScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { studentDetails } = route.params || {};
-  console.log("studentDetails", studentDetails);
+  // console.log("studentDetails", studentDetails);
   const { colors, layout, fonts } = useTheme();
   const overallProgress = studentDetails
-    ? studentDetails.progressPercentage / 100
+    ? studentDetails?.progressPercentage / 100
     : 0;
   const [maxTime, setMaxTime] = useState(1000);
   const [thisWeek, setThisWeek] = useState(564);
@@ -101,7 +124,7 @@ const StudentWiseReportScreen = () => {
             ]}
           >
             <View style={{ marginTop: "1%", alignItems: "center" }}>
-              <Concentrix scorePercentage={studentDetails.achievableScore} />
+              <Concentrix scorePercentage={studentDetails?.achievableScore} />
             </View>
             <View style={[layout.itemsCenter, { marginTop: "-20%" }]}>
               <Divider
@@ -135,14 +158,23 @@ const StudentWiseReportScreen = () => {
                   { color: colors.white },
                 ]}
               >
-                {`${studentDetails.progressPercentage}% complete`}
+                {`${studentDetails?.progressPercentage}% complete`}
               </Text>
             </View>
             <View style={{ marginTop: "3%" }}>
               <Progressbar progress={overallProgress} color={"#3DD598"} />
             </View>
           </View>
-          <BarChart />
+          {/* <BarChart /> */}
+          <StudentLevelBarChart
+            data={data}
+            colors={barChartColor}
+            width={width}
+            height={height}
+            borderRadius={borderRadius}
+            xAxisTitle={xAxisTitle}
+            yAxisTitle={yAxisTitle}
+          />
           <View
             style={[
               layout.display,
@@ -161,7 +193,11 @@ const StudentWiseReportScreen = () => {
               HOME WORK INSIGHTS
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate("HomeWorkDetailsScreen",{studentDetails:studentDetails})}
+              onPress={() =>
+                navigation.navigate("HomeWorkDetailsScreen", {
+                  studentDetails: studentDetails,
+                })
+              }
             >
               <Text
                 style={[
@@ -366,7 +402,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, marginLeft: "3%" },
                   ]}
                 >
-                  {/* {formatSecond2(thisWeek)} */} 1h 05m
+                  1h 05m
                 </Text>
               </View>
             </View>
@@ -404,7 +440,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, marginLeft: "3%" },
                   ]}
                 >
-                  {/* {formatSecond2(lastWeek)} */} 1h 50m
+                  1h 50m
                 </Text>
               </View>
             </View>
@@ -445,7 +481,7 @@ const StudentWiseReportScreen = () => {
                     },
                   ]}
                 >
-                  {/* {formatSecond2(peers)} */} 2h 15m
+                  2h 15m
                 </Text>
               </View>
             </View>
@@ -469,7 +505,11 @@ const StudentWiseReportScreen = () => {
               CLASS WORK INSIGHTS
             </Text>
             <TouchableOpacity
-            onPress={() => navigation.navigate("ClassWorkdetailsScreen",{studentDetails:studentDetails})}
+              onPress={() =>
+                navigation.navigate("ClassWorkdetailsScreen", {
+                  studentDetails: studentDetails,
+                })
+              }
             >
               <Text
                 style={[

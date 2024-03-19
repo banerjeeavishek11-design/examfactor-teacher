@@ -119,8 +119,8 @@ const StudentLevelScreen = () => {
   };
 
   const goToStudentWiseReportScreen=(studentDetails)=>{
-    console.log('first')
     navigation.navigate('StudentWiseReportScreen',{studentDetails:studentDetails})
+    // navigation.navigate('StudentWiseReportScreen')
   }
 
   return (
