@@ -70,7 +70,7 @@ const StudentWiseReportScreen = () => {
           layout.paddingForFullScreen,
           {
             height: 50,
-            backgroundColor: colors.headerBackgroundColor,
+            // backgroundColor: colors.headerBackgroundColor,
           },
         ]}
       >
