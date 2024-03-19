@@ -53,10 +53,10 @@ const LoginScreen = () => {
     Keyboard.dismiss();
   };
   const handleUsernameLogin = (data) => {
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: "AuthorizedStack" }],
-    // });
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "AuthorizedStack" }],
+    });
     console.log("login", data);
   };
 
@@ -233,7 +233,7 @@ const LoginScreen = () => {
                           color: "#FF575F",
                         }}
                       >
-                        {errors.username.message || null}
+                        {errors.password.message || null}
                       </Text>
                     )}
                   </View>

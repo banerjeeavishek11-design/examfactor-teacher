@@ -43,10 +43,9 @@ const ForgotPasswordScreen = () => {
         style={[
           layout.justifyEnd,
           layout.fullHeight,
-          { borderColor: "red", borderWidth: 1 },
         ]}
       >
-        <View style={{ borderColor: "red", borderWidth: 1, marginBottom: "5%" }}>
+        <View style={{marginBottom: "5%" }}>
           <ImageVariant
             testID="brand-img"
             style={{ width: 110, height: 112 }}
