@@ -15,6 +15,7 @@ import {
   ClassWorkdetailsScreen,
   QuestionSolutionScreen,
   LoginScreen,
+  BookmarkedQuestionsScreen,
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
