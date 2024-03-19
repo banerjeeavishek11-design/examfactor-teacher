@@ -76,7 +76,7 @@ const questionsPerPage = 4;
 
 const BookmarkedQuestionsScreen = ({ navigation }) => {
   const { layout, colors, fonts } = useTheme();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalTabs, setTotalTabs] = useState([]);
   const startIndex = currentPage * questionsPerPage;
   const endIndex = Math.min(

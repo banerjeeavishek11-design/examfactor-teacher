@@ -14,7 +14,6 @@ import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 import RadioButton from "@/components/RadioButton/RadioButton";
 
-
 const chapters = [
   {
     id: 1,
@@ -22,7 +21,7 @@ const chapters = [
     subtopics: [
       { id: 1, sub: "Lorem ipsum dolor sit amet." },
       { id: 2, sub: "Lorem ipsum dolor sit." },
-      { id: 3, sub: "Lorem ipsum dolor sit amet consectetur." },
+      { id: 3, sub: "Lorem ipsum dolor sit amet." },
       { id: 4, sub: "Lorem, ipsum dolor." },
       { id: 5, sub: "Lorem ipsum dolor sit." },
     ],
@@ -33,7 +32,7 @@ const chapters = [
     subtopics: [
       { id: 1, sub: "Lorem ipsum dolor sit amet." },
       { id: 2, sub: "Lorem ipsum dolor sit." },
-      { id: 3, sub: "Lorem ipsum dolor sit amet consectetur." },
+      { id: 3, sub: "Lorem ipsum dolor sit amet." },
       { id: 4, sub: "Lorem, ipsum dolor." },
       { id: 5, sub: "Lorem ipsum dolor sit." },
     ],
@@ -44,15 +43,15 @@ const chapters = [
     subtopics: [
       { id: 1, sub: "Lorem ipsum dolor sit amet." },
       { id: 2, sub: "Lorem ipsum dolor sit." },
-      { id: 3, sub: "Lorem ipsum dolor sit amet consectetur." },
+      { id: 3, sub: "Lorem ipsum dolor sit amet." },
       { id: 4, sub: "Lorem, ipsum dolor." },
       { id: 5, sub: "Lorem ipsum dolor sit." },
     ],
   },
 ];
 
-const BookmarkedQuestionFilterBottomSheet = ({visible, closeModal}) => {
-    const {layout, colors, fonts}= useTheme()
+const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
+  const { layout, colors, fonts } = useTheme();
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
@@ -95,32 +94,80 @@ const BookmarkedQuestionFilterBottomSheet = ({visible, closeModal}) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: "5%" }}
               >
-                {
-                    chapters.map((chapters)=>{return(
-                        <View key={chapters.id} style={[
-                            layout.fullWidth,
-                            layout.paddingForCard,
-                            {
-                              height: "auto",
-                              backgroundColor: colors.cardBackgroundColor,
-                              borderRadius: 16,
-                              marginTop: "3%",
-                            },
-                          ]}>
-                            <Text style={[fonts.size_18,{color: colors.gray100}]}>{chapters.topic}</Text>
-                            <View style={{marginVertical:"4%"}}>
-                                {
-                                    chapters.subtopics.map((subs)=>{return (
-                                        <View style={[layout.row, layout.justifyBetween,{marginVertical:"2%"}]} key={subs.id}>
-                                            <Text style={[fonts.size_13, fonts.fontWeight_small,{color: colors.gray200}]}>{subs.sub}</Text>
-                                            <RadioButton/>
-                                        </View>
-                                    )})
-                                }
+                {chapters.map((chapters) => {
+                  return (
+                    <View
+                      key={chapters.id}
+                      style={[
+                        layout.fullWidth,
+                        layout.paddingForCard,
+                        {
+                          height: "auto",
+                          backgroundColor: colors.cardBackgroundColor,
+                          borderRadius: 16,
+                          marginTop: "3%",
+                        },
+                      ]}
+                    >
+                      <Text style={[fonts.size_18,fonts.fontWeignt_600, { color: colors.gray100 }]}>
+                        {chapters.topic}
+                      </Text>
+                      <View style={{ marginVertical: "4%" }}>
+                        {chapters.subtopics.map((subs) => {
+                          return (
+                            <View
+                              style={[
+                                layout.row,
+                                layout.justifyBetween,
+                                layout.itemsCenter,
+                                { marginVertical: "2%" },
+                              ]}
+                              key={subs.id}
+                            >
+                              <Text
+                                style={[
+                                  fonts.size_16,
+                                  fonts.fontWeight_small,
+                                  { color: colors.gray200 },
+                                ]}
+                              >
+                                {subs.sub}
+                              </Text>
+                              <TouchableOpacity
+                                // onPress={() =>
+                                //   handleToggle(
+                                //     item.chapterCode,
+                                //     topic.topicCode
+                                //   )
+                                // }
+                                activeOpacity={0.8}
+                              >
+                                <View
+                                  style={[
+                                    styles.checkbox,
+                                    layout.justifyCenter,
+                                    layout.itemsCenter,
+                                    { color: colors.white}
+                                    // selectedItem.includes(topic.topicCode) &&
+                                    //   styles.checked,
+                                  ]}
+                                >
+                                  {/* {selectedItem.includes(topic.topicCode) && (
+                                    <Ionicons
+                                      name="checkmark-outline"
+                                      size={18}
+                                      color="white"
+                                    />
+                                  )} */}
+                                </View>
+                              </TouchableOpacity>
                             </View>
-                        </View>
-                    )})
-                }
+                          );
+                        })}
+                      </View>
+                    </View>
+                  );
+                })}
               </ScrollView>
               <View style={styles.footer}>
                 <TouchableOpacity
@@ -152,7 +199,7 @@ const BookmarkedQuestionFilterBottomSheet = ({visible, closeModal}) => {
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                //   onPress={handleApply}
+                  //   onPress={handleApply}
                 >
                   <PrimaryGradient
                     styleProp={[
@@ -266,5 +313,13 @@ const styles = StyleSheet.create({
     width: "48%",
     height: 48,
     borderRadius: 8,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderColor: 'white',
+    borderWidth: 1,
+    marginTop: 10,
   },
 });

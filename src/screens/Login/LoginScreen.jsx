@@ -246,7 +246,7 @@ const Login = () => {
                     style={[
                       fonts.size_16,
                       fonts.fontWeight_small,
-                      { color: colors.termsLinkColor },
+                      { color: colors.linearGradientColor },
                     ]}
                   >
                     Forgot password?
@@ -279,7 +279,7 @@ const Login = () => {
                     style={[
                       fonts.size_12,
                       fonts.fontWeight_small,
-                      { color: colors.termsLinkColor, opacity: 0.7 },
+                      { color: colors.linearGradientColor, opacity: 0.7 },
                     ]}
                   >
                     T&C
@@ -301,7 +301,7 @@ const Login = () => {
                     style={[
                       fonts.size_12,
                       fonts.fontWeight_small,
-                      { color: colors.termsLinkColor, opacity: 0.7 },
+                      { color: colors.linearGradientColor, opacity: 0.7 },
                     ]}
                   >
                     Privacy policy
