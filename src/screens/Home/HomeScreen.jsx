@@ -26,6 +26,14 @@ import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
 
+const data = ["03", "06", "09", "12",];
+const barchartColor = ["#7AF4FC", "#27D4FA"];
+const width = 300;
+const height = 250;
+const borderRadius = 5;
+const xAxisTitle = "Achievable Score (%)";
+const yAxisTitle = "No. of students";
+
 const HomeScreen = () => {
   const {
     colors,
@@ -207,7 +215,7 @@ const HomeScreen = () => {
                 { color: colors.white },
               ]}
             >
-               {`${diagnosticProgress * 100}% Complete`}
+              {`${diagnosticProgress * 100}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: "3%" }}>
@@ -226,7 +234,15 @@ const HomeScreen = () => {
             },
           ]}
         ></View> */}
-        <BarChart />
+        <BarChart
+          data={data}
+          colors={barchartColor}
+          width={width}
+          height={height}
+          borderRadius={borderRadius}
+          xAxisTitle={xAxisTitle}
+          yAxisTitle={yAxisTitle}
+        />
         <View
           style={[
             layout.display,

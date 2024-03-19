@@ -20,8 +20,6 @@ import {
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
 
-
-
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createStackNavigator();
