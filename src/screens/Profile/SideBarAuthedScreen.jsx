@@ -57,6 +57,10 @@ const SideBarAuthedScreen = (props) => {
     setRateUsModalVisible(true);
   };
 
+  const logOut = () => {
+    navigation.navigate("LoginScreen")
+  };
+
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen, { flex: 1 }]}>
@@ -201,9 +205,17 @@ const SideBarAuthedScreen = (props) => {
               >
                 <View style={{ width: "5%" }}>
                   {userRole === "Teacher" ? (
-                    <Image style={{ width: 20, height: 25 }} source={Teacher} resizeMode="contain"/>
+                    <Image
+                      style={{ width: 20, height: 25 }}
+                      source={Teacher}
+                      resizeMode="contain"
+                    />
                   ) : (
-                    <Image style={{ width: 20, height: 25 }} source={ClassTeacher} resizeMode="contain"/>
+                    <Image
+                      style={{ width: 20, height: 25 }}
+                      source={ClassTeacher}
+                      resizeMode="contain"
+                    />
                   )}
                 </View>
                 <View>
@@ -422,7 +434,7 @@ const SideBarAuthedScreen = (props) => {
           <View>
             <TouchableOpacity
               style={{ marginVertical: 40 }}
-              // onPress={() => logOut()}
+              onPress={() => logOut()}
             >
               <Text
                 style={[

@@ -14,6 +14,7 @@ import {
   HomeWorkDetailsScreen,
   ClassWorkdetailsScreen,
   QuestionSolutionScreen,
+  LoginScreen,
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -55,6 +56,14 @@ const AuthorizedStack = () => {
       <Stack.Screen
         name="ProfileDetailsScreen"
         component={ProfileDetailsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+       <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },

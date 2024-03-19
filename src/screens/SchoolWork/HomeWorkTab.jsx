@@ -13,10 +13,12 @@ import Circularprogressbar from "@/components/template/CircularProgressBar/Circu
 import Progressbar from "@/components/template/Progressbar/Progressbar";
 import UpArrow from "@/theme/assets/images/uparrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
+import ActivatedHomeWork from "@/theme/assets/images/homework.png";
 import { Divider } from "react-native-paper";
 import RemindStudentBottomSheet from "@/components/BottomSheet/SchoolWork/RemindStudentBottomSheet";
 import { useRoute, useNavigation } from "@react-navigation/native";
-
+import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
+import { ImageVariant } from "@/components/atoms";
 
 const topic = [
   {
@@ -53,6 +55,7 @@ const HomeWorkTab = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] =
     useState(false);
+  const [activatedHomeWork, setActivatedHomeWork] = useState(false);
 
   const toggleContent = (id) => {
     setExpandedCards((prevState) => ({
@@ -61,218 +64,291 @@ const HomeWorkTab = () => {
     }));
   };
 
+  const handleActiveHomework = () => {
+    setActivatedHomeWork(true);
+  };
+
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
-        <Text
-          style={[
-            fonts.size_14,
-            fonts.bold,
-            { color: colors.white, opacity: 0.4 },
-          ]}
-        >
-          Last 7 Days Assigned homework
-        </Text>
-        {topic.map((ele) => {
-          const progressPercentage = ele.progress / 100;
-          return (
-            <View
-              key={ele.topicName}
+        {activatedHomeWork === true ? (
+          <>
+            <Text
               style={[
-                layout.fullWidth,
+                fonts.size_14,
+                fonts.bold,
+                { color: colors.white, opacity: 0.4 },
+              ]}
+            >
+              Last 7 Days Assigned homework
+            </Text>
+            {topic.map((ele) => {
+              const progressPercentage = ele.progress / 100;
+              return (
+                <View
+                  key={ele.topicName}
+                  style={[
+                    layout.fullWidth,
+                    {
+                      backgroundColor: colors.cardBackgroundColor,
+                      height: expandedCards[ele.id] ? "auto" : 130,
+                      borderRadius: 14,
+                      marginTop: "3%",
+                    },
+                  ]}
+                >
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      layout.paddingForCard,
+                      { paddingBottom: "0%" },
+                    ]}
+                  >
+                    <View style={{ width: "55%" }}>
+                      <Text
+                        numberOfLines={2}
+                        style={[
+                          fonts.size_14,
+                          fonts.bold,
+                          { color: colors.white, top: -6 },
+                        ]}
+                      >
+                        {ele.topicName}
+                      </Text>
+                      <Text
+                        style={[
+                          fonts.size_10,
+                          fonts.fontWeight_small,
+                          { color: colors.backButtonColor, marginBottom: "5%" },
+                        ]}
+                      >
+                        {ele.subTitle}
+                      </Text>
+                    </View>
+                    <View style={{ width: "20%", top: -5 }}>
+                      <Circularprogressbar progress={ele.progress} />
+                    </View>
+                    <View style={{ width: "5%" }}>
+                      <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                        {expandedCards[ele.id] ? (
+                          <Image
+                            style={{ width: 12, height: 8 }}
+                            source={UpArrow}
+                            resizeMode="contain"
+                          />
+                        ) : (
+                          <Image
+                            style={{ width: 12, height: 8 }}
+                            source={DownArrow}
+                            resizeMode="contain"
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
+                    <TouchableOpacity
+                      onPress={() => setOpenRemindStudentBottomSheet(true)}
+                    >
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeignt_600,
+                          {
+                            color: colors.termsLinkColor,
+                            textDecorationLine: "underline",
+                          },
+                        ]}
+                      >
+                        Remind Students
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {expandedCards[ele.id] ? (
+                    <View>
+                      <View
+                        style={[layout.paddingForCard, { paddingTop: "0%" }]}
+                      >
+                        <Text
+                          style={[
+                            fonts.size_12,
+                            fonts.fontWeight_small,
+                            {
+                              color: "#7A7A82",
+                            },
+                          ]}
+                        >
+                          Reminded on Aug 28, 2023
+                        </Text>
+                        <View style={[layout.itemsCenter]}>
+                          <Divider
+                            style={{
+                              width: "100%",
+                              backgroundColor: colors.lineBackgroundColor,
+                            }}
+                          />
+                        </View>
+                      </View>
+                      <View>
+                        <View style={styles.header}>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.bold,
+                              { color: colors.white },
+                            ]}
+                          >
+                            Name
+                          </Text>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.bold,
+                              { color: colors.white },
+                            ]}
+                          >
+                            Progress
+                          </Text>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.bold,
+                              { color: colors.white },
+                            ]}
+                          >
+                            Achievable
+                          </Text>
+                        </View>
+                        {leaderboardData.map((item, index) => (
+                          <View
+                            key={index}
+                            style={[
+                              styles.row,
+                              index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                              index === leaderboardData.length - 1 &&
+                                styles.lastRow,
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.fontWeight_small,
+                                { color: colors.white,opacity:0.7},
+                              ]}
+                            >
+                              {item.name}
+                            </Text>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.fontWeight_small,
+                                { color: colors.white,opacity:0.7},
+                              ]}
+                            >
+                              {item.progress}
+                            </Text>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.fontWeight_small,
+                                { color: colors.white,opacity:0.7},
+                              ]}
+                            >
+                              {item.achievable}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  ) : null}
+                  {expandedCards[ele.id] && (
+                    <TouchableOpacity
+                      style={{ marginTop: "4%", marginBottom: "4%" }}
+                      onPress={() => console.log("first")}
+                    >
+                      <Text
+                        style={[
+                          fonts.size_14,
+                          fonts.fontWeignt_600,
+                          fonts.alignCenter,
+                          { color: colors.termsLinkColor },
+                        ]}
+                      >
+                        See More
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              );
+            })}
+          </>
+        ) : (
+          <View
+            style={[
+              layout.fullWidth,
+              {
+                height: 500,
+                backgroundColor: colors.cardBackgroundColor,
+                borderRadius: 13,
+                alignItems: "center",
+              },
+            ]}
+          >
+            <Image
+              style={{ width: 230, height: 230, marginTop: "4%" }}
+              source={ActivatedHomeWork}
+              resizeMode="contain"
+            />
+            <Text
+              style={[
+                fonts.size_20,
+                fonts.fontWeignt_600,
+                { color: colors.white },
+              ]}
+            >
+              Home Work not assigned
+            </Text>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.fontWeignt_600,
                 {
-                  backgroundColor: colors.cardBackgroundColor,
-                  height: expandedCards[ele.id] ? "auto" : 130,
-                  borderRadius: 14,
-                  marginTop: "3%",
+                  color: colors.white,
+                  opacity: 0.4,
+                  textAlign: "center",
+                  width: "70%",
                 },
               ]}
             >
-              <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  layout.paddingForCard,
-                  { paddingBottom: "0%" },
-                ]}
+              Go to activate and assign Home Work for students at first
+            </Text>
+            <TouchableOpacity onPress={handleActiveHomework}>
+              <PrimaryGradient
+                styleProp={[styles.loginButton, layout.justifyCenter]}
               >
-                <View style={{ width: "55%" }}>
+                <View style={[layout.display, layout.rowHCenter]}>
                   <Text
-                    numberOfLines={2}
                     style={[
-                      fonts.size_14,
+                      fonts.size_16,
                       fonts.bold,
-                      { color: colors.white, top: -6 },
+                      { color: colors.loginBtnTextColor },
                     ]}
                   >
-                    {ele.topicName}
-                  </Text>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.backButtonColor, marginBottom: "5%" },
-                    ]}
-                  >
-                    {ele.subTitle}
+                    Activate Home Work
                   </Text>
                 </View>
-                <View style={{ width: "20%", top: -5 }}>
-                  <Circularprogressbar progress={ele.progress} />
-                </View>
-                <View style={{ width: "5%" }}>
-                  <TouchableOpacity onPress={() => toggleContent(ele.id)}>
-                    {expandedCards[ele.id] ? (
-                      <Image
-                        style={{ width: 12, height: 8 }}
-                        source={UpArrow}
-                        resizeMode="contain"
-                      />
-                    ) : (
-                      <Image
-                        style={{ width: 12, height: 8 }}
-                        source={DownArrow}
-                        resizeMode="contain"
-                      />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
-                <TouchableOpacity onPress={()=>setOpenRemindStudentBottomSheet(true)}>
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      fonts.fontWeignt_600,
-                      {
-                        color: colors.termsLinkColor,
-                        textDecorationLine: "underline",
-                      },
-                    ]}
-                  >
-                    Remind Students
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {expandedCards[ele.id] ? (
-                <View>
-                  <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
-                    <Text
-                      style={[
-                        fonts.size_12,
-                        fonts.fontWeight_small,
-                        {
-                          color: "#7A7A82",
-                        },
-                      ]}
-                    >
-                      Reminded on Aug 28, 2023
-                    </Text>
-                    <View style={[layout.itemsCenter]}>
-                      <Divider
-                        style={{
-                          width: "100%",
-                          backgroundColor: colors.lineBackgroundColor,
-                        }}
-                      />
-                    </View>
-                  </View>
-                  <View>
-                    <View style={styles.header}>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        Name
-                      </Text>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        Progress
-                      </Text>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        Achievable
-                      </Text>
-                    </View>
-                    {leaderboardData.map((item, index) => (
-                      <View
-                        key={index}
-                        style={[
-                          styles.row,
-                          index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                          index === leaderboardData.length - 1 &&
-                            styles.lastRow,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
-                        >
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
-                        >
-                          {item.progress}
-                        </Text>
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
-                        >
-                          {item.achievable}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              ) : null}
-              {expandedCards[ele.id] && (
-                <TouchableOpacity
-                  style={{ marginTop: "4%", marginBottom: "4%" }}
-                  onPress={() => console.log("first")}
-                >
-                  <Text
-                    style={[
-                      fonts.size_14,
-                      fonts.fontWeignt_600,
-                      fonts.alignCenter,
-                      { color: colors.termsLinkColor },
-                    ]}
-                  >
-                    See More
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          );
-        })}
+              </PrimaryGradient>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
-      <RemindStudentBottomSheet setOpenRemindStudentBottomSheet={setOpenRemindStudentBottomSheet} openRemindStudentBottomSheet={openRemindStudentBottomSheet}/>
+      <RemindStudentBottomSheet
+        setOpenRemindStudentBottomSheet={setOpenRemindStudentBottomSheet}
+        openRemindStudentBottomSheet={openRemindStudentBottomSheet}
+      />
     </SafeScreen>
   );
 };
@@ -301,5 +377,15 @@ const styles = StyleSheet.create({
   },
   oddRow: {
     backgroundColor: "#222230",
+  },
+  loginButton: {
+    height: 48,
+    width: "100%",
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });
