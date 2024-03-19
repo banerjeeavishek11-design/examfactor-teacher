@@ -9,7 +9,7 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@/theme";
 import Logo from "@/theme/assets/images/examfactorlogo.png";
 import rightArrow from "@/theme/assets/images/rightarrow.png";
@@ -21,9 +21,11 @@ import {
   moderateVerticalScale,
 } from "react-native-size-matters";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
+import { MMKV, useMMKVString } from "react-native-mmkv";
 
 const screenWidth = Dimensions.get("window").width;
 const isTablet = screenWidth >= 600;
+const storage = new MMKV();
 
 const LoginScreen = () => {
   const {
@@ -52,12 +54,13 @@ const LoginScreen = () => {
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
+
   const handleUsernameLogin = (data) => {
+    storage.set("username", data.username);
     navigation.reset({
       index: 0,
       routes: [{ name: "AuthorizedStack" }],
     });
-    console.log("login", data);
   };
 
   return (

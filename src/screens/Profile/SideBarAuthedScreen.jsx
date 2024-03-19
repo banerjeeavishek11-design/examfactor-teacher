@@ -23,6 +23,7 @@ import ClassTeacher from "@/theme/assets/images/classteacher.png";
 import { Divider } from "react-native-paper";
 import ChangeRoleBottomSheet from "@/components/BottomSheet/Profile/ChangeRoleBottomSheet";
 import RateUsBottomSheet from "@/components/BottomSheet/Profile/RateUsBottomSheet";
+import { MMKV, useMMKVString } from "react-native-mmkv";
 
 const SideBarAuthedScreen = (props) => {
   const {
@@ -36,6 +37,8 @@ const SideBarAuthedScreen = (props) => {
     backgrounds,
   } = useTheme();
   const navigation = useNavigation();
+  const storage = new MMKV();
+  const userName = storage.getString("username");
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] =
     useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
@@ -57,9 +60,22 @@ const SideBarAuthedScreen = (props) => {
     setRateUsModalVisible(true);
   };
 
+  // const logOut = () => {
+  //   navigation.navigate("LoginScreen");
+  // };
+  console.log(userName)
   const logOut = () => {
-    navigation.navigate("LoginScreen")
+    // Remove the stored username from MMKV
+   const clearData =  storage.clearAll("username");
+   console.log('clearData',clearData)
+    // Navigate back to the login screen
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "LoginScreen" }],
+    });
   };
+
+
 
   return (
     <SafeScreen>
@@ -147,7 +163,7 @@ const SideBarAuthedScreen = (props) => {
                         { color: colors.white },
                       ]}
                     >
-                      Viney Dua
+                      {userName}
                     </Text>
 
                     <Text

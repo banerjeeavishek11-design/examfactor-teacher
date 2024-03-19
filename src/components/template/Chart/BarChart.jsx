@@ -169,7 +169,7 @@ const GradientBarChart = ({
           y1={0}
           x2={yAxisWidth}
           y2={height - xAxisHeight}
-          stroke="black"
+          stroke="#474752"
           strokeWidth={1}
         />
 
@@ -194,7 +194,7 @@ const GradientBarChart = ({
             y1={(index / (yAxisLabels.length - 1)) * (height - xAxisHeight)}
             x2={yAxisWidth}
             y2={(index / (yAxisLabels.length - 1)) * (height - xAxisHeight)}
-            stroke="black"
+            stroke="#474752"
             strokeWidth={1}
           />
         ))}

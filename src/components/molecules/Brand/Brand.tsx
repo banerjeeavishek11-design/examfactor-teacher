@@ -1,6 +1,6 @@
 import { View, DimensionValue } from 'react-native';
 
-import LogoLight from '@/theme/assets/images/tom_light.png';
+import LogoLight from '@/theme/assets/images/examfactorlogo.png';
 import LogoDark from '@/theme/assets/images/tom_dark.png';
 
 import { ImageVariant } from '@/components/atoms';
@@ -24,7 +24,7 @@ function Brand({ height, width, mode }: Props) {
 		<View testID="brand-img-wrapper" style={{ height, width }}>
 			<ImageVariant
 				testID="brand-img"
-				style={[layout.fullHeight, layout.fullWidth]}
+				style={{width:172,height:175,left:10}}
 				source={LogoLight}
 				sourceDark={LogoDark}
 				resizeMode={mode}
