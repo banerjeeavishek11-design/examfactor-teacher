@@ -96,7 +96,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
 
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 10, height: 7 }}
+                style={{ width: 14, height: 9 }}
                 source={DownArrow}
                 resizeMode="contain"
               />

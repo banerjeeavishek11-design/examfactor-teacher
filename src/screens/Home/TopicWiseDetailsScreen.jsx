@@ -144,7 +144,7 @@ const TopicWiseDetailsScreen = () => {
                   { paddingBottom: "0%" },
                 ]}
               >
-                <View style={{ width: "50%" }}>
+                <View style={{ width: "60%" }}>
                   <Text
                     numberOfLines={2}
                     style={[
@@ -157,28 +157,28 @@ const TopicWiseDetailsScreen = () => {
                   </Text>
                   <Text
                     style={[
-                      fonts.size_10,
+                      fonts.size_13,
                       fonts.fontWeight_small,
-                      { color: colors.backButtonColor, marginTop: "3%" },
+                      { color: colors.backButtonColor},
                     ]}
                   >
                     {ele.subTitle}
                   </Text>
                 </View>
-                <View style={{ width: "20%", top: -5 }}>
+                <View style={{ width: "25%", top: -5 }}>
                   <Circularprogressbar progress={ele.progress} />
                 </View>
                 <View style={{ width: "5%" }}>
                   <TouchableOpacity onPress={() => toggleContent(ele.id)}>
                     {expandedCards[ele.id] ? (
                       <Image
-                        style={{ width: 12, height: 8 }}
+                        style={{width: 14, height: 10 }}
                         source={UpArrow}
                         resizeMode="contain"
                       />
                     ) : (
                       <Image
-                        style={{ width: 12, height: 8 }}
+                        style={{ width: 14, height: 10 }}
                         source={DownArrow}
                         resizeMode="contain"
                       />

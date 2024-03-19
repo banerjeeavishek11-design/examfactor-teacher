@@ -19,3 +19,5 @@ export { default as StudentWiseReportScreen } from "./Reports/StudentWiseReportS
 export { default as HomeWorkDetailsScreen } from "./Reports/HomeWorkDetailsScreen";
 export { default as ClassWorkdetailsScreen } from "./Reports/ClassWorkdetailsScreen";
 export { default as QuestionSolutionScreen} from "./Reports/QuestionSolutionScreen";
+export { default as BookmarkedQuestionsScreen} from "./Reports/BookmarkedQuestionsScreen";
+

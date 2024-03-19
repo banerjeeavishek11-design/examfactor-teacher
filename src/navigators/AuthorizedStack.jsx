@@ -142,6 +142,15 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
+       <Stack.Screen
+        name="BookmarkedQuestionsScreen"
+        component={BookmarkedQuestionsScreen}
+        options={{
+          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerContentContainerStyle: { paddingVertical: 20 },
+        }}
+      />
+
     </Drawer.Navigator>
   );
 };

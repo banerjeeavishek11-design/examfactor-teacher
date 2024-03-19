@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import { useTheme } from "@/theme";
 import { SafeScreen } from "@/components/template";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import rightArrow from '@/theme/assets/images/rightarrow.png'
-import leftArrow from '@/theme/assets/images/leftArrow2.png'
+import rightArrow from "@/theme/assets/images/rightarrow.png";
+import leftArrow from "@/theme/assets/images/leftArrow2.png";
 import Correct from "@/theme/assets/images/correctSolution.png";
 
 const answer = [
@@ -27,7 +27,17 @@ const QuestionSolutionScreen = () => {
   const { AllQuestions, currentQuestionId, currentQuestion } = route.params;
   const navigation = useNavigation();
   const { fonts, colors, layout } = useTheme();
-  console.log("LOG",AllQuestions);
+  // console.log("LOG", AllQuestions);
+
+  const [question, setQuestion] = useState(currentQuestion)
+
+  // const showNextQuestion = ()=>{
+  //   const nextQestionId = currentQuestionId + 1;
+  //   const nextQuestion = AllQuestions.find((ques)=> ques.id === nextQestionId);
+  //   setQuestion(nextQuestion.question)
+  //   console.log("quest next changed");
+  // }
+
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen]}>
@@ -82,7 +92,7 @@ const QuestionSolutionScreen = () => {
                 { color: colors.gray200, marginTop: "4%" },
               ]}
             >
-              {currentQuestion}
+              {question}
             </Text>
           </View>
           <View style={{ marginVertical: "5%", gap: 10 }}>
@@ -289,7 +299,7 @@ const QuestionSolutionScreen = () => {
               layout.row,
               layout.justifyBetween,
               layout.itemsCenter,
-              { marginTop: "20%",marginBottom: "5%",height: 60 },
+              { marginTop: "20%", marginBottom: "5%", height: 60 },
             ]}
           >
             <TouchableOpacity
@@ -302,12 +312,27 @@ const QuestionSolutionScreen = () => {
                   width: "49%",
                   height: 50,
                   backgroundColor: colors.cardBackgroundColor,
-                  gap:4
+                  gap: 4,
                 },
               ]}
             >
-              <Image style={{width:20, height:10, tintColor: colors.linearGradientColor}} source={leftArrow} />
-              <Text style={[fonts.size_16, fonts.fontWeight_small,{color: colors.linearGradientColor}]}>Previous</Text>
+              <Image
+                style={{
+                  width: 20,
+                  height: 10,
+                  tintColor: colors.linearGradientColor,
+                }}
+                source={leftArrow}
+              />
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.linearGradientColor },
+                ]}
+              >
+                Previous
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -320,12 +345,27 @@ const QuestionSolutionScreen = () => {
                   width: "49%",
                   height: 50,
                   backgroundColor: colors.cardBackgroundColor,
-                  gap:5
+                  gap: 5,
                 },
               ]}
             >
-              <Text style={[fonts.size_16, fonts.fontWeight_small,{color: colors.linearGradientColor}]}>Next</Text>
-              <Image style={{width:20, height:10, tintColor: colors.linearGradientColor}} source={rightArrow} />
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  { color: colors.linearGradientColor },
+                ]}
+              >
+                Next
+              </Text>
+              <Image
+                style={{
+                  width: 20,
+                  height: 10,
+                  tintColor: colors.linearGradientColor,
+                }}
+                source={rightArrow}
+              />
             </TouchableOpacity>
           </View>
         </ScrollView>

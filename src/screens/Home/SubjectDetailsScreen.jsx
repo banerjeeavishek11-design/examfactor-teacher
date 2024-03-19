@@ -217,7 +217,7 @@ const SubjectDetailsScreen = () => {
                   </Text>
                   <Text
                     style={[
-                      fonts.size_12,
+                      fonts.size_13,
                       fonts.fontWeight_small,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,
@@ -267,25 +267,39 @@ const SubjectDetailsScreen = () => {
                 />
               </View>
               <View>
-                <Text
-                  style={[
-                    fonts.size_12,
-                    fonts.fontWeight_small,
-                    {
-                      color: colors.subjectDetailsAcheivableScoreColor,
-                      marginTop: "4%",
-                    },
-                  ]}
+                <View
+                  style={[layout.row, layout.itemsCenter, { marginTop: "4%", gap:5 }]}
                 >
-                  Activated Topic : {`${ele.activatedTopic}/12`}
-                </Text>
+                  <Text
+                    style={[
+                      fonts.size_13,
+                      fonts.fontWeight_small,
+                      {
+                        color: colors.subjectDetailsAcheivableScoreColor,
+                      },
+                    ]}
+                  >
+                    Activated Topic :
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_13,
+                      fonts.bold,
+                      {
+                        color: colors.subjectDetailsAcheivableScoreColor,
+                      },
+                    ]}
+                  >
+                    {`${ele.activatedTopic}/12`}
+                  </Text>
+                </View>
                 <Text
                   style={[
                     fonts.size_12,
                     fonts.fontWeight_small,
                     {
                       color: colors.subjectDetailsAcheivableScoreColor,
-                      marginTop: "4%",
+                      marginTop: "2%",
                     },
                   ]}
                 >
