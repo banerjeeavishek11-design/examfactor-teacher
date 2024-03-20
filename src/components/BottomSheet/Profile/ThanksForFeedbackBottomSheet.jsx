@@ -14,7 +14,7 @@ import rightArrow from "@/theme/assets/images/rightarrow.png";
 import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
-const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
+const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
   const { fonts, colors, layout } = useTheme();
   return (
     <View>
