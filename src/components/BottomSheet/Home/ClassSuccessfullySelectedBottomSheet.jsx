@@ -20,6 +20,7 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
     setOpenClassSuccessfullySelectedBottomSheet,
     openClassSuccessfullySelectedBottomSheet,
     showSelecTedClass,
+    openFrom,
   } = props;
 
   const handleSlideDown = () => {
@@ -68,34 +69,58 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
             >
               <ImageVariant
                 testID="brand-img"
-                style={[{ width: 80, height: 80,marginTop:'5%' }]}
+                style={[{ width: 80, height: 80, marginTop: "5%" }]}
                 source={Success}
                 resizeMode="contain"
               />
-              <View style={{ width: "50%",marginTop:'3%' }}>
-                <Text
-                  style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    fonts.alignCenter,
-                    { color: colors.white,},
-                  ]}
-                >
-                  Class successfully Selected!
-                </Text>
-              </View>
-              <View style={{ width: "50%",marginTop:'3%' }}>
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    fonts.alignCenter,
-                    { color: colors.white,opacity: 0.7 },
-                  ]}
-                >
-                  Your has been selected Class {showSelecTedClass}
-                </Text>
-              </View>
+
+              {openFrom === "SelectClassBottomSheet" ? (
+                <>
+                  <View style={{ width: "50%", marginTop: "3%" }}>
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        fonts.alignCenter,
+                        { color: colors.white },
+                      ]}
+                    >
+                      Class successfully Selected!
+                    </Text>
+                  </View>
+                  <View style={{ width: "50%", marginTop: "3%" }}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        fonts.alignCenter,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Your has been selected Class {showSelecTedClass}
+                    </Text>
+                  </View>
+                </>
+              ) : openFrom === "ActivateHomeWorkConfirmationBottomTab" ? (
+                <View style={{ width: "90%", marginTop: "3%" }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.white,marginTop:"4%" },
+                    ]}
+                  >
+                    Topic activated Successfully!
+                  </Text>
+                  <Text style={[
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.gray200,marginTop:"2%" },
+                    ]}>Notification has been sent to all students.</Text>
+                </View>
+              ) : null}
             </View>
           </View>
         </View>

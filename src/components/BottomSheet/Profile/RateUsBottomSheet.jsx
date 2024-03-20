@@ -317,6 +317,7 @@ const RateUsBottomSheet = (props) => {
       <ThanksForFeedbackBottomSheet
         closeModal={closeThanksForFeedbackModal}
         visible={thanksForYourFeedbackBottomSheetVisible}
+       
       />
     </View>
   );

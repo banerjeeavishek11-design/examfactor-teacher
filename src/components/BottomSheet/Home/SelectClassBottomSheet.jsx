@@ -200,6 +200,7 @@ const ReferandearnBottomsheet = (props) => {
           openClassSuccessfullySelectedBottomSheet
         }
         showSelecTedClass={showSelecTedClass}
+        openFrom={"SelectClassBottomSheet"}
       />
     </View>
   );

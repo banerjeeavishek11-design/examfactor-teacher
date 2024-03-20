@@ -1,31 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { useTheme } from '@/theme';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { useTheme } from "@/theme";
+import { Header, SafeScreen } from "@/components/template";
+import ActivateTopTabNavigator from "@/navigators/ActivateTopTabNavigator";
 
 const ActivateScreen = () => {
-    const {
-        colors,
-        variant,
-        changeTheme,
-        layout,
-        gutters,
-        fonts,
-        components,
-        backgrounds,
-      } = useTheme();
+  const { colors, layout, fonts } = useTheme();
   return (
-    <View
-      style={[
-        backgrounds.screenBackgroundColor,
-        layout.paddingForFullScreen,
-        layout.flex_1,
-      ]}
-    >
-      <Text>ActivateScreen</Text>
-    </View>
-  )
-}
+    <SafeScreen>
+      <View
+        style={[{ backgroundColor: colors.headerBackgroundColor, height: 120 }]}
+      >
+        <Header />
+      </View>
+      <ActivateTopTabNavigator />
+    </SafeScreen>
+  );
+};
 
-export default ActivateScreen
+export default ActivateScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
