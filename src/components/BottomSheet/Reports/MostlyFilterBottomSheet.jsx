@@ -51,7 +51,6 @@ const MostlyFilterBottomSheet = ({visible, closeModal,setSelectedFilter}) => {
                   style={styles.radioButtonContainer}
                   onPress={() => {
                     setSelectedFilter(ele.options)
-                    console.log("op", ele.options);
                     closeModal()
                   }}
                 >

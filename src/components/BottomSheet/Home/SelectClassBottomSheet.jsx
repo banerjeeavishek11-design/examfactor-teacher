@@ -60,7 +60,6 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
-    console.log("op", op);
   };
 
   const handleApply = () => {

@@ -19,7 +19,6 @@ const SelectAreaBottomSheet = ({visible, closeModal, setSelectedArea}) => {
     const [option, setOption] = useState("first");
     const handleOptionChange = (op) => {
         setOption(op);
-        console.log("op", op);
       };
       const handleApply = () => {
         setSelectedArea(option);

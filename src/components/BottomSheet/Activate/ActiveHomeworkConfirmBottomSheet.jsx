@@ -15,7 +15,11 @@ import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradien
 import ActivateMoreTopicBottomSheet from "./ActivateMoreTopicBottomSheet";
 import ClassSuccessfullySelectedBottomSheet from "../Home/ClassSuccessfullySelectedBottomSheet";
 
-const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
+const ActiveHomeworkConfirmBottomSheet = ({
+  visible,
+  setActivateConfirmationModalVisible,
+  callAfterDialogClose,
+}) => {
   const { layout, colors, fonts } = useTheme();
   const [moreTopicModalVisible, setMoreTopicModalVisible] = useState(false);
   const closeMoreTopicModal = () => {
@@ -26,9 +30,14 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
     setOpenClassSuccessfullySelectedBottomSheet,
   ] = useState(false);
 
-  const topicActivated = () => {
-    setOpenClassSuccessfullySelectedBottomSheet(true);
-    closeModal();
+  const topicActivated = (clickedBtnName) => {
+    if (clickedBtnName === "YES") {
+      setOpenClassSuccessfullySelectedBottomSheet(true);
+      setActivateConfirmationModalVisible(false);
+      callAfterDialogClose(clickedBtnName);
+    } else {
+      setActivateConfirmationModalVisible(false);
+    }
   };
 
   return (
@@ -42,7 +51,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => setActivateConfirmationModalVisible(false)}
               style={[{ position: "absolute", top: -35, left: "92%" }]}
             >
               <ImageVariant
@@ -55,7 +64,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
             <View style={styles.center}>
               <TouchableOpacity
                 style={styles.slideIndicator}
-                onPress={closeModal}
+                onPress={() => setActivateConfirmationModalVisible(false)}
               ></TouchableOpacity>
             </View>
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
@@ -81,7 +90,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setMoreTopicModalVisible(true);
-                    closeModal();
+                    setActivateConfirmationModalVisible(false);
                   }}
                 >
                   <Text
@@ -100,7 +109,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
               </View>
               <View style={styles.footer}>
                 <TouchableOpacity
-                  onPress={closeModal}
+                  onPress={() => topicActivated("NO")}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -129,7 +138,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
                     },
                   ]}
                   onPress={() => {
-                    topicActivated();
+                    topicActivated("YES");
                   }}
                 >
                   <PrimaryGradient
@@ -172,7 +181,7 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal,  }) => {
   );
 };
 
-export default ActiveHomeworkConfirmBottomTab;
+export default ActiveHomeworkConfirmBottomSheet;
 
 const styles = StyleSheet.create({
   container: {

@@ -25,11 +25,9 @@ const SelectChapterBottomSheet = ({ visible, closeModal,setSelectedChapter }) =>
     const [option, setOption] = useState(null);
     const handleOptionChange = (op) => {
         setOption(op);
-        console.log("op", op);
       };
       const handleApply = () => {
         setSelectedChapter(option);
-        console.log("OPPP",option);
         closeModal()
       };
 

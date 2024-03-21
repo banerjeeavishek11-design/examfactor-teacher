@@ -15,7 +15,6 @@ const Concentrix = (props) => {
     backgrounds,
   } = useTheme();
   const { scorePercentage } = props;
-  // console.log('scorePercentage',scorePercentage)
   const strokeWidth = 5;
   const radius = 100;
   const targetRadius = 5;

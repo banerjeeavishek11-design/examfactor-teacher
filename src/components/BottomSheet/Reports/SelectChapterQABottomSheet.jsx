@@ -52,11 +52,9 @@ const SelectChapterQABottomSheet = ({
   const [option, setOption] = useState(null);
   const handleOptionChange = (op) => {
     setOption(op);
-    console.log("op", op);
   };
   const handleApply = () => {
     setSelectedValue(option);
-    // console.log("handle apply from chapter select QA: ", option);
     closeModal();
     setOpenQuestionTypeModal(true);
   };

@@ -46,13 +46,9 @@ const InsightsScreen = () => {
         setChapters([]);
         return;
       }
-      console.log("RESULTED CHAPTER:::", result?.data);
       setChapters(result?.data);
     }
   }, [selectedChapter]);
-
-  console.log("SELECTED CHAPTER::", selectedChapter);
-  console.log("SELECTED Area::", selectedArea);
   return (
     <SafeScreen>
         <ScrollView

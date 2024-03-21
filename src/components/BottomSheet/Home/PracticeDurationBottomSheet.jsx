@@ -29,7 +29,6 @@ const PracticeDurationBottomSheet = ({visible, closeModal, setPracticeDurationVa
     const [option, setOption] = useState("first");
     const handleOptionChange = (op) => {
         setOption(op);
-        console.log("selected practice duration: ", op);
       };
 
       const handleApply = () => {

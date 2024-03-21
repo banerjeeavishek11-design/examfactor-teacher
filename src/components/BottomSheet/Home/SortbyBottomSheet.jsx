@@ -29,7 +29,6 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
     const [option, setOption] = useState("first");
     const handleOptionChange = (op) => {
         setOption(op);
-        console.log("selected sortby: ", op);
       };
 
       const handleApply = () => {
