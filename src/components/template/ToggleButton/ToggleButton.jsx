@@ -8,7 +8,7 @@ const ToggleButton = ({
   setActivateConfirmationModalVisible,
   activeToggleData,
   chapterInfo,
-  setActivatedData,
+  // setActivatedData ,
 }) => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
@@ -21,7 +21,7 @@ const ToggleButton = ({
 
   const toggleSwitch = () => {
     setActivateConfirmationModalVisible(true);
-    setActivatedData(chapterInfo);
+    // setActivatedData(chapterInfo);
   };
 
   return (
