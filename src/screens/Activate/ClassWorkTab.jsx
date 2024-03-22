@@ -191,8 +191,20 @@ const HomeWorkTab = () => {
                             >
                               {tests.id}
                             </Text>
-                            <Text style={[fonts.size_14,{color: colors.gray200}]}>Activated on {tests.activated}</Text>
-                            <Text style={[fonts.size_14,fonts.bold,{color: colors.gray200}]}>For {tests.for}</Text>
+                            <Text
+                              style={[fonts.size_14, { color: colors.gray200 }]}
+                            >
+                              Activated on {tests.activated}
+                            </Text>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                { color: colors.gray200 },
+                              ]}
+                            >
+                              For {tests.for}
+                            </Text>
                           </View>
                           <View
                             style={{
