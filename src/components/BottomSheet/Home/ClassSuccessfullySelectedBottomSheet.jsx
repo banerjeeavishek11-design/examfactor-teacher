@@ -101,8 +101,32 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                     </Text>
                   </View>
                 </>
-              ) : openFrom === "ActivateHomeWorkConfirmationBottomTab" ? (
-                <View style={{ width: "90%", marginTop: "3%" }}>
+              ) : null}
+              {
+                openFrom === "ActivateHomeWorkConfirmationBottomTab" ? (
+                  <View style={{ width: "90%", marginTop: "3%" }}>
+                    <Text
+                      style={[
+                        fonts.size_18,
+                        fonts.bold,
+                        fonts.alignCenter,
+                        { color: colors.white,marginTop:"4%" },
+                      ]}
+                    >
+                      Topic activated Successfully!
+                    </Text>
+                    <Text style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        fonts.alignCenter,
+                        { color: colors.gray200,marginTop:"2%" },
+                      ]}>Notification has been sent to all students.</Text>
+                  </View>
+                ) : null
+              }
+              {
+                openFrom === "ActivateDiagnosticConfirmationBottomSheet" ? (
+                  <View style={{ width: "90%", marginTop: "3%" }}>
                   <Text
                     style={[
                       fonts.size_18,
@@ -111,7 +135,7 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                       { color: colors.white,marginTop:"4%" },
                     ]}
                   >
-                    Topic activated Successfully!
+                    Chapter activated Successfully!
                   </Text>
                   <Text style={[
                       fonts.size_14,
@@ -120,7 +144,8 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                       { color: colors.gray200,marginTop:"2%" },
                     ]}>Notification has been sent to all students.</Text>
                 </View>
-              ) : null}
+                ) : null
+              }
             </View>
           </View>
         </View>
