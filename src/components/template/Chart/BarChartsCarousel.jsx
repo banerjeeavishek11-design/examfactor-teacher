@@ -65,7 +65,6 @@ const BarChartsCarousel = ({ refresh, setSelectedSubjectCode }) => {
       <FlatList
         data={data}
         renderItem={({ item, index }) => {
-          console.log("first", item);
           return (
             <View
               key={index}

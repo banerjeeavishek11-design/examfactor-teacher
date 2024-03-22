@@ -267,7 +267,6 @@ const HomeWorkTab = () => {
                   {expandedCards[ele.id] && (
                     <TouchableOpacity
                       style={{ marginTop: "4%", marginBottom: "4%" }}
-                      onPress={() => console.log("first")}
                     >
                       <Text
                         style={[

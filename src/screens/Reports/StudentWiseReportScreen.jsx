@@ -48,7 +48,6 @@ const StudentWiseReportScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { studentDetails } = route.params || {};
-  // console.log("studentDetails", studentDetails);
   const { colors, layout, fonts } = useTheme();
   const overallProgress = studentDetails
     ? studentDetails?.progressPercentage / 100
@@ -70,7 +69,7 @@ const StudentWiseReportScreen = () => {
           layout.paddingForFullScreen,
           {
             height: 50,
-            backgroundColor: colors.headerBackgroundColor,
+            // backgroundColor: colors.headerBackgroundColor,
           },
         ]}
       >

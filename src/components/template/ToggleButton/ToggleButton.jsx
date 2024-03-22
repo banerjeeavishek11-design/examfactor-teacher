@@ -1,26 +1,34 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeScreen } from "@/components/template";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@/theme";
 
-const ToggleButton = ({ setActivateConfirmationModalVisible }) => {
+const ToggleButton = ({
+  setActivateConfirmationModalVisible,
+  activeToggleData,
+  chapterInfo,
+  // setActivatedData ,
+}) => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState();
+
+  useEffect(() => {
+    setIsEnabled(activeToggleData);
+  }, [activeToggleData]);
 
   const toggleSwitch = () => {
-    if (!isEnabled) {
-      setActivateConfirmationModalVisible(true);
-    }
-    setIsEnabled(!isEnabled);
+    setActivateConfirmationModalVisible(true);
+    // setActivatedData(chapterInfo);
   };
 
   return (
     <SafeScreen>
       <TouchableOpacity
-        style={{ backgroundColor: colors.cardBackgroundColor }}
+        // style={{ backgroundColor: colors.cardBackgroundColor }}
+        // style={{ backgroundColor: 'transparent' }}
         onPress={() => {
           toggleSwitch();
         }}
@@ -47,10 +55,9 @@ export default ToggleButton;
 
 const styles = StyleSheet.create({
   container: {
-    width: 42,
-    height: 30,
+    width: 34,
+    height: 23,
     borderRadius: 15,
-    backgroundColor: "#ccc",
     justifyContent: "center",
     alignSelf: "flex-end",
     padding: 2,

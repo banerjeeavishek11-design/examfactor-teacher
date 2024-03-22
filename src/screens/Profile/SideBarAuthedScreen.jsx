@@ -59,16 +59,8 @@ const SideBarAuthedScreen = (props) => {
   const openRateUsModal = () => {
     setRateUsModalVisible(true);
   };
-
-  // const logOut = () => {
-  //   navigation.navigate("LoginScreen");
-  // };
-  console.log(userName)
   const logOut = () => {
-    // Remove the stored username from MMKV
    const clearData =  storage.clearAll("username");
-   console.log('clearData',clearData)
-    // Navigate back to the login screen
     navigation.reset({
       index: 0,
       routes: [{ name: "LoginScreen" }],

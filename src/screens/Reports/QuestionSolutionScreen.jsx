@@ -27,7 +27,6 @@ const QuestionSolutionScreen = () => {
   const { AllQuestions, currentQuestionId, currentQuestion } = route.params;
   const navigation = useNavigation();
   const { fonts, colors, layout } = useTheme();
-  // console.log("LOG", AllQuestions);
 
   const [question, setQuestion] = useState(currentQuestion)
 
@@ -35,7 +34,6 @@ const QuestionSolutionScreen = () => {
   //   const nextQestionId = currentQuestionId + 1;
   //   const nextQuestion = AllQuestions.find((ques)=> ques.id === nextQestionId);
   //   setQuestion(nextQuestion.question)
-  //   console.log("quest next changed");
   // }
 
   return (

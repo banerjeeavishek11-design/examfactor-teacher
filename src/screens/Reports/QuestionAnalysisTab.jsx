@@ -58,10 +58,6 @@ const QuestionAnalysisScreen = () => {
   const changeQuestionType = (option)=>{
     setSelectedQuestionType(option)
   }
-
-console.log("QESTION TYPE", selectedQuestionType);
-console.log("CHASPTER TYPEX TYPE", selectedChapter);
-
   return (
     <SafeScreen>
       <ScrollView

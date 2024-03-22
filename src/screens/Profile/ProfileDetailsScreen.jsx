@@ -50,9 +50,6 @@ const ProfileDetailsScreen = ({ navigation }) => {
   const closeChangePasswordModal = ()=>{
     setChangePasswordBottomSheetVisible(false)
   }
-
-  console.log("PROF DATA::", profileData);
-
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>

@@ -31,7 +31,6 @@ const SelectQuestionTypeBottomSheet = ({
   const [option, setOption] = useState("first");
   const handleOptionChange = (op) => {
     setOption(op);
-    console.log("op", op);
   };
   const handleApply = () => {
     setSelectedChapter({

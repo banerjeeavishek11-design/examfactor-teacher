@@ -68,7 +68,6 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                   retypePassword: "",
                 }}
                 onSubmit={(values) => {
-                  console.log(values);
                 }}
               >
                 {({ handleChange, handleSubmit, values, errors }) => {
