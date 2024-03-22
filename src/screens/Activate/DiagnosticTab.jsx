@@ -18,22 +18,27 @@ const TopicData = [
   {
     id: "C1",
     topic: "Motion",
+    isActive: false,
   },
   {
     id: "C2",
     topic: "Force and Laws of Motion",
+    isActive: false,
   },
   {
     id: "C3",
     topic: "Gravitation",
+    isActive: false,
   },
   {
     id: "C4",
     topic: "Work and Energy",
+    isActive: false,
   },
   {
     id: "C5",
     topic: "Sound",
+    isActive: false,
   },
 ];
 
@@ -45,6 +50,20 @@ const DiagnosticTab = () => {
   ] = useState(false);
   const closeActiveConfirmationModal = () => {
     setActivateConfirmationModalVisible(false);
+  };
+  const [activatedData, setActivatedData] = useState();
+
+  const topicActivated = (clickedBtnName) => {
+    if (clickedBtnName === "YES") {
+      let activatedTopic = { ...activatedData };
+      activatedTopic.isActive = true;
+      let topicIndex = TopicData.findIndex(
+        (ele) => ele.topic == activatedData.topic
+      );
+      TopicData[topicIndex] = activatedTopic;
+      console.log("TopicData after update", activatedTopic);
+      setActivatedData(TopicData);
+    }
   };
 
   return (
@@ -116,7 +135,7 @@ const DiagnosticTab = () => {
                       layout.itemsCenter,
                     ]}
                   >
-                    <View style={[layout.row, { gap: 5, marginBottom: "5%" }]}>
+                    <View style={[{ marginBottom: "4%", width: "70%" }]}>
                       <Text
                         style={[
                           fonts.size_16,
@@ -124,25 +143,19 @@ const DiagnosticTab = () => {
                           { color: colors.white },
                         ]}
                       >
-                        {topic.id}:
-                      </Text>
-                      <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.fontWeignt_600,
-                          { color: colors.white },
-                        ]}
-                      >
-                        {topic.topic}
+                        {`C${index + 1}`}: {topic.topic}
                       </Text>
                     </View>
-                    <View
-                      style={{ backgroundColor: colors.cardBackgroundColor }}
-                    >
+                    <View style={{ width: "0%" }}>
                       <ToggleButton
                         setActivateConfirmationModalVisible={
                           setActivateConfirmationModalVisible
                         }
+                        activeToggleData={topic.isActive}
+                        chapterInfo={{
+                          topic: topic,
+                        }}
+                        setActivatedData={setActivatedData}
                       />
                     </View>
                   </View>
@@ -154,7 +167,10 @@ const DiagnosticTab = () => {
       </View>
       <ActivateDiagnosticConfirmationBottomSheet
         visible={activateConfirmationModalVisible}
-        closeModal={closeActiveConfirmationModal}
+        setActivateConfirmationModalVisible={
+          setActivateConfirmationModalVisible
+        }
+        callAfterDialogClose={topicActivated}
       />
     </SafeScreen>
   );

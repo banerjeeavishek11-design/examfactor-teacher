@@ -64,7 +64,7 @@ const TopicData = [
   },
 ];
 
-const HomeWorkTab = () => {
+const ClassWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
   const [
     activateConfirmationModalVisible,
@@ -114,7 +114,7 @@ const HomeWorkTab = () => {
         </Text>
         <ScrollView>
           <View style={{ marginBottom: "30%" }}>
-            {TopicData.map((topic) => {
+            {TopicData.map((topic, i) => {
               return (
                 <View
                   style={[
@@ -131,39 +131,33 @@ const HomeWorkTab = () => {
                 >
                   <View
                     style={[
-                      layout.row,
+                      layout.display,
+                      layout.rowHCenter,
                       layout.justifyBetween,
-                      layout.itemsCenter,
                     ]}
                   >
-                    <View style={[layout.row, { gap: 5, marginBottom: "5%" }]}>
-                      <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        {topic.id}:
-                      </Text>
-                      <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        {topic.topic}
-                      </Text>
-                    </View>
-                    {
-                      <TouchableOpacity>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeignt_600,
+                        { color: colors.white },
+                      ]}
+                    >{`C${i + 1}: ${topic.topic}`}</Text>
+                    <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                      {/* {expandedCards[ele.id] ? (
                         <Image
-                          style={{ width: 14, height: 8 }}
-                          source={DownArrow}
+                          style={{ width: 12, height: 8 }}
+                          source={UpArrow}
+                          resizeMode="contain"
                         />
-                      </TouchableOpacity>
-                    }
+                      ) : ( */}
+                      <Image
+                        style={{ width: 12, height: 8 }}
+                        source={DownArrow}
+                        resizeMode="contain"
+                      />
+                      {/* )} */}
+                    </TouchableOpacity>
                   </View>
                   <View>
                     {topic.tests.map((tests) => {
@@ -178,6 +172,7 @@ const HomeWorkTab = () => {
                               borderTopColor: colors.gray400,
                               borderTopWidth: 1,
                               paddingVertical: "5%",
+                              marginTop: "2%",
                             },
                           ]}
                         >
@@ -191,12 +186,24 @@ const HomeWorkTab = () => {
                             >
                               {tests.id}
                             </Text>
-                            <Text style={[fonts.size_14,{color: colors.gray200}]}>Activated on {tests.activated}</Text>
-                            <Text style={[fonts.size_14,fonts.bold,{color: colors.gray200}]}>For {tests.for}</Text>
+                            <Text
+                              style={[fonts.size_14, { color: colors.gray200 }]}
+                            >
+                              Activated on {tests.activated}
+                            </Text>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                { color: colors.white },
+                              ]}
+                            >
+                              For {tests.for}
+                            </Text>
                           </View>
                           <View
                             style={{
-                              backgroundColor: colors.cardBackgroundColor,
+                              width: "0%",
                             }}
                           >
                             <ToggleButton
@@ -219,6 +226,6 @@ const HomeWorkTab = () => {
   );
 };
 
-export default HomeWorkTab;
+export default ClassWorkTab;
 
 const styles = StyleSheet.create({});
