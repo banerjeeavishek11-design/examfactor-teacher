@@ -12,15 +12,10 @@ import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
 import Cross from "@/theme/assets/images/cross.png";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
-import ActivateMoreTopicBottomSheet from "./ActivateMoreTopicBottomSheet";
 import ClassSuccessfullySelectedBottomSheet from "../Home/ClassSuccessfullySelectedBottomSheet";
 
-const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
-  const { layout, colors, fonts } = useTheme();
-  const [moreTopicModalVisible, setMoreTopicModalVisible] = useState(false);
-  const closeMoreTopicModal = () => {
-    setMoreTopicModalVisible(false);
-  };
+const ActivateDiagnosticConfirmationBottomSheet = ({ visible, closeModal }) => {
+  const { fonts, colors, layout } = useTheme();
   const [
     openClassSuccessfullySelectedBottomSheet,
     setOpenClassSuccessfullySelectedBottomSheet,
@@ -30,7 +25,6 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
     setOpenClassSuccessfullySelectedBottomSheet(true);
     closeModal();
   };
-
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
@@ -67,38 +61,19 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
                     { color: colors.white, textAlign: "left" },
                   ]}
                 >
-                  Are you sure you want to activate this Home Work ?
+                  Are you sure you want to activate ?
                 </Text>
                 <Text
                   style={[
-                    fonts.size_14,
+                    fonts.size_16,
                     fonts.fontWeight_small,
                     { color: colors.gray200, marginVertical: "4%" },
                   ]}
                 >
-                  Number of topics selected: 1
+                  C1: Electric Current
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setMoreTopicModalVisible(true);
-                    closeModal();
-                  }}
-                >
-                  <Text
-                    style={[
-                      fonts.size_16,
-                      fonts.bold,
-                      {
-                        color: colors.linearGradientColor,
-                        marginBottom: "10%",
-                      },
-                    ]}
-                  >
-                    Activate more topics
-                  </Text>
-                </TouchableOpacity>
               </View>
-              <View style={styles.footer}>
+              <View style={[styles.footer, { marginTop: "8%" }]}>
                 <TouchableOpacity
                   onPress={closeModal}
                   style={[
@@ -128,9 +103,9 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                  onPress={() => {
-                    topicActivated();
-                  }}
+                    onPress={() => {
+                      topicActivated();
+                    }}
                 >
                   <PrimaryGradient
                     styleProp={[
@@ -155,10 +130,6 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
           </View>
         </View>
       </Modal>
-      <ActivateMoreTopicBottomSheet
-        visible={moreTopicModalVisible}
-        closeModal={closeMoreTopicModal}
-      />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={
           setOpenClassSuccessfullySelectedBottomSheet
@@ -166,13 +137,13 @@ const ActiveHomeworkConfirmBottomTab = ({ visible, closeModal  }) => {
         openClassSuccessfullySelectedBottomSheet={
           openClassSuccessfullySelectedBottomSheet
         }
-        openFrom={"ActivateHomeWorkConfirmationBottomTab"}
+        openFrom={"ActivateDiagnosticConfirmationBottomSheet"}
       />
     </View>
   );
 };
 
-export default ActiveHomeworkConfirmBottomTab;
+export default ActivateDiagnosticConfirmationBottomSheet;
 
 const styles = StyleSheet.create({
   container: {
@@ -186,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   bottomSheetContent: {
-    height: 350,
+    height: 300,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
