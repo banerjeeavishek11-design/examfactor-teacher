@@ -461,7 +461,7 @@ const HomeScreen = () => {
                 style={[
                   fonts.size_10,
                   fonts.fontWeight_small,
-                  { color: colors.white },
+                  { color: colors.gray200},
                 ]}
               >
                 Achievable Score
@@ -589,7 +589,7 @@ const HomeScreen = () => {
                     style={[
                       fonts.size_10,
                       fonts.fontWeight_small,
-                      { color: colors.white, opacity: 0.9 },
+                      { color: colors.gray200 },
                     ]}
                   >
                     Last practice
@@ -610,7 +610,7 @@ const HomeScreen = () => {
                       style={[
                         fonts.size_10,
                         fonts.fontWeight_small,
-                        { color: colors.white, opacity: 0.9 },
+                        { color: colors.gray200 },
                       ]}
                     >
                       Avg. Study Time
@@ -642,7 +642,7 @@ const HomeScreen = () => {
                     style={[
                       fonts.size_10,
                       fonts.fontWeight_small,
-                      { color: colors.white, opacity: 0.9 },
+                      { color: colors.gray200 },
                     ]}
                   >
                     Last test score
@@ -681,7 +681,7 @@ const HomeScreen = () => {
               style={[
                 fonts.size_10,
                 fonts.fontWeight_small,
-                { color: colors.white },
+                { color: colors.gray200 },
               ]}
             >
               Achievable Score
@@ -796,7 +796,7 @@ const HomeScreen = () => {
               style={[
                 fonts.size_10,
                 fonts.fontWeight_small,
-                { color: colors.white },
+                { color: colors.gray200 },
               ]}
             >
               Achievable Score

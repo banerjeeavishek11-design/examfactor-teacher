@@ -123,7 +123,7 @@ const Concentrix = (props) => {
                 },
               ]}
             >
-              {scorePercentage}/100
+              {scorePercentage}/<Text style={[fonts.size_10,fonts.fontWeight_small,{color:colors.gray200}]}>100</Text>
             </Text>
           ) : (
             <Text

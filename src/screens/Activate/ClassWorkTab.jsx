@@ -14,25 +14,55 @@ import { SafeScreen } from "@/components/template";
 import ToggleButton from "@/components/template/ToggleButton/ToggleButton";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
 import UpArrow from "@/theme/assets/images/uparrow.png";
-// import ActiveHomeworkConfirmBottomTab from "@/components/BottomSheet/Activate/ActiveHomeworkConfirmBottomTab";
+import ScheduleTestActivationBottomSheet from "@/components/BottomSheet/Activate/ScheduleTestActivationBottomSheet";
 
 const TopicData = [
   {
     id: "C1",
     topic: "Motion",
     tests: [
-      { id: "Test 1", activated: "Aug 28,2023", for: "02 Sep, 2023" },
-      { id: "Test 3", activated: "Aug 29,2023", for: "03 Sep, 2023" },
-      { id: "Test 2", activated: "Aug 30,2023", for: "04 Sep, 2023" },
+      {
+        id: "Test 1",
+        activated: "Aug 28,2023",
+        for: "02 Sep, 2023",
+        isActive: false,
+      },
+      {
+        id: "Test 3",
+        activated: "Aug 29,2023",
+        for: "03 Sep, 2023",
+        isActive: false,
+      },
+      {
+        id: "Test 2",
+        activated: "Aug 30,2023",
+        for: "04 Sep, 2023",
+        isActive: false,
+      },
     ],
   },
   {
     id: "C2",
     topic: "Force and Laws of Motion",
     tests: [
-      { id: "Test 1", activated: "Aug 28,2023", for: "02 Sep, 2023" },
-      { id: "Test 3", activated: "Aug 29,2023", for: "03 Sep, 2023" },
-      { id: "Test 2", activated: "Aug 30,2023", for: "04 Sep, 2023" },
+      {
+        id: "Test 1",
+        activated: "Aug 28,2023",
+        for: "02 Sep, 2023",
+        isActive: false,
+      },
+      {
+        id: "Test 3",
+        activated: "Aug 29,2023",
+        for: "03 Sep, 2023",
+        isActive: false,
+      },
+      {
+        id: "Test 2",
+        activated: "Aug 30,2023",
+        for: "04 Sep, 2023",
+        isActive: false,
+      },
     ],
   },
   {
@@ -70,8 +100,21 @@ const ClassWorkTab = () => {
     activateConfirmationModalVisible,
     setActivateConfirmationModalVisible,
   ] = useState(false);
-  const closeActiveConfirmationModal = () => {
-    setActivateConfirmationModalVisible(false);
+  const [activatedData, setActivatedData] = useState();
+
+  const topicActivated = (clickedBtnName) => {
+    if (clickedBtnName === "YES") {
+      let activatedTopic = { ...activatedData.subTopic };
+      activatedTopic.isActive = true;
+      let topicIndex = TopicData.findIndex(
+        (ele) => ele.topic == activatedData.topic
+      );
+      let subTopicIndex = TopicData[topicIndex].tests.findIndex(
+        (ele) => ele.id == activatedData.subTopic.id
+      );
+      TopicData[topicIndex].tests[subTopicIndex] = activatedTopic;
+      setActivatedData(TopicData);
+    }
   };
 
   return (
@@ -210,6 +253,12 @@ const ClassWorkTab = () => {
                               setActivateConfirmationModalVisible={
                                 setActivateConfirmationModalVisible
                               }
+                              activeToggleData={tests.isActive}
+                              chapterInfo={{
+                                topic: topic.topic,
+                                subTopic: tests,
+                              }}
+                              setActivatedData={setActivatedData}
                             />
                           </View>
                         </View>
@@ -221,6 +270,13 @@ const ClassWorkTab = () => {
             })}
           </View>
         </ScrollView>
+        <ScheduleTestActivationBottomSheet
+          visible={activateConfirmationModalVisible}
+          setActivateConfirmationModalVisible={
+            setActivateConfirmationModalVisible
+          }
+          callAfterDialogClose={topicActivated}
+        />
       </View>
     </SafeScreen>
   );
