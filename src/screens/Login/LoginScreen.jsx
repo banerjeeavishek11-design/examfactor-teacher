@@ -22,10 +22,13 @@ import {
 } from "react-native-size-matters";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 import { MMKV, useMMKVString } from "react-native-mmkv";
+import { useDispatch } from "react-redux";
+import { loginAction } from "@/store/redux-slice/LoginSlice";
 
 const screenWidth = Dimensions.get("window").width;
 const isTablet = screenWidth >= 600;
 const storage = new MMKV();
+
 
 const LoginScreen = () => {
   const {
@@ -39,6 +42,7 @@ const LoginScreen = () => {
     backgrounds,
   } = useTheme();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -57,6 +61,7 @@ const LoginScreen = () => {
 
   const handleUsernameLogin = (data) => {
     storage.set("username", data.username);
+    dispatch(loginAction(data));
     navigation.reset({
       index: 0,
       routes: [{ name: "AuthorizedStack" }],
@@ -331,7 +336,7 @@ const LoginScreen = () => {
                     </Text>
                     <ImageVariant
                       testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5,top:-2 }}
+                      style={{ width: 16, height: 9, left: 5, top: -2 }}
                       source={rightArrow}
                       resizeMode="contain"
                     />

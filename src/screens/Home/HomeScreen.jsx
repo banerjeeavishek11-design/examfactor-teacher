@@ -26,7 +26,7 @@ import Progressbar from "@/components/template/Progressbar/Progressbar";
 import { useNavigation } from "@react-navigation/native";
 import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
 import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
-
+import { useSelector } from "react-redux";
 
 const data = ["03", "06", "09", "12"];
 const barchartColor = ["#7AF4FC", "#27D4FA"];
@@ -51,6 +51,11 @@ const HomeScreen = () => {
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
   const [showContent, setShowContent] = useState(false);
+
+  const userDetails = useSelector((state) => state.login);
+  
+
+  console.log("first", userDetails);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -142,7 +147,6 @@ const HomeScreen = () => {
           >
             Physics
           </Text>
-
           <View style={{ marginTop: "1%", alignItems: "center" }}>
             <Concentrix scorePercentage={20} />
           </View>
@@ -461,7 +465,7 @@ const HomeScreen = () => {
                 style={[
                   fonts.size_10,
                   fonts.fontWeight_small,
-                  { color: colors.gray200},
+                  { color: colors.gray200 },
                 ]}
               >
                 Achievable Score
