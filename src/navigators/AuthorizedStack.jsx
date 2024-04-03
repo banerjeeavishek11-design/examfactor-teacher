@@ -17,6 +17,7 @@ import {
   LoginScreen,
   BookmarkedQuestionsScreen,
   ForgotPasswordScreen,
+  ForgotPasswordSuccessfulScreen,
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -73,6 +74,7 @@ const AuthorizedStack = () => {
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
       />
+        <Stack.Screen name="ForgotPasswordSuccessfulScreen" component={ForgotPasswordSuccessfulScreen} />
       <Stack.Screen
         name="AppGuideScreen"
         component={AppGuideScreen}
