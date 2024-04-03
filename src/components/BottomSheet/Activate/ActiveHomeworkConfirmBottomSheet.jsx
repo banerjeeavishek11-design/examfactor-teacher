@@ -100,6 +100,7 @@ const ActiveHomeworkConfirmBottomSheet = ({
                       {
                         color: colors.linearGradientColor,
                         marginBottom: "10%",
+                        textDecorationLine: 'underline'
                       },
                     ]}
                   >

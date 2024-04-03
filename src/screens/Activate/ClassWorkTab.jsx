@@ -238,7 +238,7 @@ const ClassWorkTab = () => {
                               style={[
                                 fonts.size_14,
                                 fonts.bold,
-                                { color: colors.white },
+                                { color: colors.gray200 },
                               ]}
                             >
                               For {tests.for}
