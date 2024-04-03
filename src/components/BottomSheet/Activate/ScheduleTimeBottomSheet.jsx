@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: "82%",
+    marginTop: "84%",
   },
   toModalView: {
     margin: '48%',
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: "82%",
+    marginTop: "84%",
   },
   button: {
     borderRadius: 20,
