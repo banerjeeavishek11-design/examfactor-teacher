@@ -16,6 +16,7 @@ import {
   QuestionSolutionScreen,
   LoginScreen,
   BookmarkedQuestionsScreen,
+  ForgotPasswordScreen,
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -60,13 +61,17 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{
           drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
       />
       <Stack.Screen
         name="AppGuideScreen"
@@ -133,7 +138,7 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="QuestionSolutionScreen"
         component={QuestionSolutionScreen}
         options={{
@@ -141,7 +146,7 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="BookmarkedQuestionsScreen"
         component={BookmarkedQuestionsScreen}
         options={{
@@ -149,7 +154,6 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-
     </Drawer.Navigator>
   );
 };
