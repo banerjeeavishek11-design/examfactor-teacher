@@ -26,16 +26,7 @@ import RateUsBottomSheet from "@/components/BottomSheet/Profile/RateUsBottomShee
 import { MMKV } from "react-native-mmkv";
 
 const SideBarAuthedScreen = (props) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const storage = new MMKV();
   const userName = storage.getString("username");
