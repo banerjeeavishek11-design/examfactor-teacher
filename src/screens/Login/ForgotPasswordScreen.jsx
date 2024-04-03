@@ -53,12 +53,12 @@ const ForgotPasswordScreen = () => {
             resizeMode="contain"
           />
         </View>
-        <View style={{ width: "40%", marginBottom: "5%" }}>
+        <View style={{ width: "50%", marginBottom: "5%" }}>
           <Text style={[fonts.size_16, fonts.bold, { color: "white" }]}>
             Forgot password? Login through OTP
           </Text>
         </View>
-        <View style={{ marginBottom: "2%" }}>
+        <View style={{ marginBottom: "2%",width:'80%' }}>
           <Text
             style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}
           >

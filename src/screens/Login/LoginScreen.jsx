@@ -331,7 +331,7 @@ const LoginScreen = () => {
                     </Text>
                     <ImageVariant
                       testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5 }}
+                      style={{ width: 16, height: 9, left: 5,top:-2 }}
                       source={rightArrow}
                       resizeMode="contain"
                     />

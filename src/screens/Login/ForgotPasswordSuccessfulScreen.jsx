@@ -40,7 +40,7 @@ const ForgotPasswordSuccessfulScreen = () => {
           source={ForgotSuccess}
           resizeMode="contain"
         />
-        <View style={[layout.itemsCenter, { width: "50%", marginTop: "5%" }]}>
+        <View style={[layout.itemsCenter, { width: "60%", marginTop: "5%" }]}>
           <Text
             style={[
               fonts.size_16,
