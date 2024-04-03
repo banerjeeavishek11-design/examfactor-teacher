@@ -49,6 +49,7 @@ const InsightsScreen = () => {
       setChapters(result?.data);
     }
   }, [selectedChapter]);
+
   return (
     <SafeScreen>
         <ScrollView
@@ -146,7 +147,16 @@ const InsightsScreen = () => {
                     borderWidth: 1,
                     borderColor:
                       selectedArea !== null ? colors.termsLinkColor : null,
-                    width: 65,
+                    width:
+                      selectedArea !== null
+                        ? Math.min(
+                            145,
+                            Math.max(
+                              45,
+                              selectedArea.length * 10.2
+                            )
+                          )
+                        : 65,
                     height: 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
@@ -168,7 +178,9 @@ const InsightsScreen = () => {
                     fonts.alignCenter,
                   ]}
                 >
-                  Areas
+                   {
+                    selectedArea != null? selectedArea : "Areas"
+                   }
                 </Text>
                 <ImageVariant
                   testID="brand-img"
