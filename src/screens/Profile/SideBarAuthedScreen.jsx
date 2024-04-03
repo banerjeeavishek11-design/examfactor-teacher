@@ -203,7 +203,7 @@ const SideBarAuthedScreen = (props) => {
                   layout.rowHCenter,
                   layout.justifyBetween,
                   {
-                    width: "40%",
+                    width: userRole === "Teacher" ? "35%" : "44%",
                     height: 35,
                     backgroundColor: "green",
                     borderRadius: 4,
