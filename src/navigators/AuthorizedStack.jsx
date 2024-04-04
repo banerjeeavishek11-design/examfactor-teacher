@@ -28,10 +28,10 @@ const AuthorizedStack = () => {
   const Stack = createStackNavigator();
 
   const screenWidth = Dimensions.get("window").width;
-  const isTablet = screenWidth >= 600;
+  const isTablet = screenWidth >= 400;
 
   return (
-    <Drawer.Navigator
+    <Stack.Navigator
       screenOptions={{
         headerShown: false,
         drawerPosition: "right",
@@ -93,6 +93,10 @@ const AuthorizedStack = () => {
       <Stack.Screen
         name="ForgotPasswordSuccessfulScreen"
         component={ForgotPasswordSuccessfulScreen}
+      />
+       <Stack.Screen
+        name="SideBarAuthedScreen"
+        component={SideBarAuthedScreen}
       />
       <Stack.Screen
         name="AppGuideScreen"
@@ -175,7 +179,7 @@ const AuthorizedStack = () => {
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
-    </Drawer.Navigator>
+    </Stack.Navigator>
   );
 };
 

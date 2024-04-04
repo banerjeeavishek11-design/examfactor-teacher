@@ -18,11 +18,13 @@ import SchoolWorkTab from "@/theme/assets/images/Schoolworktab.png";
 import ReportsTab from "@/theme/assets/images/Reportstab.png";
 import ActivateTab from "@/theme/assets/images/Activatetab.png";
 import { moderateScale, ScaledSheet } from "react-native-size-matters";
+import { createStackNavigator } from "@react-navigation/stack";
 
 
 const TabSideBarNavigator = () => {
   const { layout, fonts, colors } = useTheme();
   const Drawer = createDrawerNavigator();
+  const Stack = createStackNavigator();
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomSideBar {...props} />}

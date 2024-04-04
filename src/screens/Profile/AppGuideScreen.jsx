@@ -15,7 +15,7 @@ import { SafeScreen } from "@/components/template";
 import Youtube from "@/theme/assets/images/youtubeVideo.png";
 import UpArrow from "@/theme/assets/images/uparrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
-import RightArrow from '@/theme/assets/images/rightarrow.png'
+import RightArrow from "@/theme/assets/images/rightarrow.png";
 import PracticeActive from "@/theme/assets/images/practiceactive.png";
 import { DrawerActions } from "@react-navigation/native";
 
@@ -76,8 +76,12 @@ const AppGuideScreen = ({ navigation }) => {
               { display: "flex" },
             ]}
           >
-            <TouchableOpacity onPress={() => {navigation.goBack() 
-              navigation.dispatch(DrawerActions.openDrawer())}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+                // navigation.dispatch(DrawerActions.openDrawer());
+              }}
+            >
               <View style={[layout.rowHCenter, layout.display]}>
                 <ImageVariant
                   testID="brand-img"
@@ -98,93 +102,113 @@ const AppGuideScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-          <View style={{ marginTop: "5%" }}>
-            {allAccordian.buttonDetails.map((ele, index) => (
-              <View
-                style={[
-                  styles.arrowView,
-                  { backgroundColor: colors.cardBackgroundColor },
-                ]}
-                key={ele.id}
+        <View style={{ marginTop: "5%" }}>
+          {allAccordian.buttonDetails.map((ele, index) => (
+            <View
+              style={[
+                styles.arrowView,
+                { backgroundColor: colors.cardBackgroundColor },
+              ]}
+              key={ele.id}
+            >
+              <TouchableOpacity
+                onPress={() => toggleExpanded(ele.id, ele.isExpand)}
               >
-                <TouchableOpacity
-                  onPress={() => toggleExpanded(ele.id, ele.isExpand)}
+                <View
+                  style={[
+                    layout.row,
+                    layout.justifyBetween,
+                    layout.itemsCenter,
+                  ]}
                 >
-                  <View style={[layout.row, layout.justifyBetween, layout.itemsCenter]}>
-                    {index == 0 ? (
-                      <ImageVariant
-                        source={PracticeActive}
-                        style={{ width: 40, height: 40 }}
-                      />
-                    ) : null}
-                    <View style={{ width: "60%" }}>
-                      <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          { color: colors.white },
-                          
-                            index == 0 ? {marginLeft: -30} : null
-                          
-                        ]}
-                      >
-                        {ele.title}
-                      </Text>
-                    </View>
-                    {ele.isExpand ? (
-                      <ImageVariant
-                        style={{ width: 10, height: 11 }}
-                        source={UpArrow}
-                        resizeMode="contain"
-                      />
-                    ) : (
-                      <ImageVariant
-                        style={{ width: 10, height: 11 }}
-                        source={DownArrow}
-                        resizeMode="contain"
-                      />
-                    )}
+                  {index == 0 ? (
+                    <ImageVariant
+                      source={PracticeActive}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  ) : null}
+                  <View style={{ width: "60%" }}>
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        { color: colors.white },
+
+                        index == 0 ? { marginLeft: -30 } : null,
+                      ]}
+                    >
+                      {ele.title}
+                    </Text>
                   </View>
-                  <View>
-                    {ele.isExpand ? (
-                      <View style={{ marginTop: 12 }}>
-                        {index == 0 ? (
-                          <View>
-                            <Image style={{marginBottom: '4%',borderRadius: 20,width: "100%",alignSelf: 'center'}} source={Youtube} />
-                            <TouchableOpacity
+                  {ele.isExpand ? (
+                    <ImageVariant
+                      style={{ width: 10, height: 11 }}
+                      source={UpArrow}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <ImageVariant
+                      style={{ width: 10, height: 11 }}
+                      source={DownArrow}
+                      resizeMode="contain"
+                    />
+                  )}
+                </View>
+                <View>
+                  {ele.isExpand ? (
+                    <View style={{ marginTop: 12 }}>
+                      {index == 0 ? (
+                        <View>
+                          <Image
+                            style={{
+                              marginBottom: "4%",
+                              borderRadius: 20,
+                              width: "100%",
+                              alignSelf: "center",
+                            }}
+                            source={Youtube}
+                          />
+                          <TouchableOpacity
                             style={[layout.row, layout.justifyBetween]}
-                              onPress={()=>{}}
-                            >
-                              <Text
-                                style={[
-                                  fonts.size_14,
-                                  fonts.bold,
-                                  { color: colors.termsLinkColor },
-                                ]}
-                              >
-                                GO TO NEO JOURNEY
-                              </Text>
-                              <ImageVariant style={{width:25, height:16, tintColor: colors.termsLinkColor}} source={RightArrow}/>
-                            </TouchableOpacity>
-                          </View>
-                        ) : (
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeight_small,
-                              { color: colors.white, opacity: 0.7 },
-                            ]}
+                            onPress={() => {}}
                           >
-                            {ele.subTitle}
-                          </Text>
-                        )}
-                      </View>
-                    ) : null}
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                { color: colors.termsLinkColor },
+                              ]}
+                            >
+                              GO TO NEO JOURNEY
+                            </Text>
+                            <ImageVariant
+                              style={{
+                                width: 25,
+                                height: 16,
+                                tintColor: colors.termsLinkColor,
+                              }}
+                              source={RightArrow}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      ) : (
+                        <Text
+                          style={[
+                            fonts.size_14,
+                            fonts.fontWeight_small,
+                            { color: colors.white, opacity: 0.7 },
+                          ]}
+                        >
+                          {ele.subTitle}
+                        </Text>
+                      )}
+                    </View>
+                  ) : null}
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
       </View>
     </SafeScreen>
   );

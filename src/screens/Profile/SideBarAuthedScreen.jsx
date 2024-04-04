@@ -62,7 +62,10 @@ const SideBarAuthedScreen = (props) => {
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen, { flex: 1 }]}>
-        <TouchableOpacity onPress={closeDrawer}>
+        <TouchableOpacity 
+        // onPress={closeDrawer}
+        onPress={()=>navigation.goBack()}
+        >
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
               testID="brand-img"

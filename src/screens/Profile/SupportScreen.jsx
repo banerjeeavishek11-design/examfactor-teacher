@@ -90,7 +90,7 @@ const SupportScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
-                navigation.dispatch(DrawerActions.openDrawer());
+                // navigation.dispatch(DrawerActions.openDrawer());
               }}
             >
               <View style={[layout.rowHCenter, layout.display]}>

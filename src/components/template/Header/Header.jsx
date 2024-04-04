@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
@@ -12,8 +13,6 @@ import User from "@/theme/assets/images/user.png";
 import { useTheme } from "@/theme";
 import { ImageVariant } from "@/components/atoms";
 import SelectClassBottomSheet from "@/components/BottomSheet/Home/SelectClassBottomSheet";
-
-
 
 const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
   const {
@@ -29,6 +28,8 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const productScrollRef = useRef(null);
+  const screenWidth = Dimensions.get("window").width;
+  const isTablet = screenWidth >= 400;
 
   const [subjects, setSubjects] = useState([
     { id: 1, subjectName: "Physics", isChecked: true },
@@ -39,10 +40,15 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
   ]);
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] =
     useState(false);
-    const [showSelecTedClass,setShowSelectedClass] = useState('10-B')
+  const [showSelecTedClass, setShowSelectedClass] = useState("10-B");
 
   const handleOpenDrawer = () => {
-    navigation.dispatch(DrawerActions.openDrawer());
+    if (isTablet) {
+      navigation.navigate("SideBarAuthedScreen");
+    } else {
+      // navigation.dispatch(DrawerActions.openDrawer());
+      navigation.navigate('SideBarAuthedScreen')
+    }
   };
 
   const handleButtonPress = (index) => {
@@ -116,7 +122,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
             />
             <ImageVariant
               testID="brand-img"
-              style={{ width: 10, height: 12, left: 5,tintColor:'#B6B6BB' }}
+              style={{ width: 10, height: 12, left: 5, tintColor: "#B6B6BB" }}
               source={DownArrow}
               resizeMode="contain"
             />
