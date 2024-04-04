@@ -21,10 +21,15 @@ import {
 } from "@/screens";
 import TopTabNavigator from "./ReportsTopTabNavigator";
 import BottomTabNavigator from "./BottomTabNavigator";
+import TabSideBarNavigator from "./TabSideBarNavigator";
 
 const AuthorizedStack = () => {
   const Drawer = createDrawerNavigator();
   const Stack = createStackNavigator();
+
+  const screenWidth = Dimensions.get("window").width;
+  const isTablet = screenWidth >= 600;
+
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -38,14 +43,25 @@ const AuthorizedStack = () => {
       }}
       drawerContent={(props) => <SideBarAuthedScreen {...props} />}
     >
-      <Stack.Screen
-        name="BottomTabNavigator"
-        component={BottomTabNavigator}
-        options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
-          drawerContentContainerStyle: { paddingVertical: 20 },
-        }}
-      />
+      {isTablet ? (
+        <Stack.Screen
+          name="TabSideBar"
+          component={TabSideBarNavigator}
+          options={{
+            drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+            drawerContentContainerStyle: { paddingVertical: 20 },
+          }}
+        />
+      ) : (
+        <Stack.Screen
+          name="BottomTabNavigator"
+          component={BottomTabNavigator}
+          options={{
+            drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+            drawerContentContainerStyle: { paddingVertical: 20 },
+          }}
+        />
+      )}
       <Stack.Screen
         name="TopTabNavigator"
         component={TopTabNavigator}
@@ -74,7 +90,10 @@ const AuthorizedStack = () => {
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
       />
-        <Stack.Screen name="ForgotPasswordSuccessfulScreen" component={ForgotPasswordSuccessfulScreen} />
+      <Stack.Screen
+        name="ForgotPasswordSuccessfulScreen"
+        component={ForgotPasswordSuccessfulScreen}
+      />
       <Stack.Screen
         name="AppGuideScreen"
         component={AppGuideScreen}
