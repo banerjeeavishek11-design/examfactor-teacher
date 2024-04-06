@@ -84,6 +84,9 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     BookmarkedQuestions.length
   );
 
+  const route = useRoute()
+  const {studentDetails} = route.params || {};
+
   const [bookmarkFilterVisible, setBookmarkFilterVisible] = useState(false);
   const closeBookmarkFilterModal = () => {
     setBookmarkFilterVisible(false)
@@ -110,7 +113,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate('StudentWiseReportScreen',{studentDetails:studentDetails})
             }}
           >
             <View style={[layout.rowHCenter, layout.display]}>
@@ -175,7 +178,8 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                       <TouchableOpacity onPress={()=>navigation.navigate("QuestionSolutionScreen",{
                         AllQuestions: BookmarkedQuestions,
                         currentQuestionId: ques.id,
-                        currentQuestion: ques.question
+                        currentQuestion: ques.question,
+                        studentDetails: studentDetails
                       })}>
                       <View
                         style={[

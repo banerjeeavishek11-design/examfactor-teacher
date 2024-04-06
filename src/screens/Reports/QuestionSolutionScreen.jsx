@@ -24,7 +24,7 @@ const answer = [
 
 const QuestionSolutionScreen = () => {
   const route = useRoute();
-  const { AllQuestions, currentQuestionId, currentQuestion } = route.params;
+  const { AllQuestions, currentQuestionId, currentQuestion,studentDetails } = route.params;
   const navigation = useNavigation();
   const { fonts, colors, layout } = useTheme();
 
@@ -42,7 +42,7 @@ const QuestionSolutionScreen = () => {
         <View>
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate("BookmarkedQuestionsScreen",{ studentDetails: studentDetails});
             }}
           >
             <View style={[layout.rowHCenter, layout.display]}>

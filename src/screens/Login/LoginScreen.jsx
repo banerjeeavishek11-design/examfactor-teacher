@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
+  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/theme";
@@ -31,6 +32,7 @@ const storage = new MMKV();
 
 
 const LoginScreen = () => {
+  
   const {
     colors,
     variant,
@@ -67,6 +69,14 @@ const LoginScreen = () => {
       routes: [{ name: "AuthorizedStack" }],
     });
   };
+
+  const openTermsAndCondition = ()=>{
+    Linking.openURL('https://www.examfactor.com/terms-and-conditions/')
+  }
+
+  const openPrivacyPolicy = ()=>{
+    Linking.openURL('https://www.examfactor.com/privacy-policy/')
+  }
 
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
@@ -282,7 +292,7 @@ const LoginScreen = () => {
                 </Text>
                 <TouchableOpacity
                   style={{ marginRight: "2%" }}
-                  // onPress={openTermsAndCondition}
+                  onPress={openTermsAndCondition}
                 >
                   <Text
                     style={[
@@ -304,7 +314,7 @@ const LoginScreen = () => {
                   and
                 </Text>
                 <TouchableOpacity
-                // onPress={openPrivacyPolicy}
+                onPress={openPrivacyPolicy}
                 >
                   <Text
                     style={[

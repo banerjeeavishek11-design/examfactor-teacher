@@ -29,7 +29,7 @@ const MostlyFilterBottomSheet = ({visible, closeModal,setSelectedFilter}) => {
           >
             <ImageVariant
               testID="brand-img"
-              style={{ width: 16, height: 16, tintColor: "white" }}
+              style={{ width: 16, height: 16, tintColor: colors.gray200 }}
               source={Cross}
               resizeMode="contain"
             />

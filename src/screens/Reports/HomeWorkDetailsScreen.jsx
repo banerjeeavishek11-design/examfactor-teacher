@@ -15,6 +15,7 @@ import { ImageVariant } from "@/components/atoms";
 import LeftArrow from "@/theme/assets/images/leftarrow.png";
 import UpArrow from "@/theme/assets/images/uparrow.png";
 import DownArrow from "@/theme/assets/images/Downarrow.png";
+import Star from '@/theme/assets/images/Star.png'
 
 const chapterDetails = [
   {
@@ -26,20 +27,20 @@ const chapterDetails = [
       {
         topicName: "T1: Introduction to Electric Field",
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
-          "Combination of cells",
+          {name: "Drift of electrons & origin of resistance", important: true},
+          {name: "Electric current and voltage", important: true},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Combination of cells", important: false},
         ],
       },
       {
         topicName: "T2: Electric Field",
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
+          {name: "Drift of electrons & origin of resistance", important: true},
+          {name: "Electric current and voltage", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
         ],
       },
     ],
@@ -53,20 +54,20 @@ const chapterDetails = [
       {
         topic1: "T1: Introduction to Electric Field",
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
-          "Combination of cells",
+          {name: "Drift of electrons & origin of resistance", important: true},
+          {name: "Electric current and voltage", important: true},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Combination of cells", important: false},
         ],
       },
       {
         topic2: "T2: Electric Field",
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
+          {name: "Drift of electrons & origin of resistance", important: true},
+          {name: "Electric current and voltage", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
+          {name: "Resistivity, and Ohm's law", important: false},
         ],
       },
     ],
@@ -134,7 +135,7 @@ const HomeWorkDetailsScreen = () => {
         <ScrollView contentContainerStyle={{paddingBottom:'15%'}}>
           {chapterDetails?.map((ele) => {
             return (
-              <View
+              <TouchableOpacity  onPress={() => toggleContent(ele.id)}
                 key={ele.id}
                 style={[
                   layout.fullWidth,
@@ -174,7 +175,7 @@ const HomeWorkDetailsScreen = () => {
                     >{`${ele.strongArea} strong & ${ele.weakArea} weak areas indentified`}</Text>
                   </View>
                   <View style={{ width: "5%" }}>
-                    <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                    <TouchableOpacity>
                       {expandedCards[ele.id] ? (
                         <Image
                           style={{ width: 12, height: 8 }}
@@ -210,24 +211,34 @@ const HomeWorkDetailsScreen = () => {
                         >
                           <Text
                             style={[
-                              fonts.size_14,
+                              fonts.size_16,
                               fonts.fontWeight_small,
-                              { color: colors.white },
+                              { color: colors.white, marginBottom: "2%" },
                             ]}
                           >
                             {topic.topicName}
                           </Text>
                           {topic.subtopic.map((subtopic) => {
                             return (
+                              <View style={[layout.row,layout.itemsCenter,{gap: 5}]}>
                               <Text
                                 style={[
-                                  fonts.size_12,
+                                  fonts.size_13,
                                   fonts.fontWeight_small,
-                                  { color: colors.backButtonColor },
+                                  { color: colors.backButtonColor,marginVertical: "2%" },
                                 ]}
                               >
-                                {subtopic}
+                                {subtopic.name}
                               </Text>
+                              {
+                                subtopic.important ? (
+                                  <Image
+                                  source={Star}
+                                  />
+                                ) : null
+                              }
+                              </View>
+                              
                             );
                           })}
                         </View>
@@ -235,7 +246,7 @@ const HomeWorkDetailsScreen = () => {
                     })}
                   </>
                 ) : null}
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>

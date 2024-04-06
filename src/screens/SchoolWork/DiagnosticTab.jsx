@@ -72,15 +72,15 @@ const DiagnosticTab = () => {
             {topic.map((ele) => {
               const progressPercentage = ele.progress / 100;
               return (
-                <View
+                <TouchableOpacity onPress={() => toggleContent(ele.id)}
                   key={ele.topicName}
                   style={[
                     layout.fullWidth,
                     {
                       backgroundColor: colors.cardBackgroundColor,
-                      height: expandedCards[ele.id] ? "auto" : 100,
+                      height: expandedCards[ele.id] ? "auto" : 80,
                       borderRadius: 14,
-                      marginTop: "3%",
+                      marginTop: "4%",
                     },
                   ]}
                 >
@@ -93,7 +93,7 @@ const DiagnosticTab = () => {
                       { paddingBottom: "0%" },
                     ]}
                   >
-                    <View style={{ width: "55%" }}>
+                    <View style={{ width: "65%" }}>
                       <Text
                         numberOfLines={2}
                         style={[
@@ -135,7 +135,7 @@ const DiagnosticTab = () => {
                       </View>
                     </View>
                     <View style={{ width: "5%" }}>
-                      <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                      <TouchableOpacity>
                         {expandedCards[ele.id] ? (
                           <Image
                             style={{ width: 12, height: 8 }}
@@ -153,7 +153,11 @@ const DiagnosticTab = () => {
                     </View>
                   </View>
 
-                  <View style={[layout.itemsCenter, layout.paddingForCard]}>
+                  
+
+                  {expandedCards[ele.id] ? (
+                    <View>
+                      <View style={[layout.itemsCenter, layout.paddingForCard]}>
                     <Divider
                       style={{
                         width: "100%",
@@ -161,9 +165,6 @@ const DiagnosticTab = () => {
                       }}
                     />
                   </View>
-
-                  {expandedCards[ele.id] ? (
-                    <View>
                       <View>
                         <View style={styles.header}>
                           <View style={{ width: "30%" }}>
@@ -283,7 +284,7 @@ const DiagnosticTab = () => {
                       </Text>
                     </TouchableOpacity>
                   )}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </>

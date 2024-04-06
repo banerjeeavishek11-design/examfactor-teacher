@@ -19,11 +19,11 @@ const chapters = [
     id: 1,
     topic: "Introduction to Electric Feild",
     subtopics: [
-      { id: 1, sub: "Lorem ipsum dolor sit amet." },
-      { id: 2, sub: "Lorem ipsum dolor sit." },
-      { id: 3, sub: "Lorem ipsum dolor sit amet." },
-      { id: 4, sub: "Lorem, ipsum dolor." },
-      { id: 5, sub: "Lorem ipsum dolor sit." },
+      { id: 1, sub: "Drift of electrons & origin of resistance." },
+      { id: 2, sub: "Electric current and voltage." },
+      { id: 3, sub: "Resistivity, and Ohm's law." },
+      { id: 4, sub: "Electric power and DC circuits." },
+      { id: 5, sub: "Combination of cells." },
     ],
   },
   {
@@ -69,7 +69,7 @@ const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -112,7 +112,7 @@ const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
                       <Text style={[fonts.size_18,fonts.fontWeignt_600, { color: colors.gray100 }]}>
                         {chapters.topic}
                       </Text>
-                      <View style={{ marginVertical: "4%" }}>
+                      <View style={{ marginVertical: "1%" }}>
                         {chapters.subtopics.map((subs) => {
                           return (
                             <View
@@ -126,7 +126,7 @@ const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
                             >
                               <Text
                                 style={[
-                                  fonts.size_16,
+                                  fonts.size_14,
                                   fonts.fontWeight_small,
                                   { color: colors.gray200 },
                                 ]}

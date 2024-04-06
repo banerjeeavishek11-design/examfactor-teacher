@@ -40,7 +40,7 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                 style={{ position: "absolute", top: -35, left: "98%" }}
               >
                 <ImageVariant
-                  style={{ width: 18, height: 18 }}
+                  style={{ width: 18, height: 18, tintColor: colors.gray200 }}
                   source={Cross}
                 />
               </TouchableOpacity>

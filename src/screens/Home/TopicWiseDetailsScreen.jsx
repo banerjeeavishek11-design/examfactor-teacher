@@ -122,7 +122,7 @@ const TopicWiseDetailsScreen = () => {
         {topic.map((ele) => {
           const progressPercentage = ele.progress / 100;
           return (
-            <View
+            <TouchableOpacity onPress={() => toggleContent(ele.id)}
               key={ele.topicName}
               style={[
                 layout.fullWidth,
@@ -169,7 +169,7 @@ const TopicWiseDetailsScreen = () => {
                   <Circularprogressbar progress={ele.progress} />
                 </View>
                 <View style={{ width: "5%" }}>
-                  <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                  <TouchableOpacity >
                     {expandedCards[ele.id] ? (
                       <Image
                         style={{width: 14, height: 10 }}
@@ -253,7 +253,7 @@ const TopicWiseDetailsScreen = () => {
                           style={[
                             fonts.size_14,
                             fonts.fontWeight_small,
-                            { color: colors.white },
+                            { color: colors.gray200 },
                           ]}
                         >
                           {item.name}
@@ -262,19 +262,19 @@ const TopicWiseDetailsScreen = () => {
                           style={[
                             fonts.size_14,
                             fonts.fontWeight_small,
-                            { color: colors.white },
+                            { color: colors.gray200 },
                           ]}
                         >
-                          {item.progress}
+                          {`${item.progress}%`}
                         </Text>
                         <Text
                           style={[
                             fonts.size_14,
                             fonts.fontWeight_small,
-                            { color: colors.white },
+                            { color: colors.gray200 },
                           ]}
                         >
-                          {item.achievable}
+                          {`${item.achievable}/100`}
                         </Text>
                       </View>
                     ))}
@@ -297,7 +297,7 @@ const TopicWiseDetailsScreen = () => {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>

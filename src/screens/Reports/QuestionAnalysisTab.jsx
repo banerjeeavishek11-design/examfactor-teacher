@@ -58,6 +58,8 @@ const QuestionAnalysisScreen = () => {
   const changeQuestionType = (option)=>{
     setSelectedQuestionType(option)
   }
+
+  console.log("SELECTED FILTER::", selectedFilter);
   return (
     <SafeScreen>
       <ScrollView
@@ -215,7 +217,7 @@ const QuestionAnalysisScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {selectedFilter && selectedChapter !== null ? (
+          {selectedFilter ? (
             <View style={{ marginTop: "2%" }}>
               <TouchableOpacity
                 style={[
@@ -260,7 +262,7 @@ const QuestionAnalysisScreen = () => {
                   />
               </TouchableOpacity>
             </View>
-          ) : null}
+           ) : null} 
 
           <View>
             {selectedChapter !== null ? (

@@ -142,7 +142,7 @@ const Concentrix = (props) => {
               0
             </Text>
           )}
-          <Text
+          {/* <Text
             style={[
               fonts.size_14,
               fonts.fontWeight_small,
@@ -155,11 +155,11 @@ const Concentrix = (props) => {
             ]}
           >
             Average
-          </Text>
+          </Text> */}
 
           <Text
             style={[
-              fonts.size_14,
+              fonts.size_16,
               fonts.fontWeight_small,
               fonts.alignCenter,
               {
@@ -184,7 +184,7 @@ const Concentrix = (props) => {
               },
             ]}
           >
-            based on concepts covered till date
+            based on chapters covered till date
           </Text>
         </View>
       </Svg>

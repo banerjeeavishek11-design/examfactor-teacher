@@ -373,7 +373,7 @@ const StudentWiseReportScreen = () => {
                 style={[
                   fonts.size_14,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
+                  { color: colors.gray200 },
                 ]}
               >
                 This week
@@ -413,7 +413,7 @@ const StudentWiseReportScreen = () => {
                 style={[
                   fonts.size_14,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
+                  { color: colors.gray200 },
                 ]}
               >
                 Last week
@@ -449,9 +449,9 @@ const StudentWiseReportScreen = () => {
             >
               <Text
                 style={[
-                  fonts.size_12,
+                  fonts.size_14,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
+                  { color: colors.gray200, width: 40 },
                 ]}
               >
                 Peers
@@ -472,7 +472,7 @@ const StudentWiseReportScreen = () => {
                 />
                 <Text
                   style={[
-                    fonts.size_14,
+                    fonts.size_12,
                     fonts.fontWeight_small,
                     {
                       color: colors.white,
@@ -612,7 +612,7 @@ const StudentWiseReportScreen = () => {
                 marginTop: "3%",
               },
             ]}
-            onPress={() => navigation.navigate("BookmarkedQuestionsScreen")}
+            onPress={() => navigation.navigate("BookmarkedQuestionsScreen",{studentDetails: studentDetails})}
           >
             <View
               style={[layout.display, layout.rowHCenter, layout.justifyBetween]}

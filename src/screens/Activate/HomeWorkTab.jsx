@@ -178,7 +178,7 @@ const HomeWorkTab = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: "30%" }}>
           {searchChapterName.map((ele, i) => {
             return (
-              <View
+              <TouchableOpacity onPress={() => toggleContent(ele.id)}
                 key={i}
                 style={[
                   layout.fullWidth,
@@ -205,7 +205,7 @@ const HomeWorkTab = () => {
                       { color: colors.white },
                     ]}
                   >{`C${i + 1}: ${ele.topic}`}</Text>
-                  <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                  <TouchableOpacity >
                     {expandedCards[ele.id] ? (
                       <Image
                         style={{ width: 12, height: 8 }}
@@ -269,7 +269,7 @@ const HomeWorkTab = () => {
                     })}
                   </>
                 ) : null}
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
