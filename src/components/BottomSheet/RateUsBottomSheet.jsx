@@ -7,13 +7,13 @@ import {
   ScrollView,
   TextInput,
   Image,
-} from "react-native";
-import { useTheme } from "@/theme";
-import React, { useState, useEffect } from "react";
-import RateUsStart from "@/theme/assets/images/rateusstar.png";
-import Cross from "@/theme/assets/images/cross.png";
-import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
-import { ImageVariant } from "../atoms";
+} from 'react-native';
+import { useTheme } from '@/theme';
+import React, { useState, useEffect } from 'react';
+import RateUsStart from '@/theme/assets/images/rateusstar.png';
+import Cross from '@/theme/assets/images/cross.png';
+import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
+import { ImageVariant } from '../atoms';
 
 const starRatings = [
   { id: 1, selected: false },
@@ -24,18 +24,18 @@ const starRatings = [
 ];
 
 const lessThanThreeStarOptions = [
-  { id: 1, name: "Unclear and irrelevant questions", isChecked: false },
-  { id: 2, name: "Incorrect or misleading information", isChecked: false },
-  { id: 3, name: "Confusing and non-intuitive navigation", isChecked: false },
-  { id: 4, name: "Unappealing platform theme", isChecked: false },
+  { id: 1, name: 'Unclear and irrelevant questions', isChecked: false },
+  { id: 2, name: 'Incorrect or misleading information', isChecked: false },
+  { id: 3, name: 'Confusing and non-intuitive navigation', isChecked: false },
+  { id: 4, name: 'Unappealing platform theme', isChecked: false },
 ];
 const moreThanThreeStarOptions = [
-  { id: 1, name: "Great quality of questions", isChecked: false },
-  { id: 2, name: "Great quality of solutions", isChecked: false },
-  { id: 3, name: "Best platform interface", isChecked: false },
-  { id: 4, name: "Great platform theme", isChecked: false },
-  { id: 5, name: "Features are engaging", isChecked: false },
-  { id: 6, name: "Overall great experience", isChecked: false },
+  { id: 1, name: 'Great quality of questions', isChecked: false },
+  { id: 2, name: 'Great quality of solutions', isChecked: false },
+  { id: 3, name: 'Best platform interface', isChecked: false },
+  { id: 4, name: 'Great platform theme', isChecked: false },
+  { id: 5, name: 'Features are engaging', isChecked: false },
+  { id: 6, name: 'Overall great experience', isChecked: false },
 ];
 
 const RateUsBottomSheet = (props) => {
@@ -43,15 +43,11 @@ const RateUsBottomSheet = (props) => {
   const { layout, fonts, colors } = useTheme();
   const [selectedRating, setSelectedRating] = useState(0);
   const [submittedRating, setSubmittedRating] = useState(0);
-  const [lessThanThreeOptions, setLessThanThreeOptions] = useState(
-    lessThanThreeStarOptions
-  );
-  const [
-    thanksForYourFeedbackBottomSheetVisible,
-    setThanksForYourFeedbackBottomSheetVisible,
-  ] = useState(false);
+  const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
+  const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
+    useState(false);
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [selectedIssues, setSelectedIssues] = useState([]);
 
   useEffect(() => {
@@ -78,9 +74,7 @@ const RateUsBottomSheet = (props) => {
 
   const toggleSelection = (name) => {
     if (selectedIssues.includes(name)) {
-      setSelectedIssues((prevSelected) =>
-        prevSelected.filter((item) => item !== name)
-      );
+      setSelectedIssues((prevSelected) => prevSelected.filter((item) => item !== name));
     } else {
       setSelectedIssues((prevSelected) => [...prevSelected, name]);
     }
@@ -105,11 +99,11 @@ const RateUsBottomSheet = (props) => {
           >
             <TouchableOpacity
               onPress={handleSlideDown}
-              style={[{ position: "absolute", top: -35, left: "100%" }]}
+              style={[{ position: 'absolute', top: -35, left: '100%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: 'white' }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -117,80 +111,69 @@ const RateUsBottomSheet = (props) => {
             <View
             //   style={styles.center}
             >
-              <TouchableOpacity
-                style={styles.slideIndicator}
-                onPress={handleSlideDown}
-              >
+              <TouchableOpacity style={styles.slideIndicator} onPress={handleSlideDown}>
                 <Text>-</Text>
               </TouchableOpacity>
 
               <View>
-                <View style={{ marginTop: "5%" }}>
-                  <Text
-                    style={[
-                      fonts.size_18,
-                      fonts.fontWeignt_600,
-                      { color: colors.white },
-                    ]}
-                  >
+                <View style={{ marginTop: '5%' }}>
+                  <Text style={[fonts.size_18, fonts.fontWeignt_600, { color: colors.white }]}>
                     How is your experience so far?
                   </Text>
                 </View>
                 <ScrollView
-                  contentContainerStyle={{ paddingBottom: "0%" }}
+                  contentContainerStyle={{ paddingBottom: '0%' }}
                   showsVerticalScrollIndicator={false}
                 >
-                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '3%' },
+                    ]}
+                  >
                     {starRatings.map((rating) => (
-                      <TouchableOpacity
-                        key={rating.id}
-                        onPress={() => handleStarPress(rating.id)}
-                      >
+                      <TouchableOpacity key={rating.id} onPress={() => handleStarPress(rating.id)}>
                         <Image
                           style={{
                             width: 48,
                             height: 48,
-                            tintColor:
-                              rating.id <= selectedRating
-                                ? "#FFAB48"
-                                : "#585868",
+                            tintColor: rating.id <= selectedRating ? '#FFAB48' : '#585868',
                           }}
                           source={RateUsStart}
-                          resizeMode={"contain"}
+                          resizeMode={'contain'}
                         />
                       </TouchableOpacity>
                     ))}
                   </View>
-                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween,{marginTop: '3%'}]}>
-                    <Text
-                      style={[
-                        fonts.alignCenter,
-                        { color: colors.backButtonColor },
-                      ]}
-                    >
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '3%' },
+                    ]}
+                  >
+                    <Text style={[fonts.alignCenter, { color: colors.backButtonColor }]}>
                       Not satisfied
                     </Text>
-                    <Text
-                      style={[
-                        fonts.alignCenter,
-                        { color: colors.backButtonColor },
-                      ]}
-                    >
+                    <Text style={[fonts.alignCenter, { color: colors.backButtonColor }]}>
                       Great
                     </Text>
                   </View>
                   {selectedRating > 0 && (
-                    <View style={{ marginTop: "8%" }}>
+                    <View style={{ marginTop: '8%' }}>
                       <View
                         style={{
-                          flexDirection: "column",
+                          flexDirection: 'column',
                         }}
                       >
                         <View
                           style={{
-                            flexDirection: "row",
-                            justifyContent: "center",
-                            flexWrap: "wrap",
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
                             rowGap: 10,
                             columnGap: 10,
                             marginBottom: 10,
@@ -200,18 +183,18 @@ const RateUsBottomSheet = (props) => {
                             <TouchableOpacity
                               key={ele.id}
                               style={{
-                                backgroundColor: "#22222F",
+                                backgroundColor: '#22222F',
                                 //   opacity: 0.1,
                                 height: 42,
                                 paddingHorizontal: 12,
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
                                 borderRadius: 4,
                                 borderWidth: 2,
                                 borderColor: selectedIssues.includes(ele.name)
-                                  ? "#7AF4FC"
-                                  : "transparent",
+                                  ? '#7AF4FC'
+                                  : 'transparent',
                               }}
                               onPress={() => toggleSelection(ele.name)}
                             >
@@ -222,8 +205,8 @@ const RateUsBottomSheet = (props) => {
                                   layout.textCenter,
                                   {
                                     color: selectedIssues.includes(ele.name)
-                                      ? "#7AF4FC"
-                                      : "#7A7A82",
+                                      ? '#7AF4FC'
+                                      : '#7A7A82',
                                   },
                                 ]}
                               >
@@ -242,7 +225,7 @@ const RateUsBottomSheet = (props) => {
                           styles.inputField,
                           {
                             paddingHorizontal: 10,
-                            marginTop: "5%",
+                            marginTop: '5%',
                             height: 90,
                           },
                         ]}
@@ -254,11 +237,11 @@ const RateUsBottomSheet = (props) => {
                             fonts.textCenter,
                             fonts.size_16,
                             {
-                              color: "#94939B",
-                              textAlign: "left",
-                              paddingLeft: "0%",
+                              color: '#94939B',
+                              textAlign: 'left',
+                              paddingLeft: '0%',
                               minHeight: 70,
-                              verticalAlign: "top",
+                              verticalAlign: 'top',
                             },
                           ]}
                           placeholder="Add Comment"
@@ -276,7 +259,7 @@ const RateUsBottomSheet = (props) => {
                             height: 48,
                             borderRadius: 12,
                             backgroundColor: colors.termsLinkColor,
-                            marginVertical: "8%",
+                            marginVertical: '8%',
                           },
                         ]}
                         onPress={() => {
@@ -285,18 +268,23 @@ const RateUsBottomSheet = (props) => {
                         }}
                       >
                         <TouchableOpacity
-                          style={[styles.loginButton, layout.justifyCenter, layout.itemsCenter, fonts.alignCenter]}
+                          style={[
+                            styles.loginButton,
+                            layout.justifyCenter,
+                            layout.itemsCenter,
+                            fonts.alignCenter,
+                          ]}
                         >
-                            <Text
-                              style={[
-                                fonts.size_16,
-                                fonts.bold,
-                                fonts.alignCenter,
-                                { color: colors.loginBtnTextColor },
-                              ]}
-                            >
-                              Submit
-                            </Text>
+                          <Text
+                            style={[
+                              fonts.size_16,
+                              fonts.bold,
+                              fonts.alignCenter,
+                              { color: colors.loginBtnTextColor },
+                            ]}
+                          >
+                            Submit
+                          </Text>
                         </TouchableOpacity>
                       </TouchableOpacity>
                     </View>
@@ -320,31 +308,31 @@ export default RateUsBottomSheet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "#8F8F94",
+    borderColor: '#8F8F94',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   inputField: {
     height: 48,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.3)",
+    borderColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 4,
   },
   loginButton: {

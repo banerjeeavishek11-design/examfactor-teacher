@@ -1,19 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Svg, Path, Circle } from "react-native-svg";
-import { useTheme } from "@/theme";
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Svg, Path, Circle } from 'react-native-svg';
+import { useTheme } from '@/theme';
 
 const Concentrix = (props) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const { scorePercentage } = props;
   // console.log('scorePercentage',scorePercentage)
   const strokeWidth = 5;
@@ -95,17 +87,17 @@ const Concentrix = (props) => {
               fill="none"
               stroke={
                 scorePercentage >= 0 && scorePercentage <= 33.5
-                  ? "#F26D0C"
+                  ? '#F26D0C'
                   : scorePercentage > 33.5 && scorePercentage <= 66.5
-                  ? "#FDD649"
-                  : "#3DD598"
+                    ? '#FDD649'
+                    : '#3DD598'
               }
               strokeWidth={
                 scorePercentage >= 0 && scorePercentage <= 33.5
                   ? 8
                   : scorePercentage > 33.5 && scorePercentage <= 66.5
-                  ? 8
-                  : 8
+                    ? 8
+                    : 8
               }
             />
           </>
@@ -119,8 +111,8 @@ const Concentrix = (props) => {
                 fonts.bold,
                 {
                   color: colors.white,
-                  marginTop: "20%",
-                  fontFamily: "Poppins-Bold",
+                  marginTop: '20%',
+                  fontFamily: 'Poppins-Bold',
                 },
               ]}
             >
@@ -134,8 +126,8 @@ const Concentrix = (props) => {
                 fonts.bold,
                 {
                   color: colors.white,
-                  marginTop: "20%",
-                  fontFamily: "Poppins-Bold",
+                  marginTop: '20%',
+                  fontFamily: 'Poppins-Bold',
                 },
               ]}
             >
@@ -149,8 +141,8 @@ const Concentrix = (props) => {
               fonts.alignCenter,
               {
                 color: colors.white,
-                marginTop: "2%",
-                fontFamily: "Poppins-Regular",
+                marginTop: '2%',
+                fontFamily: 'Poppins-Regular',
               },
             ]}
           >
@@ -164,7 +156,7 @@ const Concentrix = (props) => {
               fonts.alignCenter,
               {
                 color: colors.white,
-                fontFamily: "Poppins-Regular",
+                fontFamily: 'Poppins-Regular',
               },
             ]}
           >
@@ -178,8 +170,8 @@ const Concentrix = (props) => {
               fonts.alignCenter,
               {
                 color: colors.white,
-                width: "55%",
-                fontFamily: "Poppins-Regular",
+                width: '55%',
+                fontFamily: 'Poppins-Regular',
                 opacity: 0.5,
               },
             ]}

@@ -1,21 +1,13 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "../atoms";
-import Cross from "@/theme/assets/images/cross.png";
-import Success from "@/theme/assets/images/forgotsuccess.png";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '../atoms';
+import Cross from '@/theme/assets/images/cross.png';
+import Success from '@/theme/assets/images/forgotsuccess.png';
 
 const ClassSuccessfullySelectedBottomSheet = (props) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const {
     setOpenClassSuccessfullySelectedBottomSheet,
     openClassSuccessfullySelectedBottomSheet,
@@ -43,11 +35,11 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
           >
             <TouchableOpacity
               onPress={handleSlideDown}
-              style={[{ position: "absolute", top: -30, left: "92%" }]}
+              style={[{ position: 'absolute', top: -30, left: '92%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: 'white' }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -68,29 +60,24 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
             >
               <ImageVariant
                 testID="brand-img"
-                style={[{ width: 80, height: 80,marginTop:'5%' }]}
+                style={[{ width: 80, height: 80, marginTop: '5%' }]}
                 source={Success}
                 resizeMode="contain"
               />
-              <View style={{ width: "50%",marginTop:'3%' }}>
+              <View style={{ width: '50%', marginTop: '3%' }}>
                 <Text
-                  style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    fonts.alignCenter,
-                    { color: colors.white,},
-                  ]}
+                  style={[fonts.size_16, fonts.bold, fonts.alignCenter, { color: colors.white }]}
                 >
                   Class successfully Selected!
                 </Text>
               </View>
-              <View style={{ width: "50%",marginTop:'3%' }}>
+              <View style={{ width: '50%', marginTop: '3%' }}>
                 <Text
                   style={[
                     fonts.size_14,
                     fonts.fontWeight_small,
                     fonts.alignCenter,
-                    { color: colors.white,opacity: 0.7 },
+                    { color: colors.white, opacity: 0.7 },
                   ]}
                 >
                   Your has been selected Class {showSelecTedClass}
@@ -109,32 +96,32 @@ export default ClassSuccessfullySelectedBottomSheet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     height: 300,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "gray",
+    borderColor: 'gray',
   },
   center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
-    marginTop: "4%",
+    alignSelf: 'center',
+    marginTop: '4%',
   },
 });

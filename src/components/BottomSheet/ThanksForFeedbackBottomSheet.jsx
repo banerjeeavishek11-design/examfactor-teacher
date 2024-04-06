@@ -1,21 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import Feedback from "@/theme/assets/images/feedback.png";
-import { ImageVariant } from "../atoms";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
+import { StyleSheet, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import Feedback from '@/theme/assets/images/feedback.png';
+import { ImageVariant } from '../atoms';
+import rightArrow from '@/theme/assets/images/rightarrow.png';
 
 const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();
   return (
-    <View >
+    <View>
       <Modal visible={visible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
@@ -27,27 +20,20 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: "absolute", top: -35, left: "98%" }}
+              style={{ position: 'absolute', top: -35, left: '98%' }}
             >
-              <Text style={[fonts.size_18, { color: "white" }]}>X</Text>
+              <Text style={[fonts.size_18, { color: 'white' }]}>X</Text>
             </TouchableOpacity>
-            <View >
-              <TouchableOpacity
-                style={styles.slideIndicator}
-                onPress={closeModal}
-              >
-                <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
+            <View>
+              <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>
+                <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ marginTop: "8%" }}>
+            <View style={{ marginTop: '8%' }}>
               <View style={[layout.justifyCenter, layout.itemsCenter]}>
-                <Image
-                  style={{ width: 80, height: 80 }}
-                  source={Feedback}
-                  resizeMode={"contain"}
-                />
+                <Image style={{ width: 80, height: 80 }} source={Feedback} resizeMode={'contain'} />
               </View>
-              <View style={{ width: "100%", alignSelf: "center" }}>
+              <View style={{ width: '100%', alignSelf: 'center' }}>
                 <Text
                   style={[
                     fonts.size_24,
@@ -55,7 +41,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      marginTop: "5%",
+                      marginTop: '5%',
                     },
                   ]}
                 >
@@ -65,8 +51,8 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
 
               <View
                 style={{
-                  width: "100%",
-                  marginTop: "3%",
+                  width: '100%',
+                  marginTop: '3%',
                 }}
               >
                 <Text
@@ -76,8 +62,8 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      width: "75%",
-                      alignSelf: "center",
+                      width: '75%',
+                      alignSelf: 'center',
                       opacity: 0.6,
                     },
                   ]}
@@ -93,24 +79,14 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                     height: 48,
                     borderRadius: 12,
                     backgroundColor: colors.termsLinkColor,
-                    marginVertical: "8%",
+                    marginVertical: '8%',
                   },
                 ]}
                 onPress={closeModal}
               >
-                <TouchableOpacity
-                  style={[layout.justifyCenter]}
-                >
-                  <View
-                    style={[layout.display, layout.row, layout.itemsCenter,]}
-                  >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
+                <TouchableOpacity style={[layout.justifyCenter]}>
+                  <View style={[layout.display, layout.row, layout.itemsCenter]}>
+                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                       RATE US ON APP STORE
                     </Text>
                     <ImageVariant
@@ -135,20 +111,20 @@ export default ThanksForFeedbackBottomSheet;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 1)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "#8F8F94",
+    borderColor: '#8F8F94',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 });

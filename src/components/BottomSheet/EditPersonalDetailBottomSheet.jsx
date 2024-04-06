@@ -8,19 +8,19 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Image
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import RightArrow from "@/theme/assets/images/rightarrow.png";
-import { Formik } from "formik";
-import { ImageVariant } from "../atoms";
-import Cross from "@/theme/assets/images/cross.png";
+  Image,
+} from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import RightArrow from '@/theme/assets/images/rightarrow.png';
+import { Formik } from 'formik';
+import { ImageVariant } from '../atoms';
+import Cross from '@/theme/assets/images/cross.png';
 // import DateTimePickerModal from "react-native-modal-datetime-picker";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import moment from "moment";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import Calender from '@/theme/assets/images/calendar.png'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import moment from 'moment';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import Calender from '@/theme/assets/images/calendar.png';
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -30,37 +30,33 @@ const EditPersonalDetailBottomSheet = ({
 }) => {
   const { fonts, colors, layout } = useTheme();
   const [openCalender, setOpenCalender] = useState(false);
-  const [selectedDob, setSelectedDob] = useState("");
+  const [selectedDob, setSelectedDob] = useState('');
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
 
-  console.log("Recied prof data in child::",profileData);
+  console.log('Recied prof data in child::', profileData);
 
-  console.log("SELECTED DATE::", selectedDob);
+  console.log('SELECTED DATE::', selectedDob);
 
   return (
-    <Modal
-      visible={personalDetailBottomSheetVisible}
-      animationType="slide"
-      transparent={true}
-    >
+    <Modal visible={personalDetailBottomSheetVisible} animationType="slide" transparent={true}>
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
         <View style={[styles.modalContainer]}>
           <View
             style={[
               styles.bottomSheetContent,
               {
-                padding: "4%",
+                padding: '4%',
                 backgroundColor: colors.bottomSheetBackgroundColor,
-                height: "90%",
+                height: '90%',
               },
             ]}
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: "absolute", top: -35, left: "98%" }}
+              style={{ position: 'absolute', top: -35, left: '98%' }}
             >
               <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
             </TouchableOpacity>
@@ -72,29 +68,26 @@ const EditPersonalDetailBottomSheet = ({
                 dob: profileData.dob,
                 mobile: profileData.mobile,
                 emergencyContact: profileData.emergencyContact,
-                address: "",
+                address: '',
               }}
               onSubmit={(values, actions) => {
                 saveNewData(values);
-                console.log("OnSUBMIT values::",values);
+                console.log('OnSUBMIT values::', values);
                 actions.setSubmitting(false);
                 closeModal();
               }}
             >
               {({ handleChange, handleSubmit, values, setFieldValue }) => {
                 return (
-                  <View style={{ marginTop: "8%" }}>
-                    <ScrollView
-                      showsVerticalScrollIndicator={false}
-                      style={{ height: "90%" }}
-                    >
+                  <View style={{ marginTop: '8%' }}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{ height: '90%' }}>
                       <View style={styles.inputContainer}>
                         <Text
                           style={[
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
@@ -110,8 +103,8 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_16,
                             {
                               color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
+                              textAlign: 'left',
+                              paddingLeft: '3%',
                               backgroundColor: colors.bottomTabBackground,
                             },
                           ]}
@@ -128,23 +121,30 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
                         >
                           DOB
                         </Text>
-                        <View style={[layout.row, layout.itemsCenter, layout.justifyBetween, styles.inputField]}>
+                        <View
+                          style={[
+                            layout.row,
+                            layout.itemsCenter,
+                            layout.justifyBetween,
+                            styles.inputField,
+                          ]}
+                        >
                           <TextInput
                             style={[
                               layout.justifyCenter,
                               fonts.size_16,
                               {
                                 color: colors.gray200,
-                                textAlign: "left",
-                                paddingLeft: "3%",
-                                width: "90%",
+                                textAlign: 'left',
+                                paddingLeft: '3%',
+                                width: '90%',
                               },
                             ]}
                             editable={false}
@@ -157,12 +157,15 @@ const EditPersonalDetailBottomSheet = ({
                               setOpenCalender(true);
                             }}
                           >
-                            <Image source={Calender} style={{width: 20, height:20, marginLeft: "5%"}} />
+                            <Image
+                              source={Calender}
+                              style={{ width: 20, height: 20, marginLeft: '5%' }}
+                            />
                           </TouchableOpacity>
                           <DateTimePicker
                             mode="date"
                             onConfirm={(date) => {
-                              setSelectedDob(moment(date).format("DD-MM-YYYY"));
+                              setSelectedDob(moment(date).format('DD-MM-YYYY'));
                               setOpenCalender(false);
                             }}
                             isVisible={openCalender}
@@ -179,38 +182,30 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
                         >
                           Gender
                         </Text>
-                        <View
-                          style={[
-                            layout.row,
-                            layout.justifyBetween,
-                            { marginTop: "2%" },
-                          ]}
-                        >
+                        <View style={[layout.row, layout.justifyBetween, { marginTop: '2%' }]}>
                           <TouchableOpacity
                             style={[
                               layout.justifyCenter,
                               layout.itemsCenter,
                               {
                                 backgroundColor:
-                                  profileData.gender === "Male"
-                                    ? "#2F2B39"
+                                  profileData.gender === 'Male'
+                                    ? '#2F2B39'
                                     : colors.bottomTabBackground,
-                                width: "45%",
+                                width: '45%',
                                 paddingVertical: 12,
                                 paddingHorizontal: 12,
                                 borderRadius: 14,
                                 borderWidth: 1,
                                 borderColor:
-                                  profileData.gender === "Male"
-                                    ? colors.gray400
-                                    : "transparent",
+                                  profileData.gender === 'Male' ? colors.gray400 : 'transparent',
                               },
                             ]}
                             onPress={() => {}}
@@ -221,10 +216,7 @@ const EditPersonalDetailBottomSheet = ({
                                 fonts.bold,
                                 layout.textCenter,
                                 {
-                                  color:
-                                    profileData.gender === "Male"
-                                      ? "#7AF4FC"
-                                      : "#7A7A82",
+                                  color: profileData.gender === 'Male' ? '#7AF4FC' : '#7A7A82',
                                 },
                               ]}
                             >
@@ -237,17 +229,15 @@ const EditPersonalDetailBottomSheet = ({
                               layout.itemsCenter,
                               {
                                 backgroundColor:
-                                  profileData.gender !== "Male"
-                                    ? "#2F2B39"
+                                  profileData.gender !== 'Male'
+                                    ? '#2F2B39'
                                     : colors.bottomTabBackground,
-                                width: "45%",
+                                width: '45%',
                                 paddingHorizontal: 12,
                                 borderRadius: 14,
                                 borderWidth: 1,
                                 borderColor:
-                                  profileData.gender !== "Male"
-                                    ? colors.gray400
-                                    : "transparent",
+                                  profileData.gender !== 'Male' ? colors.gray400 : 'transparent',
                               },
                             ]}
                             onPress={() => {}}
@@ -258,10 +248,7 @@ const EditPersonalDetailBottomSheet = ({
                                 fonts.bold,
                                 layout.textCenter,
                                 {
-                                  color:
-                                    profileData.gender !== "Male"
-                                      ? "#7AF4FC"
-                                      : "#7A7A82",
+                                  color: profileData.gender !== 'Male' ? '#7AF4FC' : '#7A7A82',
                                 },
                               ]}
                             >
@@ -277,7 +264,7 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
@@ -293,8 +280,8 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_16,
                             {
                               color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
+                              textAlign: 'left',
+                              paddingLeft: '3%',
                               backgroundColor: colors.bottomTabBackground,
                             },
                           ]}
@@ -311,7 +298,7 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
@@ -327,14 +314,14 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_16,
                             {
                               color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
+                              textAlign: 'left',
+                              paddingLeft: '3%',
                             },
                           ]}
                           keyboardType="phone-pad"
                           placeholder={profileData.mobile}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange("mobile")}
+                          onChangeText={handleChange('mobile')}
                           value={values.mobile}
                         />
                       </View>
@@ -345,7 +332,7 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
@@ -361,14 +348,14 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_16,
                             {
                               color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
+                              textAlign: 'left',
+                              paddingLeft: '3%',
                             },
                           ]}
                           keyboardType="phone-pad"
                           placeholder={profileData.emergencyContact}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange("emergencyContact")}
+                          onChangeText={handleChange('emergencyContact')}
                           value={values.emergencyContact}
                         />
                       </View>
@@ -379,7 +366,7 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_18,
                             {
                               color: colors.white,
-                              marginBottom: "2%",
+                              marginBottom: '2%',
                               opacity: 0.8,
                             },
                           ]}
@@ -395,13 +382,13 @@ const EditPersonalDetailBottomSheet = ({
                             fonts.size_16,
                             {
                               color: colors.gray200,
-                              textAlign: "left",
-                              paddingLeft: "3%",
+                              textAlign: 'left',
+                              paddingLeft: '3%',
                             },
                           ]}
                           placeholder={profileData.address}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange("address")}
+                          onChangeText={handleChange('address')}
                           value={values.address}
                         />
                       </View>
@@ -416,20 +403,16 @@ const EditPersonalDetailBottomSheet = ({
                           height: 48,
                           borderRadius: 12,
                           backgroundColor: colors.termsLinkColor,
-                          position: "fixed",
+                          position: 'fixed',
                         },
                       ]}
-                      onPress={()=>{
-                        setFieldValue('dob', selectedDob)
-                        handleSubmit()
+                      onPress={() => {
+                        setFieldValue('dob', selectedDob);
+                        handleSubmit();
                       }}
                     >
                       <Text
-                        style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          { color: colors.loginBtnTextColor },
-                        ]}
+                        style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
                       >
                         SAVE
                       </Text>
@@ -456,8 +439,8 @@ export default EditPersonalDetailBottomSheet;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   inputContainer: {
     marginBottom: 16,
@@ -465,13 +448,13 @@ const styles = StyleSheet.create({
   inputField: {
     height: 48,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.3)",
+    borderColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 12,
   },
   bottomSheetContent: {
     borderTopLeftRadius: 14,
     borderTopRightRadius: 14,
     borderTopWidth: 2,
-    borderColor: "#8F8F94",
+    borderColor: '#8F8F94',
   },
 });

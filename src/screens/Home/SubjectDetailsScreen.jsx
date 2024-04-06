@@ -1,22 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "@/theme";
-import { SafeScreen } from "@/components/template";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '@/theme';
+import { SafeScreen } from '@/components/template';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
 
 const SubjectDetailsScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   return (
     <SafeScreen>
@@ -26,8 +18,8 @@ const SubjectDetailsScreen = () => {
           {
             height: 167,
             backgroundColor: colors.headerBackgroundColor,
-            paddingLeft: "4%",
-            paddingTop: "4%",
+            paddingLeft: '4%',
+            paddingTop: '4%',
           },
         ]}
       >
@@ -38,13 +30,7 @@ const SubjectDetailsScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
+          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
             Physics
           </Text>
         </View>
