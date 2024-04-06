@@ -7,7 +7,6 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
-  ActionSheetIOS
 } from 'react-native';
 import React from 'react';
 import { useTheme } from '@/theme';
@@ -15,7 +14,7 @@ import { Formik } from 'formik';
 import { ImageVariant } from '../atoms';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
 import Cross from '@/theme/assets/images/cross.png';
-import { useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
@@ -56,7 +55,7 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                   console.log(values);
                 }}
               >
-                {({ handleChange, handleSubmit, values, errors }) => {
+                {({ handleChange, handleSubmit, values }) => {
                   return (
                     <View>
                       <View style={{ marginTop: '4%' }}>
