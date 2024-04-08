@@ -17,6 +17,7 @@ import { Divider } from 'react-native-paper';
 import ChangeRoleBottomSheet from '@/components/BottomSheet/Profile/ChangeRoleBottomSheet';
 import RateUsBottomSheet from '@/components/BottomSheet/Profile/RateUsBottomSheet';
 import { MMKV } from 'react-native-mmkv';
+import appVersion from '../../../package.json';
 
 const SideBarAuthedScreen = (props) => {
   const { colors, layout, fonts } = useTheme();
@@ -461,7 +462,7 @@ const SideBarAuthedScreen = (props) => {
                   },
                 ]}
               >
-                APP VERSION 123
+                APP VERSION {appVersion.version}
               </Text>
             </View>
           </View>
