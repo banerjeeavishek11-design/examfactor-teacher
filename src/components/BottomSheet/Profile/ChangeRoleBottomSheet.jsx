@@ -1,54 +1,17 @@
-import { useTheme } from "@/theme";
-import React, { useState } from "react";
-import {
-  View,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Image,
-  ScrollView,
-} from "react-native";
-import ModalClose from "@/theme/assets/images/modalclose.png";
-import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../../atoms";
-import RadioButton from "../../RadioButton/RadioButton";
-import Teacher from "@/theme/assets/images/teacher.png";
-import ClassTeacher from "@/theme/assets/images/classteacher.png";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
-
-const studentClass = [
-  { id: 1, class: '10-A' },
-  { id: 1, class: '10-B' },
-  { id: 1, class: '10-C' },
-  { id: 1, class: '10-D' },
-  { id: 1, class: '11-A' },
-  { id: 1, class: '11-B' },
-  { id: 1, class: '11-C' },
-  { id: 1, class: '11-D' },
-  { id: 1, class: '12-A' },
-  { id: 1, class: '12-B' },
-  { id: 1, class: '12-C' },
-  { id: 1, class: '12-D' },
-];
+import { useTheme } from '@/theme';
+import React, { useState } from 'react';
+import { View, Modal, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import Cross from '@/theme/assets/images/cross.png';
+import { ImageVariant } from '../../atoms';
+import RadioButton from '../../RadioButton/RadioButton';
+import Teacher from '@/theme/assets/images/teacher.png';
+import ClassTeacher from '@/theme/assets/images/classteacher.png';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const ChangeRoleBottomSheet = (props) => {
-  const {
-    setChangeRoleBottomSheetVisible,
-    changeRoleBottomSheetVisible,
-    setUserRole,
-  } = props;
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
-  const [option, setOption] = useState("Teacher");
+  const { setChangeRoleBottomSheetVisible, changeRoleBottomSheetVisible, setUserRole } = props;
+  const { colors, layout, fonts } = useTheme();
+  const [option, setOption] = useState('Teacher');
 
   const handleSlideDown = () => {
     setChangeRoleBottomSheetVisible(false);
@@ -167,10 +130,7 @@ const ChangeRoleBottomSheet = (props) => {
                 onPress={handleApply}
               >
                 <PrimaryGradient
-                  styleProp={[
-                    layout.justifyCenter,
-                    { height: "100%", borderRadius: 8 },
-                  ]}
+                  styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                 >
                   <Text
                     style={[
@@ -273,16 +233,6 @@ const styles = StyleSheet.create({
     width: '48%',
     height: 48,
     borderRadius: 8,
-  },
-  radioButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 20,
-    backgroundColor: '#22222F',
-    borderRadius: 12,
-    height: 52,
-    marginTop: 5,
-    width: '100%',
   },
 });
 

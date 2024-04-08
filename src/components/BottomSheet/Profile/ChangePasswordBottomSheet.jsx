@@ -7,15 +7,15 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
-} from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import { Formik } from "formik";
-import { ImageVariant } from "../../atoms";
-import RightArrow from "@/theme/assets/images/rightarrow.png";
-import Cross from "@/theme/assets/images/cross.png";
-import { useNavigation } from "@react-navigation/native";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
+} from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import { Formik } from 'formik';
+import { ImageVariant } from '../../atoms';
+import RightArrow from '@/theme/assets/images/rightarrow.png';
+import Cross from '@/theme/assets/images/cross.png';
+import { useNavigation } from '@react-navigation/native';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
@@ -51,8 +51,6 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                   currentPassword: '',
                   newPassword: '',
                   retypePassword: '',
-                }}
-                onSubmit={(values) => {
                 }}
               >
                 {({ handleChange, handleSubmit, values }) => {
@@ -129,34 +127,36 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                       <Text style={[fonts.size_14, { color: colors.gray200, width: '66%' }]}>
                         Contain : At least 1 numeric digit
                       </Text>
-                      
+
                       <TouchableOpacity
-                      onPress={() => {
-                        handleSubmit();
-                        closeModal();
-                        navigation.navigate("NewPasswordStatusScreen", {
-                          data: "Updated",
-                        });
-                      }}
-                    >
-                      <PrimaryGradient
-                        styleProp={[styles.loginButton, layout.justifyCenter]}
+                        onPress={() => {
+                          handleSubmit();
+                          closeModal();
+                          navigation.navigate('NewPasswordStatusScreen', {
+                            data: 'Updated',
+                          });
+                        }}
                       >
-                        <View style={[layout.display, layout.rowHCenter]}>
-                          <Text
-                            style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
-                          >
-                            Save
-                          </Text>
-                          <ImageVariant
-                            testID="brand-img"
-                            style={{ width: 16, height: 9, left: 5 }}
-                            source={RightArrow}
-                            resizeMode="contain"
-                          />
-                        </View>
-                      </PrimaryGradient>
-                    </TouchableOpacity>
+                        <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
+                          <View style={[layout.display, layout.rowHCenter]}>
+                            <Text
+                              style={[
+                                fonts.size_16,
+                                fonts.bold,
+                                { color: colors.loginBtnTextColor },
+                              ]}
+                            >
+                              Save
+                            </Text>
+                            <ImageVariant
+                              testID="brand-img"
+                              style={{ width: 16, height: 9, left: 5 }}
+                              source={RightArrow}
+                              resizeMode="contain"
+                            />
+                          </View>
+                        </PrimaryGradient>
+                      </TouchableOpacity>
                     </View>
                   );
                 }}
@@ -240,12 +240,12 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });

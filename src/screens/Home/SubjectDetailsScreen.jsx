@@ -1,68 +1,59 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "@/theme";
-import { SafeScreen } from "@/components/template";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import { Searchbar } from "react-native-paper";
-import Cross from "@/theme/assets/images/cross.png";
-import Search from "@/theme/assets/images/search.png";
-import Circularprogressbar from "@/components/template/CircularProgressBar/Circularprogressbar";
-import LinearGradient from "react-native-linear-gradient";
-import RightArrow from "@/theme/assets/images/rightarrow.png";
-import Progressbar from "@/components/template/Progressbar/Progressbar";
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '@/theme';
+import { SafeScreen } from '@/components/template';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import { Searchbar } from 'react-native-paper';
+import Search from '@/theme/assets/images/search.png';
+import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
+import LinearGradient from 'react-native-linear-gradient';
+import RightArrow from '@/theme/assets/images/rightarrow.png';
+import Progressbar from '@/components/template/Progressbar/Progressbar';
 
 const chapters = [
   {
     id: 1,
-    chapterName: "C1: Rate of Change of Velocity",
+    chapterName: 'C1: Rate of Change of Velocity',
     achievableScore: 70,
     progressPercentage: 75,
-    activatedTopic: "05",
-    subTitle: "Progress is calculated based on the activated topics.",
+    activatedTopic: '05',
+    subTitle: 'Progress is calculated based on the activated topics.',
   },
   {
     id: 2,
-    chapterName: "C2: Motion",
+    chapterName: 'C2: Motion',
     achievableScore: 70,
     progressPercentage: 60,
-    activatedTopic: "05",
-    subTitle: "Progress is calculated based on the activated topics.",
+    activatedTopic: '05',
+    subTitle: 'Progress is calculated based on the activated topics.',
   },
   {
     id: 3,
-    chapterName: "C3: Force and Laws of Motion",
+    chapterName: 'C3: Force and Laws of Motion',
     achievableScore: 70,
     progressPercentage: 50,
-    activatedTopic: "05",
-    subTitle: "Progress is calculated based on the activated topics.",
+    activatedTopic: '05',
+    subTitle: 'Progress is calculated based on the activated topics.',
   },
   {
     id: 4,
-    chapterName: "C4: Gravitation",
+    chapterName: 'C4: Gravitation',
     achievableScore: 70,
     progressPercentage: 45,
-    activatedTopic: "05",
-    subTitle: "Progress is calculated based on the activated topics.",
+    activatedTopic: '05',
+    subTitle: 'Progress is calculated based on the activated topics.',
   },
 ];
 
 const SubjectDetailsScreen = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const [searchChapterName, setSearchChapterName] = useState([]);
 
   const goToTopicWiseDetailsScreen = (chapterName, progress) => {
-    navigation.navigate("TopicWiseDetailsScreen", {
+    navigation.navigate('TopicWiseDetailsScreen', {
       topicName: chapterName,
       progress: progress,
     });
@@ -105,27 +96,19 @@ const SubjectDetailsScreen = () => {
             Physics
           </Text>
         </TouchableOpacity>
-        <View style={{ width: "100%", marginTop: "4%" }}>
+        <View style={{ width: '100%', marginTop: '4%' }}>
           <Searchbar
             placeholder="Search Chapters"
             placeholderTextColor="rgba(275, 275, 275, 0.5)"
             iconColor="rgba(275, 275, 275, 0.5)"
-            inputStyle={[
-              fonts.size_14,
-              fonts.fontWeignt_600,
-              { color: colors.white, right: 10 },
-            ]}
+            inputStyle={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white, right: 10 }]}
             icon={() => (
-              <Image
-                source={Search}
-                resizeMode="contain"
-                style={{ width: 14, height: 14 }}
-              />
+              <Image source={Search} resizeMode="contain" style={{ width: 14, height: 14 }} />
             )}
             onChangeText={onSearchChapters}
             style={{
-              backgroundColor: "#09070E",
-              borderColor: "rgba(275, 275, 275, 0.5)",
+              backgroundColor: '#09070E',
+              borderColor: 'rgba(275, 275, 275, 0.5)',
               borderWidth: 1,
               borderRadius: 8,
               // fontSize: 20,
@@ -138,7 +121,7 @@ const SubjectDetailsScreen = () => {
 
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
         <LinearGradient
-          colors={["#2E554E", "#22222D"]}
+          colors={['#2E554E', '#22222D']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[
@@ -148,7 +131,7 @@ const SubjectDetailsScreen = () => {
             layout.justifyBetween,
             layout.paddingForCard,
             {
-              height: "auto",
+              height: 'auto',
               borderRadius: 14,
             },
           ]}
@@ -161,7 +144,7 @@ const SubjectDetailsScreen = () => {
               style={[
                 fonts.size_12,
                 fonts.fontWeight_small,
-                { color: colors.backButtonColor, marginTop: "6%" },
+                { color: colors.backButtonColor, marginTop: '6%' },
               ]}
             >
               Based on concepts covered till date
@@ -181,24 +164,16 @@ const SubjectDetailsScreen = () => {
                 layout.fullWidth,
                 layout.paddingForCard,
                 {
-                  height: "auto",
+                  height: 'auto',
                   backgroundColor: colors.cardBackgroundColor,
                   borderRadius: 16,
-                  marginTop: "5%",
+                  marginTop: '5%',
                 },
               ]}
             >
-              <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                ]}
-              >
+              <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                 <View>
-                  <Text
-                    style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-                  >
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                     {ele.chapterName}
                   </Text>
                   <Text
@@ -207,7 +182,7 @@ const SubjectDetailsScreen = () => {
                       fonts.fontWeight_small,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,
-                        marginTop: "5%",
+                        marginTop: '5%',
                       },
                     ]}
                   >
@@ -218,9 +193,8 @@ const SubjectDetailsScreen = () => {
                       fonts.size_12,
                       fonts.fontWeight_small,
                       {
-                        color:
-                          ele.progressPercentage >= 60 ? "#3DD598" : "#FFAB48",
-                        marginTop: "5%",
+                        color: ele.progressPercentage >= 60 ? '#3DD598' : '#FFAB48',
+                        marginTop: '5%',
                       },
                     ]}
                   >
@@ -229,10 +203,7 @@ const SubjectDetailsScreen = () => {
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    goToTopicWiseDetailsScreen(
-                      ele.chapterName,
-                      ele.progressPercentage
-                    )
+                    goToTopicWiseDetailsScreen(ele.chapterName, ele.progressPercentage)
                   }
                 >
                   <Image
@@ -246,16 +217,14 @@ const SubjectDetailsScreen = () => {
                   />
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: "4%" }}>
+              <View style={{ marginTop: '4%' }}>
                 <Progressbar
                   progress={progress}
-                  color={ele.progressPercentage >= 60 ? "#3DD598" : "#FFAB48"}
+                  color={ele.progressPercentage >= 60 ? '#3DD598' : '#FFAB48'}
                 />
               </View>
               <View>
-                <View
-                  style={[layout.row, layout.itemsCenter, { marginTop: "4%", gap:5 }]}
-                >
+                <View style={[layout.row, layout.itemsCenter, { marginTop: '4%', gap: 5 }]}>
                   <Text
                     style={[
                       fonts.size_12,
@@ -285,7 +254,7 @@ const SubjectDetailsScreen = () => {
                     fonts.fontWeight_small,
                     {
                       color: colors.subjectDetailsAcheivableScoreColor,
-                      marginTop: "2%",
+                      marginTop: '2%',
                     },
                   ]}
                 >
@@ -301,5 +270,3 @@ const SubjectDetailsScreen = () => {
 };
 
 export default SubjectDetailsScreen;
-
-const styles = StyleSheet.create({});

@@ -9,19 +9,17 @@ import {
   ScrollView,
   TextInput,
   Image,
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
-import { Formik } from "formik";
-import { ImageVariant } from "../../atoms";
-import Cross from "@/theme/assets/images/cross.png";
-// import DateTimePickerModal from "react-native-modal-datetime-picker";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import moment from "moment";
-import DateTimePicker from "react-native-modal-datetime-picker";
-import Calender from "@/theme/assets/images/calendar.png";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
+} from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import rightArrow from '@/theme/assets/images/rightarrow.png';
+import { Formik } from 'formik';
+import { ImageVariant } from '../../atoms';
+import Cross from '@/theme/assets/images/cross.png';
+import moment from 'moment';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import Calender from '@/theme/assets/images/calendar.png';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -40,7 +38,7 @@ const EditPersonalDetailBottomSheet = ({
   return (
     <Modal visible={personalDetailBottomSheetVisible} animationType="slide" transparent={true}>
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
-        <View style={[styles.modalContainer,{marginBottom:'8%'}]}>
+        <View style={[styles.modalContainer, { marginBottom: '8%' }]}>
           <View
             style={[
               styles.bottomSheetContent,
@@ -158,7 +156,7 @@ const EditPersonalDetailBottomSheet = ({
                               style={{
                                 width: 20,
                                 height: 20,
-                                marginLeft: "5%",
+                                marginLeft: '5%',
                               }}
                             />
                           </TouchableOpacity>
@@ -393,24 +391,17 @@ const EditPersonalDetailBottomSheet = ({
                         />
                       </View>
                     </ScrollView>
-                    
+
                     <TouchableOpacity
                       onPress={() => {
-                        setFieldValue("dob", selectedDob);
+                        void setFieldValue('dob', selectedDob);
                         handleSubmit();
                       }}
-                      
                     >
-                      <PrimaryGradient
-                        styleProp={[styles.loginButton, layout.justifyCenter]}
-                      >
+                      <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                         <View style={[layout.display, layout.rowHCenter]}>
                           <Text
-                            style={[
-                              fonts.size_16,
-                              fonts.bold,
-                              { color: colors.loginBtnTextColor },
-                            ]}
+                            style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
                           >
                             Save
                           </Text>
@@ -459,11 +450,11 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

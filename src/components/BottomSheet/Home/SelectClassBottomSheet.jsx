@@ -1,20 +1,11 @@
-import { useTheme } from "@/theme";
-import React, { useState } from "react";
-import {
-  View,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Image,
-  ScrollView,
-} from "react-native";
-import ModalClose from "@/theme/assets/images/modalclose.png";
-import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../../atoms";
-import RadioButton from "../../RadioButton/RadioButton";
-import ClassSuccessfullySelectedBottomSheet from "./ClassSuccessfullySelectedBottomSheet";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
+import { useTheme } from '@/theme';
+import React, { useState } from 'react';
+import { View, Modal, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
+import Cross from '@/theme/assets/images/cross.png';
+import { ImageVariant } from '../../atoms';
+import RadioButton from '../../RadioButton/RadioButton';
+import ClassSuccessfullySelectedBottomSheet from './ClassSuccessfullySelectedBottomSheet';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const studentClass = [
   { id: 1, class: '10-A' },
@@ -38,8 +29,7 @@ const ReferandearnBottomsheet = (props) => {
     setShowSelectedClass,
     showSelecTedClass,
   } = props;
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const [option, setOption] = useState('first');
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
@@ -50,7 +40,6 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
-    console.log('op', op);
   };
 
   const handleApply = () => {
@@ -147,10 +136,7 @@ const ReferandearnBottomsheet = (props) => {
                 onPress={handleApply}
               >
                 <PrimaryGradient
-                  styleProp={[
-                    layout.justifyCenter,
-                    { height: "100%", borderRadius: 8 },
-                  ]}
+                  styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                 >
                   <Text
                     style={[
@@ -172,7 +158,7 @@ const ReferandearnBottomsheet = (props) => {
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
         openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
         showSelecTedClass={showSelecTedClass}
-        openFrom={"SelectClassBottomSheet"}
+        openFrom={'SelectClassBottomSheet'}
       />
     </View>
   );

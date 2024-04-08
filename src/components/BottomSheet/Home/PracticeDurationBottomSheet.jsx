@@ -1,19 +1,9 @@
-import {
-    View,
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    Text,
-    Image,
-    ScrollView,
-  } from "react-native";
-import React, {useState} from 'react'
-import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../../atoms";
-import RadioButton from "../../RadioButton/RadioButton";
-import { useTheme } from '@/theme'
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
-
+import { View, Modal, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import Cross from '@/theme/assets/images/cross.png';
+import { ImageVariant } from '../../atoms';
+import RadioButton from '../../RadioButton/RadioButton';
+import { useTheme } from '@/theme';
 
 const practiceDuration = [
   { id: 1, practiceDuration: 'All Students in class' },
@@ -24,12 +14,12 @@ const practiceDuration = [
   { id: 3, practiceDuration: 'Not Practiced in 30 Days' },
 ];
 
-const PracticeDurationBottomSheet = ({visible, closeModal, setPracticeDurationValue}) => {
-    const {fonts, layout, colors}=useTheme();
-    const [option, setOption] = useState("first");
-    const handleOptionChange = (op) => {
-        setOption(op);
-      };
+const PracticeDurationBottomSheet = ({ visible, closeModal, setPracticeDurationValue }) => {
+  const { fonts, layout, colors } = useTheme();
+  const [option, setOption] = useState('first');
+  const handleOptionChange = (op) => {
+    setOption(op);
+  };
 
   const handleApply = () => {
     setPracticeDurationValue(option);

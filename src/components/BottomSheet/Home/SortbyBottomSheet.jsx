@@ -1,19 +1,10 @@
-import {
-    View,
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
-    Text,
-    Image,
-    ScrollView,
-  } from "react-native";
-import React, {useState} from 'react'
-import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../../atoms";
-import RadioButton from "../../RadioButton/RadioButton";
-import { useTheme } from '@/theme'
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
-
+import { View, Modal, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import Cross from '@/theme/assets/images/cross.png';
+import { ImageVariant } from '../../atoms';
+import RadioButton from '../../RadioButton/RadioButton';
+import { useTheme } from '@/theme';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const sortBy = [
   { id: 1, sortBy: 'Practice Progress: High To Low' },
@@ -24,12 +15,12 @@ const sortBy = [
   { id: 6, sortBy: 'Last Test Score: Low to High' },
 ];
 
-const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
-    const {fonts, layout, colors} = useTheme();
-    const [option, setOption] = useState("first");
-    const handleOptionChange = (op) => {
-        setOption(op);
-      };
+const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue }) => {
+  const { fonts, layout, colors } = useTheme();
+  const [option, setOption] = useState('first');
+  const handleOptionChange = (op) => {
+    setOption(op);
+  };
 
   const handleApply = () => {
     setSortbyValue(option);
@@ -97,15 +88,13 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
                 style={[
                   fonts.size_16,
                   fonts.fontWeignt_600,
-                  { color: colors.termsLinkColor, textAlign: "center" },
+                  { color: colors.termsLinkColor, textAlign: 'center' },
                 ]}
               >
-                <Text>
-                Cancel
-              </Text>
-            </TouchableOpacity>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
+              <TouchableOpacity
                 style={[
                   layout.justifyCenter,
                   styles.footerButton,
@@ -116,10 +105,7 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
                 onPress={handleApply}
               >
                 <PrimaryGradient
-                  styleProp={[
-                    layout.justifyCenter,
-                    { height: "100%", borderRadius: 8 },
-                  ]}
+                  styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                 >
                   <Text
                     style={[
@@ -133,8 +119,8 @@ const SortbyBottomSheet = ({visible, closeModal,setSortbyValue}) => {
                   </Text>
                 </PrimaryGradient>
               </TouchableOpacity>
+            </View>
           </View>
-        </View>
         </View>
       </Modal>
     </View>

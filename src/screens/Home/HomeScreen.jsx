@@ -1,53 +1,33 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import {
-  Concentrix,
-  Header,
-  SafeScreen,
-  BarChart,
-  BarChartsCarousel,
-} from "@/components/template";
-import Arrow from "@/theme/assets/images/arrow.png";
-import { ImageVariant } from "@/components/atoms";
-import { Divider } from "react-native-paper";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
-import Line from "@/theme/assets/images/line.png";
-import Info from "@/theme/assets/images/info.png";
-import UpArrow from "@/theme/assets/images/uparrow.png";
-import Progressbar from "@/components/template/Progressbar/Progressbar";
-import { useNavigation } from "@react-navigation/native";
-import SortbyBottomSheet from "@/components/BottomSheet/Home/SortbyBottomSheet";
-import PracticeDurationBottomSheet from "@/components/BottomSheet/Home/PracticeDurationBottomSheet";
-import { useSelector } from "react-redux";
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
+import Arrow from '@/theme/assets/images/arrow.png';
+import { ImageVariant } from '@/components/atoms';
+import { Divider } from 'react-native-paper';
+import DownArrow from '@/theme/assets/images/Downarrow.png';
+import Line from '@/theme/assets/images/line.png';
+import Info from '@/theme/assets/images/info.png';
+import UpArrow from '@/theme/assets/images/uparrow.png';
+import Progressbar from '@/components/template/Progressbar/Progressbar';
+import { useNavigation } from '@react-navigation/native';
+import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
+import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
 
-const data = ["03", "06", "09", "12"];
-const barchartColor = ["#7AF4FC", "#27D4FA"];
+const data = ['03', '06', '09', '12'];
+const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
 const height = 250;
 const borderRadius = 5;
-const xAxisTitle = "Achievable Score (%)";
-const yAxisTitle = "No. of students";
+const xAxisTitle = 'Achievable Score (%)';
+const yAxisTitle = 'No. of students';
 
 const HomeScreen = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
   const [showContent, setShowContent] = useState(false);
-
-  const userDetails = useSelector((state) => state.login);
-  
-
-  console.log("first", userDetails);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -119,7 +99,7 @@ const HomeScreen = () => {
           >
             Physics
           </Text>
-          <View style={{ marginTop: "1%", alignItems: "center" }}>
+          <View style={{ marginTop: '1%', alignItems: 'center' }}>
             <Concentrix scorePercentage={20} />
           </View>
           <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
@@ -145,13 +125,7 @@ const HomeScreen = () => {
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               Home work
             </Text>
-            <Text
-              style={[
-                fonts.size_12,
-                fonts.fontWeight_small,
-                { color: colors.white },
-              ]}
-            >
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               {`${homeworkProgress * 100}% Complete`}
             </Text>
           </View>
@@ -164,13 +138,7 @@ const HomeScreen = () => {
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               Diagnostic
             </Text>
-            <Text
-              style={[
-                fonts.size_12,
-                fonts.fontWeight_small,
-                { color: colors.white },
-              ]}
-            >
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               {`${diagnosticProgress * 100}% Complete`}
             </Text>
           </View>
@@ -243,8 +211,7 @@ const HomeScreen = () => {
                 fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 {
-                  color:
-                    sortByValue !== null ? colors.termsLinkColor : colors.white,
+                  color: sortByValue !== null ? colors.termsLinkColor : colors.white,
                   opacity: sortByValue !== null ? 1 : 0.3,
                 },
               ]}
@@ -256,8 +223,7 @@ const HomeScreen = () => {
               style={{
                 width: 10,
                 height: 10,
-                tintColor:
-                  sortByValue !== null ? colors.termsLinkColor : colors.white,
+                tintColor: sortByValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: sortByValue !== null ? 1 : 0.4,
               }}
               source={DownArrow}
@@ -289,10 +255,7 @@ const HomeScreen = () => {
                 fonts.size_12,
                 fonts.fontWeight_small,
                 {
-                  color:
-                    practiceDurationValue !== null
-                      ? colors.termsLinkColor
-                      : colors.white,
+                  color: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
                   opacity: practiceDurationValue !== null ? 1 : 0.3,
                 },
                 fonts.alignCenter,
@@ -305,10 +268,7 @@ const HomeScreen = () => {
               style={{
                 width: 10,
                 height: 10,
-                tintColor:
-                  practiceDurationValue !== null
-                    ? colors.termsLinkColor
-                    : colors.white,
+                tintColor: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: practiceDurationValue !== null ? 1 : 0.4,
               }}
               source={DownArrow}
@@ -392,19 +352,9 @@ const HomeScreen = () => {
           ]}
         >
           <View style={[layout.display, layout.rowHCenter]}>
-            <View style={{ width: "30%" }}>
-              <Text
-                style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-              >
-                75%
-              </Text>
-              <Text
-                style={[
-                  fonts.size_10,
-                  fonts.fontWeight_small,
-                  { color: colors.gray200 },
-                ]}
-              >
+            <View style={{ width: '30%' }}>
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>75%</Text>
+              <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                 Achievable Score
               </Text>
             </View>
@@ -470,17 +420,9 @@ const HomeScreen = () => {
             <View style={{ width: '10%' }}>
               <TouchableOpacity onPress={toggleContent}>
                 {showContent ? (
-                  <Image
-                    style={{ width: 12, height: 8 }}
-                    source={UpArrow}
-                    resizeMode="contain"
-                  />
+                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
                 ) : (
-                  <Image
-                    style={{ width: 12, height: 8 }}
-                    source={DownArrow}
-                    resizeMode="contain"
-                  />
+                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain" />
                 )}
               </TouchableOpacity>
             </View>
@@ -506,13 +448,7 @@ const HomeScreen = () => {
                   <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     8 days ago
                   </Text>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.gray200 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                     Last practice
                   </Text>
                 </View>
@@ -522,11 +458,7 @@ const HomeScreen = () => {
                   </Text>
                   <View style={[layout.display, layout.rowHCenter]}>
                     <Text
-                      style={[
-                        fonts.size_10,
-                        fonts.fontWeight_small,
-                        { color: colors.gray200 },
-                      ]}
+                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
                     >
                       Avg. Study Time
                     </Text>
@@ -547,13 +479,7 @@ const HomeScreen = () => {
                   <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     75%
                   </Text>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.gray200 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                     Last test score
                   </Text>
                 </View>
@@ -576,23 +502,9 @@ const HomeScreen = () => {
             },
           ]}
         >
-          <View style={{ width: "30%" }}>
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.white, left: 5 },
-              ]}
-            >
-              0%
-            </Text>
-            <Text
-              style={[
-                fonts.size_10,
-                fonts.fontWeight_small,
-                { color: colors.gray200 },
-              ]}
-            >
+          <View style={{ width: '30%' }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, left: 5 }]}>0%</Text>
+            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
               Achievable Score
             </Text>
           </View>
@@ -675,17 +587,9 @@ const HomeScreen = () => {
             },
           ]}
         >
-          <View style={{ width: "30%" }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-              52%
-            </Text>
-            <Text
-              style={[
-                fonts.size_10,
-                fonts.fontWeight_small,
-                { color: colors.gray200 },
-              ]}
-            >
+          <View style={{ width: '30%' }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>52%</Text>
+            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
               Achievable Score
             </Text>
           </View>
@@ -769,5 +673,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({});

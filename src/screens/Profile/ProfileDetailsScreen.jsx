@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useState } from "react";
-import { SafeScreen } from "@/components/template";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import Profile from "@/theme/assets/images/profile.png";
-import EditPersonalDetailBottomSheet from "@/components/BottomSheet/Profile/EditPersonalDetailBottomSheet";
-import ChangePasswordBottomSheet from "@/components/BottomSheet/Profile/ChangePasswordBottomSheet";
-import { DrawerActions } from "@react-navigation/native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { SafeScreen } from '@/components/template';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import Profile from '@/theme/assets/images/profile.png';
+import EditPersonalDetailBottomSheet from '@/components/BottomSheet/Profile/EditPersonalDetailBottomSheet';
+import ChangePasswordBottomSheet from '@/components/BottomSheet/Profile/ChangePasswordBottomSheet';
+import { DrawerActions } from '@react-navigation/native';
 
 const ProfileData = {
   fullName: 'Vinay Dua',
@@ -43,9 +43,9 @@ const ProfileDetailsScreen = ({ navigation }) => {
     setChangePasswordBottomSheetVisible(true);
   };
 
-  const closeChangePasswordModal = ()=>{
-    setChangePasswordBottomSheetVisible(false)
-  }
+  const closeChangePasswordModal = () => {
+    setChangePasswordBottomSheetVisible(false);
+  };
   const { layout, fonts, colors } = useTheme();
   return (
     <SafeScreen>

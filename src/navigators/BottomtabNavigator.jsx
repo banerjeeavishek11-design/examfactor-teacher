@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ActivateScreen, HomeScreen, ReportsScreen, SchoolWorkScreen } from '@/screens';
@@ -55,8 +55,8 @@ const TabBar = (props) => {
             fonts.size_12,
             fonts.alignCenter,
             {
-              fontWeight: props.state.index === 0 ? "700" : "500",
-              color: props.state.index === 0 ? "#fff" : "#77747D",
+              fontWeight: props.state.index === 0 ? '700' : '500',
+              color: props.state.index === 0 ? '#fff' : '#77747D',
 
               lineHeight: 18,
             },
@@ -86,8 +86,8 @@ const TabBar = (props) => {
             fonts.size_12,
             fonts.alignCenter,
             {
-              fontWeight: props.state.index === 1 ? "700" : "500",
-              color: props.state.index === 1 ? "#fff" : "#77747D",
+              fontWeight: props.state.index === 1 ? '700' : '500',
+              color: props.state.index === 1 ? '#fff' : '#77747D',
 
               lineHeight: 18,
             },
@@ -184,5 +184,3 @@ const BottomTabNavigator = () => {
 };
 
 export default BottomTabNavigator;
-
-const styles = StyleSheet.create({});

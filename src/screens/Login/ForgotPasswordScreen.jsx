@@ -1,43 +1,35 @@
 import {
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import { useNavigation } from "@react-navigation/native";
-import { ImageVariant } from "@/components/atoms";
-import Logo from "@/theme/assets/images/examfactorlogo.png";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
-import { Controller, useForm } from "react-hook-form";
-import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
+} from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import { useNavigation } from '@react-navigation/native';
+import { ImageVariant } from '@/components/atoms';
+import Logo from '@/theme/assets/images/examfactorlogo.png';
+import rightArrow from '@/theme/assets/images/rightarrow.png';
+import { Controller, useForm } from 'react-hook-form';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const ForgotPasswordScreen = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts, backgrounds } = useTheme();
   const navigation = useNavigation();
   const {
     control,
-    handleSubmit,
     formState: { errors },
   } = useForm();
   return (
-    <View
-      style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen]}
-    >
+    <View style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen]}>
       {/* <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
         <Text style={{ color: "white" }}>Back</Text>
       </TouchableOpacity> */}
-      <View
-        style={[
-          layout.justifyEnd,
-          layout.fullHeight,
-        ]}
-      >
-        <View style={{marginBottom: "5%" }}>
+      <View style={[layout.justifyEnd, layout.fullHeight]}>
+        <View style={{ marginBottom: '5%' }}>
           <ImageVariant
             testID="brand-img"
             style={{ width: 110, height: 112 }}
@@ -45,30 +37,28 @@ const ForgotPasswordScreen = () => {
             resizeMode="contain"
           />
         </View>
-        <View style={{ width: "50%", marginBottom: "5%" }}>
-          <Text style={[fonts.size_16, fonts.bold, { color: "white" }]}>
+        <View style={{ width: '50%', marginBottom: '5%' }}>
+          <Text style={[fonts.size_16, fonts.bold, { color: 'white' }]}>
             Forgot password? Login through OTP
           </Text>
         </View>
-        <View style={{ marginBottom: "2%",width:'80%' }}>
-          <Text
-            style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}
-          >
+        <View style={{ marginBottom: '2%', width: '80%' }}>
+          <Text style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}>
             Please enter your email address to get the one time password
           </Text>
         </View>
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           enabled={true}
         >
-          <View style={{ marginBottom: "10%" }}>
+          <View style={{ marginBottom: '10%' }}>
             <Controller
               name="email"
               control={control}
               rules={{
-                required: "This feild is required",
+                required: 'This feild is required',
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
+              render={({ field: { onBlur } }) => (
                 <View
                   style={[
                     layout.display,
@@ -77,9 +67,7 @@ const ForgotPasswordScreen = () => {
                     styles.mobileNumberInput,
                     {
                       paddingHorizontal: 10,
-                      borderColor: errors.username
-                        ? "#FF575F"
-                        : "rgba(255, 255, 255, 0.3)",
+                      borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                     },
                   ]}
                 >
@@ -90,8 +78,8 @@ const ForgotPasswordScreen = () => {
                       fonts.size_16,
                       {
                         color: colors.white,
-                        textAlign: "left",
-                        paddingLeft: "0%",
+                        textAlign: 'left',
+                        paddingLeft: '0%',
                       },
                     ]}
                     placeholder="Email "
@@ -111,22 +99,10 @@ const ForgotPasswordScreen = () => {
             />
           </View>
 
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ForgotPasswordSuccessfulScreen")
-            }
-          >
-            <PrimaryGradient
-              styleProp={[styles.loginButton, layout.justifyCenter]}
-            >
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordSuccessfulScreen')}>
+            <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
               <View style={[layout.display, layout.rowHCenter]}>
-                <Text
-                  style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    { color: colors.loginBtnTextColor },
-                  ]}
-                >
+                <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                   GET OTP
                 </Text>
                 <ImageVariant
@@ -158,12 +134,12 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });

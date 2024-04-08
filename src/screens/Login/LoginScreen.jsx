@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,39 +9,27 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@/theme";
-import Logo from "@/theme/assets/images/examfactorlogo.png";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
-import { ImageVariant } from "@/components/atoms";
-import { Controller, useForm } from "react-hook-form";
-import { useNavigation } from "@react-navigation/native";
-import {
-  moderateScale,
-  moderateVerticalScale,
-} from "react-native-size-matters";
-import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
-import { MMKV, useMMKVString } from "react-native-mmkv";
-import { useDispatch } from "react-redux";
-import { loginAction } from "@/store/redux-slice/LoginSlice";
+  Platform,
+} from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import Logo from '@/theme/assets/images/examfactorlogo.png';
+import rightArrow from '@/theme/assets/images/rightarrow.png';
+import { ImageVariant } from '@/components/atoms';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { MMKV } from 'react-native-mmkv';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '@/store/redux-slice/LoginSlice';
 
-const screenWidth = Dimensions.get("window").width;
+const screenWidth = Dimensions.get('window').width;
 const isTablet = screenWidth >= 600;
 const storage = new MMKV();
 
-
 const LoginScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, layout, fonts, backgrounds } = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
@@ -49,10 +38,10 @@ const LoginScreen = () => {
     formState: { errors },
   } = useForm();
   const [textInputValues, setTextInputValues] = useState({
-    username: "",
-    password: "",
-    referralCode: "",
-    mobileNumber: "",
+    username: '',
+    password: '',
+    referralCode: '',
+    mobileNumber: '',
   });
 
   const handleOutsideTap = () => {
@@ -60,11 +49,11 @@ const LoginScreen = () => {
   };
 
   const handleUsernameLogin = (data) => {
-    storage.set("username", data.username);
+    storage.set('username', data.username);
     dispatch(loginAction(data));
     navigation.reset({
       index: 0,
-      routes: [{ name: "AuthorizedStack" }],
+      routes: [{ name: 'AuthorizedStack' }],
     });
   };
 
@@ -76,12 +65,11 @@ const LoginScreen = () => {
           layout.paddingForFullScreen,
           isTablet
             ? {
-                justifyContent: "center",
-                alignSelf: "center",
-                alignItems: "flex-start",
-                width: moderateScale(300),
-                // paddingBottom: verticalScale(40),
-              }
+              justifyContent: 'center',
+              alignSelf: 'center',
+              alignItems: 'flex-start',
+              width: moderateScale(300),
+            }
             : null,
         ]}
       >
@@ -97,15 +85,8 @@ const LoginScreen = () => {
                 source={Logo}
                 resizeMode="contain"
               />
-              <View style={{ width: "80%" }}>
-                <Text
-                  style={[
-                    fonts.size_32,
-                    fonts.bold,
-                    styles.heading,
-                    { color: colors.white },
-                  ]}
-                >
+              <View style={{ width: '80%' }}>
+                <Text style={[fonts.size_32, fonts.bold, styles.heading, { color: colors.white }]}>
                   ExamFactor
                 </Text>
                 <Text
@@ -121,17 +102,17 @@ const LoginScreen = () => {
               </View>
               <View style={isTablet ? { marginTop: moderateScale(-5) } : null}>
                 <KeyboardAvoidingView
-                  behavior={Platform.OS === "ios" ? "padding" : "height"}
+                  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                   enabled={true}
                 >
-                  <View style={{ marginTop: "3%" }}>
+                  <View style={{ marginTop: '3%' }}>
                     <Controller
                       name="username"
                       control={control}
                       rules={{
-                        required: "This field is required",
+                        required: 'This field is required',
                       }}
-                      render={({ field: { onChange, onBlur, value } }) => (
+                      render={({ field: { onChange, onBlur } }) => (
                         <View
                           style={[
                             layout.display,
@@ -140,9 +121,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username
-                                ? "#FF575F"
-                                : "rgba(255, 255, 255, 0.3)",
+                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -154,8 +133,8 @@ const LoginScreen = () => {
                               fonts.fontWeight_small,
                               {
                                 color: colors.white,
-                                textAlign: "left",
-                                paddingLeft: "0%",
+                                textAlign: 'left',
+                                paddingLeft: '0%',
                               },
                             ]}
                             placeholder="Username"
@@ -176,7 +155,7 @@ const LoginScreen = () => {
                     {errors.username && (
                       <Text
                         style={{
-                          color: "#FF575F",
+                          color: '#FF575F',
                         }}
                       >
                         {errors.username.message || null}
@@ -189,10 +168,10 @@ const LoginScreen = () => {
                       rules={{
                         required: {
                           value: true,
-                          message: "this field is required",
+                          message: 'this field is required',
                         },
                       }}
-                      render={({ field: { onChange, onBlur, value } }) => (
+                      render={({ field: { onChange, onBlur } }) => (
                         <View
                           style={[
                             layout.display,
@@ -201,9 +180,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username
-                                ? "#FF575F"
-                                : "rgba(255, 255, 255, 0.3)",
+                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -215,8 +192,8 @@ const LoginScreen = () => {
                               fonts.fontWeight_small,
                               {
                                 color: colors.white,
-                                textAlign: "left",
-                                paddingLeft: "0%",
+                                textAlign: 'left',
+                                paddingLeft: '0%',
                               },
                             ]}
                             placeholder="Password"
@@ -238,7 +215,7 @@ const LoginScreen = () => {
                     {errors.password && (
                       <Text
                         style={{
-                          color: "#FF575F",
+                          color: '#FF575F',
                         }}
                       >
                         {errors.password.message || null}
@@ -247,10 +224,8 @@ const LoginScreen = () => {
                   </View>
                 </KeyboardAvoidingView>
               </View>
-              <View style={{ marginTop: "4%" }}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ForgotPasswordScreen")}
-                >
+              <View style={{ marginTop: '4%' }}>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}>
                   <Text
                     style={[
                       fonts.size_16,
@@ -273,7 +248,7 @@ const LoginScreen = () => {
                     {
                       color: colors.white,
 
-                      marginRight: "2%",
+                      marginRight: '2%',
                       opacity: 0.7,
                     },
                   ]}
@@ -281,7 +256,7 @@ const LoginScreen = () => {
                   By logging in, you agree to
                 </Text>
                 <TouchableOpacity
-                  style={{ marginRight: "2%" }}
+                  style={{ marginRight: '2%' }}
                   // onPress={openTermsAndCondition}
                 >
                   <Text
@@ -298,7 +273,7 @@ const LoginScreen = () => {
                   style={[
                     fonts.size_12,
                     fonts.fontWeight_small,
-                    { color: colors.white, opacity: 0.7, marginRight: "2%" },
+                    { color: colors.white, opacity: 0.7, marginRight: '2%' },
                   ]}
                 >
                   and
@@ -318,20 +293,13 @@ const LoginScreen = () => {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onPress={handleSubmit(handleUsernameLogin)}
                 // disabled={isLoading}
               >
-                <PrimaryGradient
-                  styleProp={[styles.loginButton, layout.justifyCenter]}
-                >
+                <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                   <View style={[layout.display, layout.rowHCenter]}>
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
+                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                       LOGIN
                     </Text>
                     <ImageVariant
@@ -355,34 +323,34 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   heading: {
-    marginTop: "2%",
+    marginTop: '2%',
   },
   subheading: {
-    marginTop: isTablet ? moderateScale(5) : "2%",
+    marginTop: isTablet ? moderateScale(5) : '2%',
   },
   mobileNumberInput: {
-    width: "100%",
+    width: '100%',
     height: 48,
-    color: "rgba(255, 255, 255, 0.3)",
+    color: 'rgba(255, 255, 255, 0.3)',
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 10,
     marginTop: 12,
   },
   termsAndConditions: {
-    marginRight: "4%",
-    width: "100%",
+    marginRight: '4%',
+    width: '100%',
     height: 18,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });

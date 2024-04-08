@@ -7,14 +7,14 @@ import {
   ScrollView,
   TextInput,
   Image,
-} from "react-native";
-import { useTheme } from "@/theme";
-import React, { useState, useEffect } from "react";
-import RateUsStart from "@/theme/assets/images/rateusstar.png";
-import Cross from "@/theme/assets/images/cross.png";
-import { ImageVariant } from "../../atoms";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
-import ThanksForFeedbackBottomSheet from "./ThanksForFeedbackBottomSheet";
+} from 'react-native';
+import { useTheme } from '@/theme';
+import React, { useState, useEffect } from 'react';
+import RateUsStart from '@/theme/assets/images/rateusstar.png';
+import Cross from '@/theme/assets/images/cross.png';
+import { ImageVariant } from '../../atoms';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
+import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
 
 const starRatings = [
   { id: 1, selected: false },
@@ -43,7 +43,6 @@ const RateUsBottomSheet = (props) => {
   const { visible, setRateUsModalVisible } = props;
   const { layout, fonts, colors } = useTheme();
   const [selectedRating, setSelectedRating] = useState(0);
-  const [submittedRating, setSubmittedRating] = useState(0);
   const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
   const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
     useState(false);
@@ -64,7 +63,6 @@ const RateUsBottomSheet = (props) => {
 
   const handleSlideDown = () => {
     setRateUsModalVisible(false);
-    setSubmittedRating(0);
     setSelectedRating(0);
   };
 
@@ -131,7 +129,7 @@ const RateUsBottomSheet = (props) => {
                       layout.display,
                       layout.rowHCenter,
                       layout.justifyBetween,
-                      { marginTop: "3%" },
+                      { marginTop: '3%' },
                     ]}
                   >
                     {starRatings.map((rating) => (
@@ -153,15 +151,10 @@ const RateUsBottomSheet = (props) => {
                       layout.display,
                       layout.rowHCenter,
                       layout.justifyBetween,
-                      { marginTop: "3%" },
+                      { marginTop: '3%' },
                     ]}
                   >
-                    <Text
-                      style={[
-                        fonts.alignCenter,
-                        { color: colors.backButtonColor },
-                      ]}
-                    >
+                    <Text style={[fonts.alignCenter, { color: colors.backButtonColor }]}>
                       Not satisfied
                     </Text>
                     <Text style={[fonts.alignCenter, { color: colors.backButtonColor }]}>
@@ -264,9 +257,7 @@ const RateUsBottomSheet = (props) => {
                           openThanksForFeedbackModal();
                         }}
                       >
-                        <PrimaryGradient
-                          styleProp={[styles.loginButton, layout.justifyCenter]}
-                        >
+                        <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                           <View style={[layout.display, layout.rowHCenter]}>
                             <Text
                               style={[
@@ -291,7 +282,6 @@ const RateUsBottomSheet = (props) => {
       <ThanksForFeedbackBottomSheet
         closeModal={closeThanksForFeedbackModal}
         visible={thanksForYourFeedbackBottomSheetVisible}
-       
       />
     </View>
   );
@@ -331,12 +321,12 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });

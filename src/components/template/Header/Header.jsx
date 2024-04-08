@@ -1,26 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from "react-native";
-import React, { useState, useRef } from "react";
-import { useNavigation, DrawerActions } from "@react-navigation/native";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
-import User from "@/theme/assets/images/user.png";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "@/components/atoms";
-import SelectClassBottomSheet from "@/components/BottomSheet/Home/SelectClassBottomSheet";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import DownArrow from '@/theme/assets/images/Downarrow.png';
+import User from '@/theme/assets/images/user.png';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '@/components/atoms';
+import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
 
-const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+const Header = () => {
+  const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const productScrollRef = useRef(null);
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get('window').width;
   const isTablet = screenWidth >= 400;
 
   const [subjects, setSubjects] = useState([
@@ -30,16 +22,14 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
     { id: 4, subjectName: 'Bengali', isChecked: false },
     { id: 5, subjectName: 'English', isChecked: false },
   ]);
-  const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] =
-    useState(false);
-  const [showSelecTedClass, setShowSelectedClass] = useState("10-B");
+  const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
+  const [showSelecTedClass, setShowSelectedClass] = useState('10-B');
 
   const handleOpenDrawer = () => {
     if (isTablet) {
-      navigation.navigate("SideBarAuthedScreen");
+      navigation.navigate('SideBarAuthedScreen');
     } else {
-      // navigation.dispatch(DrawerActions.openDrawer());
-      navigation.navigate('SideBarAuthedScreen')
+      navigation.navigate('SideBarAuthedScreen');
     }
   };
 
@@ -114,7 +104,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
             />
             <ImageVariant
               testID="brand-img"
-              style={{ width: 10, height: 12, left: 5, tintColor: "#B6B6BB" }}
+              style={{ width: 10, height: 12, left: 5, tintColor: '#B6B6BB' }}
               source={DownArrow}
               resizeMode="contain"
             />

@@ -1,20 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import Feedback from "@/theme/assets/images/feedback.png";
-import { ImageVariant } from "../../atoms";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
-import Cross from "@/theme/assets/images/cross.png";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
+import { StyleSheet, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import Feedback from '@/theme/assets/images/feedback.png';
+import { ImageVariant } from '../../atoms';
+import rightArrow from '@/theme/assets/images/rightarrow.png';
+import Cross from '@/theme/assets/images/cross.png';
+import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
-const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
+const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();
   return (
     <View>
@@ -33,17 +26,14 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: 'white' }}
                 source={Cross}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <View>
-              <TouchableOpacity
-                style={styles.slideIndicator}
-                onPress={closeModal}
-              >
-                <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
+              <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>
+                <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
               </TouchableOpacity>
             </View>
             <View style={{ marginTop: '8%' }}>
@@ -79,8 +69,8 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      width: "75%",
-                      alignSelf: "center",
+                      width: '75%',
+                      alignSelf: 'center',
                     },
                   ]}
                 >
@@ -93,22 +83,14 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
                   closeModal();
                 }}
               >
-                <PrimaryGradient
-                  styleProp={[styles.loginButton, layout.justifyCenter]}
-                >
+                <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                   <View style={[layout.display, layout.rowHCenter]}>
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      RATE US ON APP STORE 
+                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
+                      RATE US ON APP STORE
                     </Text>
                     <ImageVariant
                       testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5,top:-2 }}
+                      style={{ width: 16, height: 9, left: 5, top: -2 }}
                       source={rightArrow}
                       resizeMode="contain"
                     />
@@ -146,12 +128,12 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });
