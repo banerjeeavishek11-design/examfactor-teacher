@@ -19,8 +19,8 @@ import {
   ForgotPasswordSuccessfulScreen,
 } from '@/screens';
 import TopTabNavigator from './ReportsTopTabNavigator';
-import BottomTabNavigator from './BottomTabNavigator';
 import TabSideBarNavigator from './TabSideBarNavigator';
+import BottomTabNavigator from './BottomtabNavigator';
 
 const AuthorizedStack = () => {
   const Stack = createStackNavigator();

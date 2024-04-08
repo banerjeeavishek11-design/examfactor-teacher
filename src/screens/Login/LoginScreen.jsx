@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable indent */
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -65,11 +65,11 @@ const LoginScreen = () => {
           layout.paddingForFullScreen,
           isTablet
             ? {
-              justifyContent: 'center',
-              alignSelf: 'center',
-              alignItems: 'flex-start',
-              width: moderateScale(300),
-            }
+                justifyContent: 'center',
+                alignSelf: 'center',
+                alignItems: 'flex-start',
+                width: moderateScale(300),
+              }
             : null,
         ]}
       >
