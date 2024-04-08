@@ -24,30 +24,30 @@ const AppGuideScreen = ({ navigation }) => {
     buttonDetails: [
       {
         id: 1,
-        title: "What is NEO?",
+        title: 'What is NEO?',
         subTitle:
-          "The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock & 1 Diagnostic is already Live",
+          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock & 1 Diagnostic is already Live',
         isExpand: true,
       },
       {
         id: 2,
-        title: "What is ExamFactor?",
+        title: 'What is ExamFactor?',
         subTitle:
-          "Registration for the CUET 2024 is expected to begin in the first week of February 2024.",
+          'Registration for the CUET 2024 is expected to begin in the first week of February 2024.',
         isExpand: false,
       },
       {
         id: 3,
-        title: "Difference b/w Assessment v/s Practice?",
+        title: 'Difference b/w Assessment v/s Practice?',
         subTitle:
-          "The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live",
+          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
         isExpand: false,
       },
       {
         id: 4,
-        title: "How can i improve my exam preparedness?",
+        title: 'How can i improve my exam preparedness?',
         subTitle:
-          "The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live",
+          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
         isExpand: false,
       },
     ],
@@ -56,9 +56,7 @@ const AppGuideScreen = ({ navigation }) => {
     let obj = {
       ...allAccordian,
     };
-    let selectedAccordianIndex = obj.buttonDetails.findIndex(
-      (ele) => ele.id == id
-    );
+    let selectedAccordianIndex = obj.buttonDetails.findIndex((ele) => ele.id == id);
     obj.buttonDetails[selectedAccordianIndex].isExpand = !isExpand;
     setAllAccordian(obj);
   };
@@ -69,12 +67,7 @@ const AppGuideScreen = ({ navigation }) => {
         <StatusBar backgroundColor="#0D0D1B" barStyle="light-content" />
         <View style={[]}>
           <View
-            style={[
-              layout.row,
-              layout.justifyBetween,
-              layout.itemsCenter,
-              { display: "flex" },
-            ]}
+            style={[layout.row, layout.justifyBetween, layout.itemsCenter, { display: 'flex' }]}
           >
             <TouchableOpacity
               onPress={() => {
@@ -90,11 +83,7 @@ const AppGuideScreen = ({ navigation }) => {
                   resizeMode="contain"
                 />
                 <Text
-                  style={[
-                    fonts.size_16,
-                    fonts.bold,
-                    { color: colors.backButtonColor, left: 5 },
-                  ]}
+                  style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}
                 >
                   App Guide
                 </Text>
@@ -219,11 +208,11 @@ export default AppGuideScreen;
 const styles = StyleSheet.create({
   arrowView: {
     borderRadius: 16,
-    overflow: "hidden",
-    width: "100%",
-    height: "auto",
+    overflow: 'hidden',
+    width: '100%',
+    height: 'auto',
     borderWidth: 1,
-    padding: "4%",
-    marginTop: "3%",
+    padding: '4%',
+    marginTop: '3%',
   },
 });

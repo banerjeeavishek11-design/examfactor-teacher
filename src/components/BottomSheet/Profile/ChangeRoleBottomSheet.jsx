@@ -18,18 +18,18 @@ import ClassTeacher from "@/theme/assets/images/classteacher.png";
 import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const studentClass = [
-  { id: 1, class: "10-A" },
-  { id: 1, class: "10-B" },
-  { id: 1, class: "10-C" },
-  { id: 1, class: "10-D" },
-  { id: 1, class: "11-A" },
-  { id: 1, class: "11-B" },
-  { id: 1, class: "11-C" },
-  { id: 1, class: "11-D" },
-  { id: 1, class: "12-A" },
-  { id: 1, class: "12-B" },
-  { id: 1, class: "12-C" },
-  { id: 1, class: "12-D" },
+  { id: 1, class: '10-A' },
+  { id: 1, class: '10-B' },
+  { id: 1, class: '10-C' },
+  { id: 1, class: '10-D' },
+  { id: 1, class: '11-A' },
+  { id: 1, class: '11-B' },
+  { id: 1, class: '11-C' },
+  { id: 1, class: '11-D' },
+  { id: 1, class: '12-A' },
+  { id: 1, class: '12-B' },
+  { id: 1, class: '12-C' },
+  { id: 1, class: '12-D' },
 ];
 
 const ChangeRoleBottomSheet = (props) => {
@@ -65,11 +65,7 @@ const ChangeRoleBottomSheet = (props) => {
 
   return (
     <View style={styles.container}>
-      <Modal
-        visible={changeRoleBottomSheetVisible}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={changeRoleBottomSheetVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -79,11 +75,11 @@ const ChangeRoleBottomSheet = (props) => {
           >
             <TouchableOpacity
               onPress={handleSlideDown}
-              style={[{ position: "absolute", top: -35, left: "92%" }]}
+              style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: 'white' }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -96,11 +92,7 @@ const ChangeRoleBottomSheet = (props) => {
             </View>
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
               <Text
-                style={[
-                  fonts.size_20,
-                  fonts.bold,
-                  { color: colors.white, paddingBottom: "2%" },
-                ]}
+                style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}
               >
                 Select Your Role
               </Text>
@@ -108,11 +100,11 @@ const ChangeRoleBottomSheet = (props) => {
               <View>
                 <TouchableOpacity
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange("Teacher")}
+                  onPress={() => handleOptionChange('Teacher')}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === "Teacher"} />
+                    <RadioButton isActive={option === 'Teacher'} />
                   </View>
                   <ImageVariant
                     testID="brand-img"
@@ -125,11 +117,11 @@ const ChangeRoleBottomSheet = (props) => {
 
                 <TouchableOpacity
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange("Class Teacher")}
+                  onPress={() => handleOptionChange('Class Teacher')}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === "Class Teacher"} />
+                    <RadioButton isActive={option === 'Class Teacher'} />
                   </View>
                   <ImageVariant
                     testID="brand-img"
@@ -203,37 +195,37 @@ const ChangeRoleBottomSheet = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     height: 350,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "gray",
+    borderColor: 'gray',
   },
   center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
-    marginTop: "4%",
+    alignSelf: 'center',
+    marginTop: '4%',
   },
   line: {
-    position: "absolute",
-    top: "65%",
+    position: 'absolute',
+    top: '65%',
     left: 18,
     right: 18,
     borderBottomWidth: 1,
@@ -244,53 +236,53 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 11,
     borderRadius: 9,
-    alignItems: "center",
+    alignItems: 'center',
   },
   smallBtn: {
     height: 32,
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 20,
-    backgroundColor: "#22222F",
+    backgroundColor: '#22222F',
     borderRadius: 12,
     height: 52,
     marginTop: 8,
-    width: "100%",
+    width: '100%',
   },
   radioButtonText: {
     marginLeft: 15,
-    color: "#fff",
+    color: '#fff',
   },
   scrollContainer: {
     flex: 1,
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 20,
-    backgroundColor: "transparent", // Change if needed
+    backgroundColor: 'transparent', // Change if needed
   },
   footerButton: {
-    width: "48%",
+    width: '48%',
     height: 48,
     borderRadius: 8,
   },
   radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 20,
-    backgroundColor: "#22222F",
+    backgroundColor: '#22222F',
     borderRadius: 12,
     height: 52,
     marginTop: 5,
-    width: "100%",
+    width: '100%',
   },
 });
 

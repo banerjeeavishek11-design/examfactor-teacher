@@ -1,38 +1,33 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  ActivateScreen,
-  HomeScreen,
-  ReportsScreen,
-  SchoolWorkScreen,
-} from "@/screens";
-import { useTheme } from "@/theme";
-import HomeTab from "@/theme/assets/images/Hometab.png";
-import SchoolWorkTab from "@/theme/assets/images/Schoolworktab.png";
-import ReportsTab from "@/theme/assets/images/Reportstab.png";
-import ActivateTab from "@/theme/assets/images/Activatetab.png";
-import { ImageVariant } from "@/components/atoms";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ActivateScreen, HomeScreen, ReportsScreen, SchoolWorkScreen } from '@/screens';
+import { useTheme } from '@/theme';
+import HomeTab from '@/theme/assets/images/Hometab.png';
+import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
+import ReportsTab from '@/theme/assets/images/Reportstab.png';
+import ActivateTab from '@/theme/assets/images/Activatetab.png';
+import { ImageVariant } from '@/components/atoms';
 
 const Tab = createBottomTabNavigator();
 const S = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 72,
-    backgroundColor: "#1C1827",
-    alignItems: "center",
+    backgroundColor: '#1C1827',
+    alignItems: 'center',
     // borderTopColor:'red',
     // borderWidth:1
   },
   tabButton: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#1C1827",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1C1827',
     height: 50,
   },
-  activeIcon: { tintColor: "blue" },
-  activeLabel: { color: "red" },
+  activeIcon: { tintColor: 'blue' },
+  activeLabel: { color: 'red' },
 });
 
 const TabBar = (props) => {
@@ -40,9 +35,9 @@ const TabBar = (props) => {
   return (
     <View style={S.container}>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: "25%" }]}
+        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
         onPress={() => {
-          props.navigation.jumpTo("HomeTab");
+          props.navigation.jumpTo('HomeTab');
         }}
       >
         <ImageVariant
@@ -50,7 +45,7 @@ const TabBar = (props) => {
           style={{
             width: 30,
             height: 30,
-            tintColor: props.state.index === 0 ? "#fff" : "#77747D",
+            tintColor: props.state.index === 0 ? '#fff' : '#77747D',
           }}
           source={HomeTab}
           resizeMode="contain"
@@ -71,9 +66,9 @@ const TabBar = (props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: "25%" }]}
+        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
         onPress={() => {
-          props.navigation.jumpTo("SchoolWorkTab");
+          props.navigation.jumpTo('SchoolWorkTab');
         }}
       >
         <ImageVariant
@@ -81,7 +76,7 @@ const TabBar = (props) => {
           style={{
             width: 30,
             height: 30,
-            tintColor: props.state.index === 1 ? "#fff" : "#77747D",
+            tintColor: props.state.index === 1 ? '#fff' : '#77747D',
           }}
           source={SchoolWorkTab}
           resizeMode="contain"
@@ -102,9 +97,9 @@ const TabBar = (props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: "25%" }]}
+        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
         onPress={() => {
-          props.navigation.jumpTo("ReportsTab");
+          props.navigation.jumpTo('ReportsTab');
         }}
       >
         <ImageVariant
@@ -112,7 +107,7 @@ const TabBar = (props) => {
           style={{
             width: 30,
             height: 30,
-            tintColor: props.state.index === 2 ? "#fff" : "#77747D",
+            tintColor: props.state.index === 2 ? '#fff' : '#77747D',
           }}
           source={ReportsTab}
           resizeMode="contain"
@@ -122,8 +117,8 @@ const TabBar = (props) => {
             fonts.size_12,
             fonts.alignCenter,
             {
-              fontWeight: props.state.index === 2 ? "700" : "500",
-              color: props.state.index === 2 ? "#fff" : "#77747D",
+              fontWeight: props.state.index === 2 ? '700' : '500',
+              color: props.state.index === 2 ? '#fff' : '#77747D',
               lineHeight: 18,
             },
           ]}
@@ -133,9 +128,9 @@ const TabBar = (props) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: "25%" }]}
+        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
         onPress={() => {
-          props.navigation.jumpTo("ActivateTab");
+          props.navigation.jumpTo('ActivateTab');
         }}
       >
         <ImageVariant
@@ -143,7 +138,7 @@ const TabBar = (props) => {
           style={{
             width: 30,
             height: 30,
-            tintColor: props.state.index === 3 ? "#fff" : "#77747D",
+            tintColor: props.state.index === 3 ? '#fff' : '#77747D',
           }}
           source={ActivateTab}
           resizeMode="contain"
@@ -153,8 +148,8 @@ const TabBar = (props) => {
             fonts.size_12,
             fonts.alignCenter,
             {
-              fontWeight: props.state.index === 4 ? "700" : "500",
-              color: props.state.index === 3 ? "#fff" : "#77747D",
+              fontWeight: props.state.index === 4 ? '700' : '500',
+              color: props.state.index === 3 ? '#fff' : '#77747D',
               lineHeight: 18,
             },
           ]}

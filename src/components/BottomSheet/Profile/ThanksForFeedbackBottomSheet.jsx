@@ -29,7 +29,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: "absolute", top: -35, left: "98%" }}
+              style={{ position: 'absolute', top: -35, left: '98%' }}
             >
               <ImageVariant
                 testID="brand-img"
@@ -46,15 +46,11 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
                 <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ marginTop: "8%" }}>
+            <View style={{ marginTop: '8%' }}>
               <View style={[layout.justifyCenter, layout.itemsCenter]}>
-                <Image
-                  style={{ width: 80, height: 80 }}
-                  source={Feedback}
-                  resizeMode={"contain"}
-                />
+                <Image style={{ width: 80, height: 80 }} source={Feedback} resizeMode={'contain'} />
               </View>
-              <View style={{ width: "100%", alignSelf: "center" }}>
+              <View style={{ width: '100%', alignSelf: 'center' }}>
                 <Text
                   style={[
                     fonts.size_20,
@@ -62,7 +58,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      marginTop: "5%",
+                      marginTop: '5%',
                     },
                   ]}
                 >
@@ -72,8 +68,8 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal,openFrom }) => {
 
               <View
                 style={{
-                  width: "100%",
-                  marginTop: "3%",
+                  width: '100%',
+                  marginTop: '3%',
                 }}
               >
                 <Text
@@ -132,21 +128,21 @@ export default ThanksForFeedbackBottomSheet;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 1)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "#8F8F94",
+    borderColor: '#8F8F94',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   loginButton: {
     height: 48,

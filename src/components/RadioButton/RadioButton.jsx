@@ -3,16 +3,8 @@ import React from 'react';
 import { useTheme } from '@/theme';
 
 const RadioButton = ({ isActive }) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   return (
     <View style={[styles.outerStyle]}>
       <View
@@ -34,7 +26,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: 'white',
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',

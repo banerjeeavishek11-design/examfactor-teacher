@@ -17,18 +17,18 @@ import ClassSuccessfullySelectedBottomSheet from "./ClassSuccessfullySelectedBot
 import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
 
 const studentClass = [
-  { id: 1, class: "10-A" },
-  { id: 1, class: "10-B" },
-  { id: 1, class: "10-C" },
-  { id: 1, class: "10-D" },
-  { id: 1, class: "11-A" },
-  { id: 1, class: "11-B" },
-  { id: 1, class: "11-C" },
-  { id: 1, class: "11-D" },
-  { id: 1, class: "12-A" },
-  { id: 1, class: "12-B" },
-  { id: 1, class: "12-C" },
-  { id: 1, class: "12-D" },
+  { id: 1, class: '10-A' },
+  { id: 1, class: '10-B' },
+  { id: 1, class: '10-C' },
+  { id: 1, class: '10-D' },
+  { id: 1, class: '11-A' },
+  { id: 1, class: '11-B' },
+  { id: 1, class: '11-C' },
+  { id: 1, class: '11-D' },
+  { id: 1, class: '12-A' },
+  { id: 1, class: '12-B' },
+  { id: 1, class: '12-C' },
+  { id: 1, class: '12-D' },
 ];
 
 const ReferandearnBottomsheet = (props) => {
@@ -38,21 +38,11 @@ const ReferandearnBottomsheet = (props) => {
     setShowSelectedClass,
     showSelecTedClass,
   } = props;
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
-  const [option, setOption] = useState("first");
-  const [
-    openClassSuccessfullySelectedBottomSheet,
-    setOpenClassSuccessfullySelectedBottomSheet,
-  ] = useState(false);
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
+  const [option, setOption] = useState('first');
+  const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
+    useState(false);
 
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);
@@ -60,6 +50,7 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
+    console.log('op', op);
   };
 
   const handleApply = () => {
@@ -70,11 +61,7 @@ const ReferandearnBottomsheet = (props) => {
 
   return (
     <View style={styles.container}>
-      <Modal
-        visible={openSelectClassBottmSheet}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={openSelectClassBottmSheet} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -85,11 +72,11 @@ const ReferandearnBottomsheet = (props) => {
           >
             <TouchableOpacity
               onPress={handleSlideDown}
-              style={[{ position: "absolute", top: -35, left: "92%" }]}
+              style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: 'white' }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -102,17 +89,13 @@ const ReferandearnBottomsheet = (props) => {
             </View>
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
               <Text
-                style={[
-                  fonts.size_20,
-                  fonts.bold,
-                  { color: colors.white, paddingBottom: "2%" },
-                ]}
+                style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}
               >
                 Select Class
               </Text>
               <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: "5%" }}
+                contentContainerStyle={{ paddingBottom: '5%' }}
               >
                 {studentClass?.map((ele) => (
                   <TouchableOpacity
@@ -124,13 +107,7 @@ const ReferandearnBottomsheet = (props) => {
                     <View style={{ marginLeft: 10 }}>
                       <RadioButton isActive={option === ele.class} />
                     </View>
-                    <Text
-                      style={[
-                        styles.radioButtonText,
-                        fonts.size_14,
-                        fonts.fontWeignt_600,
-                      ]}
-                    >
+                    <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
                       {ele.class}
                     </Text>
                   </TouchableOpacity>
@@ -192,12 +169,8 @@ const ReferandearnBottomsheet = (props) => {
         </View>
       </Modal>
       <ClassSuccessfullySelectedBottomSheet
-        setOpenClassSuccessfullySelectedBottomSheet={
-          setOpenClassSuccessfullySelectedBottomSheet
-        }
-        openClassSuccessfullySelectedBottomSheet={
-          openClassSuccessfullySelectedBottomSheet
-        }
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
         showSelecTedClass={showSelecTedClass}
         openFrom={"SelectClassBottomSheet"}
       />
@@ -208,37 +181,37 @@ const ReferandearnBottomsheet = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     height: 550,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "gray",
+    borderColor: 'gray',
   },
   center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
-    marginTop: "4%",
+    alignSelf: 'center',
+    marginTop: '4%',
   },
   line: {
-    position: "absolute",
-    top: "65%",
+    position: 'absolute',
+    top: '65%',
     left: 18,
     right: 18,
     borderBottomWidth: 1,
@@ -249,41 +222,41 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 11,
     borderRadius: 9,
-    alignItems: "center",
+    alignItems: 'center',
   },
   smallBtn: {
     height: 32,
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 20,
-    backgroundColor: "#22222F",
+    backgroundColor: '#22222F',
     borderRadius: 12,
     height: 52,
     marginTop: 8,
-    width: "100%",
+    width: '100%',
   },
   radioButtonText: {
     marginLeft: 8,
-    color: "#fff",
+    color: '#fff',
   },
   scrollContainer: {
     flex: 1,
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 20,
-    backgroundColor: "transparent", // Change if needed
+    backgroundColor: 'transparent', // Change if needed
   },
   footerButton: {
-    width: "48%",
+    width: '48%',
     height: 48,
     borderRadius: 8,
   },

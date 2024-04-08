@@ -33,18 +33,18 @@ const SideBarAuthedScreen = (props) => {
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] =
     useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState("Teacher");
+  const [userRole, setUserRole] = useState('Teacher');
 
   const closeDrawer = () => {
     navigation.dispatch(DrawerActions.closeDrawer());
   };
 
   const openTermsAndCondition = () => {
-    Linking.openURL("https://www.examfactor.com/terms-and-conditions/");
+    Linking.openURL('https://www.examfactor.com/terms-and-conditions/');
   };
 
   const openPrivacyPolicy = () => {
-    Linking.openURL("https://www.examfactor.com/privacy-policy/");
+    Linking.openURL('https://www.examfactor.com/privacy-policy/');
   };
 
   const openRateUsModal = () => {
@@ -73,13 +73,7 @@ const SideBarAuthedScreen = (props) => {
               source={LeftArrow}
               resizeMode="contain"
             />
-            <Text
-              style={[
-                fonts.size_16,
-                fonts.bold,
-                { color: colors.backButtonColor, left: 5 },
-              ]}
-            >
+            <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
               Profile
             </Text>
           </View>

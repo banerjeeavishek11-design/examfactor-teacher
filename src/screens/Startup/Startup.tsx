@@ -18,12 +18,12 @@ function Startup({ navigation }: ApplicationScreenProps) {
 	const userName = storage.getString("username");
 	const { t } = useTranslation(['startup']);
 
-	const { isSuccess, isFetching, isError } = useQuery({
-		queryKey: ['startup'],
-		queryFn: () => {
-			return Promise.resolve(true);
-		},
-	});
+  const { isSuccess, isFetching, isError } = useQuery({
+    queryKey: ['startup'],
+    queryFn: () => {
+      return Promise.resolve(true);
+    },
+  });
 
 	useEffect(() => {
 	  if (userName) {

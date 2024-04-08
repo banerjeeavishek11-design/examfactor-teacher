@@ -15,16 +15,8 @@ import { ImageVariant } from "@/components/atoms";
 import SelectClassBottomSheet from "@/components/BottomSheet/Home/SelectClassBottomSheet";
 
 const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const productScrollRef = useRef(null);
@@ -32,11 +24,11 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
   const isTablet = screenWidth >= 400;
 
   const [subjects, setSubjects] = useState([
-    { id: 1, subjectName: "Physics", isChecked: true },
-    { id: 2, subjectName: "Chemistry", isChecked: false },
-    { id: 3, subjectName: "Mathematics", isChecked: false },
-    { id: 4, subjectName: "Bengali", isChecked: false },
-    { id: 5, subjectName: "English", isChecked: false },
+    { id: 1, subjectName: 'Physics', isChecked: true },
+    { id: 2, subjectName: 'Chemistry', isChecked: false },
+    { id: 3, subjectName: 'Mathematics', isChecked: false },
+    { id: 4, subjectName: 'Bengali', isChecked: false },
+    { id: 5, subjectName: 'English', isChecked: false },
   ]);
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] =
     useState(false);
@@ -78,7 +70,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
           //   layout.justifyBetween,
           layout.justifyBetween,
           layout.display,
-          { width: "100%" },
+          { width: '100%' },
         ]}
       >
         <View>
@@ -112,7 +104,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
         <View>
           <TouchableOpacity
             onPress={() => handleOpenDrawer()}
-            style={[layout.rowHCenter, layout.justifyBetween, { width: "10%" }]}
+            style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
           >
             <ImageVariant
               testID="brand-img"
@@ -143,7 +135,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
               style={[
                 styles.button,
                 {
-                  borderColor: ele.isChecked ? "#27D4FA" : "#22222F",
+                  borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
                   borderWidth: ele.isChecked ? 2 : 0,
                 },
               ]}
@@ -153,9 +145,7 @@ const Header = ({ goToCoinScreen, openCategoryBottomSheet, refresh }) => {
             >
               <Text
                 style={[
-                  ele.isChecked == true
-                    ? styles.activeButton
-                    : styles.buttonText,
+                  ele.isChecked == true ? styles.activeButton : styles.buttonText,
                   fonts.size_14,
                   fonts.bold,
                 ]}
@@ -180,37 +170,37 @@ export default Header;
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: "#E53777",
+    backgroundColor: '#E53777',
     borderRadius: 12,
     minWidth: 20,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    justifyContent: "center",
-    alignItems: "center",
-    top: "5%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: '5%',
     zIndex: 5,
-    position: "relative",
+    position: 'relative',
   },
   badgeText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "white",
+    fontWeight: '600',
+    color: 'white',
   },
   button: {
     height: 45,
     borderRadius: 12,
-    backgroundColor: "#22222F",
+    backgroundColor: '#22222F',
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 8,
-    marginTop: "3%",
+    marginTop: '3%',
   },
   activeButton: {
-    color: "#27D4FA",
+    color: '#27D4FA',
   },
   buttonText: {
-    color: "#7A7A82",
+    color: '#7A7A82',
   },
 });

@@ -8,17 +8,17 @@ import { useTheme } from '@/theme';
 import { isImageSourcePropType } from '@/types/guards/image';
 
 type Props = {
-	height?: DimensionValue;
-	width?: DimensionValue;
-	mode?: 'contain' | 'cover' | 'stretch' | 'repeat' | 'center';
+  height?: DimensionValue;
+  width?: DimensionValue;
+  mode?: 'contain' | 'cover' | 'stretch' | 'repeat' | 'center';
 };
 
 function Brand({ height, width, mode }: Props) {
-	const { layout } = useTheme();
+  const { layout } = useTheme();
 
-	if (!isImageSourcePropType(LogoLight) || !isImageSourcePropType(LogoDark)) {
-		throw new Error('Image source is not valid');
-	}
+  if (!isImageSourcePropType(LogoLight) || !isImageSourcePropType(LogoDark)) {
+    throw new Error('Image source is not valid');
+  }
 
 	return (
 		<View testID="brand-img-wrapper" style={{ height, width }}>
@@ -34,9 +34,9 @@ function Brand({ height, width, mode }: Props) {
 }
 
 Brand.defaultProps = {
-	height: 200,
-	width: 200,
-	mode: 'contain',
+  height: 200,
+  width: 200,
+  mode: 'contain',
 };
 
 export default Brand;

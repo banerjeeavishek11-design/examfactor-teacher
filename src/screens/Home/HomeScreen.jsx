@@ -37,16 +37,8 @@ const xAxisTitle = "Achievable Score (%)";
 const yAxisTitle = "No. of students";
 
 const HomeScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
@@ -66,8 +58,7 @@ const HomeScreen = () => {
 
   //Practice Duration Modal Handling
   const [practiceDurationValue, setPracticeDurationValue] = useState(null);
-  const [practiceDurationModalVisible, setPracticeDurationModalVisible] =
-    useState(false);
+  const [practiceDurationModalVisible, setPracticeDurationModalVisible] = useState(false);
   const closePracticeDurationModal = () => {
     setPracticeDurationModalVisible(false);
   };
@@ -81,35 +72,16 @@ const HomeScreen = () => {
       <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
         <Header />
       </View>
-      <ScrollView
-        contentContainerStyle={[
-          layout.paddingForFullScreen,
-          { paddingTop: "2%" },
-        ]}
-      >
-        <View
-          style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
-        >
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.bold,
-              { color: colors.white, opacity: 0.4 },
-            ]}
-          >
+      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
+        <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             CLASS PREPAREDNESS
           </Text>
           <TouchableOpacity
             style={[layout.display, layout.rowHCenter]}
-            onPress={() => navigation.navigate("SubjectDetailsScreen")}
+            onPress={() => navigation.navigate('SubjectDetailsScreen')}
           >
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.termsLinkColor },
-              ]}
-            >
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
               SEE DETAILS
             </Text>
             <ImageVariant
@@ -131,9 +103,9 @@ const HomeScreen = () => {
             layout.paddingForCard,
             {
               backgroundColor: colors.cardBackgroundColor,
-              height: "auto",
+              height: 'auto',
               borderRadius: 12,
-              marginTop: "4%",
+              marginTop: '4%',
             },
           ]}
         >
@@ -142,7 +114,7 @@ const HomeScreen = () => {
               fonts.size_20,
               fonts.fontWeight_small,
               fonts.alignCenter,
-              { color: colors.white, marginTop: "3%" },
+              { color: colors.white, marginTop: '3%' },
             ]}
           >
             Physics
@@ -150,10 +122,10 @@ const HomeScreen = () => {
           <View style={{ marginTop: "1%", alignItems: "center" }}>
             <Concentrix scorePercentage={20} />
           </View>
-          <View style={[layout.itemsCenter, { marginTop: "-20%" }]}>
+          <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
             <Divider
               style={{
-                width: "100%",
+                width: '100%',
                 backgroundColor: colors.lineBackgroundColor,
               }}
             />
@@ -168,20 +140,9 @@ const HomeScreen = () => {
             PRACTICE
           </Text>
           <View
-            style={[
-              layout.display,
-              layout.rowHCenter,
-              layout.justifyBetween,
-              { marginTop: "5%" },
-            ]}
+            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
           >
-            <Text
-              style={[
-                fonts.size_12,
-                fonts.fontWeight_small,
-                { color: colors.white },
-              ]}
-            >
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               Home work
             </Text>
             <Text
@@ -194,24 +155,13 @@ const HomeScreen = () => {
               {`${homeworkProgress * 100}% Complete`}
             </Text>
           </View>
-          <View style={{ marginTop: "3%" }}>
-            <Progressbar progress={homeworkProgress} color={"#3DD598"} />
+          <View style={{ marginTop: '3%' }}>
+            <Progressbar progress={homeworkProgress} color={'#3DD598'} />
           </View>
           <View
-            style={[
-              layout.display,
-              layout.rowHCenter,
-              layout.justifyBetween,
-              { marginTop: "5%" },
-            ]}
+            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
           >
-            <Text
-              style={[
-                fonts.size_12,
-                fonts.fontWeight_small,
-                { color: colors.white },
-              ]}
-            >
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               Diagnostic
             </Text>
             <Text
@@ -224,8 +174,8 @@ const HomeScreen = () => {
               {`${diagnosticProgress * 100}% Complete`}
             </Text>
           </View>
-          <View style={{ marginTop: "3%" }}>
-            <Progressbar progress={diagnosticProgress} color={"#BBA041"} />
+          <View style={{ marginTop: '3%' }}>
+            <Progressbar progress={diagnosticProgress} color={'#BBA041'} />
           </View>
         </View>
         {/* <View
@@ -236,7 +186,7 @@ const HomeScreen = () => {
               backgroundColor: colors.cardBackgroundColor,
               height: 350,
               borderRadius: 12,
-              marginTop: "4%",
+              marginTop: '4%',
             },
           ]}
         ></View> */}
@@ -251,20 +201,9 @@ const HomeScreen = () => {
         />
         {/* <BarChartsCarousel /> */}
         <View
-          style={[
-            layout.display,
-            layout.rowHCenter,
-            layout.justifyBetween,
-            { marginTop: "10%" },
-          ]}
+          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.bold,
-              { color: colors.white, opacity: 0.4 },
-            ]}
-          >
+          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             STUDENT PROGRESS
           </Text>
         </View>
@@ -274,7 +213,7 @@ const HomeScreen = () => {
           contentContainerStyle={[
             layout.display,
             layout.rowHCenter,
-            { marginRight: 5, marginTop: "3%" },
+            { marginRight: 5, marginTop: '3%' },
           ]}
         >
           <TouchableOpacity
@@ -289,8 +228,7 @@ const HomeScreen = () => {
               {
                 backgroundColor: colors.bottomTabBackground,
                 borderWidth: 1,
-                borderColor:
-                  sortByValue !== null ? colors.termsLinkColor : null,
+                borderColor: sortByValue !== null ? colors.termsLinkColor : null,
                 width: 72,
                 height: 28,
                 borderRadius: 4,
@@ -337,8 +275,7 @@ const HomeScreen = () => {
               {
                 backgroundColor: colors.bottomTabBackground,
                 borderWidth: 1,
-                borderColor:
-                  practiceDurationValue !== null ? colors.termsLinkColor : null,
+                borderColor: practiceDurationValue !== null ? colors.termsLinkColor : null,
                 width: 169,
                 height: 28,
                 borderRadius: 4,
@@ -448,8 +385,8 @@ const HomeScreen = () => {
 
             {
               backgroundColor: colors.cardBackgroundColor,
-              height: "auto",
-              marginTop: "4%",
+              height: 'auto',
+              marginTop: '4%',
               borderRadius: 14,
             },
           ]}
@@ -482,14 +419,12 @@ const HomeScreen = () => {
               source={Line}
               resizeMode="contain"
             />
-            <View style={{ width: "65%" }}>
-              <Text
-                style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-              >
+            <View style={{ width: '65%' }}>
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                 Shashank Kumar
               </Text>
               <View style={[layout.display, layout.rowHCenter]}>
-                <View style={{ width: "30%" }}>
+                <View style={{ width: '30%' }}>
                   <Text
                     style={[
                       fonts.size_10,
@@ -500,24 +435,18 @@ const HomeScreen = () => {
                     Home Work
                   </Text>
                 </View>
-                <View style={{ width: "50%" }}>
-                  <Progressbar progress={0.5} color={"#3DD598"} />
+                <View style={{ width: '50%' }}>
+                  <Progressbar progress={0.5} color={'#3DD598'} />
                 </View>
-                <View style={{ width: "20%" }}>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.bold,
-                      { color: colors.white, left: 5 },
-                    ]}
-                  >
+                <View style={{ width: '20%' }}>
+                  <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                     60%
                   </Text>
                 </View>
               </View>
 
               <View style={[layout.display, layout.rowHCenter]}>
-                <View style={{ width: "30%" }}>
+                <View style={{ width: '30%' }}>
                   <Text
                     style={[
                       fonts.size_10,
@@ -528,23 +457,17 @@ const HomeScreen = () => {
                     Diagnostic
                   </Text>
                 </View>
-                <View style={{ width: "50%" }}>
-                  <Progressbar progress={0.3} color={"#FF575F"} />
+                <View style={{ width: '50%' }}>
+                  <Progressbar progress={0.3} color={'#FF575F'} />
                 </View>
-                <View style={{ width: "20%" }}>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.bold,
-                      { color: colors.white, left: 5 },
-                    ]}
-                  >
+                <View style={{ width: '20%' }}>
+                  <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                     27%
                   </Text>
                 </View>
               </View>
             </View>
-            <View style={{ width: "10%" }}>
+            <View style={{ width: '10%' }}>
               <TouchableOpacity onPress={toggleContent}>
                 {showContent ? (
                   <Image
@@ -566,8 +489,8 @@ const HomeScreen = () => {
             <>
               <Divider
                 style={{
-                  marginTop: "2%",
-                  width: "100%",
+                  marginTop: '2%',
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -576,17 +499,11 @@ const HomeScreen = () => {
                   layout.display,
                   layout.rowHCenter,
                   layout.justifyBetween,
-                  { marginTop: "2%" },
+                  { marginTop: '2%' },
                 ]}
               >
-                <View style={{ width: "35%" }}>
-                  <Text
-                    style={[
-                      fonts.size_14,
-                      fonts.fontWeignt_600,
-                      { color: colors.white },
-                    ]}
-                  >
+                <View style={{ width: '35%' }}>
+                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     8 days ago
                   </Text>
                   <Text
@@ -599,14 +516,8 @@ const HomeScreen = () => {
                     Last practice
                   </Text>
                 </View>
-                <View style={{ width: "45%" }}>
-                  <Text
-                    style={[
-                      fonts.size_14,
-                      fonts.fontWeignt_600,
-                      { color: colors.white },
-                    ]}
-                  >
+                <View style={{ width: '45%' }}>
+                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     55 Min
                   </Text>
                   <View style={[layout.display, layout.rowHCenter]}>
@@ -624,7 +535,7 @@ const HomeScreen = () => {
                       style={{
                         width: 10,
                         height: 10,
-                        tintColor: "#A9A9AD",
+                        tintColor: '#A9A9AD',
                         left: 6,
                       }}
                       source={Info}
@@ -632,14 +543,8 @@ const HomeScreen = () => {
                     />
                   </View>
                 </View>
-                <View style={{ width: "25%" }}>
-                  <Text
-                    style={[
-                      fonts.size_14,
-                      fonts.fontWeignt_600,
-                      { color: colors.white },
-                    ]}
-                  >
+                <View style={{ width: '25%' }}>
+                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     75%
                   </Text>
                   <Text
@@ -666,7 +571,7 @@ const HomeScreen = () => {
             {
               backgroundColor: colors.cardBackgroundColor,
               height: 92,
-              marginTop: "4%",
+              marginTop: '4%',
               borderRadius: 14,
             },
           ]}
@@ -702,67 +607,45 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "65%" }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-              Rahul Gupta
-            </Text>
+          <View style={{ width: '65%' }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Rahul Gupta</Text>
             <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: "30%" }}>
+              <View style={{ width: '30%' }}>
                 <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.fontWeight_small,
-                    { color: colors.backButtonColor },
-                  ]}
+                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
                 >
                   Home Work
                 </Text>
               </View>
-              <View style={{ width: "50%" }}>
-                <Progressbar progress={0} color={"#3DD598"} />
+              <View style={{ width: '50%' }}>
+                <Progressbar progress={0} color={'#3DD598'} />
               </View>
-              <View style={{ width: "20%" }}>
-                <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.bold,
-                    { color: colors.white, left: 5 },
-                  ]}
-                >
+              <View style={{ width: '20%' }}>
+                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                   0%
                 </Text>
               </View>
             </View>
 
             <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: "30%" }}>
+              <View style={{ width: '30%' }}>
                 <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.fontWeight_small,
-                    { color: colors.backButtonColor },
-                  ]}
+                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
                 >
                   Diagnostic
                 </Text>
               </View>
-              <View style={{ width: "50%" }}>
-                <Progressbar progress={0} color={"#3DD598"} />
+              <View style={{ width: '50%' }}>
+                <Progressbar progress={0} color={'#3DD598'} />
               </View>
-              <View style={{ width: "20%" }}>
-                <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.bold,
-                    { color: colors.white, left: 5 },
-                  ]}
-                >
+              <View style={{ width: '20%' }}>
+                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                   0%
                 </Text>
               </View>
             </View>
           </View>
-          <View style={{ width: "10%" }}>
+          <View style={{ width: '10%' }}>
             <TouchableOpacity>
               <ImageVariant
                 testID="brand-img"
@@ -787,7 +670,7 @@ const HomeScreen = () => {
             {
               backgroundColor: colors.cardBackgroundColor,
               height: 92,
-              marginTop: "4%",
+              marginTop: '4%',
               borderRadius: 14,
             },
           ]}
@@ -817,67 +700,45 @@ const HomeScreen = () => {
             source={Line}
             resizeMode="contain"
           />
-          <View style={{ width: "65%" }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-              Utkarsh Sharma
-            </Text>
+          <View style={{ width: '65%' }}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Utkarsh Sharma</Text>
             <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: "30%" }}>
+              <View style={{ width: '30%' }}>
                 <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.fontWeight_small,
-                    { color: colors.backButtonColor },
-                  ]}
+                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
                 >
                   Home Work
                 </Text>
               </View>
-              <View style={{ width: "50%" }}>
-                <Progressbar progress={0.7} color={"#FFAB48"} />
+              <View style={{ width: '50%' }}>
+                <Progressbar progress={0.7} color={'#FFAB48'} />
               </View>
-              <View style={{ width: "20%" }}>
-                <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.bold,
-                    { color: colors.white, left: 5 },
-                  ]}
-                >
+              <View style={{ width: '20%' }}>
+                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                   45%
                 </Text>
               </View>
             </View>
 
             <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: "30%" }}>
+              <View style={{ width: '30%' }}>
                 <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.fontWeight_small,
-                    { color: colors.backButtonColor },
-                  ]}
+                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
                 >
                   Diagnostic
                 </Text>
               </View>
-              <View style={{ width: "50%" }}>
-                <Progressbar progress={0.6} color={"#3DD598"} />
+              <View style={{ width: '50%' }}>
+                <Progressbar progress={0.6} color={'#3DD598'} />
               </View>
-              <View style={{ width: "20%" }}>
-                <Text
-                  style={[
-                    fonts.size_10,
-                    fonts.bold,
-                    { color: colors.white, left: 5 },
-                  ]}
-                >
+              <View style={{ width: '20%' }}>
+                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
                   60%
                 </Text>
               </View>
             </View>
           </View>
-          <View style={{ width: "10%" }}>
+          <View style={{ width: '10%' }}>
             <TouchableOpacity>
               <ImageVariant
                 testID="brand-img"

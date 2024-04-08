@@ -8,32 +8,12 @@ import { ImageVariant } from "@/components/atoms";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
 const ForgotPasswordSuccessfulScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   return (
-    <View
-      style={[
-        backgrounds.screenBackgroundColor,
-        layout.paddingForFullScreen,
-        layout.flex_1,
-      ]}
-    >
-      <View
-        style={[
-          layout.itemsCenter,
-          layout.flex_1,
-          { justifyContent: "flex-end" },
-        ]}
-      >
+    <View style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen, layout.flex_1]}>
+      <View style={[layout.itemsCenter, layout.flex_1, { justifyContent: 'flex-end' }]}>
         <ImageVariant
           testID="brand-img"
           style={{ width: 80, height: 80 }}

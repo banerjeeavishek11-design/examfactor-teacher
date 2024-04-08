@@ -16,16 +16,8 @@ import { Controller, useForm } from "react-hook-form";
 import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
 
 const ForgotPasswordScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   const {
     control,
@@ -156,9 +148,9 @@ export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
   mobileNumberInput: {
-    width: "100%",
+    width: '100%',
     height: 48,
-    color: "rgba(255, 255, 255, 0.3)",
+    color: 'rgba(255, 255, 255, 0.3)',
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 10,

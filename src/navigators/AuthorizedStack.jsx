@@ -34,10 +34,10 @@ const AuthorizedStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        drawerPosition: "right",
+        drawerPosition: 'right',
         drawerStyle: {
           // width: Dimensions.get('window').width * 0.9,
-          width: Dimensions.get("window").width,
+          width: Dimensions.get('window').width,
         },
         swipeEnabled: false,
       }}
@@ -66,7 +66,7 @@ const AuthorizedStack = () => {
         name="TopTabNavigator"
         component={TopTabNavigator}
         options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerLabelStyle: { fontWeight: 'bold', fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
@@ -74,7 +74,7 @@ const AuthorizedStack = () => {
         name="ProfileDetailsScreen"
         component={ProfileDetailsScreen}
         options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerLabelStyle: { fontWeight: 'bold', fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
@@ -102,7 +102,7 @@ const AuthorizedStack = () => {
         name="AppGuideScreen"
         component={AppGuideScreen}
         options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerLabelStyle: { fontWeight: 'bold', fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
@@ -110,7 +110,7 @@ const AuthorizedStack = () => {
         name="SupportScreen"
         component={SupportScreen}
         options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerLabelStyle: { fontWeight: 'bold', fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />
@@ -134,7 +134,7 @@ const AuthorizedStack = () => {
         name="NewPasswordStatusScreen"
         component={NewPasswordStatusScreen}
         options={{
-          drawerLabelStyle: { fontWeight: "bold", fontSize: 16 },
+          drawerLabelStyle: { fontWeight: 'bold', fontSize: 16 },
           drawerContentContainerStyle: { paddingVertical: 20 },
         }}
       />

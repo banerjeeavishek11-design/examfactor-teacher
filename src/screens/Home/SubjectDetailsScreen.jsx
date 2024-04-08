@@ -56,16 +56,8 @@ const chapters = [
 ];
 
 const SubjectDetailsScreen = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   const [searchChapterName, setSearchChapterName] = useState([]);
 
@@ -109,13 +101,7 @@ const SubjectDetailsScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
+          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
             Physics
           </Text>
         </TouchableOpacity>
