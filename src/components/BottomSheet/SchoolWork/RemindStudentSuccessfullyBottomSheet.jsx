@@ -1,37 +1,23 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import React, { useEffect } from "react";
-import { useTheme } from "@/theme";
-import Feedback from "@/theme/assets/images/forgotsuccess.png";
-import { ImageVariant } from "../../atoms";
-import rightArrow from "@/theme/assets/images/rightarrow.png";
-import Cross from "@/theme/assets/images/cross.png";
-import PrimaryGradient from "../../template/LinearGradient/PrimaryGradient";
+import { StyleSheet, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { useTheme } from '@/theme';
+import Feedback from '@/theme/assets/images/forgotsuccess.png';
+import { ImageVariant } from '../../atoms';
+import Cross from '@/theme/assets/images/cross.png';
 
 const RemindStudentSuccessfullyBottomSheet = (props) => {
-  const { setOpenRemindStudentSuccessfully, openRemindStudentSuccessfully } =
-    props;
+  const { setOpenRemindStudentSuccessfully, openRemindStudentSuccessfully } = props;
   const { fonts, colors, layout } = useTheme();
 
   useEffect(() => {
     setTimeout(() => {
       setOpenRemindStudentSuccessfully(false);
-    },5000);
+    }, 5000);
   }, [openRemindStudentSuccessfully]);
 
   return (
     <View>
-      <Modal
-        visible={openRemindStudentSuccessfully}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={openRemindStudentSuccessfully} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View
             style={[
@@ -42,11 +28,11 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
           >
             <TouchableOpacity
               onPress={() => setOpenRemindStudentSuccessfully(false)}
-              style={{ position: "absolute", top: -35, left: "98%" }}
+              style={{ position: 'absolute', top: -35, left: '98%' }}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -56,18 +42,14 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
                 style={styles.slideIndicator}
                 onPress={() => setOpenRemindStudentSuccessfully(false)}
               >
-                <Text style={[fonts.size_18, { color: "white" }]}>-</Text>
+                <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ marginTop: "8%" }}>
+            <View style={{ marginTop: '8%' }}>
               <View style={[layout.justifyCenter, layout.itemsCenter]}>
-                <Image
-                  style={{ width: 80, height: 80 }}
-                  source={Feedback}
-                  resizeMode={"contain"}
-                />
+                <Image style={{ width: 80, height: 80 }} source={Feedback} resizeMode={'contain'} />
               </View>
-              <View style={{ width: "100%", alignSelf: "center" }}>
+              <View style={{ width: '100%', alignSelf: 'center' }}>
                 <Text
                   style={[
                     fonts.size_16,
@@ -75,7 +57,7 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      marginTop: "5%",
+                      marginTop: '5%',
                     },
                   ]}
                 >
@@ -85,8 +67,8 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
 
               <View
                 style={{
-                  width: "100%",
-                  marginTop: "3%",
+                  width: '100%',
+                  marginTop: '3%',
                 }}
               >
                 <Text
@@ -96,8 +78,8 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
                     fonts.alignCenter,
                     {
                       color: colors.white,
-                      width: "75%",
-                      alignSelf: "center",
+                      width: '75%',
+                      alignSelf: 'center',
                       opacity: 0.6,
                     },
                   ]}
@@ -118,30 +100,30 @@ export default RemindStudentSuccessfullyBottomSheet;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 1)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 1)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "#8F8F94",
+    borderColor: '#8F8F94',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
 });

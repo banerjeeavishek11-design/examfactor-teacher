@@ -338,7 +338,8 @@ const HomeScreen = () => {
           </Text>
         </View> */}
 
-        <View
+        <TouchableOpacity
+          onPress={toggleContent}
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -418,7 +419,7 @@ const HomeScreen = () => {
               </View>
             </View>
             <View style={{ width: '10%' }}>
-              <TouchableOpacity onPress={toggleContent}>
+              <TouchableOpacity>
                 {showContent ? (
                   <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
                 ) : (
@@ -486,9 +487,9 @@ const HomeScreen = () => {
               </View>
             </>
           )}
-        </View>
+        </TouchableOpacity>
 
-        <View
+        <TouchableOpacity
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -571,9 +572,9 @@ const HomeScreen = () => {
               />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
 
-        <View
+        <TouchableOpacity
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -656,7 +657,7 @@ const HomeScreen = () => {
               />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
       <SortbyBottomSheet
         visible={sortbyModalVisible}

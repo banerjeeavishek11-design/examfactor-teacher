@@ -1,21 +1,12 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "../../atoms";
-import Cross from "@/theme/assets/images/cross.png";
-import Success from "@/theme/assets/images/forgotsuccess.png";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '../../atoms';
+import Cross from '@/theme/assets/images/cross.png';
+import Success from '@/theme/assets/images/forgotsuccess.png';
 
 const ClassSuccessfullySelectedBottomSheet = (props) => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, layout, fonts } = useTheme();
   const {
     setOpenClassSuccessfullySelectedBottomSheet,
     openClassSuccessfullySelectedBottomSheet,
@@ -44,11 +35,11 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
           >
             <TouchableOpacity
               onPress={handleSlideDown}
-              style={[{ position: "absolute", top: -30, left: "92%" }]}
+              style={[{ position: 'absolute', top: -30, left: '92%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -69,14 +60,14 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
             >
               <ImageVariant
                 testID="brand-img"
-                style={[{ width: 80, height: 80, marginTop: "5%" }]}
+                style={[{ width: 80, height: 80, marginTop: '5%' }]}
                 source={Success}
                 resizeMode="contain"
               />
 
-              {openFrom === "SelectClassBottomSheet" ? (
+              {openFrom === 'SelectClassBottomSheet' ? (
                 <>
-                  <View style={{ width: "50%", marginTop: "3%" }}>
+                  <View style={{ width: '50%', marginTop: '3%' }}>
                     <Text
                       style={[
                         fonts.size_16,
@@ -88,7 +79,7 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                       Class successfully Selected!
                     </Text>
                   </View>
-                  <View style={{ width: "50%", marginTop: "3%" }}>
+                  <View style={{ width: '50%', marginTop: '3%' }}>
                     <Text
                       style={[
                         fonts.size_14,
@@ -102,50 +93,54 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                   </View>
                 </>
               ) : null}
-              {
-                openFrom === "ActivateHomeWorkConfirmationBottomTab" ? (
-                  <View style={{ width: "90%", marginTop: "3%" }}>
-                    <Text
-                      style={[
-                        fonts.size_18,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        { color: colors.white,marginTop:"4%" },
-                      ]}
-                    >
-                      Topic activated Successfully!
-                    </Text>
-                    <Text style={[
-                        fonts.size_14,
-                        fonts.fontWeight_small,
-                        fonts.alignCenter,
-                        { color: colors.gray200,marginTop:"2%" },
-                      ]}>Notification has been sent to all students.</Text>
-                  </View>
-                ) : null
-              }
-              {
-                openFrom === "ActivateDiagnosticConfirmationBottomSheet" ? (
-                  <View style={{ width: "90%", marginTop: "3%" }}>
+              {openFrom === 'ActivateHomeWorkConfirmationBottomTab' ? (
+                <View style={{ width: '90%', marginTop: '3%' }}>
                   <Text
                     style={[
                       fonts.size_18,
                       fonts.bold,
                       fonts.alignCenter,
-                      { color: colors.white,marginTop:"4%" },
+                      { color: colors.white, marginTop: '4%' },
+                    ]}
+                  >
+                    Topic activated Successfully!
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.gray200, marginTop: '2%' },
+                    ]}
+                  >
+                    Notification has been sent to all students.
+                  </Text>
+                </View>
+              ) : null}
+              {openFrom === 'ActivateDiagnosticConfirmationBottomSheet' ? (
+                <View style={{ width: '90%', marginTop: '3%' }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: '4%' },
                     ]}
                   >
                     Chapter activated Successfully!
                   </Text>
-                  <Text style={[
+                  <Text
+                    style={[
                       fonts.size_14,
                       fonts.fontWeight_small,
                       fonts.alignCenter,
-                      { color: colors.gray200,marginTop:"2%" },
-                    ]}>Notification has been sent to all students.</Text>
+                      { color: colors.gray200, marginTop: '2%' },
+                    ]}
+                  >
+                    Notification has been sent to all students.
+                  </Text>
                 </View>
-                ) : null
-              }
+              ) : null}
             </View>
           </View>
         </View>
@@ -159,32 +154,32 @@ export default ClassSuccessfullySelectedBottomSheet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     height: 300,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "gray",
+    borderColor: 'gray',
   },
   center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
-    marginTop: "4%",
+    alignSelf: 'center',
+    marginTop: '4%',
   },
 });

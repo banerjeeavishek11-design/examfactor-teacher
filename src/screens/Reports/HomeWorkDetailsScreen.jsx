@@ -1,85 +1,79 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { SafeScreen } from "@/components/template";
-import { useTheme } from "@/theme";
-import { useRoute } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import UpArrow from "@/theme/assets/images/uparrow.png";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeScreen } from '@/components/template';
+import { useTheme } from '@/theme';
+import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import UpArrow from '@/theme/assets/images/uparrow.png';
+import DownArrow from '@/theme/assets/images/Downarrow.png';
+import Star from '@/theme/assets/images/Star.png';
 
 const chapterDetails = [
   {
-    id: "C1",
-    chapterName: "Electric Current",
+    id: 'C1',
+    chapterName: 'Electric Current',
     strongArea: 4,
     weakArea: 3,
     topic: [
       {
-        topicName: "T1: Introduction to Electric Field",
+        topicName: 'T1: Introduction to Electric Field',
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
-          "Combination of cells",
+          { name: 'Drift of electrons & origin of resistance', important: true },
+          { name: 'Electric current and voltage', important: true },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: 'Combination of cells', important: false },
         ],
       },
       {
-        topicName: "T2: Electric Field",
+        topicName: 'T2: Electric Field',
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
+          { name: 'Drift of electrons & origin of resistance', important: true },
+          { name: 'Electric current and voltage', important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
         ],
       },
     ],
   },
   {
-    id: "C2",
-    chapterName: "Electric Field",
+    id: 'C2',
+    chapterName: 'Electric Field',
     strongArea: 4,
     weakArea: 3,
     topic: [
       {
-        topic1: "T1: Introduction to Electric Field",
+        topic1: 'T1: Introduction to Electric Field',
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
-          "Combination of cells",
+          { name: 'Drift of electrons & origin of resistance', important: true },
+          { name: 'Electric current and voltage', important: true },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: 'Combination of cells', important: false },
         ],
       },
       {
-        topic2: "T2: Electric Field",
+        topic2: 'T2: Electric Field',
         subtopic: [
-          "Drift of electrons & origin of resistance",
-          "Electric current and voltage",
-          "Resistivity, and Ohm's law",
-          "Resistivity, and Ohm's law",
+          { name: 'Drift of electrons & origin of resistance', important: true },
+          { name: 'Electric current and voltage', important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
+          { name: "Resistivity, and Ohm's law", important: false },
         ],
       },
     ],
   },
   {
-    id: "C3",
-    chapterName: "Electric Current",
+    id: 'C3',
+    chapterName: 'Electric Current',
     strongArea: 4,
     weakArea: 3,
   },
   {
-    id: "C4",
-    chapterName: "Electric Current",
+    id: 'C4',
+    chapterName: 'Electric Current',
     strongArea: 4,
     weakArea: 3,
   },
@@ -103,9 +97,9 @@ const HomeWorkDetailsScreen = () => {
     <SafeScreen>
       <View style={[layout.fullWidth, layout.paddingForFullScreen]}>
         <TouchableOpacity
-          style={[layout.display, layout.rowHCenter,{paddingBottom:'1%'}]}
+          style={[layout.display, layout.rowHCenter, { paddingBottom: '1%' }]}
           onPress={() =>
-            navigation.navigate("StudentWiseReportScreen", {
+            navigation.navigate('StudentWiseReportScreen', {
               studentDetails: studentDetails,
             })
           }
@@ -121,60 +115,43 @@ const HomeWorkDetailsScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
+          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
             Chapter Covered
           </Text>
         </TouchableOpacity>
-        <ScrollView contentContainerStyle={{paddingBottom:'15%'}}>
+        <ScrollView contentContainerStyle={{ paddingBottom: '15%' }}>
           {chapterDetails?.map((ele) => {
             return (
-              <View
+              <TouchableOpacity
+                onPress={() => toggleContent(ele.id)}
                 key={ele.id}
                 style={[
                   layout.fullWidth,
                   layout.paddingForCard,
                   {
                     backgroundColor: colors.cardBackgroundColor,
-                    height: expandedCards[ele.id] ? "auto" : 78,
+                    height: expandedCards[ele.id] ? 'auto' : 78,
                     borderRadius: 16,
-                    marginTop: "3%",
+                    marginTop: '3%',
                   },
                 ]}
               >
-                <View
-                  style={[
-                    layout.display,
-                    layout.rowHCenter,
-                    layout.justifyBetween,
-                  ]}
-                >
+                <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                   <View>
-                    <Text
-                      style={[
-                        fonts.size_14,
-                        fonts.bold,
-                        { color: colors.white },
-                      ]}
-                    >
+                    <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                       {ele.id}: {ele.chapterName}
                     </Text>
                     <Text
                       style={[
                         fonts.size_12,
                         fonts.fontWeight_small,
-                        { color: "#FFAB48" },
-                        { marginTop: "2%" },
+                        { color: '#FFAB48' },
+                        { marginTop: '2%' },
                       ]}
                     >{`${ele.strongArea} strong & ${ele.weakArea} weak areas indentified`}</Text>
                   </View>
-                  <View style={{ width: "5%" }}>
-                    <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                  <View style={{ width: '5%' }}>
+                    <TouchableOpacity>
                       {expandedCards[ele.id] ? (
                         <Image
                           style={{ width: 12, height: 8 }}
@@ -193,41 +170,44 @@ const HomeWorkDetailsScreen = () => {
                 </View>
                 {expandedCards[ele.id] ? (
                   <>
-                    {ele?.topic?.map((topic) => {
+                    {ele?.topic?.map((topic, i) => {
                       return (
                         <View
+                          key={i}
                           style={[
                             layout.fullWidth,
                             layout.paddingForCard,
                             {
-                              backgroundColor:
-                                colors.bottomSheetBackgroundColor,
-                              height: "auto",
+                              backgroundColor: colors.bottomSheetBackgroundColor,
+                              height: 'auto',
                               borderRadius: 14,
-                              marginTop: "4%",
+                              marginTop: '4%',
                             },
                           ]}
                         >
                           <Text
                             style={[
-                              fonts.size_14,
+                              fonts.size_16,
                               fonts.fontWeight_small,
-                              { color: colors.white },
+                              { color: colors.white, marginBottom: '2%' },
                             ]}
                           >
                             {topic.topicName}
                           </Text>
-                          {topic.subtopic.map((subtopic) => {
+                          {topic.subtopic.map((subtopic, i) => {
                             return (
-                              <Text
-                                style={[
-                                  fonts.size_12,
-                                  fonts.fontWeight_small,
-                                  { color: colors.backButtonColor },
-                                ]}
-                              >
-                                {subtopic}
-                              </Text>
+                              <View key={i} style={[layout.row, layout.itemsCenter, { gap: 5 }]}>
+                                <Text
+                                  style={[
+                                    fonts.size_13,
+                                    fonts.fontWeight_small,
+                                    { color: colors.backButtonColor, marginVertical: '2%' },
+                                  ]}
+                                >
+                                  {subtopic.name}
+                                </Text>
+                                {subtopic.important ? <Image source={Star} /> : null}
+                              </View>
                             );
                           })}
                         </View>
@@ -235,7 +215,7 @@ const HomeWorkDetailsScreen = () => {
                     })}
                   </>
                 ) : null}
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
@@ -245,5 +225,3 @@ const HomeWorkDetailsScreen = () => {
 };
 
 export default HomeWorkDetailsScreen;
-
-const styles = StyleSheet.create({});

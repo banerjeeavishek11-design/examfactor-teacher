@@ -1,55 +1,45 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { SafeScreen } from "@/components/template";
-import { useTheme } from "@/theme";
-import { useNavigation } from "@react-navigation/native";
-import Diagnostic from "@/theme/assets/images/diagnostic.png";
-import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
-import Circularprogressbar from "@/components/template/CircularProgressBar/Circularprogressbar";
-import Progressbar from "@/components/template/Progressbar/Progressbar";
-import UpArrow from "@/theme/assets/images/uparrow.png";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
-import { Divider } from "react-native-paper";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeScreen } from '@/components/template';
+import { useTheme } from '@/theme';
+import Diagnostic from '@/theme/assets/images/diagnostic.png';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import Progressbar from '@/components/template/Progressbar/Progressbar';
+import UpArrow from '@/theme/assets/images/uparrow.png';
+import DownArrow from '@/theme/assets/images/Downarrow.png';
+import { Divider } from 'react-native-paper';
 
 const topic = [
   {
     id: 1,
-    topicName: "Introduction to Motion",
-    subTitle: "Students completed the homework",
+    topicName: 'Introduction to Motion',
+    subTitle: 'Students completed the homework',
     progress: 60,
   },
   {
     id: 2,
-    topicName: "Rate of Motion",
-    subTitle: "Based on concepts covered till date",
+    topicName: 'Rate of Motion',
+    subTitle: 'Based on concepts covered till date',
     progress: 65,
   },
   {
     id: 3,
-    topicName: "Rate of Change of Velocity",
-    subTitle: "Rate of Change of Velocity",
+    topicName: 'Rate of Change of Velocity',
+    subTitle: 'Rate of Change of Velocity',
     progress: 50,
   },
 ];
 
 const leaderboardData = [
-  { name: "Rahul K. ", progress: "Yes", achievable: 5 },
-  { name: "Sanya M.", progress: "No", achievable: 10 },
-  { name: "Karan K.", progress: "Yes", achievable: 11 },
-  { name: "Piyush K.", progress: "No", achievable: 7 },
-  { name: "Anmol S.", progress: "Yes", achievable: 9 },
+  { name: 'Rahul K. ', progress: 'Yes', achievable: 5 },
+  { name: 'Sanya M.', progress: 'No', achievable: 10 },
+  { name: 'Karan K.', progress: 'Yes', achievable: 11 },
+  { name: 'Piyush K.', progress: 'No', achievable: 7 },
+  { name: 'Anmol S.', progress: 'Yes', achievable: 9 },
 ];
 
 const DiagnosticTab = () => {
   const { colors, layout, fonts } = useTheme();
-  const navigation = useNavigation();
   const [expandedCards, setExpandedCards] = useState({});
   const [activatedChapter, setActivatedChapter] = useState(false);
 
@@ -70,17 +60,17 @@ const DiagnosticTab = () => {
         {activatedChapter === true ? (
           <>
             {topic.map((ele) => {
-              const progressPercentage = ele.progress / 100;
               return (
-                <View
+                <TouchableOpacity
+                  onPress={() => toggleContent(ele.id)}
                   key={ele.topicName}
                   style={[
                     layout.fullWidth,
                     {
                       backgroundColor: colors.cardBackgroundColor,
-                      height: expandedCards[ele.id] ? "auto" : 100,
+                      height: expandedCards[ele.id] ? 'auto' : 80,
                       borderRadius: 14,
-                      marginTop: "3%",
+                      marginTop: '4%',
                     },
                   ]}
                 >
@@ -90,27 +80,17 @@ const DiagnosticTab = () => {
                       layout.rowHCenter,
                       layout.justifyBetween,
                       layout.paddingForCard,
-                      { paddingBottom: "0%" },
+                      { paddingBottom: '0%' },
                     ]}
                   >
-                    <View style={{ width: "55%" }}>
+                    <View style={{ width: '65%' }}>
                       <Text
                         numberOfLines={2}
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white, top: -6 },
-                        ]}
+                        style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                       >
                         {ele.topicName}
                       </Text>
-                      <View
-                        style={[
-                          layout.display,
-                          layout.rowHCenter,
-                          layout.justifyBetween,
-                        ]}
-                      >
+                      <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                         <Text
                           style={[
                             fonts.size_12,
@@ -120,7 +100,7 @@ const DiagnosticTab = () => {
                         >
                           No. of Students
                         </Text>
-                        <View style={{ width: "70%", left: 10 }}>
+                        <View style={{ width: '70%', left: 10 }}>
                           <Progressbar progress={0.8} color="#3DD598" />
                         </View>
                         <Text
@@ -134,8 +114,8 @@ const DiagnosticTab = () => {
                         </Text>
                       </View>
                     </View>
-                    <View style={{ width: "5%" }}>
-                      <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                    <View style={{ width: '5%' }}>
+                      <TouchableOpacity>
                         {expandedCards[ele.id] ? (
                           <Image
                             style={{ width: 12, height: 8 }}
@@ -153,49 +133,30 @@ const DiagnosticTab = () => {
                     </View>
                   </View>
 
-                  <View style={[layout.itemsCenter, layout.paddingForCard]}>
-                    <Divider
-                      style={{
-                        width: "100%",
-                        backgroundColor: colors.lineBackgroundColor,
-                      }}
-                    />
-                  </View>
-
                   {expandedCards[ele.id] ? (
                     <View>
+                      <View style={[layout.itemsCenter, layout.paddingForCard]}>
+                        <Divider
+                          style={{
+                            width: '100%',
+                            backgroundColor: colors.lineBackgroundColor,
+                          }}
+                        />
+                      </View>
                       <View>
                         <View style={styles.header}>
-                          <View style={{ width: "30%" }}>
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                { color: colors.white },
-                              ]}
-                            >
+                          <View style={{ width: '30%' }}>
+                            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                               Name
                             </Text>
                           </View>
-                          <View style={{ width: "40%" }}>
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                { color: colors.white },
-                              ]}
-                            >
+                          <View style={{ width: '40%' }}>
+                            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                               Diagnostic Completed
                             </Text>
                           </View>
-                          <View style={{ width: "30%" }}>
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                { color: colors.white },
-                              ]}
-                            >
+                          <View style={{ width: '30%' }}>
+                            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                               No. of Weak Subtopics
                             </Text>
                           </View>
@@ -206,13 +167,12 @@ const DiagnosticTab = () => {
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                              index === leaderboardData.length - 1 &&
-                                styles.lastRow,
+                              index === leaderboardData.length - 1 && styles.lastRow,
                             ]}
                           >
                             <View
                               style={{
-                                width: "30%",
+                                width: '30%',
                               }}
                             >
                               <Text
@@ -228,7 +188,7 @@ const DiagnosticTab = () => {
                             </View>
                             <View
                               style={{
-                                width: "40%",
+                                width: '40%',
                               }}
                             >
                               <Text
@@ -247,7 +207,7 @@ const DiagnosticTab = () => {
                             </View>
                             <View
                               style={{
-                                width: "30%",
+                                width: '30%',
                               }}
                             >
                               <Text
@@ -260,7 +220,6 @@ const DiagnosticTab = () => {
                               >
                                 {item.achievable}
                               </Text>
-                              
                             </View>
                           </View>
                         ))}
@@ -268,9 +227,7 @@ const DiagnosticTab = () => {
                     </View>
                   ) : null}
                   {expandedCards[ele.id] && (
-                    <TouchableOpacity
-                      style={{ marginTop: "4%", marginBottom: "4%" }}
-                    >
+                    <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
                       <Text
                         style={[
                           fonts.size_14,
@@ -283,7 +240,7 @@ const DiagnosticTab = () => {
                       </Text>
                     </TouchableOpacity>
                   )}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </>
@@ -295,12 +252,12 @@ const DiagnosticTab = () => {
                 height: 500,
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 13,
-                alignItems: "center",
+                alignItems: 'center',
               },
             ]}
           >
             <Image
-              style={{ width: 230, height: 230, marginTop: "4%" }}
+              style={{ width: 230, height: 230, marginTop: '4%' }}
               source={Diagnostic}
               resizeMode="contain"
             />
@@ -308,7 +265,7 @@ const DiagnosticTab = () => {
               style={[
                 fonts.size_20,
                 fonts.fontWeignt_600,
-                { color: colors.white, textAlign: "center" },
+                { color: colors.white, textAlign: 'center' },
               ]}
             >
               Chapter not assigned for Diagnostic
@@ -320,25 +277,17 @@ const DiagnosticTab = () => {
                 {
                   color: colors.white,
                   opacity: 0.4,
-                  textAlign: "center",
-                  width: "70%",
+                  textAlign: 'center',
+                  width: '70%',
                 },
               ]}
             >
               Go to activate and assign Diagnostic for students at first
             </Text>
             <TouchableOpacity onPress={handleActiveChapter}>
-              <PrimaryGradient
-                styleProp={[styles.loginButton, layout.justifyCenter]}
-              >
+              <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                 <View style={[layout.display, layout.rowHCenter]}>
-                  <Text
-                    style={[
-                      fonts.size_16,
-                      fonts.bold,
-                      { color: colors.loginBtnTextColor },
-                    ]}
-                  >
+                  <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                     Activate Chapter
                   </Text>
                 </View>
@@ -356,35 +305,35 @@ export default DiagnosticTab;
 const styles = StyleSheet.create({
   loginButton: {
     height: 48,
-    width: "100%",
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "5%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: "4%",
-    paddingRight: "4%",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: '4%',
+    paddingRight: '4%',
+    width: '100%',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 45,
-    paddingLeft: "4%",
-    paddingRight: "4%",
-    marginTop: "2%",
+    paddingLeft: '4%',
+    paddingRight: '4%',
+    marginTop: '2%',
   },
   evenRow: {
-    backgroundColor: "#2C2C39",
+    backgroundColor: '#2C2C39',
   },
   oddRow: {
-    backgroundColor: "#222230",
+    backgroundColor: '#222230',
   },
 });

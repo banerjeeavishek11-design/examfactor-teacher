@@ -1,30 +1,23 @@
 import {
   Image,
-  LayoutAnimation,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import { useNavigation } from "@react-navigation/native";
-import {
-  BarChart,
-  Concentrix,
-  SafeScreen,
-  StudentLevelBarChart,
-} from "@/components/template";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import Arrow from "@/theme/assets/images/arrow.png";
-import RightArrow from "@/theme/assets/images/rightarrow.png";
-import UpFullArrow from "@/theme/assets/images/upfullarrow.png";
-import { useRoute } from "@react-navigation/native";
-import Progressbar from "@/components/template/Progressbar/Progressbar";
-import { Divider } from "react-native-paper";
+} from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import { useNavigation } from '@react-navigation/native';
+import { Concentrix, SafeScreen, StudentLevelBarChart } from '@/components/template';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import RightArrow from '@/theme/assets/images/rightarrow.png';
+import UpFullArrow from '@/theme/assets/images/upfullarrow.png';
+import { useRoute } from '@react-navigation/native';
+import Progressbar from '@/components/template/Progressbar/Progressbar';
+import { Divider } from 'react-native-paper';
 
 const data = [
   [20, 20, 10, 4, 80],
@@ -33,29 +26,27 @@ const data = [
   // [70, 30, 40, 10, 50],
 ];
 const barChartColor = [
-  ["#FF575F", "#FF575F"],
-  ["#27d4fa", "#7af4fc"],
+  ['#FF575F', '#FF575F'],
+  ['#27d4fa', '#7af4fc'],
   // ["#7a74fc", "#a7d4fa"],
   // ["#7af41c", "#2714fa"],
 ];
 const width = 300;
 const height = 320;
 const borderRadius = 2;
-const xAxisTitle = "Chapters";
-const yAxisTitle = "Achievable Score %";
+const xAxisTitle = 'Chapters';
+const yAxisTitle = 'Achievable Score %';
 
 const StudentWiseReportScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { studentDetails } = route.params || {};
   const { colors, layout, fonts } = useTheme();
-  const overallProgress = studentDetails
-    ? studentDetails?.progressPercentage / 100
-    : 0;
-  const [maxTime, setMaxTime] = useState(1000);
-  const [thisWeek, setThisWeek] = useState(564);
-  const [lastWeek, setLastWeek] = useState(675);
-  const [peers, setPeers] = useState(1000);
+  const overallProgress = studentDetails ? studentDetails?.progressPercentage / 100 : 0;
+  const [maxTime] = useState(1000);
+  const [thisWeek] = useState(564);
+  const [lastWeek] = useState(675);
+  const [peers] = useState(1000);
 
   const findTimePercent = (seconds) => {
     return Math.floor((seconds / maxTime) * 100);
@@ -75,7 +66,7 @@ const StudentWiseReportScreen = () => {
       >
         <TouchableOpacity
           style={[layout.display, layout.rowHCenter]}
-          onPress={() => navigation.navigate("StudentLevelTab")}
+          onPress={() => navigation.navigate('StudentLevelTab')}
         >
           <ImageVariant
             testID="brand-img"
@@ -88,26 +79,14 @@ const StudentWiseReportScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
+          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
             Back
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={{ paddingBottom: "10%" }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: '10%' }}>
         <View style={[layout.paddingForFullScreen]}>
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.bold,
-              { color: colors.white, opacity: 0.5 },
-            ]}
-          >
+          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.5 }]}>
             {`${studentDetails?.name}'S REPORT`}
           </Text>
           <View
@@ -116,19 +95,19 @@ const StudentWiseReportScreen = () => {
               layout.paddingForCard,
               {
                 backgroundColor: colors.cardBackgroundColor,
-                height: "auto",
+                height: 'auto',
                 borderRadius: 12,
-                marginTop: "4%",
+                marginTop: '4%',
               },
             ]}
           >
-            <View style={{ marginTop: "1%", alignItems: "center" }}>
+            <View style={{ marginTop: '1%', alignItems: 'center' }}>
               <Concentrix scorePercentage={studentDetails?.achievableScore} />
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "-20%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -138,30 +117,18 @@ const StudentWiseReportScreen = () => {
                 layout.display,
                 layout.rowHCenter,
                 layout.justifyBetween,
-                { marginTop: "5%" },
+                { marginTop: '5%' },
               ]}
             >
-              <Text
-                style={[
-                  fonts.size_12,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
                 Overall Progress
               </Text>
-              <Text
-                style={[
-                  fonts.size_12,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
                 {`${studentDetails?.progressPercentage}% complete`}
               </Text>
             </View>
-            <View style={{ marginTop: "3%" }}>
-              <Progressbar progress={overallProgress} color={"#3DD598"} />
+            <View style={{ marginTop: '3%' }}>
+              <Progressbar progress={overallProgress} color={'#3DD598'} />
             </View>
           </View>
           {/* <BarChart /> */}
@@ -175,36 +142,19 @@ const StudentWiseReportScreen = () => {
             yAxisTitle={yAxisTitle}
           />
           <View
-            style={[
-              layout.display,
-              layout.rowHCenter,
-              layout.justifyBetween,
-              { marginTop: "8%" },
-            ]}
+            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '8%' }]}
           >
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.white, opacity: 0.4 },
-              ]}
-            >
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
               HOME WORK INSIGHTS
             </Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("HomeWorkDetailsScreen", {
+                navigation.navigate('HomeWorkDetailsScreen', {
                   studentDetails: studentDetails,
                 })
               }
             >
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.bold,
-                  { color: colors.termsLinkColor },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
                 SEE DETAILS
               </Text>
             </TouchableOpacity>
@@ -216,14 +166,12 @@ const StudentWiseReportScreen = () => {
               {
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 14,
-                height: "auto",
-                marginTop: "4%",
+                height: 'auto',
+                marginTop: '4%',
               },
             ]}
           >
-            <View
-              style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
-            >
+            <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
               <Text
                 style={[
                   fonts.size_14,
@@ -233,20 +181,14 @@ const StudentWiseReportScreen = () => {
               >
                 Number of chapters covered
               </Text>
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                 3/5
               </Text>
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -256,7 +198,7 @@ const StudentWiseReportScreen = () => {
                 layout.display,
                 layout.rowHCenter,
                 layout.justifyBetween,
-                { marginTop: "2%" },
+                { marginTop: '2%' },
               ]}
             >
               <Text
@@ -268,20 +210,14 @@ const StudentWiseReportScreen = () => {
               >
                 Strong areas
               </Text>
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                 18
               </Text>
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -291,7 +227,7 @@ const StudentWiseReportScreen = () => {
                 layout.display,
                 layout.rowHCenter,
                 layout.justifyBetween,
-                { marginTop: "2%" },
+                { marginTop: '2%' },
               ]}
             >
               <Text
@@ -303,20 +239,14 @@ const StudentWiseReportScreen = () => {
               >
                 Weak areas
               </Text>
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                 06
               </Text>
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -330,24 +260,20 @@ const StudentWiseReportScreen = () => {
               layout.paddingForCard,
               {
                 backgroundColor: colors.cardBackgroundColor,
-                marginTop: "4%",
+                marginTop: '4%',
                 borderRadius: 14,
               },
             ]}
           >
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-              Time spent
-            </Text>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Time spent</Text>
 
-            <View
-              style={[layout.display, layout.rowHCenter, { marginTop: "3%" }]}
-            >
+            <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
               <ImageVariant
                 testID="brand-img"
                 style={{
                   width: 15,
                   height: 12,
-                  tintColor: "#3DD598",
+                  tintColor: '#3DD598',
                 }}
                 source={UpFullArrow}
                 resizeMode="contain"
@@ -357,25 +283,17 @@ const StudentWiseReportScreen = () => {
                   fonts.size_12,
                   fonts.fontWeight_small,
                   {
-                    color: "#3DD598",
+                    color: '#3DD598',
                     top: 2,
-                    marginLeft: "1%",
+                    marginLeft: '1%',
                   },
                 ]}
               >
                 44% down from previous week
               </Text>
             </View>
-            <View
-              style={[layout.display, layout.rowHCenter, { marginTop: "3%" }]}
-            >
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
-              >
+            <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}>
                 This week
               </Text>
               <View
@@ -383,22 +301,17 @@ const StudentWiseReportScreen = () => {
                   layout.row,
                   layout.itemsCenter,
                   {
-                    marginLeft: "4%",
-                    width: "60%",
+                    marginLeft: '4%',
+                    width: '60%',
                   },
                 ]}
               >
-                <View
-                  style={[
-                    styles.timeLine1,
-                    { width: `${findTimePercent(thisWeek)}%` },
-                  ]}
-                />
+                <View style={[styles.timeLine1, { width: `${findTimePercent(thisWeek)}%` }]} />
                 <Text
                   style={[
                     fonts.size_12,
                     fonts.fontWeight_small,
-                    { color: colors.white, marginLeft: "3%" },
+                    { color: colors.white, marginLeft: '3%' },
                   ]}
                 >
                   1h 05m
@@ -406,37 +319,24 @@ const StudentWiseReportScreen = () => {
               </View>
             </View>
 
-            <View
-              style={[layout.display, layout.rowHCenter, { marginTop: "3%" }]}
-            >
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
-              >
+            <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}>
                 Last week
               </Text>
               <View
                 style={{
-                  marginLeft: "4%",
-                  width: "60%",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  marginLeft: '4%',
+                  width: '60%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                <View
-                  style={[
-                    styles.timeLine2,
-                    { width: `${findTimePercent(lastWeek)}%` },
-                  ]}
-                />
+                <View style={[styles.timeLine2, { width: `${findTimePercent(lastWeek)}%` }]} />
                 <Text
                   style={[
                     fonts.size_12,
                     fonts.fontWeight_small,
-                    { color: colors.white, marginLeft: "3%" },
+                    { color: colors.white, marginLeft: '3%' },
                   ]}
                 >
                   1h 50m
@@ -444,39 +344,32 @@ const StudentWiseReportScreen = () => {
               </View>
             </View>
 
-            <View
-              style={[layout.display, layout.rowHCenter, { marginTop: "3%" }]}
-            >
+            <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
               <Text
                 style={[
-                  fonts.size_12,
+                  fonts.size_14,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
+                  { color: colors.gray200, width: 40 },
                 ]}
               >
                 Peers
               </Text>
               <View
                 style={{
-                  marginLeft: "13%",
-                  width: "60%",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  marginLeft: '13%',
+                  width: '60%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                <View
-                  style={[
-                    styles.timeLine3,
-                    { width: `${findTimePercent(peers)}%` },
-                  ]}
-                />
+                <View style={[styles.timeLine3, { width: `${findTimePercent(peers)}%` }]} />
                 <Text
                   style={[
-                    fonts.size_14,
+                    fonts.size_12,
                     fonts.fontWeight_small,
                     {
                       color: colors.white,
-                      marginLeft: "3%",
+                      marginLeft: '3%',
                     },
                   ]}
                 >
@@ -487,36 +380,19 @@ const StudentWiseReportScreen = () => {
           </View>
 
           <View
-            style={[
-              layout.display,
-              layout.rowHCenter,
-              layout.justifyBetween,
-              { marginTop: "8%" },
-            ]}
+            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '8%' }]}
           >
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.white, opacity: 0.4 },
-              ]}
-            >
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
               CLASS WORK INSIGHTS
             </Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("ClassWorkdetailsScreen", {
+                navigation.navigate('ClassWorkdetailsScreen', {
                   studentDetails: studentDetails,
                 })
               }
             >
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.bold,
-                  { color: colors.termsLinkColor },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
                 SEE DETAILS
               </Text>
             </TouchableOpacity>
@@ -529,14 +405,12 @@ const StudentWiseReportScreen = () => {
               {
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 14,
-                height: "auto",
-                marginTop: "4%",
+                height: 'auto',
+                marginTop: '4%',
               },
             ]}
           >
-            <View
-              style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
-            >
+            <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
               <Text
                 style={[
                   fonts.size_14,
@@ -546,20 +420,14 @@ const StudentWiseReportScreen = () => {
               >
                 Number of test taken
               </Text>
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                 24
               </Text>
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -569,7 +437,7 @@ const StudentWiseReportScreen = () => {
                 layout.display,
                 layout.rowHCenter,
                 layout.justifyBetween,
-                { marginTop: "2%" },
+                { marginTop: '2%' },
               ]}
             >
               <Text
@@ -581,20 +449,14 @@ const StudentWiseReportScreen = () => {
               >
                 Accuracy percentage
               </Text>
-              <Text
-                style={[
-                  fonts.size_14,
-                  fonts.fontWeight_small,
-                  { color: colors.white },
-                ]}
-              >
+              <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                 55%
               </Text>
             </View>
-            <View style={[layout.itemsCenter, { marginTop: "2%" }]}>
+            <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
               <Divider
                 style={{
-                  width: "100%",
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -609,14 +471,14 @@ const StudentWiseReportScreen = () => {
                 backgroundColor: colors.cardBackgroundColor,
                 height: 53,
                 borderRadius: 8,
-                marginTop: "3%",
+                marginTop: '3%',
               },
             ]}
-            onPress={() => navigation.navigate("BookmarkedQuestionsScreen")}
+            onPress={() =>
+              navigation.navigate('BookmarkedQuestionsScreen', { studentDetails: studentDetails })
+            }
           >
-            <View
-              style={[layout.display, layout.rowHCenter, layout.justifyBetween]}
-            >
+            <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
               <Text
                 style={[
                   fonts.size_14,
@@ -650,17 +512,17 @@ export default StudentWiseReportScreen;
 const styles = StyleSheet.create({
   timeLine1: {
     height: 8,
-    backgroundColor: "#3DD598",
+    backgroundColor: '#3DD598',
     borderRadius: 6,
   },
   timeLine2: {
     height: 8,
-    backgroundColor: "#FFAB48",
+    backgroundColor: '#FFAB48',
     borderRadius: 6,
   },
   timeLine3: {
     height: 8,
-    backgroundColor: "#B557FF",
+    backgroundColor: '#B557FF',
     borderRadius: 6,
   },
 });

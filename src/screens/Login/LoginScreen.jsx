@@ -65,6 +65,7 @@ const LoginScreen = () => {
           layout.paddingForFullScreen,
           isTablet
             ? {
+                // eslint-disable-next-line prettier/prettier
                 justifyContent: 'center',
                 alignSelf: 'center',
                 alignItems: 'flex-start',

@@ -36,7 +36,10 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                 onPress={closeModal}
                 style={{ position: 'absolute', top: -35, left: '98%' }}
               >
-                <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
+                <ImageVariant
+                  style={{ width: 18, height: 18, tintColor: colors.gray200 }}
+                  source={Cross}
+                />
               </TouchableOpacity>
               <View style={styles.center}>
                 <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>

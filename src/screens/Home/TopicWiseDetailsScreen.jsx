@@ -1,61 +1,54 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@/theme";
-import { useRoute, useNavigation } from "@react-navigation/native";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import UpArrow from "@/theme/assets/images/uparrow.png";
-import DownArrow from "@/theme/assets/images/Downarrow.png";
-import { SafeScreen } from "@/components/template";
-import Circularprogressbar from "@/components/template/CircularProgressBar/Circularprogressbar";
-import Progressbar from "@/components/template/Progressbar/Progressbar";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '@/theme';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import UpArrow from '@/theme/assets/images/uparrow.png';
+import DownArrow from '@/theme/assets/images/Downarrow.png';
+import { SafeScreen } from '@/components/template';
+import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
+import Progressbar from '@/components/template/Progressbar/Progressbar';
 
 const topic = [
   {
     id: 1,
-    topicName: "Introduction to Motion",
-    subTitle: "Students completed the homework",
+    topicName: 'Introduction to Motion',
+    subTitle: 'Students completed the homework',
     progress: 60,
   },
   {
     id: 2,
-    topicName: "Rate of Motion",
-    subTitle: "Based on concepts covered till date",
+    topicName: 'Rate of Motion',
+    subTitle: 'Based on concepts covered till date',
     progress: 65,
   },
   {
     id: 3,
-    topicName: "Rate of Change of Velocity",
-    subTitle: "Rate of Change of Velocity",
+    topicName: 'Rate of Change of Velocity',
+    subTitle: 'Rate of Change of Velocity',
     progress: 50,
   },
   {
     id: 4,
-    topicName: "Graphical Representation...",
-    subTitle: "Based on concepts covered till date",
+    topicName: 'Graphical Representation...',
+    subTitle: 'Based on concepts covered till date',
     progress: 70,
   },
   {
     id: 5,
-    topicName: "Equations of Motion by Gr...",
-    subTitle: "Students completed the homework",
+    topicName: 'Equations of Motion by Gr...',
+    subTitle: 'Students completed the homework',
     progress: 68,
   },
 ];
 
 const leaderboardData = [
-  { name: "Rahul K.", progress: 88, achievable: 87 },
-  { name: "Sanya M.", progress: 85, achievable: 81 },
-  { name: "Karan K.", progress: 74, achievable: 78 },
-  { name: "Piyush K.", progress: 81, achievable: 87 },
-  { name: "Anmol S.", progress: 78, achievable: 84 },
+  { name: 'Rahul K.', progress: 88, achievable: 87 },
+  { name: 'Sanya M.', progress: 85, achievable: 81 },
+  { name: 'Karan K.', progress: 74, achievable: 78 },
+  { name: 'Piyush K.', progress: 81, achievable: 87 },
+  { name: 'Anmol S.', progress: 78, achievable: 84 },
 ];
 
 const TopicWiseDetailsScreen = () => {
@@ -94,7 +87,7 @@ const TopicWiseDetailsScreen = () => {
       >
         <TouchableOpacity
           style={[layout.display, layout.rowHCenter]}
-          onPress={() => navigation.navigate("SubjectDetailsScreen")}
+          onPress={() => navigation.navigate('SubjectDetailsScreen')}
         >
           <ImageVariant
             testID="brand-img"
@@ -107,13 +100,7 @@ const TopicWiseDetailsScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text
-            style={[
-              fonts.size_16,
-              fonts.bold,
-              { color: colors.backButtonColor, left: 5 },
-            ]}
-          >
+          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
             {topicName}
           </Text>
         </TouchableOpacity>
@@ -122,16 +109,17 @@ const TopicWiseDetailsScreen = () => {
         {topic.map((ele) => {
           const progressPercentage = ele.progress / 100;
           return (
-            <View
+            <TouchableOpacity
+              onPress={() => toggleContent(ele.id)}
               key={ele.topicName}
               style={[
                 layout.fullWidth,
                 // layout.paddingForCard,
                 {
                   backgroundColor: colors.cardBackgroundColor,
-                  height: expandedCards[ele.id] ? "auto" : 100,
+                  height: expandedCards[ele.id] ? 'auto' : 100,
                   borderRadius: 14,
-                  marginTop: "3%",
+                  marginTop: '3%',
                 },
               ]}
             >
@@ -141,17 +129,13 @@ const TopicWiseDetailsScreen = () => {
                   layout.rowHCenter,
                   layout.justifyBetween,
                   layout.paddingForCard,
-                  { paddingBottom: "0%" },
+                  { paddingBottom: '0%' },
                 ]}
               >
-                <View style={{ width: "60%" }}>
+                <View style={{ width: '60%' }}>
                   <Text
                     numberOfLines={2}
-                    style={[
-                      fonts.size_14,
-                      fonts.bold,
-                      { color: colors.white, top: -6 },
-                    ]}
+                    style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                   >
                     {ele.topicName}
                   </Text>
@@ -159,20 +143,20 @@ const TopicWiseDetailsScreen = () => {
                     style={[
                       fonts.size_13,
                       fonts.fontWeight_small,
-                      { color: colors.backButtonColor},
+                      { color: colors.backButtonColor },
                     ]}
                   >
                     {ele.subTitle}
                   </Text>
                 </View>
-                <View style={{ width: "25%", top: -5 }}>
+                <View style={{ width: '25%', top: -5 }}>
                   <Circularprogressbar progress={ele.progress} />
                 </View>
-                <View style={{ width: "5%" }}>
-                  <TouchableOpacity onPress={() => toggleContent(ele.id)}>
+                <View style={{ width: '5%' }}>
+                  <TouchableOpacity>
                     {expandedCards[ele.id] ? (
                       <Image
-                        style={{width: 14, height: 10 }}
+                        style={{ width: 14, height: 10 }}
                         source={UpArrow}
                         resizeMode="contain"
                       />
@@ -189,53 +173,30 @@ const TopicWiseDetailsScreen = () => {
 
               {expandedCards[ele.id] ? (
                 <View>
-                  <View style={[layout.paddingForCard, { paddingTop: "0%" }]}>
+                  <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
                     <Text
                       style={[
                         fonts.size_12,
                         fonts.fontWeight_small,
                         {
-                          color: "#3DD598",
+                          color: '#3DD598',
                           // marginTop: "5%",
                         },
                       ]}
                     >
                       Progress {`${ele.progress}%`}
                     </Text>
-                    <View style={{ marginTop: "4%" }}>
-                      <Progressbar
-                        progress={progressPercentage}
-                        color={"#3DD598"}
-                      />
+                    <View style={{ marginTop: '4%' }}>
+                      <Progressbar progress={progressPercentage} color={'#3DD598'} />
                     </View>
                   </View>
                   <View>
                     <View style={styles.header}>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
-                        Name
-                      </Text>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
+                      <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Name</Text>
+                      <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                         Progress
                       </Text>
-                      <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.bold,
-                          { color: colors.white },
-                        ]}
-                      >
+                      <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                         Achievable
                       </Text>
                     </View>
@@ -245,36 +206,23 @@ const TopicWiseDetailsScreen = () => {
                         style={[
                           styles.row,
                           index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                          index === leaderboardData.length - 1 &&
-                            styles.lastRow,
+                          index === leaderboardData.length - 1 && styles.lastRow,
                         ]}
                       >
                         <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
+                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
                           {item.name}
                         </Text>
                         <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
+                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          {item.progress}
+                          {`${item.progress}%`}
                         </Text>
                         <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeight_small,
-                            { color: colors.white },
-                          ]}
+                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          {item.achievable}
+                          {`${item.achievable}/100`}
                         </Text>
                       </View>
                     ))}
@@ -282,9 +230,7 @@ const TopicWiseDetailsScreen = () => {
                 </View>
               ) : null}
               {expandedCards[ele.id] && (
-                <TouchableOpacity
-                  style={{ marginTop: "4%", marginBottom: "4%" }}
-                >
+                <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
                   <Text
                     style={[
                       fonts.size_14,
@@ -297,7 +243,7 @@ const TopicWiseDetailsScreen = () => {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
@@ -309,25 +255,25 @@ export default TopicWiseDetailsScreen;
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: "4%",
-    paddingRight: "4%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: '4%',
+    paddingRight: '4%',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 45,
-    paddingLeft: "4%",
-    paddingRight: "4%",
-    marginTop: "2%",
+    paddingLeft: '4%',
+    paddingRight: '4%',
+    marginTop: '2%',
   },
   evenRow: {
-    backgroundColor: "#2C2C39",
+    backgroundColor: '#2C2C39',
   },
   oddRow: {
-    backgroundColor: "#222230",
+    backgroundColor: '#222230',
   },
 });

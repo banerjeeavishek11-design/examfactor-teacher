@@ -31,13 +31,49 @@ const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue }) => {
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <View
+          <TouchableOpacity
             style={[
               styles.bottomSheetContent,
 
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
+            <ImageVariant
+              testID="brand-img"
+              style={{ width: 16, height: 16, tintColor: colors.gray200 }}
+              source={Cross}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <View style={styles.center}>
+            <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}></TouchableOpacity>
+          </View>
+          <View style={[layout.paddingForCard, styles.scrollContainer]}>
+            <Text style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}>
+              Sort By
+            </Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: '5%' }}
+            >
+              {sortBy?.map((ele) => (
+                <TouchableOpacity
+                  key={ele.id}
+                  style={styles.radioButtonContainer}
+                  onPress={() => handleOptionChange(ele.sortBy)}
+                  activeOpacity={1}
+                >
+                  <View style={{ marginLeft: 10 }}>
+                    <RadioButton isActive={option === ele.sortBy} />
+                  </View>
+                  <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
+                    {ele.sortBy}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+          <View style={styles.footer}>
             <TouchableOpacity
               onPress={closeModal}
               style={[{ position: 'absolute', top: -35, left: '92%' }]}

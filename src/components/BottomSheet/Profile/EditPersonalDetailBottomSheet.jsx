@@ -53,7 +53,10 @@ const EditPersonalDetailBottomSheet = ({
               onPress={closeModal}
               style={{ position: 'absolute', top: -35, left: '98%' }}
             >
-              <ImageVariant style={{ width: 18, height: 18 }} source={Cross} />
+              <ImageVariant
+                style={{ width: 18, height: 18, tintColor: colors.gray200 }}
+                source={Cross}
+              />
             </TouchableOpacity>
             <Text style={[fonts.size_18, fonts.bold, { color: colors.white }]}>
               Edit personal details

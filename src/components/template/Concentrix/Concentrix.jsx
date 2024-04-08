@@ -1,16 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import { Svg, Path, Circle } from 'react-native-svg';
 import { useTheme } from '@/theme';
 
 const Concentrix = (props) => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const { scorePercentage } = props;
   const strokeWidth = 5;
   const radius = 100;
   const targetRadius = 5;
-  const lastCircleStrokeWidth = 8;
   const buffer = 4;
   const canvasSize = radius * 2 + strokeWidth + 28 + targetRadius + buffer;
 
@@ -116,7 +114,9 @@ const Concentrix = (props) => {
               ]}
             >
               {scorePercentage}
-              <Text style={[fonts.size_12,fonts.fontWeight_small,{color: colors.gray200}]}>/100</Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.gray200 }]}>
+                /100
+              </Text>
             </Text>
           ) : (
             <Text
@@ -134,7 +134,7 @@ const Concentrix = (props) => {
               0
             </Text>
           )}
-          <Text
+          {/* <Text
             style={[
               fonts.size_14,
               fonts.fontWeight_small,
@@ -147,11 +147,11 @@ const Concentrix = (props) => {
             ]}
           >
             Average
-          </Text>
+          </Text> */}
 
           <Text
             style={[
-              fonts.size_14,
+              fonts.size_16,
               fonts.fontWeight_small,
               fonts.alignCenter,
               {
@@ -176,7 +176,7 @@ const Concentrix = (props) => {
               },
             ]}
           >
-            based on concepts covered till date
+            based on chapters covered till date
           </Text>
         </View>
       </Svg>
@@ -185,5 +185,3 @@ const Concentrix = (props) => {
 };
 
 export default Concentrix;
-
-const styles = StyleSheet.create({});

@@ -1,23 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'react-native';
 
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "@/components/atoms";
-import RadioButton from "../../RadioButton/RadioButton";
-import Cross from "@/theme/assets/images/cross.png";
-import PrimaryGradient from "@/components/template/LinearGradient/PrimaryGradient";
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '@/components/atoms';
+import RadioButton from '../../RadioButton/RadioButton';
+import Cross from '@/theme/assets/images/cross.png';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const questionType = [
-  { id: 1, questionType: "Diagnostic" },
-  { id: 2, questionType: "Practice" },
-  { id: 3, questionType: "Test" },
+  { id: 1, questionType: 'Diagnostic' },
+  { id: 2, questionType: 'Practice' },
+  { id: 3, questionType: 'Test' },
 ];
 
 const SelectQuestionTypeBottomSheet = ({
@@ -28,7 +21,7 @@ const SelectQuestionTypeBottomSheet = ({
   changeQuestionType,
 }) => {
   const { fonts, layout, colors } = useTheme();
-  const [option, setOption] = useState("first");
+  const [option, setOption] = useState('first');
   const handleOptionChange = (op) => {
     setOption(op);
   };
@@ -54,11 +47,11 @@ const SelectQuestionTypeBottomSheet = ({
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={[{ position: "absolute", top: -35, left: "92%" }]}
+              style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
                 testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: "white" }}
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
                 source={Cross}
                 resizeMode="contain"
               />
@@ -71,17 +64,13 @@ const SelectQuestionTypeBottomSheet = ({
             </View>
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
               <Text
-                style={[
-                  fonts.size_20,
-                  fonts.bold,
-                  { color: colors.white, paddingBottom: "2%" },
-                ]}
+                style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}
               >
                 Select Question Type
               </Text>
               <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: "5%" }}
+                contentContainerStyle={{ paddingBottom: '5%' }}
               >
                 {questionType?.map((ele) => (
                   <TouchableOpacity
@@ -93,13 +82,7 @@ const SelectQuestionTypeBottomSheet = ({
                     <View style={{ marginLeft: 10 }}>
                       <RadioButton isActive={option === ele.questionType} />
                     </View>
-                    <Text
-                      style={[
-                        styles.radioButtonText,
-                        fonts.size_14,
-                        fonts.fontWeignt_600,
-                      ]}
-                    >
+                    <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
                       {ele.questionType}
                     </Text>
                   </TouchableOpacity>
@@ -138,10 +121,7 @@ const SelectQuestionTypeBottomSheet = ({
                   onPress={handleApply}
                 >
                   <PrimaryGradient
-                    styleProp={[
-                      layout.justifyCenter,
-                      { height: "100%", borderRadius: 8 },
-                    ]}
+                    styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
                     <Text
                       style={[
@@ -169,37 +149,37 @@ export default SelectQuestionTypeBottomSheet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     height: 400,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,
-    borderColor: "gray",
+    borderColor: 'gray',
   },
   center: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   slideIndicator: {
     width: 88,
     height: 8,
-    backgroundColor: "#2F2B3A",
+    backgroundColor: '#2F2B3A',
     borderRadius: 20,
-    alignSelf: "center",
-    marginTop: "4%",
+    alignSelf: 'center',
+    marginTop: '4%',
   },
   line: {
-    position: "absolute",
-    top: "65%",
+    position: 'absolute',
+    top: '65%',
     left: 18,
     right: 18,
     borderBottomWidth: 1,
@@ -210,43 +190,43 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 11,
     borderRadius: 9,
-    alignItems: "center",
+    alignItems: 'center',
   },
   smallBtn: {
     height: 32,
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 20,
-    backgroundColor: "#22222F",
+    backgroundColor: '#22222F',
     borderRadius: 12,
     height: 60,
     marginTop: 8,
-    width: "100%",
+    width: '100%',
   },
   radioButtonText: {
     marginLeft: 8,
-    color: "#fff",
+    color: '#fff',
   },
   scrollContainer: {
     flex: 1,
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     //   padding: 20,
     paddingBottom: 20,
     paddingTop: 10,
-    backgroundColor: "transparent", // Change if needed
+    backgroundColor: 'transparent', // Change if needed
   },
   footerButton: {
-    width: "48%",
+    width: '48%',
     height: 48,
     borderRadius: 8,
   },
