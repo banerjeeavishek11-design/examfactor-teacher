@@ -1,4 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from 'react-native';
 import React, { useState } from 'react';
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
@@ -8,6 +16,9 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import { Divider } from 'react-native-paper';
+
+const screenWidth = Dimensions.get('window').width;
+const isTablet = screenWidth >= 600;
 
 const topic = [
   {
@@ -56,7 +67,7 @@ const DiagnosticTab = () => {
 
   return (
     <SafeScreen>
-      <ScrollView style={[layout.paddingForFullScreen]}>
+      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
         {activatedChapter === true ? (
           <>
             {topic.map((ele) => {
@@ -68,7 +79,7 @@ const DiagnosticTab = () => {
                     layout.fullWidth,
                     {
                       backgroundColor: colors.cardBackgroundColor,
-                      height: expandedCards[ele.id] ? 'auto' : 80,
+                      height: expandedCards[ele.id] ? 'auto' : isTablet ? 110 : 80,
                       borderRadius: 14,
                       marginTop: '4%',
                     },
