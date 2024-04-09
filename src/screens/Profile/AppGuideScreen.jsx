@@ -1,12 +1,4 @@
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native';
+import { StatusBar, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
@@ -17,7 +9,6 @@ import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
 import PracticeActive from '@/theme/assets/images/practiceactive.png';
-import { DrawerActions } from '@react-navigation/native';
 
 const AppGuideScreen = ({ navigation }) => {
   const [allAccordian, setAllAccordian] = useState({
@@ -72,7 +63,7 @@ const AppGuideScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
-                navigation.dispatch(DrawerActions.openDrawer());
+                // navigation.dispatch(DrawerActions.openDrawer());
               }}
             >
               <View style={[layout.rowHCenter, layout.display]}>
@@ -94,21 +85,13 @@ const AppGuideScreen = ({ navigation }) => {
         <View style={{ marginTop: '5%' }}>
           {allAccordian.buttonDetails.map((ele, index) => (
             <View
-              style={[
-                styles.arrowView,
-                { backgroundColor: colors.cardBackgroundColor },
-              ]}
+              style={[styles.arrowView, { backgroundColor: colors.cardBackgroundColor }]}
               key={ele.id}
             >
-              <TouchableOpacity
-                onPress={() => toggleExpanded(ele.id, ele.isExpand)}
-              >
+              <TouchableOpacity onPress={() => toggleExpanded(ele.id, ele.isExpand)}>
                 <View style={[layout.row, layout.justifyBetween, layout.itemsCenter]}>
                   {index == 0 ? (
-                    <ImageVariant
-                      source={PracticeActive}
-                      style={{ width: 40, height: 40 }}
-                    />
+                    <ImageVariant source={PracticeActive} style={{ width: 40, height: 40 }} />
                   ) : null}
                   <View style={{ width: '60%' }}>
                     <Text
@@ -117,7 +100,7 @@ const AppGuideScreen = ({ navigation }) => {
                         fonts.bold,
                         { color: colors.white },
 
-                        index == 0 ? {marginLeft: -30} : null
+                        index == 0 ? { marginLeft: -30 } : null,
                       ]}
                     >
                       {ele.title}
@@ -142,21 +125,31 @@ const AppGuideScreen = ({ navigation }) => {
                     <View style={{ marginTop: 12 }}>
                       {index == 0 ? (
                         <View>
-                          <Image style={{marginBottom: '4%',borderRadius: 20,width: '100%',alignSelf: 'center'}} source={Youtube} />
+                          <Image
+                            style={{
+                              marginBottom: '4%',
+                              borderRadius: 20,
+                              width: '100%',
+                              alignSelf: 'center',
+                            }}
+                            source={Youtube}
+                          />
                           <TouchableOpacity
                             style={[layout.row, layout.justifyBetween]}
-                            onPress={()=>{}}
+                            onPress={() => {}}
                           >
                             <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                { color: colors.termsLinkColor },
-                              ]}
+                              style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}
                             >
                               GO TO NEO JOURNEY
                             </Text>
-                            <ImageVariant style={{width:25, height:16, tintColor: colors.termsLinkColor}} source={RightArrow}/>
+                            <ImageVariant
+                              style={{
+                                width: 25,
+                                height: 16,
+                                tintColor: colors.termsLinkColor,
+                              }}
+                              source={RightArrow}
                             />
                           </TouchableOpacity>
                         </View>

@@ -6,6 +6,7 @@ import { ImageVariant } from '@/components/atoms';
 import Success from '@/theme/assets/images/forgotsuccess.png';
 import { useRoute } from '@react-navigation/native';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const NewPasswordStatusScreen = ({ navigation }) => {
   const route = useRoute();
@@ -21,33 +22,26 @@ const NewPasswordStatusScreen = ({ navigation }) => {
             New Password has been {route.params?.data} Successfully
           </Text>
         </View>
+
         <TouchableOpacity
-          style={[
-            layout.justifyCenter,
-            layout.itemsCenter,
-            {
-              height: 48,
-              borderRadius: 12,
-              backgroundColor: colors.termsLinkColor,
-              width: '100%',
-              marginVertical: '8%',
-            },
-          ]}
           onPress={() => {
             navigation.navigate('ProfileDetailsScreen');
           }}
+          style={layout.fullWidth}
         >
-          <View style={[layout.display, layout.row, layout.itemsCenter]}>
-            <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-              Go To Profile
-            </Text>
-            <ImageVariant
-              testID="brand-img"
-              style={{ width: 16, height: 9, left: 5 }}
-              source={RightArrow}
-              resizeMode="contain"
-            />
-          </View>
+          <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
+            <View style={[layout.display, layout.rowHCenter]}>
+              <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
+                Go To Profile
+              </Text>
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 16, height: 9, left: 5 }}
+                source={RightArrow}
+                resizeMode="contain"
+              />
+            </View>
+          </PrimaryGradient>
         </TouchableOpacity>
       </View>
     </SafeScreen>
@@ -56,4 +50,15 @@ const NewPasswordStatusScreen = ({ navigation }) => {
 
 export default NewPasswordStatusScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loginButton: {
+    height: 48,
+    width: '100%',
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
+  },
+});

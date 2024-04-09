@@ -25,20 +25,20 @@ export const generateFontSizes = () => {
 
 export const staticFontStyles = {
   bold: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   fontWeight_small: {
     fontWeight: '400',
+    fontFamily: 'Poppins-Medium',
   },
   fontWeight_extraSmall: {
     fontWeight: '800',
+    fontFamily: 'Poppins-Medium',
   },
   fontWeignt_600: {
     fontWeight: '600',
+    fontFamily: 'Poppins-Medium',
   },
-  // fontWeignt_600:{
-  // 	fontWeight:'600'
-  // },
   uppercase: {
     textTransform: 'uppercase',
   },

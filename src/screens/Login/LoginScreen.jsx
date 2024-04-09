@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -8,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -17,14 +19,19 @@ import { ImageVariant } from '@/components/atoms';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { MMKV } from 'react-native-mmkv';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '@/store/redux-slice/LoginSlice';
 
 const screenWidth = Dimensions.get('window').width;
 const isTablet = screenWidth >= 600;
+const storage = new MMKV();
 
-const Login = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+const LoginScreen = () => {
+  const { colors, layout, fonts, backgrounds } = useTheme();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -40,7 +47,10 @@ const Login = () => {
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-  const handleUsernameLogin = () => {
+
+  const handleUsernameLogin = (data) => {
+    storage.set('username', data.username);
+    dispatch(loginAction(data));
     navigation.reset({
       index: 0,
       routes: [{ name: 'AuthorizedStack' }],
@@ -55,11 +65,11 @@ const Login = () => {
           layout.paddingForFullScreen,
           isTablet
             ? {
+                // eslint-disable-next-line prettier/prettier
                 justifyContent: 'center',
                 alignSelf: 'center',
                 alignItems: 'flex-start',
                 width: moderateScale(300),
-                // paddingBottom: verticalScale(40),
               }
             : null,
         ]}
@@ -70,8 +80,8 @@ const Login = () => {
               <ImageVariant
                 testID="brand-img"
                 style={{
-                  width: moderateScale(80),
-                  height: moderateVerticalScale(80),
+                  width: moderateScale(110),
+                  height: moderateVerticalScale(112),
                 }}
                 source={Logo}
                 resizeMode="contain"
@@ -101,9 +111,9 @@ const Login = () => {
                       name="username"
                       control={control}
                       rules={{
-                        required: 'This feild is required',
+                        required: 'This field is required',
                       }}
-                      render={({ field: { onChange, onBlur, value } }) => (
+                      render={({ field: { onChange, onBlur } }) => (
                         <View
                           style={[
                             layout.display,
@@ -121,6 +131,7 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
                                 textAlign: 'left',
@@ -130,27 +141,27 @@ const Login = () => {
                             placeholder="Username"
                             placeholderTextColor="#94939B"
                             onBlur={onBlur}
-                            // onChangeText={(value) => {
-                            //   onChange(value);
-                            //   setTextInputValues((prevState) => ({
-                            //     ...prevState,
-                            //     username: value,
-                            //   }));
-                            // }}
-                            // value={textInputValues.username}
+                            onChangeText={(value) => {
+                              onChange(value);
+                              setTextInputValues((prevState) => ({
+                                ...prevState,
+                                username: value,
+                              }));
+                            }}
+                            value={textInputValues.username}
                           />
                         </View>
                       )}
                     />
-                    {/* {errors.username && (
-                  <Text
-                    style={{
-                      color: "#FF575F",
-                    }}
-                  >
-                    {errors.username.message || null}
-                  </Text>
-                )} */}
+                    {errors.username && (
+                      <Text
+                        style={{
+                          color: '#FF575F',
+                        }}
+                      >
+                        {errors.username.message || null}
+                      </Text>
+                    )}
 
                     <Controller
                       name="password"
@@ -158,10 +169,10 @@ const Login = () => {
                       rules={{
                         required: {
                           value: true,
-                          message: 'this feild is required',
+                          message: 'this field is required',
                         },
                       }}
-                      render={({ field: { onChange, onBlur, value } }) => (
+                      render={({ field: { onChange, onBlur } }) => (
                         <View
                           style={[
                             layout.display,
@@ -179,6 +190,7 @@ const Login = () => {
                               layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
+                              fonts.fontWeight_small,
                               {
                                 color: colors.white,
                                 textAlign: 'left',
@@ -188,28 +200,28 @@ const Login = () => {
                             placeholder="Password"
                             placeholderTextColor="#94939B"
                             secureTextEntry={true}
-                            //   onBlur={onBlur}
-                            //   onChangeText={(value) => {
-                            //     onChange(value);
-                            //     setTextInputValues((prevState) => ({
-                            //       ...prevState,
-                            //       password: value,
-                            //     }));
-                            //   }}
-                            //   value={textInputValues.password}
+                            onBlur={onBlur}
+                            onChangeText={(value) => {
+                              onChange(value);
+                              setTextInputValues((prevState) => ({
+                                ...prevState,
+                                password: value,
+                              }));
+                            }}
+                            value={textInputValues.password}
                           />
                         </View>
                       )}
                     />
-                    {/* {errors.password && (
-                  <Text
-                  style={{
-                    color: "#FF575F",
-                  }}
-                >
-                    This is required.
-                  </Text>
-                )} */}
+                    {errors.password && (
+                      <Text
+                        style={{
+                          color: '#FF575F',
+                        }}
+                      >
+                        {errors.password.message || null}
+                      </Text>
+                    )}
                   </View>
                 </KeyboardAvoidingView>
               </View>
@@ -219,7 +231,7 @@ const Login = () => {
                     style={[
                       fonts.size_16,
                       fonts.fontWeight_small,
-                      { color: colors.termsLinkColor },
+                      { color: colors.linearGradientColor },
                     ]}
                   >
                     Forgot password?
@@ -248,71 +260,58 @@ const Login = () => {
                   style={{ marginRight: '2%' }}
                   // onPress={openTermsAndCondition}
                 >
-                  <Text style={[fonts.size_12, { color: colors.termsLinkColor, opacity: 0.7 }]}>
+                  <Text
+                    style={[
+                      fonts.size_12,
+                      fonts.fontWeight_small,
+                      { color: colors.linearGradientColor, opacity: 0.7 },
+                    ]}
+                  >
                     T&C
                   </Text>
                 </TouchableOpacity>
                 <Text
-                  style={[fonts.size_12, { color: colors.white, opacity: 0.7, marginRight: '2%' }]}
+                  style={[
+                    fonts.size_12,
+                    fonts.fontWeight_small,
+                    { color: colors.white, opacity: 0.7, marginRight: '2%' },
+                  ]}
                 >
                   and
                 </Text>
                 <TouchableOpacity
                 // onPress={openPrivacyPolicy}
                 >
-                  <Text style={[fonts.size_12, { color: colors.termsLinkColor, opacity: 0.7 }]}>
+                  <Text
+                    style={[
+                      fonts.size_12,
+                      fonts.fontWeight_small,
+                      { color: colors.linearGradientColor, opacity: 0.7 },
+                    ]}
+                  >
                     Privacy policy
                   </Text>
                 </TouchableOpacity>
               </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  marginTop: '5%',
-                }}
+              <TouchableOpacity
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onPress={handleSubmit(handleUsernameLogin)}
+                // disabled={isLoading}
               >
-                <TouchableOpacity
-                  onPress={handleUsernameLogin}
-                  // disabled={isLoading}
-                  style={[
-                    styles.loginButton,
-                    layout.justifyCenter,
-                    {
-                      height: 48,
-                      borderRadius: 12,
-                      backgroundColor: colors.termsLinkColor,
-                    },
-                    isTablet ? { width: moderateScale(220) } : null,
-                  ]}
-                >
-                  {/* <PrimaryGradient
-                    styleProp={[
-                      styles.loginButton,
-                      layout.justifyCenter,
-                      { height: 48, borderRadius: 12 },
-                    ]}
-                  > */}
-                  {/* {isLoading ? (
-                      <ActivityIndicator size="large" color={Colors.black} />
-                    ) : ( */}
-                  <View style={[layout.display, layout.row, layout.itemsCenter]}>
+                <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
+                  <View style={[layout.display, layout.rowHCenter]}>
                     <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                       LOGIN
                     </Text>
                     <ImageVariant
                       testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5 }}
+                      style={{ width: 16, height: 9, left: 5, top: -2 }}
                       source={rightArrow}
                       resizeMode="contain"
                     />
                   </View>
-                  {/* )} */}
-                  {/* </PrimaryGradient> */}
-                </TouchableOpacity>
-              </View>
+                </PrimaryGradient>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -321,7 +320,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   heading: {
@@ -346,12 +345,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loginButton: {
-    height: 32,
+    height: 48,
     width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: '5%',
   },
 });

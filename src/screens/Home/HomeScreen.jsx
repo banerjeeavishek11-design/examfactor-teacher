@@ -1,7 +1,15 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { useTheme } from '@/theme';
-import { Concentrix, Header, SafeScreen } from '@/components/template';
+import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { Divider } from 'react-native-paper';
@@ -11,16 +19,35 @@ import Info from '@/theme/assets/images/info.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
-import SortbyBottomSheet from '@/components/BottomSheet/SortbyBottomSheet';
-import PracticeDurationBottomSheet from '@/components/BottomSheet/PracticeDurationBottomSheet';
+import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
+import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
+
+const data = ['03', '06', '09', '12'];
+const barchartColor = ['#7AF4FC', '#27D4FA'];
+const width = 300;
+const height = 250;
+const borderRadius = 5;
+const xAxisTitle = 'Achievable Score (%)';
+const yAxisTitle = 'No. of students';
 
 const HomeScreen = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
+  const screenWidth = Dimensions.get('window').width;
+  const isTablet = screenWidth >= 600;
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
+  const productScrollRef = useRef(null);
+  const scrollViewRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
+
+  const [subjects, setSubjects] = useState([
+    { id: 1, subjectName: 'Physics', isChecked: true },
+    { id: 2, subjectName: 'Chemistry', isChecked: false },
+    { id: 3, subjectName: 'Mathematics', isChecked: false },
+    { id: 4, subjectName: 'Bengali', isChecked: false },
+    { id: 5, subjectName: 'English', isChecked: false },
+  ]);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -38,16 +65,68 @@ const HomeScreen = () => {
 
   const toggleContent = () => {
     setShowContent(!showContent);
-    // console.log("showContent:", showContent);
   };
 
-  console.log('Sortby selected value:: ', sortByValue);
-  console.log('Practice Duration selected value:: ', practiceDurationValue);
+  const handleButtonPress = (index) => {
+    const updatedSubjects = subjects.map((subject, i) => {
+      if (i === index) {
+        return { ...subject, isChecked: true };
+      } else {
+        return { ...subject, isChecked: false };
+      }
+    });
+    setSubjects(updatedSubjects);
+    const buttonWidth = 100;
+    const scrollX = index * buttonWidth;
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
+    }
+    if (productScrollRef.current) {
+      productScrollRef.current?.scrollTo({ x: 0, animated: true });
+    }
+  };
 
   return (
     <SafeScreen>
-      <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
+      <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
         <Header />
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[
+            layout.paddingForFullScreen,
+            { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
+          ]}
+        >
+          <View style={[layout.display, layout.rowHCenter]}>
+            {subjects.map((ele, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[
+                  styles.button,
+                  {
+                    borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
+                    borderWidth: ele.isChecked ? 2 : 0,
+                  },
+                ]}
+                onPress={() => {
+                  handleButtonPress(i, ele);
+                }}
+              >
+                <Text
+                  style={[
+                    ele.isChecked == true ? styles.activeButton : styles.buttonText,
+                    fonts.size_14,
+                    fonts.bold,
+                  ]}
+                >
+                  {ele.subjectName}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
       </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
@@ -96,7 +175,6 @@ const HomeScreen = () => {
           >
             Physics
           </Text>
-
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
             <Concentrix scorePercentage={20} />
           </View>
@@ -124,7 +202,7 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              60% Complete
+              {`${homeworkProgress * 100}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
@@ -137,14 +215,14 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              50% Complete
+              {`${diagnosticProgress * 100}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
             <Progressbar progress={diagnosticProgress} color={'#BBA041'} />
           </View>
         </View>
-        <View
+        {/* <View
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -155,7 +233,17 @@ const HomeScreen = () => {
               marginTop: '4%',
             },
           ]}
-        ></View>
+        ></View> */}
+        <BarChart
+          data={data}
+          colors={barchartColor}
+          width={width}
+          height={height}
+          borderRadius={borderRadius}
+          xAxisTitle={xAxisTitle}
+          yAxisTitle={yAxisTitle}
+        />
+        {/* <BarChartsCarousel /> */}
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >
@@ -196,7 +284,7 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 {
                   color: sortByValue !== null ? colors.termsLinkColor : colors.white,
@@ -209,7 +297,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: sortByValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: sortByValue !== null ? 1 : 0.4,
@@ -218,6 +306,7 @@ const HomeScreen = () => {
               resizeMode="contain"
             />
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => setPracticeDurationModalVisible(true)}
             style={[
@@ -253,7 +342,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: practiceDurationValue !== null ? colors.termsLinkColor : colors.white,
                 opacity: practiceDurationValue !== null ? 1 : 0.4,
@@ -280,7 +369,7 @@ const HomeScreen = () => {
             <Text
               style={[
                 fonts.size_12,
-                fonts.fontWeight_small,
+                fonts.fontWeight_extraSmall,
                 fonts.alignCenter,
                 { color: colors.white, opacity: 0.3 },
               ]}
@@ -290,7 +379,7 @@ const HomeScreen = () => {
             <ImageVariant
               testID="brand-img"
               style={{
-                width: 7,
+                width: 10,
                 height: 10,
                 tintColor: colors.white,
                 opacity: 0.4,
@@ -325,7 +414,8 @@ const HomeScreen = () => {
           </Text>
         </View> */}
 
-        <View
+        <TouchableOpacity
+          onPress={toggleContent}
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -341,7 +431,7 @@ const HomeScreen = () => {
           <View style={[layout.display, layout.rowHCenter]}>
             <View style={{ width: '30%' }}>
               <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>75%</Text>
-              <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.white }]}>
+              <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                 Achievable Score
               </Text>
             </View>
@@ -405,7 +495,7 @@ const HomeScreen = () => {
               </View>
             </View>
             <View style={{ width: '10%' }}>
-              <TouchableOpacity onPress={toggleContent}>
+              <TouchableOpacity>
                 {showContent ? (
                   <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
                 ) : (
@@ -435,13 +525,7 @@ const HomeScreen = () => {
                   <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     8 days ago
                   </Text>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.white, opacity: 0.9 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                     Last practice
                   </Text>
                 </View>
@@ -451,11 +535,7 @@ const HomeScreen = () => {
                   </Text>
                   <View style={[layout.display, layout.rowHCenter]}>
                     <Text
-                      style={[
-                        fonts.size_10,
-                        fonts.fontWeight_small,
-                        { color: colors.white, opacity: 0.9 },
-                      ]}
+                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
                     >
                       Avg. Study Time
                     </Text>
@@ -476,22 +556,16 @@ const HomeScreen = () => {
                   <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
                     75%
                   </Text>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.white, opacity: 0.9 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
                     Last test score
                   </Text>
                 </View>
               </View>
             </>
           )}
-        </View>
+        </TouchableOpacity>
 
-        <View
+        <TouchableOpacity
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -507,7 +581,7 @@ const HomeScreen = () => {
         >
           <View style={{ width: '30%' }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white, left: 5 }]}>0%</Text>
-            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.white }]}>
+            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
               Achievable Score
             </Text>
           </View>
@@ -574,9 +648,9 @@ const HomeScreen = () => {
               />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
 
-        <View
+        <TouchableOpacity
           style={[
             layout.fullWidth,
             layout.paddingForCard,
@@ -592,7 +666,7 @@ const HomeScreen = () => {
         >
           <View style={{ width: '30%' }}>
             <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>52%</Text>
-            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.white }]}>
+            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
               Achievable Score
             </Text>
           </View>
@@ -659,7 +733,7 @@ const HomeScreen = () => {
               />
             </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
       <SortbyBottomSheet
         visible={sortbyModalVisible}
@@ -675,6 +749,23 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  button: {
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: '#22222F',
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  activeButton: {
+    color: '#27D4FA',
+  },
+  buttonText: {
+    color: '#7A7A82',
+  },
+});
 
-const styles = StyleSheet.create({});
+export default HomeScreen;

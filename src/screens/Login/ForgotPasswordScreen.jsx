@@ -1,5 +1,6 @@
 import {
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -13,134 +14,108 @@ import { ImageVariant } from '@/components/atoms';
 import Logo from '@/theme/assets/images/examfactorlogo.png';
 import rightArrow from '@/theme/assets/images/rightarrow.png';
 import { Controller, useForm } from 'react-hook-form';
+import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const ForgotPasswordScreen = () => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts, backgrounds } = useTheme();
   const navigation = useNavigation();
   const {
     control,
-    handleSubmit,
     formState: { errors },
   } = useForm();
   return (
-    <View style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen, layout.flex_1]}>
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-        <Text style={{ color: 'white' }}>Back</Text>
-      </TouchableOpacity>
-      <View style={{ marginTop: '30%' }}>
-        <ImageVariant
-          testID="brand-img"
-          style={{ width: 172, height: 175 }}
-          source={Logo}
-          resizeMode="contain"
-        />
-      </View>
-      <View style={{ width: '40%' }}>
-        <Text style={[fonts.size_16, fonts.bold, { color: 'white' }]}>
-          Forgot password? Login through OTP
-        </Text>
-      </View>
-      <View style={{ marginTop: '5%' }}>
-        <Text style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}>
-          Please enter your email address to get the one time password
-        </Text>
-      </View>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={true}>
-        <View style={{ marginTop: '5%' }}>
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              required: 'This feild is required',
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View
-                style={[
-                  layout.display,
-                  layout.row,
-                  layout.itemsCenter,
-                  styles.mobileNumberInput,
-                  {
-                    paddingHorizontal: 10,
-                    borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
-                  },
-                ]}
-              >
-                <TextInput
-                  style={[
-                    layout.fullWidth,
-                    layout.justifyCenter,
-                    fonts.size_16,
-                    {
-                      color: colors.white,
-                      textAlign: 'left',
-                      paddingLeft: '0%',
-                    },
-                  ]}
-                  placeholder="Email "
-                  placeholderTextColor="#94939B"
-                  onBlur={onBlur}
-                  // onChangeText={(value) => {
-                  //   onChange(value);
-                  //   setTextInputValues((prevState) => ({
-                  //     ...prevState,
-                  //     username: value,
-                  //   }));
-                  // }}
-                  // value={textInputValues.username}
-                />
-              </View>
-            )}
+    <View style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen]}>
+      {/* <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <Text style={{ color: "white" }}>Back</Text>
+      </TouchableOpacity> */}
+      <View style={[layout.justifyEnd, layout.fullHeight]}>
+        <View style={{ marginBottom: '5%' }}>
+          <ImageVariant
+            testID="brand-img"
+            style={{ width: 110, height: 112 }}
+            source={Logo}
+            resizeMode="contain"
           />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignContent: 'center',
-            marginTop: '20%',
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPasswordSuccessfulScreen')}
-            // disabled={isLoading}
-            style={[
-              styles.loginButton,
-              layout.justifyCenter,
-              {
-                height: 48,
-                borderRadius: 12,
-                backgroundColor: colors.termsLinkColor,
-              },
-            ]}
-          >
-            {/* <PrimaryGradient
-                  styleProp={[
-                    styles.loginButton,
-                    layout.justifyCenter,
-                    { height: 48, borderRadius: 12 },
-                  ]}
-                > */}
-            {/* {isLoading ? (
-                    <ActivityIndicator size="large" color={Colors.black} />
-                  ) : ( */}
-            <View style={[layout.display, layout.row, layout.itemsCenter]}>
-              <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                GET OTP
-              </Text>
-              <ImageVariant
-                testID="brand-img"
-                style={{ width: 16, height: 9, left: 5 }}
-                source={rightArrow}
-                resizeMode="contain"
-              />
-            </View>
-            {/* )} */}
-            {/* </PrimaryGradient> */}
-          </TouchableOpacity>
+        <View style={{ width: '50%', marginBottom: '5%' }}>
+          <Text style={[fonts.size_16, fonts.bold, { color: 'white' }]}>
+            Forgot password? Login through OTP
+          </Text>
         </View>
-      </KeyboardAvoidingView>
+        <View style={{ marginBottom: '2%', width: '80%' }}>
+          <Text style={[fonts.size_16, fonts.small, { color: colors.subHeading }]}>
+            Please enter your email address to get the one time password
+          </Text>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          enabled={true}
+        >
+          <View style={{ marginBottom: '10%' }}>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: 'This feild is required',
+              }}
+              render={({ field: { onBlur } }) => (
+                <View
+                  style={[
+                    layout.display,
+                    layout.row,
+                    layout.itemsCenter,
+                    styles.mobileNumberInput,
+                    {
+                      paddingHorizontal: 10,
+                      borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={[
+                      layout.fullWidth,
+                      layout.justifyCenter,
+                      fonts.size_16,
+                      {
+                        color: colors.white,
+                        textAlign: 'left',
+                        paddingLeft: '0%',
+                      },
+                    ]}
+                    placeholder="Email "
+                    placeholderTextColor="#94939B"
+                    onBlur={onBlur}
+                    // onChangeText={(value) => {
+                    //   onChange(value);
+                    //   setTextInputValues((prevState) => ({
+                    //     ...prevState,
+                    //     username: value,
+                    //   }));
+                    // }}
+                    // value={textInputValues.username}
+                  />
+                </View>
+              )}
+            />
+          </View>
+
+          <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordSuccessfulScreen')}>
+            <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
+              <View style={[layout.display, layout.rowHCenter]}>
+                <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
+                  GET OTP
+                </Text>
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 16, height: 9, left: 5 }}
+                  source={rightArrow}
+                  resizeMode="contain"
+                />
+              </View>
+            </PrimaryGradient>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </View>
     </View>
   );
 };
@@ -158,12 +133,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   loginButton: {
-    height: 32,
-    width: 311,
+    height: 48,
+    width: '100%',
     borderRadius: 9,
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: '5%',
   },
 });

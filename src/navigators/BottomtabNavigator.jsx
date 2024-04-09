@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ActivateScreen, HomeScreen, ReportsScreen, SchoolWorkScreen } from '@/screens';
@@ -31,8 +31,7 @@ const S = StyleSheet.create({
 });
 
 const TabBar = (props) => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { layout, fonts } = useTheme();
   return (
     <View style={S.container}>
       <TouchableOpacity
@@ -162,7 +161,7 @@ const TabBar = (props) => {
   );
 };
 
-const BottomtabNavigator = () => {
+const BottomTabNavigator = () => {
   return (
     // <Tab.Navigator
     //   screenOptions={{
@@ -184,6 +183,4 @@ const BottomtabNavigator = () => {
   );
 };
 
-export default BottomtabNavigator;
-
-const styles = StyleSheet.create({});
+export default BottomTabNavigator;
