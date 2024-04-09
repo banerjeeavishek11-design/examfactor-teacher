@@ -1,5 +1,13 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { useTheme } from '@/theme';
 import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
@@ -25,9 +33,21 @@ const yAxisTitle = 'No. of students';
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
+  const screenWidth = Dimensions.get('window').width;
+  const isTablet = screenWidth >= 600;
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
+  const productScrollRef = useRef(null);
+  const scrollViewRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
+
+  const [subjects, setSubjects] = useState([
+    { id: 1, subjectName: 'Physics', isChecked: true },
+    { id: 2, subjectName: 'Chemistry', isChecked: false },
+    { id: 3, subjectName: 'Mathematics', isChecked: false },
+    { id: 4, subjectName: 'Bengali', isChecked: false },
+    { id: 5, subjectName: 'English', isChecked: false },
+  ]);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -47,10 +67,66 @@ const HomeScreen = () => {
     setShowContent(!showContent);
   };
 
+  const handleButtonPress = (index) => {
+    const updatedSubjects = subjects.map((subject, i) => {
+      if (i === index) {
+        return { ...subject, isChecked: true };
+      } else {
+        return { ...subject, isChecked: false };
+      }
+    });
+    setSubjects(updatedSubjects);
+    const buttonWidth = 100;
+    const scrollX = index * buttonWidth;
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
+    }
+    if (productScrollRef.current) {
+      productScrollRef.current?.scrollTo({ x: 0, animated: true });
+    }
+  };
+
   return (
     <SafeScreen>
-      <View style={[{ backgroundColor: colors.headerBackgroundColor }]}>
+      <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
         <Header />
+        <ScrollView
+          ref={scrollViewRef}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[
+            layout.paddingForFullScreen,
+            { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
+          ]}
+        >
+          <View style={[layout.display, layout.rowHCenter]}>
+            {subjects.map((ele, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[
+                  styles.button,
+                  {
+                    borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
+                    borderWidth: ele.isChecked ? 2 : 0,
+                  },
+                ]}
+                onPress={() => {
+                  handleButtonPress(i, ele);
+                }}
+              >
+                <Text
+                  style={[
+                    ele.isChecked == true ? styles.activeButton : styles.buttonText,
+                    fonts.size_14,
+                    fonts.bold,
+                  ]}
+                >
+                  {ele.subjectName}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
       </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
@@ -672,5 +748,24 @@ const HomeScreen = () => {
     </SafeScreen>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: '#22222F',
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  activeButton: {
+    color: '#27D4FA',
+  },
+  buttonText: {
+    color: '#7A7A82',
+  },
+});
 
 export default HomeScreen;
