@@ -14,10 +14,11 @@ import SchoolWorkTopTabNavigator from '@/navigators/SchoolWorkTopTabNavigator';
 import GradientLeftArrow from '@/theme/assets/images/gradientlefttarrow.png';
 import GradientRightArrow from '@/theme/assets/images/gradientrightarrow.png';
 
+const screenWidth = Dimensions.get('window').width;
+const isTablet = screenWidth >= 600;
+
 const SchoolWorkScreen = () => {
   const { colors, layout, fonts } = useTheme();
-  const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 600;
   const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
 
@@ -106,7 +107,15 @@ const SchoolWorkScreen = () => {
             />
           </TouchableOpacity>
 
-          <Text style={[fonts.size_16, fonts.bold, { color: colors.white }]}>C1: Motion</Text>
+          <Text
+            style={[
+              fonts.size_16,
+              fonts.bold,
+              { color: colors.white, marginRight: isTablet ? '8%' : null },
+            ]}
+          >
+            C1: Motion
+          </Text>
           <TouchableOpacity>
             <Image
               source={GradientRightArrow}
