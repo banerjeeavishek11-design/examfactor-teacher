@@ -1,40 +1,36 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useState } from "react";
-import { SafeScreen } from "@/components/template";
-import { useTheme } from "@/theme";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import Profile from "@/theme/assets/images/profile.png";
-import EditPersonalDetailBottomSheet from "@/components/BottomSheet/EditPersonalDetailBottomSheet";
-import ChangePasswordBottomSheet from "@/components/BottomSheet/ChangePasswordBottomSheet";
-import { DrawerActions } from "@react-navigation/native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { SafeScreen } from '@/components/template';
+import { useTheme } from '@/theme';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import Profile from '@/theme/assets/images/profile.png';
+import EditPersonalDetailBottomSheet from '@/components/BottomSheet/EditPersonalDetailBottomSheet';
+import ChangePasswordBottomSheet from '@/components/BottomSheet/ChangePasswordBottomSheet';
+import { DrawerActions } from '@react-navigation/native';
 
 const ProfileData = {
-  fullName: "Vinay Dua",
-  dob: "18",
-  email: "vin****a@gmail.com",
-  gender: "Male",
-  city: "New Delhi",
-  mobile: "9988776655",
-  emergencyContact: "9*****32412",
-  address: "axyz, Abc Street, new delhi, pin -700001 ",
+  fullName: 'Vinay Dua',
+  dob: '18',
+  email: 'vin****a@gmail.com',
+  gender: 'Male',
+  city: 'New Delhi',
+  mobile: '9988776655',
+  emergencyContact: '9*****32412',
+  address: 'axyz, Abc Street, new delhi, pin -700001 ',
 };
 
 const ProfileDetailsScreen = ({ navigation }) => {
   const [profileData, setProfileData] = useState(ProfileData);
-  const [
-    personalDetailBottomSheetVisible,
-    setPersonalDetailBottomSheetVisible,
-  ] = useState(false);
-  const [changePasswordBottomSheetVisible,
-    setChangePasswordBottomSheetVisible] = useState(false)
-    
-  const saveNewData = (newData)=>{
-    setProfileData(prevData => ({
+  const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible] = useState(false);
+  const [changePasswordBottomSheetVisible, setChangePasswordBottomSheetVisible] = useState(false);
+
+  const saveNewData = (newData) => {
+    setProfileData((prevData) => ({
       ...prevData,
-      ...newData
-    }))
-   }
+      ...newData,
+    }));
+  };
 
   const openEditPersonalDetailModal = () => {
     setPersonalDetailBottomSheetVisible(true);
@@ -43,15 +39,15 @@ const ProfileDetailsScreen = ({ navigation }) => {
     setPersonalDetailBottomSheetVisible(false);
   };
 
-  const openChangePasswordModal = ()=>{
-    setChangePasswordBottomSheetVisible(true)
-  }
+  const openChangePasswordModal = () => {
+    setChangePasswordBottomSheetVisible(true);
+  };
 
-  const closeChangePasswordModal = ()=>{
-    setChangePasswordBottomSheetVisible(false)
-  }
+  const closeChangePasswordModal = () => {
+    setChangePasswordBottomSheetVisible(false);
+  };
 
-  console.log("PROF DATA::", profileData);
+  console.log('PROF DATA::', profileData);
 
   const { layout, fonts, colors } = useTheme();
   return (
@@ -70,62 +66,25 @@ const ProfileDetailsScreen = ({ navigation }) => {
               source={LeftArrow}
               resizeMode="contain"
             />
-            <Text
-              style={[
-                fonts.size_16,
-                fonts.bold,
-                { color: colors.backButtonColor, left: 5 },
-              ]}
-            >
+            <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
               Profile Details
             </Text>
           </View>
         </TouchableOpacity>
-        <View
-          style={[
-            layout.justifyCenter,
-            layout.itemsCenter,
-            { marginTop: "10%" },
-          ]}
-        >
+        <View style={[layout.justifyCenter, layout.itemsCenter, { marginTop: '10%' }]}>
           <Image source={Profile} />
           <TouchableOpacity>
-            <Text
-              style={[
-                fonts.size_12,
-                { color: colors.termsLinkColor, marginTop: "2%" },
-              ]}
-            >
+            <Text style={[fonts.size_12, { color: colors.termsLinkColor, marginTop: '2%' }]}>
               Add Image
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={[
-            layout.rowHCenter,
-            layout.justifyBetween,
-            { marginTop: "10%" },
-          ]}
-        >
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.bold,
-              { color: colors.white, opacity: 0.4 },
-            ]}
-          >
+        <View style={[layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}>
+          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             PERSONAL
           </Text>
           <TouchableOpacity onPress={openEditPersonalDetailModal}>
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.termsLinkColor },
-              ]}
-            >
-              EDIT
-            </Text>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>EDIT</Text>
           </TouchableOpacity>
         </View>
         <View
@@ -135,7 +94,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
             {
               backgroundColor: colors.cardBackgroundColor,
               borderRadius: 14,
-              marginTop: "3%",
+              marginTop: '3%',
               paddingTop: 0,
             },
           ]}
@@ -146,7 +105,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
-                {borderBottomColor: colors.gray200}
+                { borderBottomColor: colors.gray200 },
               ]}
             >
               <Text
@@ -173,7 +132,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
-                {borderBottomColor: colors.gray200}
+                { borderBottomColor: colors.gray200 },
               ]}
             >
               <Text
@@ -200,7 +159,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
-                {borderBottomColor: colors.gray200}
+                { borderBottomColor: colors.gray200 },
               ]}
             >
               <Text
@@ -227,7 +186,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
-                {borderBottomColor: colors.gray200}
+                { borderBottomColor: colors.gray200 },
               ]}
             >
               <Text
@@ -254,7 +213,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 styles.dataFeild,
-                {borderBottomColor: colors.gray200}
+                { borderBottomColor: colors.gray200 },
               ]}
             >
               <Text
@@ -281,7 +240,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 layout.rowHCenter,
                 layout.justifyBetween,
                 {
-                  paddingTop: "5%",
+                  paddingTop: '5%',
                 },
               ]}
             >
@@ -316,44 +275,24 @@ const ProfileDetailsScreen = ({ navigation }) => {
               backgroundColor: colors.cardBackgroundColor,
               borderRadius: 14,
               height: 60,
-              marginTop: "5%",
+              marginTop: '5%',
             },
           ]}
         >
           <Text
-            style={[
-              fonts.size_16,
-              fonts.fontWeight_small,
-              { color: colors.white, opacity: 0.4 },
-            ]}
+            style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.4 }]}
           >
             Phone Number
           </Text>
           <Text
-            style={[
-              fonts.size_16,
-              fonts.fontWeight_small,
-              { color: colors.white, opacity: 0.6 },
-            ]}
+            style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
           >
             {profileData.mobile}
           </Text>
         </View>
         <TouchableOpacity onPress={openChangePasswordModal}>
-          <View
-            style={[
-              layout.rowHCenter,
-              layout.justifyBetween,
-              { marginTop: "5%" },
-            ]}
-          >
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.bold,
-                { color: colors.termsLinkColor },
-              ]}
-            >
+          <View style={[layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
               CHANGE PASSWORD
             </Text>
           </View>
@@ -362,12 +301,12 @@ const ProfileDetailsScreen = ({ navigation }) => {
       <EditPersonalDetailBottomSheet
         closeModal={closeEditPersonalDetailModal}
         personalDetailBottomSheetVisible={personalDetailBottomSheetVisible}
-        profileData = {profileData}
+        profileData={profileData}
         saveNewData={saveNewData}
       />
       <ChangePasswordBottomSheet
-      visible={changePasswordBottomSheetVisible}
-      closeModal={closeChangePasswordModal}
+        visible={changePasswordBottomSheetVisible}
+        closeModal={closeChangePasswordModal}
       />
     </SafeScreen>
   );
@@ -378,6 +317,6 @@ export default ProfileDetailsScreen;
 const styles = StyleSheet.create({
   dataFeild: {
     borderBottomWidth: 0.5,
-    paddingVertical: "5%",
+    paddingVertical: '5%',
   },
 });

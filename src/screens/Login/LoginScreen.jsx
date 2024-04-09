@@ -16,25 +16,14 @@ import rightArrow from '@/theme/assets/images/rightarrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import {
-  moderateScale,
-  moderateVerticalScale,
-} from 'react-native-size-matters';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
 const screenWidth = Dimensions.get('window').width;
 const isTablet = screenWidth >= 600;
 
 const Login = () => {
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
   const {
     control,
@@ -88,14 +77,7 @@ const Login = () => {
                 resizeMode="contain"
               />
               <View style={{ width: '80%' }}>
-                <Text
-                  style={[
-                    fonts.size_32,
-                    fonts.bold,
-                    styles.heading,
-                    { color: colors.white },
-                  ]}
-                >
+                <Text style={[fonts.size_32, fonts.bold, styles.heading, { color: colors.white }]}>
                   ExamFactor
                 </Text>
                 <Text
@@ -130,9 +112,7 @@ const Login = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username
-                                ? '#FF575F'
-                                : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -190,9 +170,7 @@ const Login = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username
-                                ? '#FF575F'
-                                : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -236,9 +214,7 @@ const Login = () => {
                 </KeyboardAvoidingView>
               </View>
               <View style={{ marginTop: '4%' }}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('ForgotPasswordScreen')}
-                >
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}>
                   <Text
                     style={[
                       fonts.size_16,
@@ -272,32 +248,19 @@ const Login = () => {
                   style={{ marginRight: '2%' }}
                   // onPress={openTermsAndCondition}
                 >
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      { color: colors.termsLinkColor, opacity: 0.7 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_12, { color: colors.termsLinkColor, opacity: 0.7 }]}>
                     T&C
                   </Text>
                 </TouchableOpacity>
                 <Text
-                  style={[
-                    fonts.size_12,
-                    { color: colors.white, opacity: 0.7, marginRight: '2%' },
-                  ]}
+                  style={[fonts.size_12, { color: colors.white, opacity: 0.7, marginRight: '2%' }]}
                 >
                   and
                 </Text>
                 <TouchableOpacity
                 // onPress={openPrivacyPolicy}
                 >
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      { color: colors.termsLinkColor, opacity: 0.7 },
-                    ]}
-                  >
+                  <Text style={[fonts.size_12, { color: colors.termsLinkColor, opacity: 0.7 }]}>
                     Privacy policy
                   </Text>
                 </TouchableOpacity>
@@ -335,16 +298,8 @@ const Login = () => {
                   {/* {isLoading ? (
                       <ActivityIndicator size="large" color={Colors.black} />
                     ) : ( */}
-                  <View
-                    style={[layout.display, layout.row, layout.itemsCenter]}
-                  >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
+                  <View style={[layout.display, layout.row, layout.itemsCenter]}>
+                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
                       LOGIN
                     </Text>
                     <ImageVariant

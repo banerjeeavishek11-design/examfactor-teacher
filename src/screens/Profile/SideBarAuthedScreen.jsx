@@ -1,64 +1,48 @@
-import {
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
-import { useNavigation, DrawerActions } from "@react-navigation/native";
-import { SafeScreen } from "@/components/template";
-import { ImageVariant } from "@/components/atoms";
-import LeftArrow from "@/theme/assets/images/leftarrow.png";
-import Arrow from "@/theme/assets/images/arrow.png";
-import Rateus from "@/theme/assets/images/rateus.png";
-import Support from "@/theme/assets/images/support.png";
-import AppGuide from "@/theme/assets/images/appguide.png";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import User from "@/theme/assets/images/user.png";
-import Teacher from "@/theme/assets/images/teacher.png";
-import ClassTeacher from "@/theme/assets/images/classteacher.png";
-import { Divider } from "react-native-paper";
-import ChangeRoleBottomSheet from "@/components/BottomSheet/ChangeRoleBottomSheet";
-import RateUsBottomSheet from "@/components/BottomSheet/RateUsBottomSheet";
+import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { useTheme } from '@/theme';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
+import { SafeScreen } from '@/components/template';
+import { ImageVariant } from '@/components/atoms';
+import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import Arrow from '@/theme/assets/images/arrow.png';
+import Rateus from '@/theme/assets/images/rateus.png';
+import Support from '@/theme/assets/images/support.png';
+import AppGuide from '@/theme/assets/images/appguide.png';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import User from '@/theme/assets/images/user.png';
+import Teacher from '@/theme/assets/images/teacher.png';
+import ClassTeacher from '@/theme/assets/images/classteacher.png';
+import { Divider } from 'react-native-paper';
+import ChangeRoleBottomSheet from '@/components/BottomSheet/ChangeRoleBottomSheet';
+import RateUsBottomSheet from '@/components/BottomSheet/RateUsBottomSheet';
 
 const SideBarAuthedScreen = (props) => {
   // console.log('first',props)
-  const {
-    colors,
-    variant,
-    changeTheme,
-    layout,
-    gutters,
-    fonts,
-    components,
-    backgrounds,
-  } = useTheme();
+  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
+    useTheme();
   const navigation = useNavigation();
-  const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] =
-    useState(false);
+  const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState("Teacher");
+  const [userRole, setUserRole] = useState('Teacher');
 
   const closeDrawer = () => {
     navigation.dispatch(DrawerActions.closeDrawer());
   };
 
   const openTermsAndCondition = () => {
-    Linking.openURL("https://www.examfactor.com/terms-and-conditions/");
+    Linking.openURL('https://www.examfactor.com/terms-and-conditions/');
   };
 
   const openPrivacyPolicy = () => {
-    Linking.openURL("https://www.examfactor.com/privacy-policy/");
+    Linking.openURL('https://www.examfactor.com/privacy-policy/');
   };
 
   const openRateUsModal = () => {
     setRateUsModalVisible(true);
   };
 
-  console.log("userRole", userRole);
+  console.log('userRole', userRole);
 
   return (
     <SafeScreen>
@@ -71,21 +55,12 @@ const SideBarAuthedScreen = (props) => {
               source={LeftArrow}
               resizeMode="contain"
             />
-            <Text
-              style={[
-                fonts.size_16,
-                fonts.bold,
-                { color: colors.backButtonColor, left: 5 },
-              ]}
-            >
+            <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
               Profile
             </Text>
           </View>
         </TouchableOpacity>
-        <DrawerContentScrollView
-          {...props}
-          showsVerticalScrollIndicator={false}
-        >
+        <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
           <View
             style={[
               layout.fullWidth,
@@ -107,7 +82,7 @@ const SideBarAuthedScreen = (props) => {
                   height: 75,
                 },
               ]}
-              onPress={() => navigation.navigate("ProfileDetailsScreen")}
+              onPress={() => navigation.navigate('ProfileDetailsScreen')}
             >
               <View style={[layout.display, layout.rowHCenter]}>
                 <View
@@ -131,21 +106,10 @@ const SideBarAuthedScreen = (props) => {
                   />
                 </View>
                 <View
-                  style={[
-                    layout.display,
-                    layout.rowHCenter,
-                    layout.justifyBetween,
-                    layout.flex_1,
-                  ]}
+                  style={[layout.display, layout.rowHCenter, layout.justifyBetween, layout.flex_1]}
                 >
-                  <View style={{ marginLeft: "6%", width: "70%" }}>
-                    <Text
-                      style={[
-                        fonts.size_14,
-                        fonts.bold,
-                        { color: colors.white },
-                      ]}
-                    >
+                  <View style={{ marginLeft: '6%', width: '70%' }}>
+                    <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                       Viney Dua
                     </Text>
 
@@ -170,11 +134,11 @@ const SideBarAuthedScreen = (props) => {
                 </View>
               </View>
             </TouchableOpacity>
-            <View style={[layout.itemsCenter, { paddingHorizontal: "4%" }]}>
+            <View style={[layout.itemsCenter, { paddingHorizontal: '4%' }]}>
               <Divider
                 style={{
-                  marginTop: "0%",
-                  width: "100%",
+                  marginTop: '0%',
+                  width: '100%',
                   backgroundColor: colors.lineBackgroundColor,
                 }}
               />
@@ -185,7 +149,7 @@ const SideBarAuthedScreen = (props) => {
                 layout.display,
                 layout.rowHCenter,
                 layout.justifyBetween,
-                { marginTop: "2%", paddingHorizontal: "4%" },
+                { marginTop: '2%', paddingHorizontal: '4%' },
               ]}
             >
               <View
@@ -194,55 +158,49 @@ const SideBarAuthedScreen = (props) => {
                   layout.rowHCenter,
                   layout.justifyBetween,
                   {
-                    width: "40%",
+                    width: '40%',
                     height: 35,
-                    backgroundColor: "green",
+                    backgroundColor: 'green',
                     borderRadius: 4,
-                    paddingHorizontal: "4%",
+                    paddingHorizontal: '4%',
                   },
                 ]}
               >
-                <View style={{ width: "5%" }}>
-                  {userRole === "Teacher" ? (
-                    <Image style={{ width: 20, height: 25 }} source={Teacher} resizeMode="contain"/>
+                <View style={{ width: '5%' }}>
+                  {userRole === 'Teacher' ? (
+                    <Image
+                      style={{ width: 20, height: 25 }}
+                      source={Teacher}
+                      resizeMode="contain"
+                    />
                   ) : (
-                    <Image style={{ width: 20, height: 25 }} source={ClassTeacher} resizeMode="contain"/>
+                    <Image
+                      style={{ width: 20, height: 25 }}
+                      source={ClassTeacher}
+                      resizeMode="contain"
+                    />
                   )}
                 </View>
                 <View>
-                  {userRole === "Teacher" ? (
-                    <Text
-                      style={[
-                        fonts.size_14,
-                        fonts.fontWeight_small,
-                        { color: colors.white },
-                      ]}
-                    >
+                  {userRole === 'Teacher' ? (
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
                       {userRole}
                     </Text>
                   ) : (
-                    <Text
-                      style={[
-                        fonts.size_13,
-                        fonts.fontWeight_small,
-                        { color: colors.white },
-                      ]}
-                    >
+                    <Text style={[fonts.size_13, fonts.fontWeight_small, { color: colors.white }]}>
                       {userRole}
                     </Text>
                   )}
                 </View>
               </View>
-              <TouchableOpacity
-                onPress={() => setChangeRoleBottomSheetVisible(true)}
-              >
+              <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
                 <Text
                   style={[
                     fonts.size_12,
                     fonts.fontWeignt_600,
                     {
                       color: colors.termsLinkColor,
-                      textDecorationLine: "underline",
+                      textDecorationLine: 'underline',
                     },
                   ]}
                 >
@@ -256,7 +214,7 @@ const SideBarAuthedScreen = (props) => {
             style={[
               fonts.size_14,
               fonts.bold,
-              { color: colors.white, opacity: 0.4, marginTop: "10%" },
+              { color: colors.white, opacity: 0.4, marginTop: '10%' },
             ]}
           >
             HELP & SUPPORT
@@ -269,7 +227,7 @@ const SideBarAuthedScreen = (props) => {
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 14,
                 height: 72,
-                marginTop: "3%",
+                marginTop: '3%',
               },
             ]}
             //   onPress={() => navigation.navigate("SupportScreen")}
@@ -283,19 +241,10 @@ const SideBarAuthedScreen = (props) => {
                 resizeMode="contain"
               />
               <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  layout.flex_1,
-                ]}
+                style={[layout.display, layout.rowHCenter, layout.justifyBetween, layout.flex_1]}
               >
-                <View style={{ marginLeft: "6%" }}>
-                  <Text
-                    style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-                  >
-                    Rate us
-                  </Text>
+                <View style={{ marginLeft: '6%' }}>
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Rate us</Text>
                   <Text
                     style={[
                       fonts.size_12,
@@ -323,10 +272,10 @@ const SideBarAuthedScreen = (props) => {
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 14,
                 height: 72,
-                marginTop: "3%",
+                marginTop: '3%',
               },
             ]}
-            onPress={() => navigation.navigate("SupportScreen")}
+            onPress={() => navigation.navigate('SupportScreen')}
           >
             <View style={[layout.rowHCenter, layout.display]}>
               <ImageVariant
@@ -336,19 +285,10 @@ const SideBarAuthedScreen = (props) => {
                 resizeMode="contain"
               />
               <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  layout.flex_1,
-                ]}
+                style={[layout.display, layout.rowHCenter, layout.justifyBetween, layout.flex_1]}
               >
-                <View style={{ marginLeft: "6%" }}>
-                  <Text
-                    style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-                  >
-                    Support
-                  </Text>
+                <View style={{ marginLeft: '6%' }}>
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Support</Text>
                   <Text
                     style={[
                       fonts.size_12,
@@ -376,10 +316,10 @@ const SideBarAuthedScreen = (props) => {
                 backgroundColor: colors.cardBackgroundColor,
                 borderRadius: 14,
                 height: 72,
-                marginTop: "3%",
+                marginTop: '3%',
               },
             ]}
-            onPress={() => navigation.navigate("AppGuideScreen")}
+            onPress={() => navigation.navigate('AppGuideScreen')}
           >
             <View style={[layout.rowHCenter, layout.display]}>
               <ImageVariant
@@ -389,17 +329,10 @@ const SideBarAuthedScreen = (props) => {
                 resizeMode="contain"
               />
               <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  layout.flex_1,
-                ]}
+                style={[layout.display, layout.rowHCenter, layout.justifyBetween, layout.flex_1]}
               >
-                <View style={{ marginLeft: "6%" }}>
-                  <Text
-                    style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-                  >
+                <View style={{ marginLeft: '6%' }}>
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
                     App guide
                   </Text>
                   <Text
@@ -451,7 +384,7 @@ const SideBarAuthedScreen = (props) => {
                     fonts.alignCenter,
                     {
                       color: colors.termsLinkColor,
-                      marginRight: "4%",
+                      marginRight: '4%',
                     },
                   ]}
                 >
@@ -469,7 +402,7 @@ const SideBarAuthedScreen = (props) => {
                     fonts.alignCenter,
                     {
                       color: colors.termsLinkColor,
-                      marginLeft: "4%",
+                      marginLeft: '4%',
                     },
                   ]}
                 >
@@ -484,7 +417,7 @@ const SideBarAuthedScreen = (props) => {
                 fonts.alignCenter,
                 {
                   color: colors.backButtonColor,
-                  marginTop: "2%",
+                  marginTop: '2%',
                 },
               ]}
             >
