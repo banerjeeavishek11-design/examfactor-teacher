@@ -1,9 +1,9 @@
-
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -81,8 +81,17 @@ android {
         applicationId "com.examfactorteacherapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+
+        def npmVersion = getNpmVersionArray()
+        def versionMajor = npmVersion[0]
+        def versionMinor = npmVersion[1]
+        def versionPatch = npmVersion[2]
+
         versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        println "#### | versionCode: $versionCode"
+        println "#### | versionName: $versionName"
     }
     signingConfigs {
         debug {
@@ -104,20 +113,19 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         // applicationVariants are e.g. debug, release
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            // For each separate APK per architecture, set a unique version code as described here:
-            // https://developer.android.com/studio/build/configure-apk-splits.html
-            // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
-            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-            def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                // For each separate APK per architecture, set a unique version code as described here:
+                // https://developer.android.com/studio/build/configure-apk-splits.html
+                // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
+                def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+                def abi = output.getFilter(OutputFile.ABI)
+                if (abi != null) {  // null for the universal-debug, universal-release variants
+                    output.versionCodeOverride =
+                            defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+                }
             }
- 
         }
-    }
     }
 }
 
