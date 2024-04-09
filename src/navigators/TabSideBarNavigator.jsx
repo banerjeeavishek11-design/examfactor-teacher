@@ -1,46 +1,35 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import Logo from "@/theme/assets/images/examfactorlogo.png";
+import { Text, View, Image } from 'react-native';
+import Logo from '@/theme/assets/images/examfactorlogo.png';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
-} from "@react-navigation/drawer";
-import React from "react";
-import {
-  ActivateScreen,
-  HomeScreen,
-  ReportsScreen,
-  SchoolWorkScreen,
-} from "@/screens";
-import { useTheme } from "@/theme";
-import HomeTab from "@/theme/assets/images/Hometab.png";
-import SchoolWorkTab from "@/theme/assets/images/Schoolworktab.png";
-import ReportsTab from "@/theme/assets/images/Reportstab.png";
-import ActivateTab from "@/theme/assets/images/Activatetab.png";
-import { moderateScale, ScaledSheet } from "react-native-size-matters";
-import { createStackNavigator } from "@react-navigation/stack";
-
+} from '@react-navigation/drawer';
+import React from 'react';
+import { ActivateScreen, HomeScreen, ReportsScreen, SchoolWorkScreen } from '@/screens';
+import { useTheme } from '@/theme';
+import HomeTab from '@/theme/assets/images/Hometab.png';
+import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
+import ReportsTab from '@/theme/assets/images/Reportstab.png';
+import ActivateTab from '@/theme/assets/images/Activatetab.png';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 const TabSideBarNavigator = () => {
-  const { layout, fonts, colors } = useTheme();
+  const { fonts, colors } = useTheme();
   const Drawer = createDrawerNavigator();
-  const Stack = createStackNavigator();
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomSideBar {...props} />}
       screenOptions={{
-        drawerType: "permanent",
-        drawerPosition: "left",
+        drawerType: 'permanent',
+        drawerPosition: 'left',
         headerShown: false,
-        drawerActiveBackgroundColor: "#191924",
+        drawerActiveBackgroundColor: '#191924',
         drawerActiveTintColor: colors.termsLinkColor,
         drawerInactiveTintColor: colors.gray100,
-        drawerLabelStyle: [
-          fonts.size_13,
-          { marginLeft: moderateScale(-10) },
-        ],
+        drawerLabelStyle: [fonts.size_13, { marginLeft: moderateScale(-10) }],
         drawerStyle: {
-            backgroundColor: colors.cardBackgroundColor,
+          backgroundColor: colors.cardBackgroundColor,
           width: moderateScale(160),
         },
       }}
@@ -49,7 +38,7 @@ const TabSideBarNavigator = () => {
         name="Home"
         component={HomeScreen}
         options={{
-          drawerIcon: ({ size, color, focused }) => (
+          drawerIcon: ({ focused }) => (
             <Image
               source={HomeTab}
               style={[
@@ -66,7 +55,7 @@ const TabSideBarNavigator = () => {
         name="School Work"
         component={SchoolWorkScreen}
         options={{
-          drawerIcon: ({ size, color, focused }) => (
+          drawerIcon: ({ focused }) => (
             <Image
               source={SchoolWorkTab}
               style={[
@@ -83,7 +72,7 @@ const TabSideBarNavigator = () => {
         name="Reports"
         component={ReportsScreen}
         options={{
-          drawerIcon: ({ size, color, focused }) => (
+          drawerIcon: ({ focused }) => (
             <Image
               source={ReportsTab}
               style={[
@@ -100,7 +89,7 @@ const TabSideBarNavigator = () => {
         name="Activate"
         component={ActivateScreen}
         options={{
-          drawerIcon: ({ size, color, focused }) => (
+          drawerIcon: ({ focused }) => (
             <Image
               source={ActivateTab}
               style={[
@@ -118,16 +107,14 @@ const TabSideBarNavigator = () => {
 };
 
 const CustomSideBar = (props) => {
-  const { layout, colors, fonts } = useTheme();
+  const { fonts } = useTheme();
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.sideBarLogoContainer}>
         <Image style={styles.sideBarLogo} source={Logo} />
-        <Text style={[fonts.size_16, fonts.bold, { color: "white" }]}>
-          Examfactor
-        </Text>
+        <Text style={[fonts.size_16, fonts.bold, { color: 'white' }]}>Examfactor</Text>
       </View>
-      <DrawerContentScrollView style={{ marginTop: "5%" }} {...props}>
+      <DrawerContentScrollView style={{ marginTop: '5%' }} {...props}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
     </View>
@@ -138,17 +125,17 @@ export default TabSideBarNavigator;
 
 const styles = ScaledSheet.create({
   sideBarLogo: {
-    height: "20@vs",
-    width: "15@s",
-    marginRight: "5@s",
+    height: '29@vs',
+    width: '30@s',
+    marginRight: '5@s',
   },
   sideBarLogoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    padding: "10@ms",
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: '10@ms',
   },
   drawerIcons: {
-    marginLeft: "15@s",
+    marginLeft: '15@s',
     width: 25,
     height: 25,
   },

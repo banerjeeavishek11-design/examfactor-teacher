@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
+import TabUser from '@/theme/assets/images/tabuser.png';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
@@ -13,7 +14,7 @@ const Header = () => {
   const scrollViewRef = useRef(null);
   const productScrollRef = useRef(null);
   const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 400;
+  const isTablet = screenWidth >= 600;
 
   const [subjects, setSubjects] = useState([
     { id: 1, subjectName: 'Physics', isChecked: true },
@@ -91,25 +92,36 @@ const Header = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity
-            onPress={() => handleOpenDrawer()}
-            style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
-          >
+        {isTablet ? (
+          <TouchableOpacity onPress={() => handleOpenDrawer()}>
             <ImageVariant
               testID="brand-img"
-              style={{ width: 23, height: 23 }}
-              source={User}
-              resizeMode="contain"
-            />
-            <ImageVariant
-              testID="brand-img"
-              style={{ width: 10, height: 12, left: 5, tintColor: '#B6B6BB' }}
-              source={DownArrow}
+              style={{ width: 44, height: 44, left: 5, tintColor: '#B6B6BB' }}
+              source={TabUser}
               resizeMode="contain"
             />
           </TouchableOpacity>
-        </View>
+        ) : (
+          <View>
+            <TouchableOpacity
+              onPress={() => handleOpenDrawer()}
+              style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
+            >
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 23, height: 23 }}
+                source={User}
+                resizeMode="contain"
+              />
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 10, height: 12, left: 5, tintColor: '#B6B6BB' }}
+                source={DownArrow}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <ScrollView
