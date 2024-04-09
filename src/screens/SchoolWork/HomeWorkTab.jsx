@@ -1,14 +1,7 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
@@ -17,9 +10,6 @@ import ActivatedHomeWork from '@/theme/assets/images/homework.png';
 import { Divider } from 'react-native-paper';
 import RemindStudentBottomSheet from '@/components/BottomSheet/SchoolWork/RemindStudentBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-
-const screenWidth = Dimensions.get('window').width;
-const isTablet = screenWidth >= 600;
 
 const topic = [
   {
@@ -52,6 +42,7 @@ const leaderboardData = [
 
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [expandedCards, setExpandedCards] = useState({});
   const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] = useState(false);
   const [activatedHomeWork, setActivatedHomeWork] = useState(false);

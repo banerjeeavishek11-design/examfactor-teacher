@@ -21,18 +21,17 @@
 //     middleware: () => [thunk]
 // });
 
-
 // const persistor = persistStore(store);
 // export { store, persistor };
 
-
-import { configureStore } from "@reduxjs/toolkit";
-import LoginSlice from "./redux-slice/LoginSlice";
-
+import { configureStore } from '@reduxjs/toolkit';
+import loginSlice from './redux-slice/LoginSlice';
+import screenDimensionsSlice from './redux-slice/ScreenDimensionsSlice';
 
 const store = configureStore({
-reducer:{
-    login:LoginSlice
-}
-})
-export default store
+  reducer: {
+    login: loginSlice,
+    screenDimensions: screenDimensionsSlice,
+  },
+});
+export default store;

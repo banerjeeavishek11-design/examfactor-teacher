@@ -1,12 +1,4 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
@@ -17,9 +9,7 @@ import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import { Divider } from 'react-native-paper';
-
-const screenWidth = Dimensions.get('window').width;
-const isTablet = screenWidth >= 600;
+import { useSelector } from 'react-redux';
 
 const topic = [
   {
@@ -52,6 +42,7 @@ const leaderboardData = [
 
 const ClassWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [expandedCards, setExpandedCards] = useState({});
   const [activatedTest, setActivatedTest] = useState(false);
 

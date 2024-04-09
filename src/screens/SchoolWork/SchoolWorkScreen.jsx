@@ -1,26 +1,17 @@
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useTheme } from '@/theme';
 import { Header, SafeScreen } from '@/components/template';
 import SchoolWorkTopTabNavigator from '@/navigators/SchoolWorkTopTabNavigator';
 import GradientLeftArrow from '@/theme/assets/images/gradientlefttarrow.png';
 import GradientRightArrow from '@/theme/assets/images/gradientrightarrow.png';
 
-const screenWidth = Dimensions.get('window').width;
-const isTablet = screenWidth >= 600;
-
 const SchoolWorkScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const [subjects, setSubjects] = useState([
     { id: 1, subjectName: 'Physics', isChecked: true },

@@ -21,12 +21,11 @@ import {
 import TopTabNavigator from './ReportsTopTabNavigator';
 import TabSideBarNavigator from './TabSideBarNavigator';
 import BottomTabNavigator from './BottomtabNavigator';
+import { useSelector } from 'react-redux';
 
 const AuthorizedStack = () => {
   const Stack = createStackNavigator();
-
-  const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 400;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   return (
     <Stack.Navigator

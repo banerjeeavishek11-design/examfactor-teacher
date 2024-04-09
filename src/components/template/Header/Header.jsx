@@ -1,18 +1,18 @@
-import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
 
 const Header = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 600;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('10-B');
 
