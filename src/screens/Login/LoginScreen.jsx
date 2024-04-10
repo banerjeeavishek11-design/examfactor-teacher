@@ -49,12 +49,13 @@ const LoginScreen = () => {
   };
 
   const handleUsernameLogin = (data) => {
-    let requiredBody = {
-      userName: data.username,
-      password: data.password,
-      mode: 'USERNAME_PASSWORD',
-    };
-    loginByUsername(requiredBody)
+    // let requiredBody = {
+    //   userName: data.username,
+    //   password: data.password,
+    //   mode: 'USERNAME_PASSWORD',
+    // };
+    data['mode'] = 'USERNAME_PASSWORD';
+    loginByUsername(data)
       .then((res) => {
         console.log('user login details', res.data);
         storage.set('username', data.username);
@@ -68,6 +69,7 @@ const LoginScreen = () => {
         console.log('error from userlogin', error);
       });
   };
+
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
@@ -118,7 +120,7 @@ const LoginScreen = () => {
                 >
                   <View style={{ marginTop: '3%' }}>
                     <Controller
-                      name="username"
+                      name="userName"
                       control={control}
                       rules={{
                         required: 'This field is required',
