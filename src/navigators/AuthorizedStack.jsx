@@ -26,7 +26,7 @@ const AuthorizedStack = () => {
   const Stack = createStackNavigator();
 
   const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 400;
+  const isTablet = screenWidth >= 600;
 
   return (
     <Stack.Navigator
