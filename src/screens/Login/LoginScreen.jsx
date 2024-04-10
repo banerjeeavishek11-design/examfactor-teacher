@@ -55,41 +55,6 @@ const LoginScreen = () => {
       routes: [{ name: 'AuthorizedStack' }],
     });
   };
-
-  const styles = StyleSheet.create({
-    heading: {
-      marginTop: '2%',
-    },
-    subheading: {
-      marginTop: isTablet ? moderateScale(5) : '2%',
-    },
-    mobileNumberInput: {
-      width: '100%',
-      height: 48,
-      color: 'rgba(255, 255, 255, 0.3)',
-      borderWidth: 1,
-      borderRadius: 12,
-      paddingHorizontal: 10,
-      marginTop: 12,
-    },
-    termsAndConditions: {
-      marginRight: '4%',
-      width: '100%',
-      height: 18,
-      justifyContent: 'center',
-    },
-    loginButton: {
-      height: 48,
-      width: '100%',
-      borderRadius: 9,
-      paddingLeft: 20,
-      paddingRight: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: '5%',
-    },
-  });
-
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
@@ -127,8 +92,7 @@ const LoginScreen = () => {
                   style={[
                     fonts.size_16,
                     fonts.fontWeight_small,
-                    { color: colors.subHeading },
-                    styles.subheading,
+                    { color: colors.subHeading, marginTop: isTablet ? moderateScale(5) : '2%' },
                   ]}
                 >
                   Login with Username & Password
@@ -352,5 +316,36 @@ const LoginScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  heading: {
+    marginTop: '2%',
+  },
+  mobileNumberInput: {
+    width: '100%',
+    height: 48,
+    color: 'rgba(255, 255, 255, 0.3)',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginTop: 12,
+  },
+  termsAndConditions: {
+    marginRight: '4%',
+    width: '100%',
+    height: 18,
+    justifyContent: 'center',
+  },
+  loginButton: {
+    height: 48,
+    width: '100%',
+    borderRadius: 9,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
+  },
+});
 
 export default LoginScreen;
