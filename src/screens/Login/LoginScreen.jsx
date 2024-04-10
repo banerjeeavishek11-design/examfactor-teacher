@@ -23,6 +23,7 @@ import { MMKV } from 'react-native-mmkv';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { loginAction } from '@/store/redux-slice/LoginSlice';
+import { loginByUsername } from '../../services/loginService';
 
 const storage = new MMKV();
 
@@ -48,12 +49,24 @@ const LoginScreen = () => {
   };
 
   const handleUsernameLogin = (data) => {
-    storage.set('username', data.username);
-    dispatch(loginAction(data));
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'AuthorizedStack' }],
-    });
+    let requiredBody = {
+      userName: data.username,
+      password: data.password,
+      mode: 'USERNAME_PASSWORD',
+    };
+    loginByUsername(requiredBody)
+      .then((res) => {
+        console.log('user login details', res.data);
+        storage.set('username', data.username);
+        dispatch(loginAction(data));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AuthorizedStack' }],
+        });
+      })
+      .catch((error) => {
+        console.log('error from userlogin', error);
+      });
   };
   return (
     <View style={[backgrounds.screenBackgroundColor]}>

@@ -143,7 +143,7 @@ const SideBarAuthedScreen = (props) => {
                           ]}
                         >
                           {/* {isPhoneNumber(studentId) ? "+91" : ""} {studentId} */}
-                          vineydua_dav
+                          {userName}
                         </Text>
                       </View>
                       <ImageVariant
