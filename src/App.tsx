@@ -9,6 +9,8 @@ import { ThemeProvider } from '@/theme';
 import ApplicationNavigator from './navigators/Application';
 import './translations';
 import store from './store/Store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './utils/toast.config';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider storage={storage}>
           <ApplicationNavigator />
+          <Toast config={toastConfig} />
         </ThemeProvider>
       </QueryClientProvider>
     </Provider>

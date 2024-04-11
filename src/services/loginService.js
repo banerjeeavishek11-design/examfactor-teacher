@@ -9,3 +9,13 @@ export const loginByUsername = async (requiredBody) => {
     },
   });
 };
+
+export const resetPassword = async (token, requiredBody) => {
+  return await axios.put(`${loginService}/v1/auth/reset-password`, requiredBody, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Host: host,
+    },
+  });
+};

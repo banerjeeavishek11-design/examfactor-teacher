@@ -4,3 +4,4 @@ const env = current.current === 'dev' ? dev : null;
 export const host = env.HOST;
 export const rootApiUrl = env.ROOT_API_URL;
 export const loginService = `${rootApiUrl}/auth-service`;
+export const teacherService = `${rootApiUrl}/teacher-service`;

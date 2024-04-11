@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -24,9 +25,12 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { loginAction } from '@/store/redux-slice/LoginSlice';
 import { loginByUsername } from '../../services/loginService';
+import Base64 from 'react-native-base64';
+import { getTeacherDetailsById } from '../../services/teacherService';
+import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
+import { notifyMessage } from '../../utils/error-toast-API';
 
 const storage = new MMKV();
-
 const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
@@ -35,41 +39,54 @@ const LoginScreen = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm();
   const [textInputValues, setTextInputValues] = useState({
-    username: '',
+    userName: '',
     password: '',
     referralCode: '',
     mobileNumber: '',
   });
+  const [opensetNewPasswordBottomSheet, setOpensetNewPasswordBottomSheet] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-
   const handleUsernameLogin = (data) => {
-    // let requiredBody = {
-    //   userName: data.username,
-    //   password: data.password,
-    //   mode: 'USERNAME_PASSWORD',
-    // };
+    storage.set('oldPassword', data.password);
+    setIsLoading(true);
     data['mode'] = 'USERNAME_PASSWORD';
     loginByUsername(data)
       .then((res) => {
-        console.log('user login details', res.data);
-        storage.set('username', data.username);
+        storage.set('username', data.userName);
+        storage.set('access_token', res.data.access_token);
+        const base64Url = res.data.access_token.split('.')[1];
+        const decodedPayload = JSON.parse(Base64.decode(base64Url));
+        getTeacheDetails(decodedPayload.preferred_username);
+        if (res.data?.temporary) {
+          setOpensetNewPasswordBottomSheet(true);
+        }
         dispatch(loginAction(data));
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AuthorizedStack' }],
-        });
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: 'AuthorizedStack' }],
+        // });
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log('error from userlogin', error);
+        if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
+          notifyMessage('Invalid UserName Or Passowrd');
+          setIsLoading(false);
+        }
       });
   };
-
+  const getTeacheDetails = (userName) => {
+    const accessToken = storage.getString('access_token');
+    getTeacherDetailsById(accessToken, userName)
+      .then(() => {})
+      .catch(() => {});
+  };
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
@@ -134,7 +151,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.userName ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -157,7 +174,7 @@ const LoginScreen = () => {
                               onChange(value);
                               setTextInputValues((prevState) => ({
                                 ...prevState,
-                                username: value,
+                                userName: value,
                               }));
                             }}
                             value={textInputValues.username}
@@ -165,13 +182,13 @@ const LoginScreen = () => {
                         </View>
                       )}
                     />
-                    {errors.username && (
+                    {errors.userName && (
                       <Text
                         style={{
                           color: '#FF575F',
                         }}
                       >
-                        {errors.username.message || null}
+                        {errors.userName.message || null}
                       </Text>
                     )}
 
@@ -307,27 +324,37 @@ const LoginScreen = () => {
               </View>
               <TouchableOpacity
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onPress={handleSubmit(handleUsernameLogin)}
-                // disabled={isLoading}
+                onPress={handleSubmit(isLoading ? null : handleUsernameLogin)}
+                disabled={!isDirty || isLoading}
               >
                 <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
-                  <View style={[layout.display, layout.rowHCenter]}>
-                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                      LOGIN
-                    </Text>
-                    <ImageVariant
-                      testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5, top: -2 }}
-                      source={rightArrow}
-                      resizeMode="contain"
-                    />
-                  </View>
+                  {isLoading ? (
+                    <ActivityIndicator size="large" color={colors.black} />
+                  ) : (
+                    <View style={[layout.display, layout.rowHCenter]}>
+                      <Text
+                        style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
+                      >
+                        LOGIN
+                      </Text>
+                      <ImageVariant
+                        testID="brand-img"
+                        style={{ width: 16, height: 9, left: 5, top: -2 }}
+                        source={rightArrow}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  )}
                 </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </View>
+      <SetNewPasswordBottomSheet
+        setOpensetNewPasswordBottomSheet={setOpensetNewPasswordBottomSheet}
+        opensetNewPasswordBottomSheet={opensetNewPasswordBottomSheet}
+      />
     </View>
   );
 };
