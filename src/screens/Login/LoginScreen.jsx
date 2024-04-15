@@ -21,12 +21,12 @@ import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { loginAction } from '@/store/redux-slice/LoginSlice';
+// import { loginAction } from '@/store/redux-slice/LoginSlice';
 import { loginByUsername } from '../../services/loginService';
-import Base64 from 'react-native-base64';
-import { getTeacherDetailsById } from '../../services/teacherService';
+// import Base64 from 'react-native-base64';
+// import { getTeacherDetailsById } from '../../services/teacherService';
 import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
 import { notifyMessage } from '../../utils/error-toast-API';
 
@@ -35,7 +35,7 @@ const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -57,22 +57,19 @@ const LoginScreen = () => {
     storage.set('oldPassword', data.password);
     setIsLoading(true);
     data['mode'] = 'USERNAME_PASSWORD';
+    console.log(data);
     loginByUsername(data)
       .then((res) => {
         storage.set('username', data.userName);
         storage.set('access_token', res.data.access_token);
-        const base64Url = res.data.access_token.split('.')[1];
-        const decodedPayload = JSON.parse(Base64.decode(base64Url));
-        getTeacheDetails(decodedPayload.preferred_username);
-        if (res.data?.temporary) {
-          setOpensetNewPasswordBottomSheet(true);
-        }
-        dispatch(loginAction(data));
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{ name: 'AuthorizedStack' }],
-        // });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AuthorizedStack' }],
+        });
         setIsLoading(false);
+        // const base64Url = res.data.access_token.split('.')[1];
+        // const decodedPayload = JSON.parse(Base64.decode(base64Url));
+        // getTeacheDetails(decodedPayload.preferred_username);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
@@ -81,12 +78,12 @@ const LoginScreen = () => {
         }
       });
   };
-  const getTeacheDetails = (userName) => {
-    const accessToken = storage.getString('access_token');
-    getTeacherDetailsById(accessToken, userName)
-      .then(() => {})
-      .catch(() => {});
-  };
+  // const getTeacheDetails = (userName) => {
+  //   const accessToken = storage.getString('access_token');
+  //   getTeacherDetailsById(accessToken, userName)
+  //     .then(() => {})
+  //     .catch(() => {});
+  // };
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
