@@ -57,15 +57,18 @@ const LoginScreen = () => {
     storage.set('oldPassword', data.password);
     setIsLoading(true);
     data['mode'] = 'USERNAME_PASSWORD';
-    console.log(data);
     loginByUsername(data)
       .then((res) => {
         storage.set('username', data.userName);
         storage.set('access_token', res.data.access_token);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AuthorizedStack' }],
-        });
+        if (res.data?.temporary) {
+          setOpensetNewPasswordBottomSheet(true);
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'AuthorizedStack' }],
+          });
+        }
         setIsLoading(false);
         // const base64Url = res.data.access_token.split('.')[1];
         // const decodedPayload = JSON.parse(Base64.decode(base64Url));
