@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'rea
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import RightArrow from '@/theme/assets/images/arrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
@@ -31,6 +32,8 @@ const QuestionAnalysisScreen = () => {
   };
   const [selectedQuestionType, setSelectedQuestionType] = useState(null);
 
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   useEffect(() => {
     if (selectedChapter !== null) {
       const result = questions.find((chapter) => chapter.chapterId === selectedChapter?.chapterId);
@@ -48,7 +51,6 @@ const QuestionAnalysisScreen = () => {
     setSelectedQuestionType(option);
   };
 
-  console.log('SELECTED FILTER::', selectedFilter);
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
@@ -60,7 +62,7 @@ const QuestionAnalysisScreen = () => {
               contentContainerStyle={[
                 layout.display,
                 layout.rowHCenter,
-                { marginRight: 5, marginTop: '3%', gap: 4 },
+                { marginTop: isTablet ? null : '3%', gap: 4 },
               ]}
             >
               <TouchableOpacity
@@ -80,7 +82,7 @@ const QuestionAnalysisScreen = () => {
                       selectedChapter !== null
                         ? Math.min(190, Math.max(90, selectedChapter.chapterName.length * 10))
                         : 72,
-                    height: 28,
+                    height: isTablet ? 40 : 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
                     marginRight: 5,
@@ -132,7 +134,7 @@ const QuestionAnalysisScreen = () => {
                       selectedQuestionType !== null
                         ? Math.min(170, Math.max(55, selectedQuestionType.length * 10))
                         : 120,
-                    height: 28,
+                    height: isTablet ? 40 : 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
                     marginRight: 5,
@@ -181,7 +183,7 @@ const QuestionAnalysisScreen = () => {
                   {
                     backgroundColor: colors.bottomTabBackground,
                     width: selectedFilter === 'Mostly Incorrect' ? 120 : 145,
-                    height: 28,
+                    height: isTablet ? 40 : 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
                     marginRight: 5,
@@ -226,7 +228,7 @@ const QuestionAnalysisScreen = () => {
                       <View
                         style={[
                           layout.fullWidth,
-                          layout.paddingForCard,
+                          isTablet ? { padding: '2%' } : layout.paddingForCard,
                           {
                             height: 'auto',
                             backgroundColor: colors.cardBackgroundColor,
@@ -235,7 +237,7 @@ const QuestionAnalysisScreen = () => {
                           },
                         ]}
                       >
-                        <View style={[layout.row, { width: '80%', gap: 10 }]}>
+                        <View style={[layout.row, { width: isTablet ? '95%' : '80%', gap: 10 }]}>
                           <Text
                             style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                           >
@@ -255,7 +257,7 @@ const QuestionAnalysisScreen = () => {
                               style={[
                                 layout.rowHCenter,
                                 layout.itemsCenter,
-                                { marginTop: '4%', gap: 8 },
+                                { marginTop: isTablet ? '2%' : '4%', gap: 8 },
                               ]}
                             >
                               <Image source={Weak} style={{ width: 20, height: 20 }} />
@@ -269,7 +271,13 @@ const QuestionAnalysisScreen = () => {
                                 Weak for 68% of the student
                               </Text>
                             </View>
-                            <View style={[layout.row, layout.justifyBetween, { marginTop: '5%' }]}>
+                            <View
+                              style={[
+                                layout.row,
+                                layout.justifyBetween,
+                                { marginTop: isTablet ? '2%' : '5%' },
+                              ]}
+                            >
                               <TouchableOpacity
                                 style={[layout.rowHCenter, { gap: 2 }]}
                                 onPress={() =>
@@ -310,7 +318,17 @@ const QuestionAnalysisScreen = () => {
                 })}
               </View>
             ) : (
-              <View style={[layout.itemsCenter, layout.justifyCenter, { marginTop: '50%' }]}>
+              <View
+                style={[
+                  layout.itemsCenter,
+                  layout.justifyCenter,
+                  {
+                    marginTop: isTablet ? '10%' : '50%',
+                    width: isTablet ? '60%' : null,
+                    alignSelf: isTablet ? 'center' : null,
+                  },
+                ]}
+              >
                 <Text
                   style={[fonts.alignCenter, fonts.size_24, fonts.bold, { color: colors.white }]}
                 >
