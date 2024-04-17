@@ -45,6 +45,7 @@ const SideBarAuthedScreen = (props) => {
   };
 
   const logOut = () => {
+    storage.clearAll('username');
     navigation.reset({
       index: 0,
       routes: [{ name: 'LoginScreen' }],
@@ -143,7 +144,7 @@ const SideBarAuthedScreen = (props) => {
                           ]}
                         >
                           {/* {isPhoneNumber(studentId) ? "+91" : ""} {studentId} */}
-                          vineydua_dav
+                          {userName}
                         </Text>
                       </View>
                       <ImageVariant

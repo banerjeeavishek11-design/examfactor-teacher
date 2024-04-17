@@ -1,15 +1,15 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useTheme } from '@/theme';
 import { Header, SafeScreen } from '@/components/template';
 import ActivateTopTabNavigator from '@/navigators/ActivateTopTabNavigator';
+import { useSelector } from 'react-redux';
 
 const ActivateScreen = () => {
   const { colors, layout, fonts } = useTheme();
-  const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 600;
   const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const [subjects, setSubjects] = useState([
     { id: 1, subjectName: 'Physics', isChecked: true },

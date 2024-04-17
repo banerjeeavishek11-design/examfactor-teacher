@@ -126,7 +126,7 @@ export default TabSideBarNavigator;
 const styles = ScaledSheet.create({
   sideBarLogo: {
     height: '29@vs',
-    width: '30@s',
+    width: '23@s',
     marginRight: '5@s',
   },
   sideBarLogoContainer: {

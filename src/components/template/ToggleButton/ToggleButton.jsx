@@ -1,18 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeScreen } from "@/components/template";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useTheme } from "@/theme";
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeScreen } from '@/components/template';
 
 const ToggleButton = ({
   setActivateConfirmationModalVisible,
   activeToggleData,
   chapterInfo,
-  setActivatedData ,
+  setActivatedData,
 }) => {
-  const { colors, layout, fonts } = useTheme();
-  const navigation = useNavigation();
-  const route = useRoute();
   const [isEnabled, setIsEnabled] = useState();
 
   useEffect(() => {
@@ -27,24 +22,14 @@ const ToggleButton = ({
   return (
     <SafeScreen>
       <TouchableOpacity
-        // style={{ backgroundColor: colors.cardBackgroundColor }}
-        // style={{ backgroundColor: 'transparent' }}
         onPress={() => {
           toggleSwitch();
         }}
       >
         <View
-          style={[
-            styles.container,
-            isEnabled ? styles.activeContainer : styles.inactiveContainer,
-          ]}
+          style={[styles.container, isEnabled ? styles.activeContainer : styles.inactiveContainer]}
         >
-          <View
-            style={[
-              styles.toggle,
-              isEnabled ? styles.activeToggle : styles.inactiveToggle,
-            ]}
-          />
+          <View style={[styles.toggle, isEnabled ? styles.activeToggle : styles.inactiveToggle]} />
         </View>
       </TouchableOpacity>
     </SafeScreen>
@@ -58,21 +43,21 @@ const styles = StyleSheet.create({
     width: 34,
     height: 23,
     borderRadius: 15,
-    justifyContent: "center",
-    alignSelf: "flex-end",
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
     padding: 2,
   },
   activeContainer: {
-    backgroundColor: "green",
+    backgroundColor: '#3DD598',
   },
   inactiveContainer: {
-    backgroundColor: "#96A7AF",
+    backgroundColor: '#96A7AF',
   },
   toggle: {
     width: 20,
     height: 20,
     borderRadius: 13,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   activeToggle: {
     transform: [{ translateX: 15 }],

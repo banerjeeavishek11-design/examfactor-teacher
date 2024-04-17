@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  Dimensions,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -21,42 +21,72 @@ import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '@/store/redux-slice/LoginSlice';
+// import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+// import { loginAction } from '@/store/redux-slice/LoginSlice';
+import { loginByUsername } from '../../services/loginService';
+// import Base64 from 'react-native-base64';
+// import { getTeacherDetailsById } from '../../services/teacherService';
+import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
+import { notifyMessage } from '../../utils/error-toast-API';
 
-const screenWidth = Dimensions.get('window').width;
-const isTablet = screenWidth >= 600;
 const storage = new MMKV();
-
 const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm();
   const [textInputValues, setTextInputValues] = useState({
-    username: '',
+    userName: '',
     password: '',
     referralCode: '',
     mobileNumber: '',
   });
+  const [opensetNewPasswordBottomSheet, setOpensetNewPasswordBottomSheet] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
-
   const handleUsernameLogin = (data) => {
-    storage.set('username', data.username);
-    dispatch(loginAction(data));
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'AuthorizedStack' }],
-    });
+    storage.set('oldPassword', data.password);
+    setIsLoading(true);
+    data['mode'] = 'USERNAME_PASSWORD';
+    loginByUsername(data)
+      .then((res) => {
+        storage.set('username', data.userName);
+        storage.set('access_token', res.data.access_token);
+        if (res.data?.temporary) {
+          setOpensetNewPasswordBottomSheet(true);
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'AuthorizedStack' }],
+          });
+        }
+        setIsLoading(false);
+        // const base64Url = res.data.access_token.split('.')[1];
+        // const decodedPayload = JSON.parse(Base64.decode(base64Url));
+        // getTeacheDetails(decodedPayload.preferred_username);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
+          notifyMessage('Invalid UserName Or Passowrd');
+          setIsLoading(false);
+        }
+      });
   };
-
+  // const getTeacheDetails = (userName) => {
+  //   const accessToken = storage.getString('access_token');
+  //   getTeacherDetailsById(accessToken, userName)
+  //     .then(() => {})
+  //     .catch(() => {});
+  // };
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
@@ -94,8 +124,7 @@ const LoginScreen = () => {
                   style={[
                     fonts.size_16,
                     fonts.fontWeight_small,
-                    { color: colors.subHeading },
-                    styles.subheading,
+                    { color: colors.subHeading, marginTop: isTablet ? moderateScale(5) : '2%' },
                   ]}
                 >
                   Login with Username & Password
@@ -108,7 +137,7 @@ const LoginScreen = () => {
                 >
                   <View style={{ marginTop: '3%' }}>
                     <Controller
-                      name="username"
+                      name="userName"
                       control={control}
                       rules={{
                         required: 'This field is required',
@@ -122,7 +151,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.userName ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >
@@ -145,7 +174,7 @@ const LoginScreen = () => {
                               onChange(value);
                               setTextInputValues((prevState) => ({
                                 ...prevState,
-                                username: value,
+                                userName: value,
                               }));
                             }}
                             value={textInputValues.username}
@@ -153,13 +182,13 @@ const LoginScreen = () => {
                         </View>
                       )}
                     />
-                    {errors.username && (
+                    {errors.userName && (
                       <Text
                         style={{
                           color: '#FF575F',
                         }}
                       >
-                        {errors.username.message || null}
+                        {errors.userName.message || null}
                       </Text>
                     )}
 
@@ -295,39 +324,44 @@ const LoginScreen = () => {
               </View>
               <TouchableOpacity
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onPress={handleSubmit(handleUsernameLogin)}
-                // disabled={isLoading}
+                onPress={handleSubmit(isLoading ? null : handleUsernameLogin)}
+                disabled={!isDirty || isLoading}
               >
                 <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
-                  <View style={[layout.display, layout.rowHCenter]}>
-                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                      LOGIN
-                    </Text>
-                    <ImageVariant
-                      testID="brand-img"
-                      style={{ width: 16, height: 9, left: 5, top: -2 }}
-                      source={rightArrow}
-                      resizeMode="contain"
-                    />
-                  </View>
+                  {isLoading ? (
+                    <ActivityIndicator size="large" color={colors.black} />
+                  ) : (
+                    <View style={[layout.display, layout.rowHCenter]}>
+                      <Text
+                        style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
+                      >
+                        LOGIN
+                      </Text>
+                      <ImageVariant
+                        testID="brand-img"
+                        style={{ width: 16, height: 9, left: 5, top: -2 }}
+                        source={rightArrow}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  )}
                 </PrimaryGradient>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </View>
+      <SetNewPasswordBottomSheet
+        setOpensetNewPasswordBottomSheet={setOpensetNewPasswordBottomSheet}
+        opensetNewPasswordBottomSheet={opensetNewPasswordBottomSheet}
+      />
     </View>
   );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
   heading: {
     marginTop: '2%',
-  },
-  subheading: {
-    marginTop: isTablet ? moderateScale(5) : '2%',
   },
   mobileNumberInput: {
     width: '100%',
@@ -355,3 +389,5 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
 });
+
+export default LoginScreen;

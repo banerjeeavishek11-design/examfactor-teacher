@@ -1,14 +1,7 @@
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
@@ -33,12 +26,11 @@ const yAxisTitle = 'No. of students';
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const screenWidth = Dimensions.get('window').width;
-  const isTablet = screenWidth >= 600;
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
   const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [showContent, setShowContent] = useState(false);
 
   const [subjects, setSubjects] = useState([

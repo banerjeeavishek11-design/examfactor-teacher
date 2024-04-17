@@ -1,10 +1,8 @@
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { useTheme } from '@/theme';
-
-const screenWidth = Dimensions.get('window').width;
-const isTablet = screenWidth >= 600;
+import { useSelector } from 'react-redux';
 
 const SuffixText = () => {
   const { fonts, colors } = useTheme();
@@ -13,6 +11,7 @@ const SuffixText = () => {
 
 const Circularprogressbar = (props) => {
   const { progress } = props;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   return (
     <View>
