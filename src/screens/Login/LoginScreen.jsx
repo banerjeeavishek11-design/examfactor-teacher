@@ -26,7 +26,8 @@ import { useSelector } from 'react-redux';
 // import { loginAction } from '@/store/redux-slice/LoginSlice';
 import { loginByUsername } from '../../services/loginService';
 // import Base64 from 'react-native-base64';
-// import { getTeacherDetailsById } from '../../services/teacherService';
+import { jwtDecode } from 'jwt-decode';
+import { getTeacherDetailsById } from '../../services/teacherService';
 import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
 import { notifyMessage } from '../../utils/error-toast-API';
 
@@ -70,9 +71,8 @@ const LoginScreen = () => {
           });
         }
         setIsLoading(false);
-        // const base64Url = res.data.access_token.split('.')[1];
-        // const decodedPayload = JSON.parse(Base64.decode(base64Url));
-        // getTeacheDetails(decodedPayload.preferred_username);
+        const decodedPayload = jwtDecode(res.data.access_token);
+        getTeacheDetails(decodedPayload.preferred_username);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
@@ -81,12 +81,17 @@ const LoginScreen = () => {
         }
       });
   };
-  // const getTeacheDetails = (userName) => {
-  //   const accessToken = storage.getString('access_token');
-  //   getTeacherDetailsById(accessToken, userName)
-  //     .then(() => {})
-  //     .catch(() => {});
-  // };
+  const getTeacheDetails = (userName) => {
+    const accessToken = storage.getString('access_token');
+    getTeacherDetailsById(accessToken, userName)
+      .then((res) => {
+        storage.set('teacherDetails', JSON.stringify(res.data));
+      })
+      .catch((error) => {
+        console.log('ERROR', error);
+      });
+  };
+
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View

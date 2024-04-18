@@ -88,7 +88,7 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                         { color: colors.white, opacity: 0.7 },
                       ]}
                     >
-                      Your has been selected Class {showSelecTedClass}
+                      Your has been selected Class {showSelecTedClass.split(' ')[2]}
                     </Text>
                   </View>
                 </>

@@ -14,7 +14,7 @@ const Header = () => {
   const navigation = useNavigation();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
-  const [showSelecTedClass, setShowSelectedClass] = useState('10-B');
+  const [showSelecTedClass, setShowSelectedClass] = useState('');
 
   const handleOpenDrawer = () => {
     if (isTablet) {
@@ -49,7 +49,7 @@ const Header = () => {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  Class {showSelecTedClass}
+                  Class {showSelecTedClass.split(' ')[2]}
                 </Text>
 
                 <ImageVariant
