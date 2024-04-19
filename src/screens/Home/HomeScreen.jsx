@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
@@ -14,6 +14,9 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
@@ -31,15 +34,10 @@ const HomeScreen = () => {
   const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
 
-  const [subjects, setSubjects] = useState([
-    { id: 1, subjectName: 'Physics', isChecked: true },
-    { id: 2, subjectName: 'Chemistry', isChecked: false },
-    { id: 3, subjectName: 'Mathematics', isChecked: false },
-    { id: 4, subjectName: 'Bengali', isChecked: false },
-    { id: 5, subjectName: 'English', isChecked: false },
-  ]);
+  const [subjects, setSubjects] = useState([]);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -55,8 +53,20 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
+  useEffect(() => {
+    createClassList();
+  }, []);
+
   const toggleContent = () => {
     setShowContent(!showContent);
+  };
+  // console.log("selectedClasses", selectedClasses);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+
+  const createClassList = () => {
+    const teacherClasses = teacherDetails.map((ele) => ele.subjectList);
+    setSubjects(teacherClasses[0].map((ele) => ele.subjectId));
   };
 
   const handleButtonPress = (index) => {
@@ -113,7 +123,7 @@ const HomeScreen = () => {
                     fonts.bold,
                   ]}
                 >
-                  {ele.subjectName}
+                  {ele.split('_')[1].toLowerCase()}
                 </Text>
               </TouchableOpacity>
             ))}

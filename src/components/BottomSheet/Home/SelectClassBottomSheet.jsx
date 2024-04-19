@@ -30,7 +30,8 @@ const ReferandearnBottomsheet = (props) => {
     if (teacherDetails != null) {
       setClasses(teacherDetails);
       if (isFirst) {
-        setOption(teacherDetails[0].sectionName);
+        setOption(teacherDetails[0]?.sectionName);
+        setShowSelectedClass(teacherDetails[0]?.sectionName);
         setIsFirst(false);
       }
     }

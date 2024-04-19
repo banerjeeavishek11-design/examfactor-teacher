@@ -21,9 +21,10 @@ import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 // import { loginAction } from '@/store/redux-slice/LoginSlice';
+import { showSelectedClasses } from '../../store/redux-slice/TeacherClassSlice';
 import { loginByUsername } from '../../services/loginService';
 // import Base64 from 'react-native-base64';
 import { jwtDecode } from 'jwt-decode';
@@ -36,7 +37,7 @@ const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -65,14 +66,10 @@ const LoginScreen = () => {
         if (res.data?.temporary) {
           setOpensetNewPasswordBottomSheet(true);
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'AuthorizedStack' }],
-          });
+          const decodedPayload = jwtDecode(res.data.access_token);
+          getTeacheDetails(decodedPayload.preferred_username);
         }
         setIsLoading(false);
-        const decodedPayload = jwtDecode(res.data.access_token);
-        getTeacheDetails(decodedPayload.preferred_username);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
@@ -86,9 +83,14 @@ const LoginScreen = () => {
     getTeacherDetailsById(accessToken, userName)
       .then((res) => {
         storage.set('teacherDetails', JSON.stringify(res.data));
+        dispatch(showSelectedClasses(res.data));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AuthorizedStack' }],
+        });
       })
       .catch((error) => {
-        console.log('ERROR', error);
+        notifyMessage('Something Went Wrong', error);
       });
   };
 

@@ -21,6 +21,8 @@ import { useNavigation } from '@react-navigation/native';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { resetPassword } from '../../../services/loginService';
 import { notifyMessage } from '../../../utils/error-toast-API';
+import { jwtDecode } from 'jwt-decode';
+import { getTeacherDetailsById } from '../../../services/teacherService';
 
 const storage = new MMKV();
 const SetNewPasswordBottomSheet = ({
@@ -52,16 +54,30 @@ const SetNewPasswordBottomSheet = ({
     };
     resetPassword(accessToken, requiredBody)
       .then(() => {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'AuthorizedStack' }],
-        });
+        const accessToken = storage.getString('access_token');
+        const decodedPayload = jwtDecode(accessToken);
+        getTeacheDetails(decodedPayload.preferred_username);
         setOpensetNewPasswordBottomSheet(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
           notifyMessage('Invalid UserName Or Passowrd');
         }
+      });
+  };
+
+  const getTeacheDetails = (userName) => {
+    const accessToken = storage.getString('access_token');
+    getTeacherDetailsById(accessToken, userName)
+      .then((res) => {
+        storage.set('teacherDetails', JSON.stringify(res.data));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AuthorizedStack' }],
+        });
+      })
+      .catch((error) => {
+        console.log('ERROR', error);
       });
   };
 

@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
@@ -8,6 +8,9 @@ import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const Header = () => {
   const { colors, layout, fonts } = useTheme();
@@ -23,6 +26,25 @@ const Header = () => {
       navigation.navigate('SideBarAuthedScreen');
     }
   };
+
+  // useEffect(() => {
+  //   const resFromMMKV = storage.getString('teacherDetails');
+  //   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  //   if (teacherDetails && teacherDetails.length > 0) {
+  //     console.log(teacherDetails[0]?.sectionName);
+  //     setShowSelectedClass(teacherDetails[0]?.sectionName);
+  //   }
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const resFromMMKV = storage.getString('teacherDetails');
+      const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+      if (teacherDetails && teacherDetails.length > 0) {
+        setShowSelectedClass(teacherDetails[0]?.sectionName);
+      }
+    }, [])
+  );
 
   return (
     <View
