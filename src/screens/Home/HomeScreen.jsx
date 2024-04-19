@@ -1,8 +1,8 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import { useTheme } from '@/theme';
-import { useSelector } from 'react-redux';
-import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
+// import { useSelector } from 'react-redux';
+import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { Divider } from 'react-native-paper';
@@ -14,9 +14,6 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
-import { MMKV } from 'react-native-mmkv';
-
-const storage = new MMKV();
 
 const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
@@ -31,13 +28,11 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
-  const productScrollRef = useRef(null);
-  const scrollViewRef = useRef(null);
-  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
 
-  const [subjects, setSubjects] = useState([]);
+  // const [subjects, setSubjects] = useState([]);
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -53,83 +48,16 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  useEffect(() => {
-    createClassList();
-  }, []);
+  // useEffect(() => {
+  //   createClassList();
+  // }, []);
 
   const toggleContent = () => {
     setShowContent(!showContent);
   };
-  // console.log("selectedClasses", selectedClasses);
-  const resFromMMKV = storage.getString('teacherDetails');
-  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
-
-  const createClassList = () => {
-    const teacherClasses = teacherDetails.map((ele) => ele.subjectList);
-    setSubjects(teacherClasses[0].map((ele) => ele.subjectId));
-  };
-
-  const handleButtonPress = (index) => {
-    const updatedSubjects = subjects.map((subject, i) => {
-      if (i === index) {
-        return { ...subject, isChecked: true };
-      } else {
-        return { ...subject, isChecked: false };
-      }
-    });
-    setSubjects(updatedSubjects);
-    const buttonWidth = 100;
-    const scrollX = index * buttonWidth;
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
-    }
-    if (productScrollRef.current) {
-      productScrollRef.current?.scrollTo({ x: 0, animated: true });
-    }
-  };
 
   return (
     <SafeScreen>
-      <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
-        <Header />
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[
-            layout.paddingForFullScreen,
-            { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
-          ]}
-        >
-          <View style={[layout.display, layout.rowHCenter]}>
-            {subjects.map((ele, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[
-                  styles.button,
-                  {
-                    borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
-                    borderWidth: ele.isChecked ? 2 : 0,
-                  },
-                ]}
-                onPress={() => {
-                  handleButtonPress(i, ele);
-                }}
-              >
-                <Text
-                  style={[
-                    ele.isChecked == true ? styles.activeButton : styles.buttonText,
-                    fonts.size_14,
-                    fonts.bold,
-                  ]}
-                >
-                  {ele.split('_')[1].toLowerCase()}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
@@ -750,24 +678,5 @@ const HomeScreen = () => {
     </SafeScreen>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    height: 45,
-    borderRadius: 12,
-    backgroundColor: '#22222F',
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-  activeButton: {
-    color: '#27D4FA',
-  },
-  buttonText: {
-    color: '#7A7A82',
-  },
-});
 
 export default HomeScreen;

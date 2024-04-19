@@ -8,6 +8,7 @@ import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
 import ReportsTab from '@/theme/assets/images/Reportstab.png';
 import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { ImageVariant } from '@/components/atoms';
+import Header from '../components/template/Header/Header';
 
 const Tab = createBottomTabNavigator();
 const S = StyleSheet.create({
@@ -163,23 +164,20 @@ const TabBar = (props) => {
 
 const BottomTabNavigator = () => {
   return (
-    // <Tab.Navigator
-    //   screenOptions={{
-    //     headerShown: false,
-    //     tabBarStyle: { backgroundColor: colors.bottomTabBackground },
-    //   }}
-    // >
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      tabBar={(props) => <TabBar {...props} />}
-    >
-      <Tab.Screen name="HomeTab" component={HomeScreen} />
-      <Tab.Screen name="SchoolWorkTab" component={SchoolWorkScreen} />
-      <Tab.Screen name="ReportsTab" component={ReportsScreen} />
-      <Tab.Screen name="ActivateTab" component={ActivateScreen} />
-    </Tab.Navigator>
+    <>
+      <Header />
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        tabBar={(props) => <TabBar {...props} />}
+      >
+        <Tab.Screen name="HomeTab" component={HomeScreen} />
+        <Tab.Screen name="SchoolWorkTab" component={SchoolWorkScreen} />
+        <Tab.Screen name="ReportsTab" component={ReportsScreen} />
+        <Tab.Screen name="ActivateTab" component={ActivateScreen} />
+      </Tab.Navigator>
+    </>
   );
 };
 

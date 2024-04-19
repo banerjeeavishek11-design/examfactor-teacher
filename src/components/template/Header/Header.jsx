@@ -1,6 +1,6 @@
-import { Text, View, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
@@ -8,16 +8,34 @@ import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
-import { MMKV } from 'react-native-mmkv';
+// import { MMKV } from 'react-native-mmkv';
 
-const storage = new MMKV();
+// const storage = new MMKV();
 
 const Header = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
+  const productScrollRef = useRef(null);
+  const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('');
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      setShowSelectedClass(teacherDetails[0]?.sectionName);
+    }
+  }, [teacherDetails]);
+
+  useEffect(() => {
+    let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
+    let subject = sectionName[0]?.subjectList;
+    // console.log("subject", subject);
+    let subjectList = subject?.map((ele) => ele?.name);
+    setSubjects(subjectList);
+  }, [showSelecTedClass]);
 
   const handleOpenDrawer = () => {
     if (isTablet) {
@@ -27,24 +45,25 @@ const Header = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const resFromMMKV = storage.getString('teacherDetails');
-  //   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
-  //   if (teacherDetails && teacherDetails.length > 0) {
-  //     console.log(teacherDetails[0]?.sectionName);
-  //     setShowSelectedClass(teacherDetails[0]?.sectionName);
-  //   }
-  // }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const resFromMMKV = storage.getString('teacherDetails');
-      const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
-      if (teacherDetails && teacherDetails.length > 0) {
-        setShowSelectedClass(teacherDetails[0]?.sectionName);
-      }
-    }, [])
-  );
+  const handleButtonPress = (index, ele) => {
+    console.log('element', ele);
+    // const updatedSubjects = subjects.map((subject, i) => {
+    //   if (i === index) {
+    //     return { ...subject, isChecked: true };
+    //   } else {
+    //     return { ...subject, isChecked: false };
+    //   }
+    // });
+    // setSubjects(updatedSubjects);
+    const buttonWidth = 100;
+    const scrollX = index * buttonWidth;
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
+    }
+    if (productScrollRef.current) {
+      productScrollRef.current?.scrollTo({ x: 0, animated: true });
+    }
+  };
 
   return (
     <View
@@ -71,7 +90,7 @@ const Header = () => {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  Class {showSelecTedClass.split(' ')[2]}
+                  Class {showSelecTedClass?.split(' ')[2]}
                 </Text>
 
                 <ImageVariant
@@ -114,6 +133,46 @@ const Header = () => {
             </View>
           )}
         </View>
+        <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[
+              layout.paddingForFullScreen,
+              { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
+            ]}
+          >
+            <View style={[layout.display, layout.rowHCenter]}>
+              {subjects?.map((ele, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={[
+                    styles.button,
+                    {
+                      borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
+                      borderWidth: ele.isChecked ? 2 : 0,
+                    },
+                  ]}
+                  onPress={() => {
+                    handleButtonPress(i, ele);
+                  }}
+                >
+                  <Text
+                    style={[
+                      ele.isChecked == true ? styles.activeButton : styles.buttonText,
+                      fonts.size_14,
+                      fonts.bold,
+                    ]}
+                  >
+                    {/* {ele.split('_')[1].toLowerCase()} */}
+                    {ele}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
         <SelectClassBottomSheet
           openSelectClassBottmSheet={openSelectClassBottmSheet}
           setOpenSelectClassBottomSheet={setOpenSelectClassBottomSheet}
@@ -124,5 +183,25 @@ const Header = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    left: -12,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: '#22222F',
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  activeButton: {
+    color: '#27D4FA',
+  },
+  buttonText: {
+    color: '#7A7A82',
+  },
+});
 
 export default Header;
