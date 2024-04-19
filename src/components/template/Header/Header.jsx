@@ -32,8 +32,10 @@ const Header = () => {
   useEffect(() => {
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
-    // console.log("subject", subject);
-    let subjectList = subject?.map((ele) => ele?.name);
+    let subjectList = subject?.map((ele) => ({
+      subjectName: ele.name,
+      subjectId: ele.subjectId,
+    }));
     setSubjects(subjectList);
   }, [showSelecTedClass]);
 
@@ -155,7 +157,7 @@ const Header = () => {
                     },
                   ]}
                   onPress={() => {
-                    handleButtonPress(i, ele);
+                    handleButtonPress(i, ele.subjectId);
                   }}
                 >
                   <Text
@@ -165,8 +167,8 @@ const Header = () => {
                       fonts.bold,
                     ]}
                   >
-                    {/* {ele.split('_')[1].toLowerCase()} */}
-                    {ele}
+                    {/* {ele.subjectId.split('_')[1].toLowerCase()} */}
+                    {ele.subjectName}
                   </Text>
                 </TouchableOpacity>
               ))}
