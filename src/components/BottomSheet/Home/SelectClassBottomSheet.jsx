@@ -6,10 +6,10 @@ import { ImageVariant } from '../../atoms';
 import RadioButton from '../../RadioButton/RadioButton';
 import ClassSuccessfullySelectedBottomSheet from './ClassSuccessfullySelectedBottomSheet';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
-import { useSelector } from 'react-redux';
-// import { MMKV } from 'react-native-mmkv';
+// import { useSelector } from 'react-redux';
+import { MMKV } from 'react-native-mmkv';
 
-// const storage = new MMKV();
+const storage = new MMKV();
 const ReferandearnBottomsheet = (props) => {
   const {
     setOpenSelectClassBottomSheet,
@@ -20,15 +20,14 @@ const ReferandearnBottomsheet = (props) => {
   const { colors, layout, fonts } = useTheme();
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
-  const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
+  // const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
   const [option, setOption] = useState('first');
   const [classes, setClasses] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
 
-  // const resFromMMKV = storage.getString('teacherDetails');
-  // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
-
   useEffect(() => {
+    const resFromMMKV = storage.getString('teacherDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     if (teacherDetails != null) {
       setClasses(teacherDetails);
       if (isFirst) {
@@ -37,7 +36,7 @@ const ReferandearnBottomsheet = (props) => {
         setIsFirst(false);
       }
     }
-  }, [openSelectClassBottmSheet, teacherDetails]);
+  }, [openSelectClassBottmSheet]);
 
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);

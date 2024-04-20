@@ -5,31 +5,37 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
 import { useTheme } from '@/theme';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
-// import { MMKV } from 'react-native-mmkv';
+import { MMKV } from 'react-native-mmkv';
+import { selectSubjectAction } from '../../../store/redux-slice/SelectedSubjectSlice';
 
-// const storage = new MMKV();
+const storage = new MMKV();
 
 const Header = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const productScrollRef = useRef(null);
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
-  const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
+  const dispatch = useDispatch();
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState();
+  // const [selectedSubjectId, setSelectedSubjectId] = useState();
 
   useEffect(() => {
+    const resFromMMKV = storage.getString('teacherDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     if (teacherDetails && teacherDetails.length > 0) {
       setShowSelectedClass(teacherDetails[0]?.sectionName);
     }
-  }, [teacherDetails]);
+  }, []);
 
   useEffect(() => {
+    const resFromMMKV = storage.getString('teacherDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
     let subjectList = subject?.map((ele) => ({
@@ -37,6 +43,13 @@ const Header = () => {
       subjectId: ele.subjectId,
     }));
     setSubjects(subjectList);
+    if (subjectList) {
+      setSelectedSubject(subjectList[0].subjectName);
+    }
+    if (subjectList && subjectList.length > 0) {
+      // setSelectedSubjectId(subjectList[0].subjectId);
+      dispatch(selectSubjectAction(subjectList[0].subjectId));
+    }
   }, [showSelecTedClass]);
 
   const handleOpenDrawer = () => {
@@ -47,23 +60,14 @@ const Header = () => {
     }
   };
 
-  const handleButtonPress = (index, ele) => {
-    console.log('element', ele);
-    // const updatedSubjects = subjects.map((subject, i) => {
-    //   if (i === index) {
-    //     return { ...subject, isChecked: true };
-    //   } else {
-    //     return { ...subject, isChecked: false };
-    //   }
-    // });
-    // setSubjects(updatedSubjects);
-    const buttonWidth = 100;
-    const scrollX = index * buttonWidth;
+  const handleButtonPress = (index, subject) => {
+    setSelectedSubject(subject);
+    // setSelectedSubjectId(subject);
+    dispatch(selectSubjectAction(subject));
+    const buttonWidth = 100; // Adjust this value as needed for your button width
+    const scrollX = index * buttonWidth; // Calculate the position to scroll to
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
-    }
-    if (productScrollRef.current) {
-      productScrollRef.current?.scrollTo({ x: 0, animated: true });
     }
   };
 
@@ -152,8 +156,8 @@ const Header = () => {
                   style={[
                     styles.button,
                     {
-                      borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
-                      borderWidth: ele.isChecked ? 2 : 0,
+                      borderColor: selectedSubject === ele.subjectId ? '#27D4FA' : '#22222F',
+                      borderWidth: selectedSubject === ele.subjectId ? 2 : 0,
                     },
                   ]}
                   onPress={() => {
@@ -162,7 +166,7 @@ const Header = () => {
                 >
                   <Text
                     style={[
-                      ele.isChecked == true ? styles.activeButton : styles.buttonText,
+                      selectedSubject === ele.subjectId ? styles.activeButton : styles.buttonText,
                       fonts.size_14,
                       fonts.bold,
                     ]}
