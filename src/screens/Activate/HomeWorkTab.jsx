@@ -14,81 +14,81 @@ import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
 
-// const TopicData = [
-//   {
-//     id: 'C1',
-//     topic: 'Motion',
-//     subTopics: [
-//       { id: 1, subtopic: 'Introduction to Motion', isActive: false },
+const TopicData = [
+  {
+    id: 'C1',
+    topic: 'Motion',
+    subTopics: [
+      { id: 1, subtopic: 'Introduction to Motion', isActive: false },
 
-//       {
-//         id: 2,
-//         subtopic: 'Rate of Motion',
-//         isActive: false,
-//       },
-//       { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
-//       {
-//         id: 4,
-//         subtopic: 'Graphical Representation of Motion',
-//         isActive: false,
-//       },
-//       {
-//         id: 5,
-//         subtopic: 'Equations of Motion by Graphical Method',
-//         isActive: false,
-//       },
-//       { id: 6, subtopic: 'Uniform Circular Motion', isActive: false },
-//     ],
-//   },
-//   {
-//     id: 'C2',
-//     topic: 'Force and Laws of Motion',
-//     subTopics: [
-//       { id: 1, subtopic: 'Introduction to Motion', isActive: false },
-//       { id: 2, subtopic: 'Rate of Motion', isActive: false },
-//       { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
-//       {
-//         id: 4,
-//         subtopic: 'Equations of Motion by Graphical Method',
-//         isActive: false,
-//       },
-//       { id: 5, subtopic: 'Uniform Circular Motion', isActive: false },
-//     ],
-//   },
-//   {
-//     id: 'C3',
-//     topic: 'Gravitation',
-//     subTopics: [
-//       { id: 1, subtopic: 'Introduction to Motion' },
-//       { id: 2, subtopic: 'Rate of Motion' },
-//       { id: 3, subtopic: 'Rate of Change of Velocity' },
-//       { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-//       { id: 5, subtopic: 'Uniform Circular Motion' },
-//     ],
-//   },
-//   {
-//     id: 'C4',
-//     topic: 'Work and Energy',
-//     subTopics: [
-//       { id: 1, subtopic: 'Introduction to Motion' },
-//       { id: 2, subtopic: 'Rate of Motion' },
-//       { id: 3, subtopic: 'Rate of Change of Velocity' },
-//       { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-//       { id: 5, subtopic: 'Uniform Circular Motion' },
-//     ],
-//   },
-//   {
-//     id: 'C5',
-//     topic: 'Sound',
-//     subTopics: [
-//       { id: 1, subtopic: 'Introduction to Motion' },
-//       { id: 2, subtopic: 'Rate of Motion' },
-//       { id: 3, subtopic: 'Rate of Change of Velocity' },
-//       { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-//       { id: 5, subtopic: 'Uniform Circular Motion' },
-//     ],
-//   },
-// ];
+      {
+        id: 2,
+        subtopic: 'Rate of Motion',
+        isActive: false,
+      },
+      { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
+      {
+        id: 4,
+        subtopic: 'Graphical Representation of Motion',
+        isActive: false,
+      },
+      {
+        id: 5,
+        subtopic: 'Equations of Motion by Graphical Method',
+        isActive: false,
+      },
+      { id: 6, subtopic: 'Uniform Circular Motion', isActive: false },
+    ],
+  },
+  {
+    id: 'C2',
+    topic: 'Force and Laws of Motion',
+    subTopics: [
+      { id: 1, subtopic: 'Introduction to Motion', isActive: false },
+      { id: 2, subtopic: 'Rate of Motion', isActive: false },
+      { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
+      {
+        id: 4,
+        subtopic: 'Equations of Motion by Graphical Method',
+        isActive: false,
+      },
+      { id: 5, subtopic: 'Uniform Circular Motion', isActive: false },
+    ],
+  },
+  {
+    id: 'C3',
+    topic: 'Gravitation',
+    subTopics: [
+      { id: 1, subtopic: 'Introduction to Motion' },
+      { id: 2, subtopic: 'Rate of Motion' },
+      { id: 3, subtopic: 'Rate of Change of Velocity' },
+      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
+      { id: 5, subtopic: 'Uniform Circular Motion' },
+    ],
+  },
+  {
+    id: 'C4',
+    topic: 'Work and Energy',
+    subTopics: [
+      { id: 1, subtopic: 'Introduction to Motion' },
+      { id: 2, subtopic: 'Rate of Motion' },
+      { id: 3, subtopic: 'Rate of Change of Velocity' },
+      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
+      { id: 5, subtopic: 'Uniform Circular Motion' },
+    ],
+  },
+  {
+    id: 'C5',
+    topic: 'Sound',
+    subTopics: [
+      { id: 1, subtopic: 'Introduction to Motion' },
+      { id: 2, subtopic: 'Rate of Motion' },
+      { id: 3, subtopic: 'Rate of Change of Velocity' },
+      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
+      { id: 5, subtopic: 'Uniform Circular Motion' },
+    ],
+  },
+];
 
 const HomeWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
@@ -96,7 +96,7 @@ const HomeWorkTab = () => {
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
   // const [searchChapterName, setSearchChapterName] = useState([]);
-  // const [activatedData, setActivatedData] = useState();
+  const [activatedData, setActivatedData] = useState();
   const [chapterDetails, setChapterDetails] = useState([]);
 
   useEffect(() => {
@@ -131,19 +131,19 @@ const HomeWorkTab = () => {
   //   setSearchChapterName(searchItem);
   // };
 
-  // const topicActivated = (clickedBtnName) => {
-  //   if (clickedBtnName === 'YES') {
-  //     let activatedTopic = { ...activatedData.subTopic };
-  //     activatedTopic.isActive = true;
-  //     let topicIndex = TopicData.findIndex((ele) => ele.topic == activatedData.topic);
-  //     let subTopicIndex = TopicData[topicIndex].subTopics.findIndex(
-  //       (ele) => ele.subtopic == activatedData.subTopic.subtopic
-  //     );
-  //     TopicData[topicIndex].subTopics[subTopicIndex] = activatedTopic;
-  //     console.log('TopicData after update', TopicData);
-  //     setActivatedData(TopicData);
-  //   }
-  // };
+  const topicActivated = (clickedBtnName) => {
+    if (clickedBtnName === 'YES') {
+      let activatedTopic = { ...activatedData.subTopic };
+      activatedTopic.isActive = true;
+      let topicIndex = TopicData.findIndex((ele) => ele.topic == activatedData.topic);
+      let subTopicIndex = TopicData[topicIndex].subTopics.findIndex(
+        (ele) => ele.subtopic == activatedData.subTopic.subtopic
+      );
+      TopicData[topicIndex].subTopics[subTopicIndex] = activatedTopic;
+      console.log('TopicData after update', TopicData);
+      setActivatedData(TopicData);
+    }
+  };
 
   return (
     <SafeScreen>
@@ -179,7 +179,7 @@ const HomeWorkTab = () => {
           {chapterDetails.map((ele, i) => {
             return (
               <TouchableOpacity
-                onPress={() => toggleContent(ele.id)}
+                onPress={() => toggleContent(ele.chapterId)}
                 key={ele.chapterId}
                 style={[
                   layout.fullWidth,
@@ -212,7 +212,7 @@ const HomeWorkTab = () => {
                     )}
                   </TouchableOpacity>
                 </View>
-                {expandedCards[ele.ChapterId] ? (
+                {expandedCards[ele.chapterId] ? (
                   <>
                     {ele.topics.map((item) => {
                       return (
@@ -251,7 +251,7 @@ const HomeWorkTab = () => {
                                   topic: ele.chapterDesc,
                                   subTopic: item.topicDesc,
                                 }}
-                                // setActivatedData={setActivatedData}
+                                setActivatedData={setActivatedData}
                               />
                             </View>
                           </View>
@@ -268,7 +268,7 @@ const HomeWorkTab = () => {
       <ActiveHomeworkConfirmBottomSheet
         visible={activateConfirmationModalVisible}
         setActivateConfirmationModalVisible={setActivateConfirmationModalVisible}
-        // callAfterDialogClose={topicActivated}
+        callAfterDialogClose={topicActivated}
       />
     </SafeScreen>
   );
