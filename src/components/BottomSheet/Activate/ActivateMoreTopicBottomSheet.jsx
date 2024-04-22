@@ -30,7 +30,7 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
 
   useEffect(() => {
     setSearchTopicName(topics);
-  }, []);
+  }, [topics]);
 
   const handleActivateMoreTopics = () => {
     let reqBody = { ...requiredBody, topicIds: selectedTopics };
