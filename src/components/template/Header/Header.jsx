@@ -9,7 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
 import { MMKV } from 'react-native-mmkv';
-import { selectSubjectAction } from '../../../store/redux-slice/SelectedSubjectSlice';
+import {
+  selectSubjectAction,
+  selectSectionName,
+} from '../../../store/redux-slice/SelectedSubjectSlice';
 
 const storage = new MMKV();
 
@@ -23,13 +26,13 @@ const Header = () => {
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState();
-  // const [selectedSubjectId, setSelectedSubjectId] = useState();
 
   useEffect(() => {
     const resFromMMKV = storage.getString('teacherDetails');
     const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     if (teacherDetails && teacherDetails.length > 0) {
       setShowSelectedClass(teacherDetails[0]?.sectionName);
+      dispatch(selectSectionName(teacherDetails[0]?.sectionName));
     }
   }, []);
 
@@ -47,7 +50,6 @@ const Header = () => {
       setSelectedSubject(subjectList[0].subjectName);
     }
     if (subjectList && subjectList.length > 0) {
-      // setSelectedSubjectId(subjectList[0].subjectId);
       dispatch(selectSubjectAction(subjectList[0].subjectId));
     }
   }, [showSelecTedClass]);
@@ -62,7 +64,6 @@ const Header = () => {
 
   const handleButtonPress = (index, subject) => {
     setSelectedSubject(subject);
-    // setSelectedSubjectId(subject);
     dispatch(selectSubjectAction(subject));
     const buttonWidth = 100; // Adjust this value as needed for your button width
     const scrollX = index * buttonWidth; // Calculate the position to scroll to

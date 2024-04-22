@@ -10,111 +10,34 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import ActiveHomeworkConfirmBottomSheet from '@/components/BottomSheet/Activate/ActiveHomeworkConfirmBottomSheet';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
+import { notifyMessage } from '../../utils/error-toast-API';
+
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
-
-const TopicData = [
-  {
-    id: 'C1',
-    topic: 'Motion',
-    subTopics: [
-      { id: 1, subtopic: 'Introduction to Motion', isActive: false },
-
-      {
-        id: 2,
-        subtopic: 'Rate of Motion',
-        isActive: false,
-      },
-      { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
-      {
-        id: 4,
-        subtopic: 'Graphical Representation of Motion',
-        isActive: false,
-      },
-      {
-        id: 5,
-        subtopic: 'Equations of Motion by Graphical Method',
-        isActive: false,
-      },
-      { id: 6, subtopic: 'Uniform Circular Motion', isActive: false },
-    ],
-  },
-  {
-    id: 'C2',
-    topic: 'Force and Laws of Motion',
-    subTopics: [
-      { id: 1, subtopic: 'Introduction to Motion', isActive: false },
-      { id: 2, subtopic: 'Rate of Motion', isActive: false },
-      { id: 3, subtopic: 'Rate of Change of Velocity', isActive: false },
-      {
-        id: 4,
-        subtopic: 'Equations of Motion by Graphical Method',
-        isActive: false,
-      },
-      { id: 5, subtopic: 'Uniform Circular Motion', isActive: false },
-    ],
-  },
-  {
-    id: 'C3',
-    topic: 'Gravitation',
-    subTopics: [
-      { id: 1, subtopic: 'Introduction to Motion' },
-      { id: 2, subtopic: 'Rate of Motion' },
-      { id: 3, subtopic: 'Rate of Change of Velocity' },
-      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-      { id: 5, subtopic: 'Uniform Circular Motion' },
-    ],
-  },
-  {
-    id: 'C4',
-    topic: 'Work and Energy',
-    subTopics: [
-      { id: 1, subtopic: 'Introduction to Motion' },
-      { id: 2, subtopic: 'Rate of Motion' },
-      { id: 3, subtopic: 'Rate of Change of Velocity' },
-      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-      { id: 5, subtopic: 'Uniform Circular Motion' },
-    ],
-  },
-  {
-    id: 'C5',
-    topic: 'Sound',
-    subTopics: [
-      { id: 1, subtopic: 'Introduction to Motion' },
-      { id: 2, subtopic: 'Rate of Motion' },
-      { id: 3, subtopic: 'Rate of Change of Velocity' },
-      { id: 4, subtopic: 'Equations of Motion by Graphical Method' },
-      { id: 5, subtopic: 'Uniform Circular Motion' },
-    ],
-  },
-];
 
 const HomeWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
-  // const [searchChapterName, setSearchChapterName] = useState([]);
-  const [activatedData, setActivatedData] = useState();
+  const [searchChapterName, setSearchChapterName] = useState([]);
   const [chapterDetails, setChapterDetails] = useState([]);
+  const [selectedChapterId, setSelectedChapterId] = useState('');
+  const [selectedTopicId, setSelectedTopicId] = useState('');
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [topics, setTopics] = useState([]);
 
   useEffect(() => {
-    // setSearchChapterName(TopicData);
-    console.log('selected subject id', selectedSubjectId);
     getAllChaptersDetails(selectedSubjectId);
+    // setSearchChapterName(chapterDetails);
   }, [selectedSubjectId]);
 
-  const getAllChaptersDetails = (subjectId) => {
-    const access_token = storage.getString('access_token');
-    getChaptersBySubjectId(access_token, subjectId)
-      .then((res) => {
-        console.log('Chapters', res.data.chapters);
-        setChapterDetails(res.data.chapters);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
+  const onSearchChapters = (search) => {
+    const searchItem = chapterDetails.filter((ele) =>
+      ele.chapterDesc.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearchChapterName(searchItem);
   };
 
   const toggleContent = (id) => {
@@ -124,25 +47,25 @@ const HomeWorkTab = () => {
     }));
   };
 
-  // const onSearchChapters = (search) => {
-  //   const searchItem = TopicData.filter((ele) =>
-  //     ele.topic.toLowerCase().includes(search.toLowerCase())
-  //   );
-  //   setSearchChapterName(searchItem);
-  // };
+  const handleToggleClick = (chapterId, topicId, topics) => {
+    setActivateConfirmationModalVisible(true);
+    setSelectedChapterId(chapterId);
+    setSelectedTopicId(topicId);
+    setTopics(topics);
+  };
 
-  const topicActivated = (clickedBtnName) => {
-    if (clickedBtnName === 'YES') {
-      let activatedTopic = { ...activatedData.subTopic };
-      activatedTopic.isActive = true;
-      let topicIndex = TopicData.findIndex((ele) => ele.topic == activatedData.topic);
-      let subTopicIndex = TopicData[topicIndex].subTopics.findIndex(
-        (ele) => ele.subtopic == activatedData.subTopic.subtopic
-      );
-      TopicData[topicIndex].subTopics[subTopicIndex] = activatedTopic;
-      console.log('TopicData after update', TopicData);
-      setActivatedData(TopicData);
-    }
+  const getAllChaptersDetails = (subjectId) => {
+    const access_token = storage.getString('access_token');
+    getChaptersBySubjectId(access_token, subjectId)
+      .then((res) => {
+        setChapterDetails(res.data.chapters);
+        setSearchChapterName(res.data.chapters);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Failed to get chapter details');
+        }
+      });
   };
 
   return (
@@ -156,7 +79,7 @@ const HomeWorkTab = () => {
           icon={() => (
             <Image source={Search} resizeMode="contain" style={{ width: 14, height: 14 }} />
           )}
-          // onChangeText={onSearchChapters}
+          onChangeText={onSearchChapters}
           style={{
             backgroundColor: '#09070E',
             borderColor: 'rgba(275, 275, 275, 0.5)',
@@ -176,7 +99,7 @@ const HomeWorkTab = () => {
           Use toggle to activate the homework
         </Text>
         <ScrollView contentContainerStyle={{ paddingBottom: '30%' }}>
-          {chapterDetails.map((ele, i) => {
+          {searchChapterName.map((ele, i) => {
             return (
               <TouchableOpacity
                 onPress={() => toggleContent(ele.chapterId)}
@@ -243,15 +166,13 @@ const HomeWorkTab = () => {
                             </View>
                             <View style={{ width: '0%' }}>
                               <ToggleButton
-                                setActivateConfirmationModalVisible={
-                                  setActivateConfirmationModalVisible
+                                chapterId={ele.chapterId}
+                                topicId={item.topicId}
+                                topics={ele.topics}
+                                onToggleClick={(chapterId, topicId, topics) =>
+                                  handleToggleClick(chapterId, topicId, topics)
                                 }
-                                activeToggleData={item.isActive}
-                                chapterInfo={{
-                                  topic: ele.chapterDesc,
-                                  subTopic: item.topicDesc,
-                                }}
-                                setActivatedData={setActivatedData}
+                                isEnabled={isEnabled}
                               />
                             </View>
                           </View>
@@ -268,7 +189,10 @@ const HomeWorkTab = () => {
       <ActiveHomeworkConfirmBottomSheet
         visible={activateConfirmationModalVisible}
         setActivateConfirmationModalVisible={setActivateConfirmationModalVisible}
-        callAfterDialogClose={topicActivated}
+        chapterId={selectedChapterId}
+        topicId={selectedTopicId}
+        setIsEnabled={setIsEnabled}
+        topics={topics}
       />
     </SafeScreen>
   );

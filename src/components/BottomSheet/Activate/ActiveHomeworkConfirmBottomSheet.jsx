@@ -1,34 +1,75 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import ActivateMoreTopicBottomSheet from './ActivateMoreTopicBottomSheet';
 import ClassSuccessfullySelectedBottomSheet from '../Home/ClassSuccessfullySelectedBottomSheet';
+import { activateHomeworkByTeacher } from '../../../services/activateHomeworkService';
+import { MMKV } from 'react-native-mmkv';
+import { notifyMessage } from '../../../utils/error-toast-API';
+
+const storage = new MMKV();
 
 const ActiveHomeworkConfirmBottomSheet = ({
   visible,
   setActivateConfirmationModalVisible,
-  callAfterDialogClose,
+  chapterId,
+  topicId,
+  setIsEnabled,
+  topics,
 }) => {
   const { layout, colors, fonts } = useTheme();
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [moreTopicModalVisible, setMoreTopicModalVisible] = useState(false);
   const closeMoreTopicModal = () => {
     setMoreTopicModalVisible(false);
   };
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
+  const [sectionId, setSectionId] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
 
-  const topicActivated = (clickedBtnName) => {
-    if (clickedBtnName === 'YES') {
-      setOpenClassSuccessfullySelectedBottomSheet(true);
-      setActivateConfirmationModalVisible(false);
-      callAfterDialogClose(clickedBtnName);
-    } else {
-      setActivateConfirmationModalVisible(false);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setSectionId(item.id);
+          return;
+        }
+      }
     }
+  }, [sectionName, teacherDetails]);
+
+  let requiredBody = {
+    gradeId: gradeId,
+    sectionId: sectionId,
+    subjectId: subjectId,
+    chapterId: chapterId,
+    topicIds: [topicId],
+  };
+
+  const handleTopicActivate = () => {
+    const accessToken = storage.getString('access_token');
+    activateHomeworkByTeacher(accessToken, requiredBody)
+      .then(() => {
+        setIsEnabled(true);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Topic already assigned');
+        }
+      })
+      .finally(() => {
+        setActivateConfirmationModalVisible(false);
+      });
   };
 
   return (
@@ -97,7 +138,9 @@ const ActiveHomeworkConfirmBottomSheet = ({
               </View>
               <View style={styles.footer}>
                 <TouchableOpacity
-                  onPress={() => topicActivated('NO')}
+                  onPress={() => {
+                    setActivateConfirmationModalVisible(false);
+                  }}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -125,9 +168,7 @@ const ActiveHomeworkConfirmBottomSheet = ({
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                  onPress={() => {
-                    topicActivated('YES');
-                  }}
+                  onPress={handleTopicActivate}
                 >
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
@@ -152,6 +193,8 @@ const ActiveHomeworkConfirmBottomSheet = ({
       <ActivateMoreTopicBottomSheet
         visible={moreTopicModalVisible}
         closeModal={closeMoreTopicModal}
+        topics={topics}
+        requiredBody={requiredBody}
       />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}

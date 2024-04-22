@@ -1,29 +1,17 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeScreen } from '@/components/template';
 
-const ToggleButton = ({
-  setActivateConfirmationModalVisible,
-  activeToggleData,
-  chapterInfo,
-  setActivatedData,
-}) => {
-  const [isEnabled, setIsEnabled] = useState();
-
-  useEffect(() => {
-    setIsEnabled(activeToggleData);
-  }, [activeToggleData]);
-
-  const toggleSwitch = () => {
-    setActivateConfirmationModalVisible(true);
-    setActivatedData(chapterInfo);
+const ToggleButton = ({ chapterId, topicId, onToggleClick, isEnabled, topics }) => {
+  const handleToggleClick = () => {
+    onToggleClick(chapterId, topicId, topics);
   };
 
   return (
     <SafeScreen>
       <TouchableOpacity
         onPress={() => {
-          toggleSwitch();
+          handleToggleClick();
         }}
       >
         <View

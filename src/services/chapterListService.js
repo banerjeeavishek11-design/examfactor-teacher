@@ -10,3 +10,16 @@ export const getChaptersBySubjectId = async (token, subjectId) => {
     },
   });
 };
+
+export const getSubjectsBySubjectId = async (token, subjectId) => {
+  return await axios.get(`${masterDataService}/v1/subjects/${subjectId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Host: host,
+    },
+    params: {
+      query: 'mapped_diagnostic_subtopic',
+    },
+  });
+};

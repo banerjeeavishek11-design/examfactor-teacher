@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   subject: {},
+  sectionName: {},
 };
 
 const selectedSubjectSlice = createSlice({
@@ -11,8 +12,11 @@ const selectedSubjectSlice = createSlice({
     selectSubjectAction: (state, action) => {
       state.subject = action.payload;
     },
+    selectSectionName: (state, action) => {
+      state.sectionName = action.payload;
+    },
   },
 });
 
-export const { selectSubjectAction } = selectedSubjectSlice.actions;
+export const { selectSubjectAction, selectSectionName } = selectedSubjectSlice.actions;
 export default selectedSubjectSlice.reducer;

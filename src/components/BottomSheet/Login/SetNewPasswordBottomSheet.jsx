@@ -77,7 +77,9 @@ const SetNewPasswordBottomSheet = ({
         });
       })
       .catch((error) => {
-        console.log('ERROR', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unable to fetch teacher details...');
+        }
       });
   };
 

@@ -6,11 +6,13 @@ import { ImageVariant } from '../../atoms';
 import RadioButton from '../../RadioButton/RadioButton';
 import ClassSuccessfullySelectedBottomSheet from './ClassSuccessfullySelectedBottomSheet';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
-// import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { MMKV } from 'react-native-mmkv';
+import { selectSectionName } from '../../../store/redux-slice/SelectedSubjectSlice';
 
 const storage = new MMKV();
 const ReferandearnBottomsheet = (props) => {
+  const dispatch = useDispatch();
   const {
     setOpenSelectClassBottomSheet,
     openSelectClassBottmSheet,
@@ -49,6 +51,7 @@ const ReferandearnBottomsheet = (props) => {
   const handleApply = () => {
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
+    dispatch(selectSectionName(option));
     setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 
