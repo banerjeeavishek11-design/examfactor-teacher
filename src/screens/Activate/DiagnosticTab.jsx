@@ -24,6 +24,7 @@ const DiagnosticTab = () => {
   const [selectedTopic, setSelectedTopic] = useState();
   const [unitId, setUnitId] = useState('');
   const [selectedChapterId, setSelectedChapterId] = useState('');
+  const [selectedChapter, setSelectedChapter] = useState('');
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
 
   useEffect(() => {
@@ -176,7 +177,7 @@ const DiagnosticTab = () => {
                         // topics={ele.topics}
                         onToggleClick={(chapterId) => {
                           handleToggleClick(chapterId);
-                          setSearchChapterName(`C${index + 1} : ${ele.chapterDesc}`);
+                          setSelectedChapter(`C${index + 1} : ${ele.chapterDesc}`);
                         }}
                         // isEnabled={isEnabled}
                       />
@@ -191,8 +192,7 @@ const DiagnosticTab = () => {
       <ActivateDiagnosticConfirmationBottomSheet
         visible={activateConfirmationModalVisible}
         closeModal={setActivateConfirmationModalVisible}
-        selectedChapter={searchChapterName}
-        // callAfterDialogClose={topicActivated}
+        selectedChapter={selectedChapter}
         unitId={unitId}
         chapterId={selectedChapterId}
       />
