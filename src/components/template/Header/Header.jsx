@@ -83,7 +83,7 @@ const Header = () => {
         <View style={[layout.rowHCenter, layout.justifyBetween, layout.display, { width: '100%' }]}>
           <View>
             <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
-              <View style={[layout.rowHCenter]}>
+              <View style={[layout.rowHCenter, { gap: 5 }]}>
                 <Text
                   style={[
                     fonts.size_18,
@@ -97,7 +97,7 @@ const Header = () => {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  Class {showSelecTedClass?.split(' ')[2]}
+                  {showSelecTedClass}
                 </Text>
 
                 <ImageVariant

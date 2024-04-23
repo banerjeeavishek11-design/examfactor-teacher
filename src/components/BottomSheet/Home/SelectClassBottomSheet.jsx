@@ -105,7 +105,7 @@ const ReferandearnBottomsheet = (props) => {
                         <RadioButton isActive={option === ele.sectionName} />
                       </View>
                       <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                        {ele.sectionName.split(' ')[2]}
+                        {ele.sectionName}
                       </Text>
                     </TouchableOpacity>
                   ))}
