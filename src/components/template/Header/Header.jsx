@@ -47,7 +47,7 @@ const Header = () => {
     }));
     setSubjects(subjectList);
     if (subjectList) {
-      setSelectedSubject(subjectList[0].subjectName);
+      setSelectedSubject(subjectList[0].subjectId);
     }
     if (subjectList && subjectList.length > 0) {
       dispatch(selectSubjectAction(subjectList[0].subjectId));
@@ -65,8 +65,8 @@ const Header = () => {
   const handleButtonPress = (index, subject) => {
     setSelectedSubject(subject);
     dispatch(selectSubjectAction(subject));
-    const buttonWidth = 100; // Adjust this value as needed for your button width
-    const scrollX = index * buttonWidth; // Calculate the position to scroll to
+    const buttonWidth = 100;
+    const scrollX = index * buttonWidth;
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
     }
@@ -151,32 +151,34 @@ const Header = () => {
             ]}
           >
             <View style={[layout.display, layout.rowHCenter]}>
-              {subjects?.map((ele, i) => (
-                <TouchableOpacity
-                  key={i}
-                  style={[
-                    styles.button,
-                    {
-                      borderColor: selectedSubject === ele.subjectId ? '#27D4FA' : '#22222F',
-                      borderWidth: selectedSubject === ele.subjectId ? 2 : 0,
-                    },
-                  ]}
-                  onPress={() => {
-                    handleButtonPress(i, ele.subjectId);
-                  }}
-                >
-                  <Text
+              {subjects?.map((ele, i) => {
+                return (
+                  <TouchableOpacity
+                    key={i}
                     style={[
-                      selectedSubject === ele.subjectId ? styles.activeButton : styles.buttonText,
-                      fonts.size_14,
-                      fonts.bold,
+                      styles.button,
+                      {
+                        borderColor: selectedSubject === ele.subjectId ? '#27D4FA' : '#22222F',
+                        borderWidth: selectedSubject === ele.subjectId ? 2 : 0,
+                      },
                     ]}
+                    onPress={() => {
+                      handleButtonPress(i, ele.subjectId);
+                    }}
                   >
-                    {/* {ele.subjectId.split('_')[1].toLowerCase()} */}
-                    {ele.subjectName}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      style={[
+                        selectedSubject === ele.subjectId ? styles.activeButton : styles.buttonText,
+                        fonts.size_14,
+                        fonts.bold,
+                      ]}
+                    >
+                      {/* {ele.subjectId.split('_')[1].toLowerCase()} */}
+                      {ele.subjectName}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </ScrollView>
         </View>

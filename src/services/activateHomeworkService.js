@@ -10,3 +10,14 @@ export const activateHomeworkByTeacher = async (token, requiredBody) => {
     },
   });
 };
+
+export const getHomeworkByTeacher = async (token, params) => {
+  return await axios.get(`${teacherService}/v1/homeworks`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Host: host,
+    },
+    params: params,
+  });
+};

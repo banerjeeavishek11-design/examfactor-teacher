@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
@@ -22,10 +22,12 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
   selectedChapter,
   unitId,
   chapterId,
+  getDiagnostics,
 }) => {
   const { fonts, colors, layout } = useTheme();
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
@@ -49,9 +51,17 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
       subjectId: subjectId,
       chapterId: chapterId,
     };
+    setIsLoading(true);
     activateDiagnosticByTeacher(accessToken, requiredBody)
       .then(() => {
-        setOpenClassSuccessfullySelectedBottomSheet(true);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getDiagnostics();
+            setOpenClassSuccessfullySelectedBottomSheet(true);
+            resolve(true);
+            setIsLoading(false);
+          }, 1000);
+        });
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
@@ -60,6 +70,7 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
         if (error?.response?.status === 500) {
           notifyMessage('internal server error 500');
         }
+        setIsLoading(false);
       })
       .finally(() => {
         closeModal(false);
@@ -145,16 +156,22 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      Yes
-                    </Text>
+                    {isLoading ? (
+                      <View>
+                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                      </View>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          fonts.alignCenter,
+                          { color: colors.loginBtnTextColor },
+                        ]}
+                      >
+                        Yes
+                      </Text>
+                    )}
                   </PrimaryGradient>
                 </TouchableOpacity>
               </View>

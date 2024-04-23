@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable quotes */
 import { DarkTheme } from '@react-navigation/native';
 
 import type { ThemeConfiguration } from '@/types/theme/config';

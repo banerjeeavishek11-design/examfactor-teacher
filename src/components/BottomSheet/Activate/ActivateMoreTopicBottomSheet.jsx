@@ -1,4 +1,13 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
@@ -10,14 +19,24 @@ import { Searchbar } from 'react-native-paper';
 import Search from '@/theme/assets/images/search.png';
 import { MMKV } from 'react-native-mmkv';
 import { notifyMessage } from '../../../utils/error-toast-API';
+import ClassSuccessfullySelectedBottomSheet from '../ClassSuccessfullySelectedBottomSheet';
 
 const storage = new MMKV();
 
-const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBody }) => {
+const ActivateMoreTopicBottomSheet = ({
+  setOpenClassSuccessfullySelectedBottomSheet,
+  openClassSuccessfullySelectedBottomSheet,
+  visible,
+  closeModal,
+  topics,
+  requiredBody,
+  getHomeworks,
+}) => {
   const { layout, fonts, colors } = useTheme();
 
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [searchTopicName, setSearchTopicName] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleTopicSelection = (topicId) => {
     const isSelected = selectedTopics.includes(topicId);
@@ -35,12 +54,23 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
   const handleActivateMoreTopics = () => {
     let reqBody = { ...requiredBody, topicIds: selectedTopics };
     const accessToken = storage.getString('access_token');
+    setIsLoading(true);
     activateHomeworkByTeacher(accessToken, reqBody)
-      .then(() => {})
+      .then(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getHomeworks();
+            setOpenClassSuccessfullySelectedBottomSheet(true);
+            setIsLoading(false);
+            resolve(true);
+          }, 1000);
+        });
+      })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Topic already assigned');
         }
+        setIsLoading(false);
       })
       .finally(() => {
         setSelectedTopics([]);
@@ -66,7 +96,10 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => {
+                closeModal(false);
+                setSelectedTopics([]);
+              }}
               style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
@@ -96,7 +129,7 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
                     { color: colors.gray200, marginVertical: '4%' },
                   ]}
                 >
-                  Number of topics selected: 2
+                  Number of topics selected: {selectedTopics.length}
                 </Text>
               </View>
               <Searchbar
@@ -201,19 +234,27 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        {
-                          color:
-                            selectedTopics.length == 0 ? colors.gray200 : colors.loginBtnTextColor,
-                        },
-                      ]}
-                    >
-                      Confirm
-                    </Text>
+                    {isLoading ? (
+                      <View>
+                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                      </View>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          fonts.alignCenter,
+                          {
+                            color:
+                              selectedTopics.length == 0
+                                ? colors.gray200
+                                : colors.loginBtnTextColor,
+                          },
+                        ]}
+                      >
+                        Confirm
+                      </Text>
+                    )}
                   </PrimaryGradient>
                 </TouchableOpacity>
               </View>
@@ -221,6 +262,11 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal, topics, requiredBod
           </View>
         </View>
       </Modal>
+      <ClassSuccessfullySelectedBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
+        openFrom={'ActivateMoreTopicConfirmationBottomTab'}
+      />
     </View>
   );
 };

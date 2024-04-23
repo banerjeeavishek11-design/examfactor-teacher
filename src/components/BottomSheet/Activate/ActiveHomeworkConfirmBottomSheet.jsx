@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
@@ -19,8 +19,8 @@ const ActiveHomeworkConfirmBottomSheet = ({
   setActivateConfirmationModalVisible,
   chapterId,
   topicId,
-  setIsEnabled,
   topics,
+  getHomeworks,
 }) => {
   const { layout, colors, fonts } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
@@ -35,6 +35,7 @@ const ActiveHomeworkConfirmBottomSheet = ({
     useState(false);
   const [sectionId, setSectionId] = useState(null);
   const [gradeId, setGradeId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -58,14 +59,23 @@ const ActiveHomeworkConfirmBottomSheet = ({
 
   const handleTopicActivate = () => {
     const accessToken = storage.getString('access_token');
+    setIsLoading(true);
     activateHomeworkByTeacher(accessToken, requiredBody)
       .then(() => {
-        setIsEnabled(true);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getHomeworks();
+            setOpenClassSuccessfullySelectedBottomSheet(true);
+            setIsLoading(false);
+            resolve(true);
+          }, 1000);
+        });
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Topic already assigned');
         }
+        setIsLoading(false);
       })
       .finally(() => {
         setActivateConfirmationModalVisible(false);
@@ -173,16 +183,22 @@ const ActiveHomeworkConfirmBottomSheet = ({
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      Yes
-                    </Text>
+                    {isLoading ? (
+                      <View>
+                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                      </View>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          fonts.alignCenter,
+                          { color: colors.loginBtnTextColor },
+                        ]}
+                      >
+                        Yes
+                      </Text>
+                    )}
                   </PrimaryGradient>
                 </TouchableOpacity>
               </View>
@@ -191,10 +207,13 @@ const ActiveHomeworkConfirmBottomSheet = ({
         </View>
       </Modal>
       <ActivateMoreTopicBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
         visible={moreTopicModalVisible}
         closeModal={closeMoreTopicModal}
         topics={topics}
         requiredBody={requiredBody}
+        getHomeworks={getHomeworks}
       />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}

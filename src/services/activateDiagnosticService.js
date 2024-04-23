@@ -10,3 +10,14 @@ export const activateDiagnosticByTeacher = async (token, requiredBody) => {
     },
   });
 };
+
+export const getDiagnosticsByTeacher = async (token, params) => {
+  return await axios.get(`${teacherService}/v1/diagnostics`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Host: host,
+    },
+    params: params,
+  });
+};
