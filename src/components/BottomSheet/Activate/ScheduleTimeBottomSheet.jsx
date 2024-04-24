@@ -1,33 +1,24 @@
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@/theme";
+import { Modal, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useTheme } from '@/theme';
 
 const fromTimeData = [
-  { id: 1, time: "11:00 am" },
-  { id: 2, time: "11:30 am" },
-  { id: 3, time: "12:00 am" },
-  { id: 4, time: "12:30 am" },
-  { id: 5, time: "1:00 pm" },
-  { id: 6, time: "1:30 am" },
-  { id: 7, time: "2:00 am" },
+  { id: 1, time: '11:00 am' },
+  { id: 2, time: '11:30 am' },
+  { id: 3, time: '12:00 am' },
+  { id: 4, time: '12:30 am' },
+  { id: 5, time: '1:00 pm' },
+  { id: 6, time: '1:30 am' },
+  { id: 7, time: '2:00 am' },
 ];
 const toTimeData = [
-  { id: 1, time: "11:30 am" },
-  { id: 2, time: "12:00 am" },
-  { id: 3, time: "12:30 am" },
-  { id: 4, time: "1:00 am" },
-  { id: 5, time: "1:30 pm" },
-  { id: 6, time: "2:00 am" },
-  { id: 7, time: "2:30 am" },
+  { id: 1, time: '11:30 am' },
+  { id: 2, time: '12:00 am' },
+  { id: 3, time: '12:30 am' },
+  { id: 4, time: '1:00 am' },
+  { id: 5, time: '1:30 pm' },
+  { id: 6, time: '2:00 am' },
+  { id: 7, time: '2:30 am' },
 ];
 
 const ScheduleTimeBottomSheet = (props) => {
@@ -39,7 +30,7 @@ const ScheduleTimeBottomSheet = (props) => {
     setSelectedFromTime,
     setToModalVisible,
   } = props;
-  const { layout, fonts, colors } = useTheme();
+  const { fonts, colors } = useTheme();
 
   const handleFromTimeSelection = (time) => {
     setSelectedToTime(time);
@@ -53,11 +44,7 @@ const ScheduleTimeBottomSheet = (props) => {
 
   return (
     <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={fromModalVisible}
-      >
+      <Modal animationType="slide" transparent={true} visible={fromModalVisible}>
         <View style={styles.fromModalView}>
           <ScrollView showsVerticalScrollIndicator={false}>
             {fromTimeData?.map((ele) => {
@@ -66,16 +53,14 @@ const ScheduleTimeBottomSheet = (props) => {
                   key={ele.id}
                   style={{
                     width: 150,
-                    backgroundColor: "#22222F",
+                    backgroundColor: '#22222F',
                     height: 42,
                     borderRadius: 12,
-                    marginTop: "3%",
-                    justifyContent: "center",
+                    marginTop: '3%',
+                    justifyContent: 'center',
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() => handleFromTimeSelection(ele.time)}
-                  >
+                  <TouchableOpacity onPress={() => handleFromTimeSelection(ele.time)}>
                     <Text
                       style={[
                         fonts.size_12,
@@ -101,16 +86,14 @@ const ScheduleTimeBottomSheet = (props) => {
                   key={ele.id}
                   style={{
                     width: 150,
-                    backgroundColor: "#22222F",
+                    backgroundColor: '#22222F',
                     height: 42,
                     borderRadius: 12,
-                    marginTop: "3%",
-                    justifyContent: "center",
+                    marginTop: '3%',
+                    justifyContent: 'center',
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() => handleToTimeSelection(ele.time)}
-                  >
+                  <TouchableOpacity onPress={() => handleToTimeSelection(ele.time)}>
                     <Text
                       style={[
                         fonts.size_12,
@@ -138,11 +121,11 @@ const styles = StyleSheet.create({
     margin: '4%',
     width: 194,
     height: 300,
-    backgroundColor: "#000000",
+    backgroundColor: '#000000',
     borderRadius: 20,
-    padding: "4%",
-    alignItems: "center",
-    shadowColor: "#000",
+    padding: '4%',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -150,18 +133,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: "84%",
+    marginTop: '98%',
   },
   toModalView: {
     margin: '48%',
     width: 194,
     height: 300,
     // backgroundColor: "#000000",
-    backgroundColor: "#000000",
+    backgroundColor: '#000000',
     borderRadius: 20,
-    padding: "4%",
-    alignItems: "center",
-    shadowColor: "#000",
+    padding: '4%',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -169,7 +152,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: "84%",
+    marginTop: '98%',
   },
   button: {
     borderRadius: 20,
@@ -177,12 +160,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

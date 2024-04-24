@@ -8,12 +8,9 @@ import Calender from '@/theme/assets/images/calendar.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import ScheduleTimeBottomSheet from './ScheduleTimeBottomSheet';
 import { Calendar } from 'react-native-calendars';
+import ClassSuccessfullySelectedBottomSheet from '../Home/ClassSuccessfullySelectedBottomSheet';
 
-const ScheduleTestActivationBottomSheet = ({
-  visible,
-  setActivateConfirmationModalVisible,
-  callAfterDialogClose,
-}) => {
+const ScheduleTestActivationBottomSheet = ({ visible, setActivateConfirmationModalVisible }) => {
   const { layout, colors, fonts } = useTheme();
   const [fromModalVisible, setFromModalVisible] = useState(false);
   const [toModalVisible, setToModalVisible] = useState(false);
@@ -21,15 +18,16 @@ const ScheduleTestActivationBottomSheet = ({
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
+    useState(false);
   const today = new Date();
 
-  const topicActivated = (clickedBtnName) => {
-    if (clickedBtnName === 'YES') {
-      setActivateConfirmationModalVisible(false);
-      callAfterDialogClose(clickedBtnName);
-    } else {
-      setActivateConfirmationModalVisible(false);
-    }
+  const topicActivated = () => {
+    setActivateConfirmationModalVisible(false);
+    setSelectedDate(null);
+    setSelectedFromTime(null);
+    setSelectedToTime(null);
+    setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 
   const handleCalendarToggle = () => {
@@ -221,7 +219,7 @@ const ScheduleTestActivationBottomSheet = ({
 
               <View style={styles.footer}>
                 <TouchableOpacity
-                  onPress={() => topicActivated('NO')}
+                  onPress={() => setActivateConfirmationModalVisible(false)}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -250,7 +248,7 @@ const ScheduleTestActivationBottomSheet = ({
                     },
                   ]}
                   onPress={() => {
-                    topicActivated('YES');
+                    topicActivated();
                   }}
                 >
                   <PrimaryGradient
@@ -280,6 +278,11 @@ const ScheduleTestActivationBottomSheet = ({
         toModalVisible={toModalVisible}
         setToModalVisible={setToModalVisible}
         setSelectedFromTime={setSelectedFromTime}
+      />
+      <ClassSuccessfullySelectedBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
+        openFrom={'ActivateScheduleConfirmationBottomTab'}
       />
     </View>
   );

@@ -12,6 +12,7 @@ import { MMKV } from 'react-native-mmkv';
 import {
   selectSubjectAction,
   selectSectionName,
+  selectSubjectName,
 } from '../../../store/redux-slice/SelectedSubjectSlice';
 
 const storage = new MMKV();
@@ -51,6 +52,7 @@ const Header = () => {
     }
     if (subjectList && subjectList.length > 0) {
       dispatch(selectSubjectAction(subjectList[0].subjectId));
+      dispatch(selectSubjectName(subjectList[0].subjectName));
     }
   }, [showSelecTedClass]);
 
@@ -62,9 +64,10 @@ const Header = () => {
     }
   };
 
-  const handleButtonPress = (index, subject) => {
+  const handleButtonPress = (index, subject, subjectName) => {
     setSelectedSubject(subject);
     dispatch(selectSubjectAction(subject));
+    dispatch(selectSubjectName(subjectName));
     const buttonWidth = 100;
     const scrollX = index * buttonWidth;
     if (scrollViewRef.current) {
@@ -163,7 +166,7 @@ const Header = () => {
                       },
                     ]}
                     onPress={() => {
-                      handleButtonPress(i, ele.subjectId);
+                      handleButtonPress(i, ele.subjectId, ele.subjectName);
                     }}
                   >
                     <Text

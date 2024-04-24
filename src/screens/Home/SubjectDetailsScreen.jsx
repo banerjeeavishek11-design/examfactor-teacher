@@ -88,7 +88,7 @@ const SubjectDetailsScreen = () => {
         >
           <ImageVariant
             testID="brand-img"
-            style={{ width: 10, height: 11, tintColor: colors.backButtonColor }}
+            style={{ top: -2, width: 10, height: 11, tintColor: colors.backButtonColor }}
             source={LeftArrow}
             resizeMode="contain"
           />

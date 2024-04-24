@@ -1,10 +1,12 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
+import { MMKV } from 'react-native-mmkv';
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Line from '@/theme/assets/images/line.png';
@@ -14,7 +16,10 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
+import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
+import { notifyMessage } from '../../utils/error-toast-API';
 
+const storage = new MMKV();
 const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
@@ -31,8 +36,15 @@ const HomeScreen = () => {
   // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
+  const subjectName = useSelector((state) => state.selectedSubject.subjectName);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [sectionId, setSectionId] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
+  const userRole = useSelector((state) => state.login.userRole);
 
-  // const [subjects, setSubjects] = useState([]);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -48,9 +60,44 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  // useEffect(() => {
-  //   createClassList();
-  // }, []);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (sectionId && gradeId && selectedSubjectId) {
+        getSubjectReports();
+      }
+    }, [selectedSubjectId, sectionId, gradeId])
+  );
+
+  const getSubjectReports = () => {
+    // if (!gradeId || !sectionId) {
+    //   return;
+    // }
+    const access_token = storage.getString('access_token');
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    getSubjectWiseReport(access_token, params)
+      .then((res) => {
+        console.log('responst subwise report', res.data);
+      })
+      .catch((error) => {
+        notifyMessage('failed to fetch subjectwise report', error);
+      });
+  };
 
   const toggleContent = () => {
     setShowContent(!showContent);
@@ -59,30 +106,32 @@ const HomeScreen = () => {
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
-        <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
-            CLASS PREPAREDNESS
-          </Text>
-          <TouchableOpacity
-            style={[layout.display, layout.rowHCenter]}
-            onPress={() => navigation.navigate('SubjectDetailsScreen')}
-          >
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
-              SEE DETAILS
+        {userRole === 'Teacher' && (
+          <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
+              CLASS PREPAREDNESS
             </Text>
-            <ImageVariant
-              testID="brand-img"
-              style={{
-                width: 11,
-                height: 11,
-                left: 2,
-                tintColor: colors.termsLinkColor,
-              }}
-              source={Arrow}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={[layout.display, layout.rowHCenter]}
+              onPress={() => navigation.navigate('SubjectDetailsScreen')}
+            >
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
+                SEE DETAILS
+              </Text>
+              <ImageVariant
+                testID="brand-img"
+                style={{
+                  width: 11,
+                  height: 11,
+                  left: 2,
+                  tintColor: colors.termsLinkColor,
+                }}
+                source={Arrow}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View
           style={[
             layout.fullWidth,
@@ -103,7 +152,7 @@ const HomeScreen = () => {
               { color: colors.white, marginTop: '3%' },
             ]}
           >
-            Physics
+            {subjectName}
           </Text>
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
             <Concentrix scorePercentage={20} />

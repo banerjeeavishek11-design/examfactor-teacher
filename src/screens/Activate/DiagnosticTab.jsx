@@ -217,71 +217,97 @@ const DiagnosticTab = () => {
             <ActivityIndicator size="large" color={colors.termsLinkColor} />
           </View>
         ) : (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: '30%' }}
-          >
-            <View
-              style={[
-                layout.fullWidth,
-                layout.paddingForCard,
-                {
-                  backgroundColor: colors.cardBackgroundColor,
-                  borderRadius: 14,
-                  marginTop: '3%',
-                  marginBottom: '2%',
-                },
-              ]}
-            >
-              {searchChapterName?.map((ele, index) => {
-                const assignedObj = getAssigned(ele.chapterId);
-                return (
+          <>
+            {searchChapterName && searchChapterName.length > 0 ? (
+              <>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingBottom: '30%' }}
+                >
                   <View
-                    style={{
-                      borderBottomWidth: index + 1 != selectedTopic.length ? 1 : 0,
-                      borderBottomColor: index + 1 != selectedTopic.length ? colors.gray400 : null,
-                      marginVertical: '3%',
-                    }}
-                    key={ele.chapterId}
+                    style={[
+                      layout.fullWidth,
+                      layout.paddingForCard,
+                      {
+                        backgroundColor: colors.cardBackgroundColor,
+                        borderRadius: 14,
+                        marginTop: '3%',
+                        marginBottom: '2%',
+                      },
+                    ]}
                   >
-                    <View style={[layout.row, layout.justifyBetween, layout.itemsCenter]}>
-                      <View style={[{ marginBottom: '4%', width: '70%' }]}>
-                        <Text
-                          style={[fonts.size_16, fonts.fontWeignt_600, { color: colors.white }]}
-                        >
-                          {`C${index + 1}`}: {ele.chapterDesc}
-                        </Text>
-                      </View>
-                      <View style={{ width: '0%' }}>
-                        <ToggleButton
-                          setActivateConfirmationModalVisible={setActivateConfirmationModalVisible}
-                          chapterId={ele.chapterId}
-                          // unitId={unitId}
-                          // topics={ele.topics}
-                          onToggleClick={(chapterId) => {
-                            handleToggleClick(chapterId);
-                            setSelectedChapter(`C${index + 1} : ${ele.chapterDesc}`);
+                    {searchChapterName?.map((ele, index) => {
+                      const assignedObj = getAssigned(ele.chapterId);
+                      return (
+                        <View
+                          style={{
+                            borderBottomWidth: index + 1 != selectedTopic.length ? 1 : 0,
+                            borderBottomColor:
+                              index + 1 != selectedTopic.length ? colors.gray400 : null,
+                            marginVertical: '3%',
                           }}
-                          isEnabled={isAlreadyAssigned(ele.chapterId)}
-                        />
-                      </View>
-                    </View>
-                    {assignedObj ? (
-                      <Text
-                        style={[
-                          fonts.size_12,
-                          fonts.fontWeight_small,
-                          { color: colors.gray200, marginTop: -10 },
-                        ]}
-                      >
-                        Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}
-                      </Text>
-                    ) : null}
+                          key={ele.chapterId}
+                        >
+                          <View style={[layout.row, layout.justifyBetween, layout.itemsCenter]}>
+                            <View style={[{ marginBottom: '4%', width: '70%' }]}>
+                              <Text
+                                style={[
+                                  fonts.size_16,
+                                  fonts.fontWeignt_600,
+                                  { color: colors.white },
+                                ]}
+                              >
+                                {`C${index + 1}`}: {ele.chapterDesc}
+                              </Text>
+                            </View>
+                            <View style={{ width: '0%' }}>
+                              <ToggleButton
+                                setActivateConfirmationModalVisible={
+                                  setActivateConfirmationModalVisible
+                                }
+                                chapterId={ele.chapterId}
+                                // unitId={unitId}
+                                // topics={ele.topics}
+                                onToggleClick={(chapterId) => {
+                                  handleToggleClick(chapterId);
+                                  setSelectedChapter(`C${index + 1} : ${ele.chapterDesc}`);
+                                }}
+                                isEnabled={isAlreadyAssigned(ele.chapterId)}
+                              />
+                            </View>
+                          </View>
+                          {assignedObj ? (
+                            <Text
+                              style={[
+                                fonts.size_12,
+                                fonts.fontWeight_small,
+                                { color: colors.gray200, marginTop: -10 },
+                              ]}
+                            >
+                              Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}
+                            </Text>
+                          ) : null}
+                        </View>
+                      );
+                    })}
                   </View>
-                );
-              })}
-            </View>
-          </ScrollView>
+                </ScrollView>
+              </>
+            ) : (
+              <View style={(styles.loader, { marginTop: '50%' })}>
+                <Text
+                  style={[
+                    fonts.size_20,
+                    fonts.fontWeight_small,
+                    fonts.alignCenter,
+                    { color: colors.white },
+                  ]}
+                >
+                  No Data Available
+                </Text>
+              </View>
+            )}
+          </>
         )}
       </View>
       <ActivateDiagnosticConfirmationBottomSheet

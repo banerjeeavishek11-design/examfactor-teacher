@@ -1,17 +1,26 @@
 import { useTheme } from '@/theme';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Modal, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Cross from '@/theme/assets/images/cross.png';
+import { useDispatch } from 'react-redux';
 import { ImageVariant } from '../../atoms';
 import RadioButton from '../../RadioButton/RadioButton';
+import { useSelector } from 'react-redux';
 import Teacher from '@/theme/assets/images/teacher.png';
 import ClassTeacher from '@/theme/assets/images/classteacher.png';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
+import { updateUserRole } from '../../../store/redux-slice/LoginSlice';
 
 const ChangeRoleBottomSheet = (props) => {
   const { setChangeRoleBottomSheetVisible, changeRoleBottomSheetVisible, setUserRole } = props;
   const { colors, layout, fonts } = useTheme();
+  const dispatch = useDispatch();
+  const initialUserRole = useSelector((state) => state.login.userRole);
   const [option, setOption] = useState('Teacher');
+
+  useEffect(() => {
+    setOption(initialUserRole);
+  }, [initialUserRole]);
 
   const handleSlideDown = () => {
     setChangeRoleBottomSheetVisible(false);
@@ -24,6 +33,7 @@ const ChangeRoleBottomSheet = (props) => {
   const handleApply = () => {
     setChangeRoleBottomSheetVisible(false);
     setUserRole(option);
+    dispatch(updateUserRole(option));
   };
 
   return (

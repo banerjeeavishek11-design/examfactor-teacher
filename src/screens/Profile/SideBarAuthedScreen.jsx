@@ -1,10 +1,11 @@
 import { Image, Linking, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useNavigation } from '@react-navigation/native';
 import { SafeScreen } from '@/components/template';
 import { ImageVariant } from '@/components/atoms';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
+import { useSelector } from 'react-redux';
 import Arrow from '@/theme/assets/images/arrow.png';
 import Rateus from '@/theme/assets/images/rateus.png';
 import Support from '@/theme/assets/images/support.png';
@@ -27,6 +28,12 @@ const SideBarAuthedScreen = (props) => {
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
   const [userRole, setUserRole] = useState('Teacher');
+
+  const initialUserRole = useSelector((state) => state.login.userRole);
+
+  useEffect(() => {
+    setUserRole(initialUserRole);
+  }, [initialUserRole]);
 
   const openTermsAndCondition = () => {
     Linking.openURL('https://www.examfactor.com/terms-and-conditions/')

@@ -9,6 +9,7 @@ import ReportsTab from '@/theme/assets/images/Reportstab.png';
 import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { ImageVariant } from '@/components/atoms';
 import Header from '../components/template/Header/Header';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const S = StyleSheet.create({
@@ -32,11 +33,16 @@ const S = StyleSheet.create({
 });
 
 const TabBar = (props) => {
+  const userRole = useSelector((state) => state.login.userRole);
   const { layout, fonts } = useTheme();
   return (
     <View style={S.container}>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
+        style={[
+          layout.justifyCenter,
+          layout.itemsCenter,
+          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+        ]}
         onPress={() => {
           props.navigation.jumpTo('HomeTab');
         }}
@@ -67,7 +73,11 @@ const TabBar = (props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
+        style={[
+          layout.justifyCenter,
+          layout.itemsCenter,
+          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+        ]}
         onPress={() => {
           props.navigation.jumpTo('SchoolWorkTab');
         }}
@@ -98,7 +108,11 @@ const TabBar = (props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
+        style={[
+          layout.justifyCenter,
+          layout.itemsCenter,
+          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+        ]}
         onPress={() => {
           props.navigation.jumpTo('ReportsTab');
         }}
@@ -127,37 +141,38 @@ const TabBar = (props) => {
           Reports
         </Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
-        onPress={() => {
-          props.navigation.jumpTo('ActivateTab');
-        }}
-      >
-        <ImageVariant
-          testID="brand-img"
-          style={{
-            width: 30,
-            height: 30,
-            tintColor: props.state.index === 3 ? '#fff' : '#77747D',
+      {userRole === 'Teacher' && (
+        <TouchableOpacity
+          style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
+          onPress={() => {
+            props.navigation.jumpTo('ActivateTab');
           }}
-          source={ActivateTab}
-          resizeMode="contain"
-        />
-        <Text
-          style={[
-            fonts.size_12,
-            fonts.alignCenter,
-            {
-              fontWeight: props.state.index === 4 ? '700' : '500',
-              color: props.state.index === 3 ? '#fff' : '#77747D',
-              lineHeight: 18,
-            },
-          ]}
         >
-          Activate
-        </Text>
-      </TouchableOpacity>
+          <ImageVariant
+            testID="brand-img"
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: props.state.index === 3 ? '#fff' : '#77747D',
+            }}
+            source={ActivateTab}
+            resizeMode="contain"
+          />
+          <Text
+            style={[
+              fonts.size_12,
+              fonts.alignCenter,
+              {
+                fontWeight: props.state.index === 4 ? '700' : '500',
+                color: props.state.index === 3 ? '#fff' : '#77747D',
+                lineHeight: 18,
+              },
+            ]}
+          >
+            Activate
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

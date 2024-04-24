@@ -80,7 +80,7 @@ const TopicWiseDetailsScreen = () => {
           layout.fullWidth,
           layout.paddingForFullScreen,
           {
-            height: 50,
+            height: 56,
             backgroundColor: colors.headerBackgroundColor,
           },
         ]}

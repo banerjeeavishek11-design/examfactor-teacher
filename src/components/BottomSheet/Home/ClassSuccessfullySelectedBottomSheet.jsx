@@ -174,6 +174,30 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                   </Text>
                 </View>
               ) : null}
+              {openFrom === 'ActivateScheduleConfirmationBottomTab' ? (
+                <View style={{ width: '90%', marginTop: '3%' }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: '4%' },
+                    ]}
+                  >
+                    Test Schedule Successfully!
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.gray200, marginTop: '2%' },
+                    ]}
+                  >
+                    Reminder has been sent to all students for test
+                  </Text>
+                </View>
+              ) : null}
             </View>
           </View>
         </View>
