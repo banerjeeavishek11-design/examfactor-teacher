@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { Concentrix, SafeScreen, BarChart } from '@/components/template';
@@ -8,6 +8,7 @@ import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
 import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Line from '@/theme/assets/images/line.png';
 import Info from '@/theme/assets/images/info.png';
@@ -16,7 +17,9 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
-import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
+import { getUserDetailsByUserId } from '../../services/teacherService';
+import { updateUserRole } from '../../store/redux-slice/LoginSlice';
+// import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 
 const storage = new MMKV();
@@ -33,18 +36,20 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
+  const userName = storage.getString('username');
+  const dispatch = useDispatch();
   // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
-  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
-  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
-  const [sectionId, setSectionId] = useState(null);
-  const [gradeId, setGradeId] = useState(null);
+  // const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  // const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  // const [sectionId, setSectionId] = useState(null);
+  // const [gradeId, setGradeId] = useState(null);
   const userRole = useSelector((state) => state.login.userRole);
 
-  const resFromMMKV = storage.getString('teacherDetails');
-  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  // const resFromMMKV = storage.getString('teacherDetails');
+  // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -60,42 +65,58 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  useEffect(() => {
-    if (teacherDetails && teacherDetails.length > 0) {
-      for (let item of teacherDetails) {
-        if (item.sectionName === sectionName) {
-          setGradeId(item.gradeId);
-          setSectionId(item.id);
-          return;
-        }
-      }
-    }
-  }, [sectionName, teacherDetails]);
+  // useEffect(() => {
+  //   if (teacherDetails && teacherDetails.length > 0) {
+  //     for (let item of teacherDetails) {
+  //       if (item.sectionName === sectionName) {
+  //         setGradeId(item.gradeId);
+  //         setSectionId(item.id);
+  //         return;
+  //       }
+  //     }
+  //   }
+  // }, [sectionName, teacherDetails]);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     if (sectionId && gradeId && selectedSubjectId) {
+  //       getSubjectReports();
+  //     }
+  //   }, [selectedSubjectId, sectionId, gradeId])
+  // );
 
   useFocusEffect(
     React.useCallback(() => {
-      if (sectionId && gradeId && selectedSubjectId) {
-        getSubjectReports();
-      }
-    }, [selectedSubjectId, sectionId, gradeId])
+      getTeacheDetails();
+    }, [])
   );
 
-  const getSubjectReports = () => {
-    // if (!gradeId || !sectionId) {
-    //   return;
-    // }
-    const access_token = storage.getString('access_token');
-    let params = {
-      gradeId: gradeId,
-      sectionId: sectionId,
-      subjectId: selectedSubjectId,
-    };
-    getSubjectWiseReport(access_token, params)
+  // const getSubjectReports = () => {
+  //   const access_token = storage.getString('access_token');
+  //   let params = {
+  //     gradeId: gradeId,
+  //     sectionId: sectionId,
+  //     subjectId: selectedSubjectId,
+  //   };
+  //   getSubjectWiseReport(access_token, params)
+  //     .then((res) => {
+  //       console.log('responst subwise report', res.data);
+  //     })
+  //     .catch((error) => {
+  //       notifyMessage('failed to fetch subjectwise report', error);
+  //     });
+  // };
+
+  const getTeacheDetails = () => {
+    const accessToken = storage.getString('access_token');
+    getUserDetailsByUserId(accessToken, userName)
       .then((res) => {
-        console.log('responst subwise report', res.data);
+        if (res.data) {
+          dispatch(updateUserRole(res.data.teacherRole));
+        }
       })
       .catch((error) => {
-        notifyMessage('failed to fetch subjectwise report', error);
+        notifyMessage('Something Went Wrong fetching teacher details', error);
       });
   };
 

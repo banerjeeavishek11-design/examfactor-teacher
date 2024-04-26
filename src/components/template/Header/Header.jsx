@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
@@ -23,6 +23,8 @@ const Header = () => {
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const dispatch = useDispatch();
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
@@ -127,12 +129,20 @@ const Header = () => {
                 onPress={() => handleOpenDrawer()}
                 style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
               >
-                <ImageVariant
-                  testID="brand-img"
-                  style={{ width: 23, height: 23 }}
-                  source={User}
-                  resizeMode="contain"
-                />
+                {teacherDetails[0]?.profileImageUrl ? (
+                  <Image
+                    style={[{ width: 23, height: 23, borderRadius: 100 }]}
+                    source={{ uri: teacherDetails[0]?.profileImageUrl }}
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <ImageVariant
+                    testID="brand-img"
+                    style={{ width: 23, height: 23 }}
+                    source={User}
+                    resizeMode="contain"
+                  />
+                )}
                 <ImageVariant
                   testID="brand-img"
                   style={{ width: 10, height: 12, left: 5, tintColor: '#B6B6BB' }}

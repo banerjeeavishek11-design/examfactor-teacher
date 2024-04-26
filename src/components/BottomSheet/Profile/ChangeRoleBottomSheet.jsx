@@ -16,7 +16,7 @@ const ChangeRoleBottomSheet = (props) => {
   const { colors, layout, fonts } = useTheme();
   const dispatch = useDispatch();
   const initialUserRole = useSelector((state) => state.login.userRole);
-  const [option, setOption] = useState('Teacher');
+  const [option, setOption] = useState('TEACHER');
 
   useEffect(() => {
     setOption(initialUserRole);
@@ -73,11 +73,11 @@ const ChangeRoleBottomSheet = (props) => {
               <View>
                 <TouchableOpacity
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange('Teacher')}
+                  onPress={() => handleOptionChange('TEACHER')}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === 'Teacher'} />
+                    <RadioButton isActive={option === 'TEACHER'} />
                   </View>
                   <ImageVariant
                     testID="brand-img"

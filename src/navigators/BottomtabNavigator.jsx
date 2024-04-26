@@ -41,7 +41,7 @@ const TabBar = (props) => {
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
         ]}
         onPress={() => {
           props.navigation.jumpTo('HomeTab');
@@ -76,7 +76,7 @@ const TabBar = (props) => {
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
         ]}
         onPress={() => {
           props.navigation.jumpTo('SchoolWorkTab');
@@ -111,7 +111,7 @@ const TabBar = (props) => {
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'Teacher' ? '25%' : '33.3%' },
+          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
         ]}
         onPress={() => {
           props.navigation.jumpTo('ReportsTab');
@@ -141,7 +141,7 @@ const TabBar = (props) => {
           Reports
         </Text>
       </TouchableOpacity>
-      {userRole === 'Teacher' && (
+      {userRole === 'TEACHER' && (
         <TouchableOpacity
           style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
           onPress={() => {

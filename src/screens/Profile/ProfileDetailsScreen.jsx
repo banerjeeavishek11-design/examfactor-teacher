@@ -7,7 +7,7 @@ import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import Profile from '@/theme/assets/images/profile.png';
 import EditPersonalDetailBottomSheet from '@/components/BottomSheet/Profile/EditPersonalDetailBottomSheet';
 import ChangePasswordBottomSheet from '@/components/BottomSheet/Profile/ChangePasswordBottomSheet';
-import { DrawerActions } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 const ProfileData = {
   fullName: 'Vinay Dua',
@@ -21,6 +21,8 @@ const ProfileData = {
 };
 
 const ProfileDetailsScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { userDetails } = route.params;
   const [profileData, setProfileData] = useState(ProfileData);
   const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible] = useState(false);
   const [changePasswordBottomSheetVisible, setChangePasswordBottomSheetVisible] = useState(false);
@@ -53,7 +55,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
-            navigation.dispatch(DrawerActions.openDrawer());
+            // navigation.dispatch(DrawerActions.openDrawer());
           }}
         >
           <View style={[layout.rowHCenter, layout.display]}>
@@ -69,7 +71,15 @@ const ProfileDetailsScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <View style={[layout.justifyCenter, layout.itemsCenter, { marginTop: '10%' }]}>
-          <Image source={Profile} />
+          {userDetails?.profileImageUrl ? (
+            <Image
+              style={[{ width: 42, height: 42, borderRadius: 100 }]}
+              source={{ uri: userDetails?.profileImageUrl }}
+              resizeMode="cover"
+            />
+          ) : (
+            <Image source={Profile} />
+          )}
           <TouchableOpacity>
             <Text style={[fonts.size_12, { color: colors.termsLinkColor, marginTop: '2%' }]}>
               Add Image
@@ -121,7 +131,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.fullName}
+                {userDetails?.firstName} {userDetails?.lastName}
               </Text>
             </View>
             <View
@@ -148,7 +158,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.dob}
+                {userDetails?.dob || '-  '}
               </Text>
             </View>
             <View
@@ -175,7 +185,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.gender}
+                {userDetails?.gender}
               </Text>
             </View>
             <View
@@ -202,7 +212,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.city}
+                {userDetails?.city || '-  '}
               </Text>
             </View>
             <View
@@ -229,7 +239,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.email}
+                {userDetails?.emailId}
               </Text>
             </View>
             <View
@@ -257,7 +267,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {profileData.emergencyContact}
+                {userDetails?.emergencyContactNumber || '-  '}
               </Text>
             </View>
           </View>
@@ -284,7 +294,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
           <Text
             style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
           >
-            {profileData.mobile}
+            {userDetails?.mobileNumber}
           </Text>
         </View>
         <TouchableOpacity onPress={openChangePasswordModal}>
@@ -296,6 +306,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <EditPersonalDetailBottomSheet
+        userDetails={userDetails}
         closeModal={closeEditPersonalDetailModal}
         personalDetailBottomSheetVisible={personalDetailBottomSheetVisible}
         profileData={profileData}

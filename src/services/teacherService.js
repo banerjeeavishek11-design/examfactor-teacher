@@ -10,3 +10,13 @@ export const getTeacherDetailsById = async (token, userName) => {
     },
   });
 };
+
+export const getUserDetailsByUserId = async (token, userName) => {
+  return await axios.get(`${teacherService}/v1/teachers/${userName}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      Host: host,
+    },
+  });
+};

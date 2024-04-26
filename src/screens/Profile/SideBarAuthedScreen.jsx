@@ -18,7 +18,10 @@ import { Divider } from 'react-native-paper';
 import ChangeRoleBottomSheet from '@/components/BottomSheet/Profile/ChangeRoleBottomSheet';
 import RateUsBottomSheet from '@/components/BottomSheet/Profile/RateUsBottomSheet';
 import { MMKV } from 'react-native-mmkv';
+import { useFocusEffect } from '@react-navigation/native';
 import appVersion from '../../../package.json';
+import { getUserDetailsByUserId } from '../../services/teacherService';
+import { notifyMessage } from '../../utils/error-toast-API';
 
 const SideBarAuthedScreen = (props) => {
   const { colors, layout, fonts } = useTheme();
@@ -27,13 +30,20 @@ const SideBarAuthedScreen = (props) => {
   const userName = storage.getString('username');
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState('Teacher');
+  const [userRole, setUserRole] = useState('TEACHER');
+  const [userDetails, setUserDetails] = useState();
 
   const initialUserRole = useSelector((state) => state.login.userRole);
 
   useEffect(() => {
     setUserRole(initialUserRole);
   }, [initialUserRole]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getTeacheDetails();
+    }, [])
+  );
 
   const openTermsAndCondition = () => {
     Linking.openURL('https://www.examfactor.com/terms-and-conditions/')
@@ -59,13 +69,21 @@ const SideBarAuthedScreen = (props) => {
     });
   };
 
+  const getTeacheDetails = () => {
+    const accessToken = storage.getString('access_token');
+    getUserDetailsByUserId(accessToken, userName)
+      .then((res) => {
+        setUserDetails(res.data);
+      })
+      .catch((error) => {
+        notifyMessage('Something Went Wrong fetching teacher details', error);
+      });
+  };
+
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen, { flex: 1 }]}>
-        <TouchableOpacity
-          // onPress={closeDrawer}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <View style={[layout.rowHCenter, layout.display]}>
             <ImageVariant
               testID="brand-img"
@@ -102,33 +120,46 @@ const SideBarAuthedScreen = (props) => {
                       height: 75,
                     },
                   ]}
-                  onPress={() => navigation.navigate('ProfileDetailsScreen')}
+                  onPress={() =>
+                    navigation.navigate('ProfileDetailsScreen', {
+                      userDetails: userDetails,
+                    })
+                  }
                 >
                   <View style={[layout.display, layout.rowHCenter]}>
-                    <View
-                      style={[
-                        layout.justifyCenter,
-                        layout.itemsCenter,
-                        {
-                          height: 42,
-                          width: 42,
-                          borderRadius: 100,
-                          opacity: 0.5,
-                          backgroundColor: colors.white,
-                        },
-                      ]}
-                    >
-                      <ImageVariant
-                        testID="brand-img"
-                        style={{
-                          width: 23,
-                          height: 23,
-                          tintColor: colors.white,
-                        }}
-                        source={User}
-                        resizeMode="contain"
+                    {userDetails?.profileImageUrl ? (
+                      <Image
+                        style={[{ width: 42, height: 42, borderRadius: 100 }]}
+                        source={{ uri: userDetails?.profileImageUrl }}
+                        resizeMode="cover"
                       />
-                    </View>
+                    ) : (
+                      <View
+                        style={[
+                          layout.justifyCenter,
+                          layout.itemsCenter,
+                          {
+                            height: 42,
+                            width: 42,
+                            borderRadius: 100,
+                            opacity: 0.5,
+                            backgroundColor: colors.white,
+                          },
+                        ]}
+                      >
+                        <ImageVariant
+                          testID="brand-img"
+                          style={{
+                            width: 23,
+                            height: 23,
+                            tintColor: colors.white,
+                          }}
+                          source={User}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    )}
+
                     <View
                       style={[
                         layout.display,
@@ -139,7 +170,8 @@ const SideBarAuthedScreen = (props) => {
                     >
                       <View style={{ marginLeft: '6%', width: '70%' }}>
                         <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                          {userName}
+                          {userDetails?.firstName || userName} {userDetails?.middleName || ''}{' '}
+                          {userDetails?.lastName || ''}
                         </Text>
 
                         <Text
@@ -151,7 +183,7 @@ const SideBarAuthedScreen = (props) => {
                           ]}
                         >
                           {/* {isPhoneNumber(studentId) ? "+91" : ""} {studentId} */}
-                          {userName}
+                          {userDetails?.emailId || userName}
                         </Text>
                       </View>
                       <ImageVariant
@@ -187,7 +219,7 @@ const SideBarAuthedScreen = (props) => {
                       layout.rowHCenter,
                       layout.justifyBetween,
                       {
-                        width: userRole === 'Teacher' ? '35%' : '44%',
+                        width: userRole === 'TEACHER' ? '35%' : '44%',
                         height: 35,
                         backgroundColor: 'green',
                         borderRadius: 4,
@@ -196,7 +228,7 @@ const SideBarAuthedScreen = (props) => {
                     ]}
                   >
                     <View style={{ width: '5%' }}>
-                      {userRole === 'Teacher' ? (
+                      {userRole === 'TEACHER' ? (
                         <Image
                           style={{ width: 20, height: 25 }}
                           source={Teacher}
@@ -211,7 +243,7 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                     <View>
-                      {userRole === 'Teacher' ? (
+                      {userRole === 'TEACHER' ? (
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                         >
@@ -226,20 +258,22 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                   </View>
-                  <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
-                    <Text
-                      style={[
-                        fonts.size_12,
-                        fonts.fontWeignt_600,
-                        {
-                          color: colors.termsLinkColor,
-                          textDecorationLine: 'underline',
-                        },
-                      ]}
-                    >
-                      Change Role
-                    </Text>
-                  </TouchableOpacity>
+                  {userDetails?.teacherViewMode === 'TEACHER' ? null : (
+                    <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeignt_600,
+                          {
+                            color: colors.termsLinkColor,
+                            textDecorationLine: 'underline',
+                          },
+                        ]}
+                      >
+                        Change Role
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
               <Text
