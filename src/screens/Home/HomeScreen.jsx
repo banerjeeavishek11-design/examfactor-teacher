@@ -46,7 +46,7 @@ const HomeScreen = () => {
   // const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
   // const [sectionId, setSectionId] = useState(null);
   // const [gradeId, setGradeId] = useState(null);
-  const userRole = useSelector((state) => state.login.userRole);
+  // const userRole = useSelector((state) => state.login.userRole);
 
   // const resFromMMKV = storage.getString('teacherDetails');
   // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -127,32 +127,30 @@ const HomeScreen = () => {
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
-        {userRole === 'Teacher' && (
-          <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
-              CLASS PREPAREDNESS
+        <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+          <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
+            CLASS PREPAREDNESS
+          </Text>
+          <TouchableOpacity
+            style={[layout.display, layout.rowHCenter]}
+            onPress={() => navigation.navigate('SubjectDetailsScreen')}
+          >
+            <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
+              SEE DETAILS
             </Text>
-            <TouchableOpacity
-              style={[layout.display, layout.rowHCenter]}
-              onPress={() => navigation.navigate('SubjectDetailsScreen')}
-            >
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
-                SEE DETAILS
-              </Text>
-              <ImageVariant
-                testID="brand-img"
-                style={{
-                  width: 11,
-                  height: 11,
-                  left: 2,
-                  tintColor: colors.termsLinkColor,
-                }}
-                source={Arrow}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-        )}
+            <ImageVariant
+              testID="brand-img"
+              style={{
+                width: 11,
+                height: 11,
+                left: 2,
+                tintColor: colors.termsLinkColor,
+              }}
+              source={Arrow}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={[
             layout.fullWidth,
