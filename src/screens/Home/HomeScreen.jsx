@@ -1,12 +1,12 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
-import { useFocusEffect } from '@react-navigation/native';
+// import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
@@ -85,11 +85,9 @@ const HomeScreen = () => {
   //   }, [selectedSubjectId, sectionId, gradeId])
   // );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getTeacheDetails();
-    }, [])
-  );
+  useEffect(() => {
+    getTeacheDetails();
+  }, []);
 
   // const getSubjectReports = () => {
   //   const access_token = storage.getString('access_token');

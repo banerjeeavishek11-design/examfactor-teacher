@@ -7,3 +7,4 @@ export const loginService = `${rootApiUrl}/auth-service`;
 export const teacherService = `${rootApiUrl}/teacher-service`;
 export const masterDataService = `${rootApiUrl}/master-data-service`;
 export const b2bStudentService = `${rootApiUrl}/b2b-student-service`;
+export const assessmentService = `${rootApiUrl}/assessment-service`;

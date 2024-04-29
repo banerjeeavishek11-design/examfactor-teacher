@@ -1,26 +1,72 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Pressable } from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
+import { useSelector } from 'react-redux';
 import Cross from '@/theme/assets/images/cross.png';
 import Calender from '@/theme/assets/images/calendar.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import ScheduleTimeBottomSheet from './ScheduleTimeBottomSheet';
 import { Calendar } from 'react-native-calendars';
 import ClassSuccessfullySelectedBottomSheet from '../Home/ClassSuccessfullySelectedBottomSheet';
+import { MMKV } from 'react-native-mmkv';
+// import { notifyMessage } from '../../../utils/error-toast-API';
 
-const ScheduleTestActivationBottomSheet = ({ visible, setActivateConfirmationModalVisible }) => {
+const storage = new MMKV();
+const ScheduleTestActivationBottomSheet = ({
+  visible,
+  setActivateConfirmationModalVisible,
+  totalTime,
+  // assessmentId,
+  // assessmentName,
+  // totalQuestions,
+  // chapterId,
+}) => {
   const { layout, colors, fonts } = useTheme();
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  // const subjectId = useSelector((state) => state.selectedSubject.subject);
+  // const userName = storage.getString('username');
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [fromModalVisible, setFromModalVisible] = useState(false);
   const [toModalVisible, setToModalVisible] = useState(false);
   const [selectedToTime, setSelectedToTime] = useState(null);
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  // const [gradeId, setGradeId] = useState(null);
+  // const [partnerId, setPartnerId] = useState(null);
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
   const today = new Date();
+
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          // setGradeId(item.gradeId);
+          // setPartnerId(item.PartnerId);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  // const requiredBody = {
+  //   gradeId: gradeId,
+  //   partnerSectionId: partnerId,
+  //   subjectId: subjectId,
+  //   chapterId: chapterId,
+  //   teacherId: userName,
+  //   assessmentId: assessmentId,
+  //   startTestDateTime: '2024-04-29T12:13:43.165Z',
+  //   endTestDateTime: '2024-04-29T12:13:43.165Z',
+  //   startTimeStr: 'string',
+  //   assessmentName: assessmentName,
+  //   totalTime: totalTime,
+  //   totalQuestions: totalQuestions,
+  // };
 
   const topicActivated = () => {
     setActivateConfirmationModalVisible(false);
@@ -50,6 +96,8 @@ const ScheduleTestActivationBottomSheet = ({ visible, setActivateConfirmationMod
   //   backgroundColor: "black",
   //   calendarBackground: "black",
   // };
+
+  // console.log('TD', teacherDetails);
 
   return (
     <View style={styles.container}>
@@ -95,7 +143,7 @@ const ScheduleTestActivationBottomSheet = ({ visible, setActivateConfirmationMod
                     { color: '#E2E2E2', marginVertical: '4%' },
                   ]}
                 >
-                  Test timing : 30 Min
+                  Test timing : {totalTime} Min
                 </Text>
               </View>
               <View>

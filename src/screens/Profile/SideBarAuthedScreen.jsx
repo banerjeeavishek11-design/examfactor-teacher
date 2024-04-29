@@ -219,7 +219,7 @@ const SideBarAuthedScreen = (props) => {
                       layout.rowHCenter,
                       layout.justifyBetween,
                       {
-                        width: userRole === 'TEACHER' ? '35%' : '44%',
+                        width: userRole === 'TEACHER' ? '35%' : '50%',
                         height: 35,
                         backgroundColor: 'green',
                         borderRadius: 4,
@@ -253,12 +253,12 @@ const SideBarAuthedScreen = (props) => {
                         <Text
                           style={[fonts.size_13, fonts.fontWeight_small, { color: colors.white }]}
                         >
-                          {userRole}
+                          CLASS TEACHER
                         </Text>
                       )}
                     </View>
                   </View>
-                  {userDetails?.teacherViewMode === 'TEACHER' ? null : (
+                  {userDetails?.teacherRole === 'TEACHER' ? null : (
                     <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
                       <Text
                         style={[

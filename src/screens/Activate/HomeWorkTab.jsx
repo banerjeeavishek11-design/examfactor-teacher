@@ -102,6 +102,7 @@ const HomeWorkTab = () => {
     setIsLoading(true);
     getChaptersBySubjectId(access_token, subjectId)
       .then((res) => {
+        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
         setSearchChapterName(res.data.chapters);
         setIsLoading(false);

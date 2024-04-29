@@ -44,6 +44,7 @@ const Header = () => {
     const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
+    subject?.sort((a, b) => a.displaySeq - b.displaySeq);
     let subjectList = subject?.map((ele) => ({
       subjectName: ele.name,
       subjectId: ele.subjectId,

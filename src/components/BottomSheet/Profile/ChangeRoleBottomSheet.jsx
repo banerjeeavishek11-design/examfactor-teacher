@@ -24,6 +24,7 @@ const ChangeRoleBottomSheet = (props) => {
 
   const handleSlideDown = () => {
     setChangeRoleBottomSheetVisible(false);
+    setOption(initialUserRole);
   };
 
   const handleOptionChange = (op) => {
@@ -35,6 +36,8 @@ const ChangeRoleBottomSheet = (props) => {
     setUserRole(option);
     dispatch(updateUserRole(option));
   };
+
+  console.log('TR', initialUserRole);
 
   return (
     <View style={styles.container}>
@@ -90,11 +93,11 @@ const ChangeRoleBottomSheet = (props) => {
 
                 <TouchableOpacity
                   style={styles.radioButtonContainer}
-                  onPress={() => handleOptionChange('Class Teacher')}
+                  onPress={() => handleOptionChange('CLASS_TEACHER')}
                   activeOpacity={1}
                 >
                   <View style={{ marginLeft: 10 }}>
-                    <RadioButton isActive={option === 'Class Teacher'} />
+                    <RadioButton isActive={option === 'CLASS_TEACHER'} />
                   </View>
                   <ImageVariant
                     testID="brand-img"
@@ -108,7 +111,7 @@ const ChangeRoleBottomSheet = (props) => {
             </View>
             <View style={styles.footer}>
               <TouchableOpacity
-                onPress={() => setChangeRoleBottomSheetVisible(false)}
+                onPress={handleSlideDown}
                 style={[
                   layout.justifyCenter,
                   styles.footerButton,
