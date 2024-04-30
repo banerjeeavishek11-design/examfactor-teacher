@@ -35,7 +35,6 @@ const ClassWorkTab = () => {
   const accessToken = storage.getString('access_token');
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
-  // const [activatedData, setActivatedData] = useState();
   const [searchChapterName, setSearchChapterName] = useState([]);
   const [chapterDetails, setChapterDetails] = useState([]);
   const [gradeId, setGradeId] = useState(null);
@@ -78,7 +77,6 @@ const ClassWorkTab = () => {
 
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
-    // setSearchChapterName(chapterDetails);
   }, [selectedSubjectId]);
 
   const onSearchChapters = (search) => {
@@ -106,6 +104,11 @@ const ClassWorkTab = () => {
     setIsLoading(true);
     getAssessmentDetails(accessToken, params)
       .then((res) => {
+        if (res.data.content.length == 0) {
+          setIsLoading(false);
+          notifyMessage('No tests found');
+          return;
+        }
         const chap = chapterDetails.map((ele) => {
           if (ele.chapterId === id) {
             return {
@@ -117,7 +120,6 @@ const ClassWorkTab = () => {
         });
         setSearchChapterName(chap);
         setIsLoading(false);
-        // setAssessmentDetails(res.data.content);
       })
       .catch((error) => {
         notifyMessage('something went wrong fetching assessments' + error);
@@ -161,7 +163,7 @@ const ClassWorkTab = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log('error', error);
+        notifyMessage('Failed to fetch classwork Data' + error);
         setIsLoading(false);
       });
   };
