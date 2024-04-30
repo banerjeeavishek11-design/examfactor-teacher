@@ -10,6 +10,7 @@ import {
   View,
   Platform,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -27,6 +28,8 @@ import { useSelector } from 'react-redux';
 import { showSelectedClasses } from '../../store/redux-slice/TeacherClassSlice';
 import { loginByUsername } from '../../services/loginService';
 // import Base64 from 'react-native-base64';
+import hidePasswordIcon from '../../theme/assets/images/hidePassword.png';
+import showPasswordIcon from '../../theme/assets/images/showPassword.png';
 import { jwtDecode } from 'jwt-decode';
 import { getTeacherDetailsById } from '../../services/teacherService';
 import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
@@ -50,6 +53,7 @@ const LoginScreen = () => {
     mobileNumber: '',
   });
   const [opensetNewPasswordBottomSheet, setOpensetNewPasswordBottomSheet] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOutsideTap = () => {
@@ -223,7 +227,7 @@ const LoginScreen = () => {
                         >
                           <TextInput
                             style={[
-                              layout.fullWidth,
+                              // layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
                               fonts.fontWeight_small,
@@ -231,11 +235,12 @@ const LoginScreen = () => {
                                 color: colors.white,
                                 textAlign: 'left',
                                 paddingLeft: '0%',
+                                width: '92%',
                               },
                             ]}
                             placeholder="Password"
                             placeholderTextColor="#94939B"
-                            secureTextEntry={true}
+                            secureTextEntry={!showPassword}
                             onBlur={onBlur}
                             onChangeText={(value) => {
                               onChange(value);
@@ -246,6 +251,19 @@ const LoginScreen = () => {
                             }}
                             value={textInputValues.password}
                           />
+                          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            {showPassword ? (
+                              <Image
+                                style={{ height: 16, width: 24, tintColor: '#94939B' }}
+                                source={showPasswordIcon}
+                              />
+                            ) : (
+                              <Image
+                                style={{ height: 20, width: 25, tintColor: '#94939B' }}
+                                source={hidePasswordIcon}
+                              />
+                            )}
+                          </TouchableOpacity>
                         </View>
                       )}
                     />

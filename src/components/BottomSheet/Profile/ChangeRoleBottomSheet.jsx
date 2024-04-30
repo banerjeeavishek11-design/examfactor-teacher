@@ -37,8 +37,6 @@ const ChangeRoleBottomSheet = (props) => {
     dispatch(updateUserRole(option));
   };
 
-  console.log('TR', initialUserRole);
-
   return (
     <View style={styles.container}>
       <Modal visible={changeRoleBottomSheetVisible} animationType="slide" transparent={true}>

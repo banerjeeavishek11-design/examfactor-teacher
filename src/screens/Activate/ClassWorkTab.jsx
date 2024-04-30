@@ -13,8 +13,10 @@ import UpArrow from '@/theme/assets/images/uparrow.png';
 import ScheduleTestActivationBottomSheet from '@/components/BottomSheet/Activate/ScheduleTestActivationBottomSheet';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getAssessmentDetails } from '../../services/getAssessmentDetails';
+import { getClasswoksByTeacher } from '../../services/ActivateServices/activeClassworkServices';
 import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
+import moment from 'moment';
 
 const storage = new MMKV();
 
@@ -34,9 +36,11 @@ const ClassWorkTab = () => {
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [totalTime, setTotalTime] = useState();
   const [assessmentId, setAssessmentId] = useState();
+  const [sectionId, setSectionId] = useState(null);
   const [assessmentName, setAssessmentName] = useState();
   const [totalQuestions, setTotalQuestions] = useState();
   const [selectedChapterId, setSelectedChapterId] = useState('');
+  const [classworkData, setClassworkData] = useState();
   // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -45,6 +49,7 @@ const ClassWorkTab = () => {
         if (item.sectionName === sectionName) {
           setGradeId(item.gradeId);
           setPartnerId(item.partnerId);
+          setSectionId(item.id);
           return;
         }
       }
@@ -54,6 +59,7 @@ const ClassWorkTab = () => {
   useFocusEffect(
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
+      getClassworks();
     }, [selectedSubjectId])
   );
 
@@ -129,6 +135,22 @@ const ClassWorkTab = () => {
       });
   };
 
+  const getClassworks = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    getClasswoksByTeacher(accessToken, params)
+      .then((res) => {
+        console.log('getClasswoksByTeacher', res.data);
+        setClassworkData(res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  };
+
   const handleToggleClick = (
     chapterId,
     totalTime,
@@ -136,23 +158,29 @@ const ClassWorkTab = () => {
     assessmentName,
     totalQuestions
   ) => {
-    // if (!isAlreadyAssigned(chapterId)) {
-    setTotalTime(totalTime);
-    setAssessmentId(assessmentId);
-    setAssessmentName(assessmentName);
-    setTotalQuestions(totalQuestions);
-    setSelectedChapterId(chapterId);
-    setActivateConfirmationModalVisible(true);
-    // setSelectedChapterId(chapterId);
-    // }
+    if (!isAlreadyAssigned(chapterId, assessmentId)) {
+      setTotalTime(totalTime);
+      setAssessmentId(assessmentId);
+      setAssessmentName(assessmentName);
+      setTotalQuestions(totalQuestions);
+      setSelectedChapterId(chapterId);
+      setActivateConfirmationModalVisible(true);
+    }
   };
 
-  const isAlreadyAssigned = () => {
-    return false;
+  const isAlreadyAssigned = (chapterId, assessmentId) => {
+    return (
+      classworkData?.filter(
+        (obj) => obj.chapterId === chapterId && obj.assessmentId === assessmentId
+      ).length > 0
+    );
   };
 
-  // console.log('TD', teacherDetails);
-  // console.log('asses details', assessmentDetails);
+  const getAssigned = (chapterId, assessmentId) => {
+    return classworkData?.filter(
+      (obj) => obj.chapterId === chapterId && obj.assessmentId === assessmentId
+    )[0];
+  };
 
   return (
     <SafeScreen>
@@ -228,6 +256,7 @@ const ClassWorkTab = () => {
                         {expandedCards[ele.chapterId] ? (
                           <>
                             {ele?.assessments?.map((element) => {
+                              const assignedObj = getAssigned(ele.chapterId, element.id);
                               return (
                                 <View
                                   key={element.id}
@@ -253,9 +282,18 @@ const ClassWorkTab = () => {
                                     >
                                       {element.assessmentName}
                                     </Text>
-                                    <Text style={[fonts.size_14, { color: colors.gray200 }]}>
-                                      Activated on ...
-                                    </Text>
+                                    {assignedObj ? (
+                                      <Text
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.gray200 },
+                                        ]}
+                                      >
+                                        Activated on{' '}
+                                        {moment(assignedObj.assignmentDate).format('MMM DD, YYYY')}
+                                      </Text>
+                                    ) : null}
                                     <Text
                                       style={[fonts.size_14, fonts.bold, { color: colors.gray200 }]}
                                     >
@@ -285,7 +323,7 @@ const ClassWorkTab = () => {
                                           element.totalNoOfQuestions
                                         );
                                       }}
-                                      isEnabled={isAlreadyAssigned(ele.id)}
+                                      isEnabled={isAlreadyAssigned(ele.chapterId, element.id)}
                                     />
                                   </View>
                                 </View>
@@ -322,6 +360,7 @@ const ClassWorkTab = () => {
           assessmentName={assessmentName}
           totalQuestions={totalQuestions}
           chapterId={selectedChapterId}
+          getClassworks={getClassworks}
         />
       </View>
     </SafeScreen>

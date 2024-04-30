@@ -47,12 +47,12 @@ const ScheduleTimeBottomSheet = (props) => {
   const { fonts, colors } = useTheme();
 
   const handleFromTimeSelection = (time) => {
-    setSelectedToTime(time);
+    setSelectedFromTime(time);
     setFromModalVisible(false);
   };
 
   const handleToTimeSelection = (time) => {
-    setSelectedFromTime(time);
+    setSelectedToTime(time);
     setToModalVisible(false);
   };
 
