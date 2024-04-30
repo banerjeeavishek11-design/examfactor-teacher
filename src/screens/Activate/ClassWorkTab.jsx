@@ -94,7 +94,6 @@ const ClassWorkTab = () => {
     };
     getAssessmentDetails(accessToken, params)
       .then((res) => {
-        // console.log('response', res.data.content);
         const chap = chapterDetails.map((ele) => {
           if (ele.chapterId === id) {
             return {
@@ -143,7 +142,6 @@ const ClassWorkTab = () => {
     };
     getClasswoksByTeacher(accessToken, params)
       .then((res) => {
-        console.log('getClasswoksByTeacher', res.data);
         setClassworkData(res.data);
       })
       .catch((error) => {

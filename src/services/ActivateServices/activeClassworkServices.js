@@ -2,7 +2,6 @@ import axios from 'axios';
 import { host, teacherService } from '../../environment/Environment';
 
 export const activateClassworkByTeacher = async (token, requiredBody) => {
-  console.log('req body', requiredBody);
   return await axios.post(`${teacherService}/v1/classworks`, requiredBody, {
     headers: {
       'Content-Type': 'application/json',
