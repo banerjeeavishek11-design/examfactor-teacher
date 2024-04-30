@@ -206,7 +206,9 @@ const HomeWorkDetailsScreen = () => {
                                 >
                                   {subtopic.name}
                                 </Text>
-                                {subtopic.important ? <Image source={Star} /> : null}
+                                {subtopic.important ? (
+                                  <Image style={{ width: 14, height: 14 }} source={Star} />
+                                ) : null}
                               </View>
                             );
                           })}

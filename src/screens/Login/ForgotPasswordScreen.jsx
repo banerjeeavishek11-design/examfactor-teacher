@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { useNavigation } from '@react-navigation/native';
 import { ImageVariant } from '@/components/atoms';
@@ -23,6 +24,19 @@ const ForgotPasswordScreen = () => {
     control,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
+
+  const handleBackPress = () => {
+    navigation.navigate('LoginScreen');
+    return true;
+  };
+
   return (
     <View style={[backgrounds.screenBackgroundColor, layout.paddingForFullScreen]}>
       {/* <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>

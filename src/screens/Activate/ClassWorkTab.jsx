@@ -1,4 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Searchbar } from 'react-native-paper';
 import Search from '@/theme/assets/images/search.png';
@@ -41,7 +49,10 @@ const ClassWorkTab = () => {
   const [totalQuestions, setTotalQuestions] = useState();
   const [selectedChapterId, setSelectedChapterId] = useState('');
   const [classworkData, setClassworkData] = useState();
-  // const [isLoading, setIsLoading] = useState(false);
+  const [forDate, setForDate] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const formattedDate = moment(forDate).format('DD MMM YYYY');
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -92,6 +103,7 @@ const ClassWorkTab = () => {
       gradeId: gradeId,
       partnerId: partnerId,
     };
+    setIsLoading(true);
     getAssessmentDetails(accessToken, params)
       .then((res) => {
         const chap = chapterDetails.map((ele) => {
@@ -104,16 +116,18 @@ const ClassWorkTab = () => {
           return ele;
         });
         setSearchChapterName(chap);
+        setIsLoading(false);
         // setAssessmentDetails(res.data.content);
       })
       .catch((error) => {
         notifyMessage('something went wrong fetching assessments' + error);
+        setIsLoading(false);
       });
   };
 
   const getAllChaptersDetails = (subjectId) => {
     const access_token = storage.getString('access_token');
-    // setIsLoading(true);
+    setIsLoading(true);
     getChaptersBySubjectId(access_token, subjectId)
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
@@ -124,13 +138,13 @@ const ClassWorkTab = () => {
             assessments: [],
           }))
         );
-        // setIsLoading(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Failed to get chapter details');
         }
-        // setIsLoading(false);
+        setIsLoading(false);
       });
   };
 
@@ -140,12 +154,15 @@ const ClassWorkTab = () => {
       sectionId: sectionId,
       subjectId: selectedSubjectId,
     };
+    setIsLoading(true);
     getClasswoksByTeacher(accessToken, params)
       .then((res) => {
         setClassworkData(res.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log('error', error);
+        setIsLoading(false);
       });
   };
 
@@ -210,146 +227,165 @@ const ClassWorkTab = () => {
         >
           Use toggle to activate the homework
         </Text>
-        <ScrollView>
-          <View style={{ marginBottom: '30%' }}>
-            {searchChapterName && searchChapterName.length > 0 ? (
-              <>
-                {searchChapterName.map((ele, i) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() => toggleContent(ele.chapterId)}
-                      style={[
-                        layout.fullWidth,
-                        layout.paddingForCard,
-                        {
-                          backgroundColor: colors.cardBackgroundColor,
-                          borderRadius: 14,
-                          marginTop: '3%',
-                          marginBottom: '2%',
-                        },
-                      ]}
-                      key={ele.chapterId}
-                    >
-                      <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
-                        >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
-                        <TouchableOpacity>
+        {isLoading ? (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color={colors.termsLinkColor} />
+          </View>
+        ) : (
+          <ScrollView>
+            <View style={{ marginBottom: '30%' }}>
+              {searchChapterName && searchChapterName.length > 0 ? (
+                <>
+                  {searchChapterName.map((ele, i) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => toggleContent(ele.chapterId)}
+                        style={[
+                          layout.fullWidth,
+                          layout.paddingForCard,
+                          {
+                            backgroundColor: colors.cardBackgroundColor,
+                            borderRadius: 14,
+                            marginTop: '3%',
+                            marginBottom: '2%',
+                          },
+                        ]}
+                        key={ele.chapterId}
+                      >
+                        <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeignt_600,
+                              { color: colors.white, width: '95%' },
+                            ]}
+                            numberOfLines={1}
+                          >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
+                          <TouchableOpacity>
+                            {expandedCards[ele.chapterId] ? (
+                              <Image
+                                style={{ width: 12, height: 8 }}
+                                source={UpArrow}
+                                resizeMode="contain"
+                              />
+                            ) : (
+                              <Image
+                                style={{ width: 12, height: 8 }}
+                                source={DownArrow}
+                                resizeMode="contain"
+                              />
+                            )}
+                          </TouchableOpacity>
+                        </View>
+                        <View>
                           {expandedCards[ele.chapterId] ? (
-                            <Image
-                              style={{ width: 12, height: 8 }}
-                              source={UpArrow}
-                              resizeMode="contain"
-                            />
-                          ) : (
-                            <Image
-                              style={{ width: 12, height: 8 }}
-                              source={DownArrow}
-                              resizeMode="contain"
-                            />
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      <View>
-                        {expandedCards[ele.chapterId] ? (
-                          <>
-                            {ele?.assessments?.map((element) => {
-                              const assignedObj = getAssigned(ele.chapterId, element.id);
-                              return (
-                                <View
-                                  key={element.id}
-                                  style={[
-                                    layout.row,
-                                    layout.justifyBetween,
-                                    layout.itemsCenter,
-                                    {
-                                      borderTopColor: colors.gray400,
-                                      borderTopWidth: 1,
-                                      paddingVertical: '5%',
-                                      marginTop: '2%',
-                                    },
-                                  ]}
-                                >
-                                  <View style={{ width: '70%' }}>
-                                    <Text
-                                      style={[
-                                        fonts.size_16,
-                                        fonts.fontWeight_small,
-                                        { color: colors.white },
-                                      ]}
-                                    >
-                                      {element.assessmentName}
-                                    </Text>
-                                    {assignedObj ? (
+                            <>
+                              {ele?.assessments?.map((element) => {
+                                const assignedObj = getAssigned(ele.chapterId, element.id);
+                                return (
+                                  <View
+                                    key={element.id}
+                                    style={[
+                                      layout.row,
+                                      layout.justifyBetween,
+                                      layout.itemsCenter,
+                                      {
+                                        borderTopColor: colors.gray400,
+                                        borderTopWidth: 1,
+                                        paddingVertical: '5%',
+                                        marginTop: '2%',
+                                      },
+                                    ]}
+                                  >
+                                    <View style={{ width: '70%' }}>
                                       <Text
                                         style={[
-                                          fonts.size_14,
+                                          fonts.size_16,
                                           fonts.fontWeight_small,
-                                          { color: colors.gray200 },
+                                          { color: colors.white, marginBottom: '4%' },
                                         ]}
                                       >
-                                        Activated on{' '}
-                                        {moment(assignedObj.assignmentDate).format('MMM DD, YYYY')}
+                                        {element.assessmentName}
                                       </Text>
-                                    ) : null}
-                                    <Text
-                                      style={[fonts.size_14, fonts.bold, { color: colors.gray200 }]}
-                                    >
-                                      For ...
-                                    </Text>
-                                  </View>
-                                  <View
-                                    style={{
-                                      width: '0%',
-                                    }}
-                                  >
-                                    <ToggleButton
-                                      setActivateConfirmationModalVisible={
-                                        setActivateConfirmationModalVisible
-                                      }
-                                      chapterId={ele.chapterId}
-                                      totalTime={element.totalTime}
-                                      assessmentId={element.id}
-                                      assessmentName={element.assessmentName}
-                                      totalQuestions={element.totalNoOfQuestions}
-                                      onToggleClick={() => {
-                                        handleToggleClick(
-                                          ele.chapterId,
-                                          element.totalTime,
-                                          element.id,
-                                          element.assessmentName,
-                                          element.totalNoOfQuestions
-                                        );
+                                      {assignedObj ? (
+                                        <Text
+                                          style={[
+                                            fonts.size_14,
+                                            fonts.fontWeight_small,
+                                            { color: colors.gray200 },
+                                          ]}
+                                        >
+                                          Activated on{' '}
+                                          {moment(assignedObj.assignmentDate).format(
+                                            'MMM DD, YYYY'
+                                          )}
+                                        </Text>
+                                      ) : null}
+                                      {formattedDate && (
+                                        <Text
+                                          style={[
+                                            fonts.size_14,
+                                            fonts.bold,
+                                            { color: colors.white },
+                                          ]}
+                                        >
+                                          For {formattedDate}
+                                        </Text>
+                                      )}
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: '0%',
                                       }}
-                                      isEnabled={isAlreadyAssigned(ele.chapterId, element.id)}
-                                    />
+                                    >
+                                      <ToggleButton
+                                        setActivateConfirmationModalVisible={
+                                          setActivateConfirmationModalVisible
+                                        }
+                                        chapterId={ele.chapterId}
+                                        totalTime={element.totalTime}
+                                        assessmentId={element.id}
+                                        assessmentName={element.assessmentName}
+                                        totalQuestions={element.totalNoOfQuestions}
+                                        onToggleClick={() => {
+                                          handleToggleClick(
+                                            ele.chapterId,
+                                            element.totalTime,
+                                            element.id,
+                                            element.assessmentName,
+                                            element.totalNoOfQuestions
+                                          );
+                                        }}
+                                        isEnabled={isAlreadyAssigned(ele.chapterId, element.id)}
+                                      />
+                                    </View>
                                   </View>
-                                </View>
-                              );
-                            })}
-                          </>
-                        ) : null}
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </>
-            ) : (
-              <View style={(styles.loader, { marginTop: '50%' })}>
-                <Text
-                  style={[
-                    fonts.size_20,
-                    fonts.fontWeight_small,
-                    fonts.alignCenter,
-                    { color: colors.white },
-                  ]}
-                >
-                  No Data Available
-                </Text>
-              </View>
-            )}
-          </View>
-        </ScrollView>
+                                );
+                              })}
+                            </>
+                          ) : null}
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </>
+              ) : (
+                <View style={(styles.loader, { marginTop: '50%' })}>
+                  <Text
+                    style={[
+                      fonts.size_20,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.white },
+                    ]}
+                  >
+                    No Data Available
+                  </Text>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        )}
         <ScheduleTestActivationBottomSheet
           visible={activateConfirmationModalVisible}
           setActivateConfirmationModalVisible={setActivateConfirmationModalVisible}
@@ -359,6 +395,7 @@ const ClassWorkTab = () => {
           totalQuestions={totalQuestions}
           chapterId={selectedChapterId}
           getClassworks={getClassworks}
+          setForDate={setForDate}
         />
       </View>
     </SafeScreen>

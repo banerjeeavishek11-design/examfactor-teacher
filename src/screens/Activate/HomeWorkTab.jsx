@@ -204,7 +204,8 @@ const HomeWorkTab = () => {
                     >
                       <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                         <Text
-                          style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                          style={[fonts.size_14, fonts.bold, { color: colors.white, width: '95%' }]}
+                          numberOfLines={1}
                         >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
                         <TouchableOpacity>
                           {expandedCards[ele.chapterId] ? (

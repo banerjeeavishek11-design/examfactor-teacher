@@ -25,6 +25,7 @@ const ScheduleTestActivationBottomSheet = ({
   totalQuestions,
   chapterId,
   getClassworks,
+  setForDate,
 }) => {
   const { layout, colors, fonts } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
@@ -62,8 +63,10 @@ const ScheduleTestActivationBottomSheet = ({
   };
 
   const handleDateSelect = (date) => {
+    console.log('DATE', date);
     const formattedDate = formatDate(date);
     setSelectedDate(formattedDate);
+    setForDate(date);
     setShowCalendar(false);
   };
 
@@ -90,7 +93,6 @@ const ScheduleTestActivationBottomSheet = ({
       teacherId: userName,
       assessmentId: assessmentId,
       startTestDateTime: startTestDateTime,
-      // assignmentDate: startTestDateTime,
       endTestDateTime: endTestDateTime,
       startTimeStr: selectedFromTime,
       assessmentName: assessmentName,

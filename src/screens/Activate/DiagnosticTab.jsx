@@ -254,8 +254,9 @@ const DiagnosticTab = () => {
                                 style={[
                                   fonts.size_16,
                                   fonts.fontWeignt_600,
-                                  { color: colors.white },
+                                  { color: colors.white, width: '95%' },
                                 ]}
+                                numberOfLines={1}
                               >
                                 {`C${index + 1}`}: {ele.chapterDesc}
                               </Text>
