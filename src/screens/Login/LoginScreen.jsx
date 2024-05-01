@@ -10,6 +10,7 @@ import {
   View,
   Platform,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -21,12 +22,16 @@ import { useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 // import { loginAction } from '@/store/redux-slice/LoginSlice';
+import { showSelectedClasses } from '../../store/redux-slice/TeacherClassSlice';
 import { loginByUsername } from '../../services/loginService';
 // import Base64 from 'react-native-base64';
-// import { getTeacherDetailsById } from '../../services/teacherService';
+import hidePasswordIcon from '../../theme/assets/images/hidePassword.png';
+import showPasswordIcon from '../../theme/assets/images/showPassword.png';
+import { jwtDecode } from 'jwt-decode';
+import { getTeacherDetailsById } from '../../services/teacherService';
 import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
 import { notifyMessage } from '../../utils/error-toast-API';
 
@@ -35,7 +40,7 @@ const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -48,6 +53,7 @@ const LoginScreen = () => {
     mobileNumber: '',
   });
   const [opensetNewPasswordBottomSheet, setOpensetNewPasswordBottomSheet] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleOutsideTap = () => {
@@ -64,15 +70,10 @@ const LoginScreen = () => {
         if (res.data?.temporary) {
           setOpensetNewPasswordBottomSheet(true);
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'AuthorizedStack' }],
-          });
+          const decodedPayload = jwtDecode(res.data.access_token);
+          getTeacheDetails(decodedPayload.preferred_username);
         }
         setIsLoading(false);
-        // const base64Url = res.data.access_token.split('.')[1];
-        // const decodedPayload = JSON.parse(Base64.decode(base64Url));
-        // getTeacheDetails(decodedPayload.preferred_username);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
@@ -81,12 +82,22 @@ const LoginScreen = () => {
         }
       });
   };
-  // const getTeacheDetails = (userName) => {
-  //   const accessToken = storage.getString('access_token');
-  //   getTeacherDetailsById(accessToken, userName)
-  //     .then(() => {})
-  //     .catch(() => {});
-  // };
+  const getTeacheDetails = (userName) => {
+    const accessToken = storage.getString('access_token');
+    getTeacherDetailsById(accessToken, userName)
+      .then((res) => {
+        storage.set('teacherDetails', JSON.stringify(res.data));
+        dispatch(showSelectedClasses(res.data));
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'AuthorizedStack' }],
+        });
+      })
+      .catch((error) => {
+        notifyMessage('Something Went Wrong', error);
+      });
+  };
+
   return (
     <View style={[backgrounds.screenBackgroundColor]}>
       <View
@@ -216,7 +227,7 @@ const LoginScreen = () => {
                         >
                           <TextInput
                             style={[
-                              layout.fullWidth,
+                              // layout.fullWidth,
                               layout.justifyCenter,
                               fonts.size_16,
                               fonts.fontWeight_small,
@@ -224,11 +235,12 @@ const LoginScreen = () => {
                                 color: colors.white,
                                 textAlign: 'left',
                                 paddingLeft: '0%',
+                                width: '92%',
                               },
                             ]}
                             placeholder="Password"
                             placeholderTextColor="#94939B"
-                            secureTextEntry={true}
+                            secureTextEntry={!showPassword}
                             onBlur={onBlur}
                             onChangeText={(value) => {
                               onChange(value);
@@ -239,6 +251,19 @@ const LoginScreen = () => {
                             }}
                             value={textInputValues.password}
                           />
+                          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            {showPassword ? (
+                              <Image
+                                style={{ height: 16, width: 24, tintColor: '#94939B' }}
+                                source={showPasswordIcon}
+                              />
+                            ) : (
+                              <Image
+                                style={{ height: 20, width: 25, tintColor: '#94939B' }}
+                                source={hidePasswordIcon}
+                              />
+                            )}
+                          </TouchableOpacity>
                         </View>
                       )}
                     />

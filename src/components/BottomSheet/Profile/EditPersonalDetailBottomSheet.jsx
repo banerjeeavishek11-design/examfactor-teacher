@@ -26,6 +26,7 @@ const EditPersonalDetailBottomSheet = ({
   closeModal,
   profileData,
   saveNewData,
+  userDetails,
 }) => {
   const { fonts, colors, layout } = useTheme();
   const [openCalender, setOpenCalender] = useState(false);
@@ -108,7 +109,7 @@ const EditPersonalDetailBottomSheet = ({
                           editable={false}
                           placeholder={profileData.fullName}
                           placeholderTextColor={colors.gray200}
-                          value={profileData.fullName}
+                          value={userDetails?.firstName}
                         />
                       </View>
 

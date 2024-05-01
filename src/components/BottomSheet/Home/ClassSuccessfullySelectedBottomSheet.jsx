@@ -1,5 +1,5 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '../../atoms';
 import Cross from '@/theme/assets/images/cross.png';
@@ -17,6 +17,15 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
   const handleSlideDown = () => {
     setOpenClassSuccessfullySelectedBottomSheet(false);
   };
+
+  useEffect(() => {
+    if (openClassSuccessfullySelectedBottomSheet) {
+      const timeout = setTimeout(() => {
+        setOpenClassSuccessfullySelectedBottomSheet(false);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [setOpenClassSuccessfullySelectedBottomSheet, openClassSuccessfullySelectedBottomSheet]);
 
   return (
     <View style={styles.container}>
@@ -88,7 +97,7 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                         { color: colors.white, opacity: 0.7 },
                       ]}
                     >
-                      Your has been selected Class {showSelecTedClass}
+                      Your has been selected {showSelecTedClass}
                     </Text>
                   </View>
                 </>
@@ -138,6 +147,54 @@ const ClassSuccessfullySelectedBottomSheet = (props) => {
                     ]}
                   >
                     Notification has been sent to all students.
+                  </Text>
+                </View>
+              ) : null}
+              {openFrom === 'ActivateMoreTopicConfirmationBottomTab' ? (
+                <View style={{ width: '90%', marginTop: '3%' }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: '4%' },
+                    ]}
+                  >
+                    Topic activated Successfully!
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.gray200, marginTop: '2%' },
+                    ]}
+                  >
+                    Notification has been sent to all students.
+                  </Text>
+                </View>
+              ) : null}
+              {openFrom === 'ActivateScheduleConfirmationBottomTab' ? (
+                <View style={{ width: '90%', marginTop: '3%' }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.bold,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: '4%' },
+                    ]}
+                  >
+                    Test Schedule Successfully!
+                  </Text>
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.gray200, marginTop: '2%' },
+                    ]}
+                  >
+                    Reminder has been sent to all students for test
                   </Text>
                 </View>
               ) : null}

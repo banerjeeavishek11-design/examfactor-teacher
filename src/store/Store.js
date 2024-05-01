@@ -27,11 +27,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import loginSlice from './redux-slice/LoginSlice';
 import screenDimensionsSlice from './redux-slice/ScreenDimensionsSlice';
+import teacherClassSlice from './redux-slice/TeacherClassSlice';
+import selectedSubjectSlice from './redux-slice/SelectedSubjectSlice';
 
 const store = configureStore({
   reducer: {
     login: loginSlice,
     screenDimensions: screenDimensionsSlice,
+    teacherClass: teacherClassSlice,
+    selectedSubject: selectedSubjectSlice,
   },
 });
 export default store;

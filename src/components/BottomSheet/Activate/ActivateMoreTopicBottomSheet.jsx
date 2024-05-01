@@ -1,22 +1,89 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
+import tick from '../../../theme/assets/images/tickMark.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { activateHomeworkByTeacher } from '../../../services/activateHomeworkService';
 import { Searchbar } from 'react-native-paper';
 import Search from '@/theme/assets/images/search.png';
+import { MMKV } from 'react-native-mmkv';
+import { notifyMessage } from '../../../utils/error-toast-API';
+import ClassSuccessfullySelectedBottomSheet from '../ClassSuccessfullySelectedBottomSheet';
 
-const MoreTopicData = [
-  { id: 1, topic: 'Introduction to Motion' },
-  { id: 2, topic: 'Rate of Motion' },
-  { id: 3, topic: 'Rate of Change of Velocity' },
-  { id: 4, topic: 'Graphical Representation of Motion' },
-  { id: 5, topic: 'Equations of Motion by Graphical Method' },
-];
+const storage = new MMKV();
 
-const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
+const ActivateMoreTopicBottomSheet = ({
+  setOpenClassSuccessfullySelectedBottomSheet,
+  openClassSuccessfullySelectedBottomSheet,
+  visible,
+  closeModal,
+  topics,
+  requiredBody,
+  getHomeworks,
+}) => {
   const { layout, fonts, colors } = useTheme();
+
+  const [selectedTopics, setSelectedTopics] = useState([]);
+  const [searchTopicName, setSearchTopicName] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toggleTopicSelection = (topicId) => {
+    const isSelected = selectedTopics.includes(topicId);
+    if (isSelected) {
+      setSelectedTopics(selectedTopics.filter((id) => id != topicId));
+    } else {
+      setSelectedTopics([...selectedTopics, topicId]);
+    }
+  };
+
+  useEffect(() => {
+    setSearchTopicName(topics);
+  }, [topics]);
+
+  const handleActivateMoreTopics = () => {
+    let reqBody = { ...requiredBody, topicIds: selectedTopics };
+    const accessToken = storage.getString('access_token');
+    setIsLoading(true);
+    activateHomeworkByTeacher(accessToken, reqBody)
+      .then(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getHomeworks();
+            setOpenClassSuccessfullySelectedBottomSheet(true);
+            setIsLoading(false);
+            resolve(true);
+          }, 1000);
+        });
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Topic already assigned');
+        }
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setSelectedTopics([]);
+        closeModal(false);
+      });
+  };
+
+  const onSearchTopics = (search) => {
+    const searchItem = topics?.filter((ele) =>
+      ele.topicDesc.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearchTopicName(searchItem);
+  };
 
   return (
     <View style={styles.container}>
@@ -29,7 +96,10 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => {
+                closeModal(false);
+                setSelectedTopics([]);
+              }}
               style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
@@ -59,7 +129,7 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                     { color: colors.gray200, marginVertical: '4%' },
                   ]}
                 >
-                  Number of topics selected: 2
+                  Number of topics selected: {selectedTopics.length}
                 </Text>
               </View>
               <Searchbar
@@ -74,7 +144,7 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                 icon={() => (
                   <Image source={Search} resizeMode="contain" style={{ width: 14, height: 14 }} />
                 )}
-                // onChangeText={onSearchChapters}
+                onChangeText={onSearchTopics}
                 style={{
                   backgroundColor: colors.bottomSheetBackgroundColor,
                   borderColor: 'rgba(275, 275, 275, 0.5)',
@@ -85,10 +155,10 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                 selectionColor={colors.buttonTextColor}
               />
               <ScrollView>
-                {MoreTopicData.map((topicName) => {
+                {searchTopicName?.map((topic) => {
                   return (
                     <TouchableOpacity
-                      key={topicName.id}
+                      key={topic.topicId}
                       style={[
                         layout.fullWidth,
                         layout.paddingForCard,
@@ -102,37 +172,26 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                     >
                       <View style={[layout.row, layout.itemsCenter, { gap: 8 }]}>
                         <TouchableOpacity
-                          // onPress={() =>
-                          //   handleToggle(
-                          //     item.chapterCode,
-                          //     topic.topicCode
-                          //   )
-                          // }
+                          onPress={() => toggleTopicSelection(topic.topicId)}
                           activeOpacity={0.8}
                         >
-                          <View
-                            style={[
-                              styles.checkbox,
-                              layout.justifyCenter,
-                              layout.itemsCenter,
-                              { color: colors.white },
-                              // selectedItem.includes(topic.topicCode) &&
-                              //   styles.checked,
-                            ]}
-                          >
-                            {/* {selectedItem.includes(topic.topicCode) && (
-                                    <Ionicons
-                                      name="checkmark-outline"
-                                      size={18}
-                                      color="white"
-                                    />
-                                  )} */}
-                          </View>
+                          {selectedTopics.includes(topic.topicId) ? (
+                            <Image source={tick} style={{ height: 20, width: 20 }} />
+                          ) : (
+                            <View
+                              style={[
+                                styles.checkbox,
+                                layout.justifyCenter,
+                                layout.itemsCenter,
+                                { color: colors.white },
+                              ]}
+                            ></View>
+                          )}
                         </TouchableOpacity>
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                         >
-                          {topicName.topic}
+                          {topic.topicDesc}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -162,6 +221,7 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  disabled={selectedTopics.length == 0}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -169,21 +229,32 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                  onPress={closeModal}
+                  onPress={handleActivateMoreTopics}
                 >
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      Confirm
-                    </Text>
+                    {isLoading ? (
+                      <View>
+                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                      </View>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          fonts.alignCenter,
+                          {
+                            color:
+                              selectedTopics.length == 0
+                                ? colors.gray200
+                                : colors.loginBtnTextColor,
+                          },
+                        ]}
+                      >
+                        Confirm
+                      </Text>
+                    )}
                   </PrimaryGradient>
                 </TouchableOpacity>
               </View>
@@ -191,6 +262,11 @@ const ActivateMoreTopicBottomSheet = ({ visible, closeModal }) => {
           </View>
         </View>
       </Modal>
+      <ClassSuccessfullySelectedBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
+        openFrom={'ActivateMoreTopicConfirmationBottomTab'}
+      />
     </View>
   );
 };

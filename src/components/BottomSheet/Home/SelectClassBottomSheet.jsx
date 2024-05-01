@@ -1,28 +1,18 @@
 import { useTheme } from '@/theme';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Modal, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import Cross from '@/theme/assets/images/cross.png';
 import { ImageVariant } from '../../atoms';
 import RadioButton from '../../RadioButton/RadioButton';
 import ClassSuccessfullySelectedBottomSheet from './ClassSuccessfullySelectedBottomSheet';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
+import { useDispatch } from 'react-redux';
+import { MMKV } from 'react-native-mmkv';
+import { selectSectionName } from '../../../store/redux-slice/SelectedSubjectSlice';
 
-const studentClass = [
-  { id: 1, class: '10-A' },
-  { id: 1, class: '10-B' },
-  { id: 1, class: '10-C' },
-  { id: 1, class: '10-D' },
-  { id: 1, class: '11-A' },
-  { id: 1, class: '11-B' },
-  { id: 1, class: '11-C' },
-  { id: 1, class: '11-D' },
-  { id: 1, class: '12-A' },
-  { id: 1, class: '12-B' },
-  { id: 1, class: '12-C' },
-  { id: 1, class: '12-D' },
-];
-
+const storage = new MMKV();
 const ReferandearnBottomsheet = (props) => {
+  const dispatch = useDispatch();
   const {
     setOpenSelectClassBottomSheet,
     openSelectClassBottmSheet,
@@ -30,9 +20,25 @@ const ReferandearnBottomsheet = (props) => {
     showSelecTedClass,
   } = props;
   const { colors, layout, fonts } = useTheme();
-  const [option, setOption] = useState('first');
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
+  // const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
+  const [option, setOption] = useState('first');
+  const [classes, setClasses] = useState([]);
+  const [isFirst, setIsFirst] = useState(true);
+
+  useEffect(() => {
+    const resFromMMKV = storage.getString('teacherDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+    if (teacherDetails != null) {
+      setClasses(teacherDetails);
+      if (isFirst) {
+        setOption(teacherDetails[0]?.sectionName);
+        setShowSelectedClass(teacherDetails[0]?.sectionName);
+        setIsFirst(false);
+      }
+    }
+  }, [openSelectClassBottmSheet]);
 
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);
@@ -45,6 +51,7 @@ const ReferandearnBottomsheet = (props) => {
   const handleApply = () => {
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
+    dispatch(selectSectionName(option));
     setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 
@@ -86,21 +93,22 @@ const ReferandearnBottomsheet = (props) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: '5%' }}
               >
-                {studentClass?.map((ele) => (
-                  <TouchableOpacity
-                    key={ele.class}
-                    style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.class)}
-                    activeOpacity={1}
-                  >
-                    <View style={{ marginLeft: 10 }}>
-                      <RadioButton isActive={option === ele.class} />
-                    </View>
-                    <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.class}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                {classes.length !== 0 &&
+                  classes?.map((ele) => (
+                    <TouchableOpacity
+                      key={ele.sectionName}
+                      style={styles.radioButtonContainer}
+                      onPress={() => handleOptionChange(ele.sectionName)}
+                      activeOpacity={1}
+                    >
+                      <View style={{ marginLeft: 10 }}>
+                        <RadioButton isActive={option === ele.sectionName} />
+                      </View>
+                      <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
+                        {ele.sectionName}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
               </ScrollView>
             </View>
             <View style={styles.footer}>

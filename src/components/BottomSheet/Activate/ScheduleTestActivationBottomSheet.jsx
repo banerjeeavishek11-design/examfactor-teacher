@@ -1,44 +1,72 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Pressable } from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
+import { useSelector } from 'react-redux';
 import Cross from '@/theme/assets/images/cross.png';
 import Calender from '@/theme/assets/images/calendar.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import ScheduleTimeBottomSheet from './ScheduleTimeBottomSheet';
 import { Calendar } from 'react-native-calendars';
+import ClassSuccessfullySelectedBottomSheet from '../Home/ClassSuccessfullySelectedBottomSheet';
+import { MMKV } from 'react-native-mmkv';
+import moment from 'moment';
+import { activateClassworkByTeacher } from '../../../services/ActivateServices/activeClassworkServices';
+import { notifyMessage } from '../../../utils/error-toast-API';
 
+const storage = new MMKV();
 const ScheduleTestActivationBottomSheet = ({
   visible,
   setActivateConfirmationModalVisible,
-  callAfterDialogClose,
+  totalTime,
+  assessmentId,
+  assessmentName,
+  totalQuestions,
+  chapterId,
+  getClassworks,
+  setForDate,
 }) => {
   const { layout, colors, fonts } = useTheme();
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const accessToken = storage.getString('access_token');
+  const userName = storage.getString('username');
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [fromModalVisible, setFromModalVisible] = useState(false);
   const [toModalVisible, setToModalVisible] = useState(false);
   const [selectedToTime, setSelectedToTime] = useState(null);
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
+  const [partnerSectionId, setPartnerSectionId] = useState(null);
+  const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
+    useState(false);
   const today = new Date();
 
-  const topicActivated = (clickedBtnName) => {
-    if (clickedBtnName === 'YES') {
-      setActivateConfirmationModalVisible(false);
-      callAfterDialogClose(clickedBtnName);
-    } else {
-      setActivateConfirmationModalVisible(false);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setPartnerSectionId(item.id);
+          return;
+        }
+      }
     }
-  };
+  }, [sectionName, teacherDetails]);
 
   const handleCalendarToggle = () => {
     setShowCalendar(!showCalendar);
   };
 
   const handleDateSelect = (date) => {
+    console.log('DATE', date);
     const formattedDate = formatDate(date);
     setSelectedDate(formattedDate);
+    setForDate(date);
     setShowCalendar(false);
   };
 
@@ -48,10 +76,48 @@ const ScheduleTestActivationBottomSheet = ({
     return date.toLocaleDateString('en-US', options);
   };
 
-  // const customTheme = {
-  //   backgroundColor: "black",
-  //   calendarBackground: "black",
-  // };
+  // Combine the date and time strings
+  const fromDateTimeString = `${selectedDate} ${selectedFromTime}`;
+  const toDateTimeString = `${selectedDate} ${selectedToTime}`;
+
+  // Format the combined date and time strings using moment
+  const startTestDateTime = moment(fromDateTimeString, 'dddd, MMMM D h:mm a').toISOString();
+  const endTestDateTime = moment(toDateTimeString, 'dddd, MMMM D h:mm a').toISOString();
+
+  const topicActivated = () => {
+    const requiredBody = {
+      gradeId: gradeId,
+      partnerSectionId: partnerSectionId,
+      subjectId: subjectId,
+      chapterId: chapterId,
+      teacherId: userName,
+      assessmentId: assessmentId,
+      startTestDateTime: startTestDateTime,
+      endTestDateTime: endTestDateTime,
+      startTimeStr: selectedFromTime,
+      assessmentName: assessmentName,
+      totalTime: totalTime,
+      totalQuestions: totalQuestions,
+    };
+    setActivateConfirmationModalVisible(false);
+    setSelectedDate(null);
+    setSelectedFromTime(null);
+    setSelectedToTime(null);
+    activateClassworkByTeacher(accessToken, requiredBody)
+      .then((res) => {
+        console.log('response', res.data);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getClassworks();
+            setOpenClassSuccessfullySelectedBottomSheet(true);
+            resolve(true);
+          }, 1000);
+        });
+      })
+      .catch((error) => {
+        notifyMessage('error fetching classworks' + error);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -97,7 +163,7 @@ const ScheduleTestActivationBottomSheet = ({
                     { color: '#E2E2E2', marginVertical: '4%' },
                   ]}
                 >
-                  Test timing : 30 Min
+                  Test timing : {totalTime} Min
                 </Text>
               </View>
               <View>
@@ -191,7 +257,7 @@ const ScheduleTestActivationBottomSheet = ({
                   onPress={() => setFromModalVisible(true)}
                 >
                   <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                    {selectedToTime ? selectedToTime : 'Select From Time'}
+                    {selectedFromTime ? selectedFromTime : 'Select from Time'}
                   </Text>
                 </Pressable>
                 <View
@@ -214,14 +280,14 @@ const ScheduleTestActivationBottomSheet = ({
                   onPress={() => setToModalVisible(true)}
                 >
                   <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                    {selectedFromTime ? selectedFromTime : 'Select To Time'}
+                    {selectedToTime ? selectedToTime : 'Select to Time'}
                   </Text>
                 </Pressable>
               </View>
 
               <View style={styles.footer}>
                 <TouchableOpacity
-                  onPress={() => topicActivated('NO')}
+                  onPress={() => setActivateConfirmationModalVisible(false)}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -250,7 +316,7 @@ const ScheduleTestActivationBottomSheet = ({
                     },
                   ]}
                   onPress={() => {
-                    topicActivated('YES');
+                    topicActivated();
                   }}
                 >
                   <PrimaryGradient
@@ -280,6 +346,11 @@ const ScheduleTestActivationBottomSheet = ({
         toModalVisible={toModalVisible}
         setToModalVisible={setToModalVisible}
         setSelectedFromTime={setSelectedFromTime}
+      />
+      <ClassSuccessfullySelectedBottomSheet
+        setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
+        openClassSuccessfullySelectedBottomSheet={openClassSuccessfullySelectedBottomSheet}
+        openFrom={'ActivateScheduleConfirmationBottomTab'}
       />
     </View>
   );

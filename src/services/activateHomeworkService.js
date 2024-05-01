@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { host, teacherService } from '../environment/Environment';
-export const getTeacherDetailsById = async (token, userName) => {
-  return await axios.get(`${teacherService}/v1/teachers/${userName}`, {
-    params: { query: 'assignedClasses' },
+
+export const activateHomeworkByTeacher = async (token, requiredBody) => {
+  return await axios.post(`${teacherService}/v1/homeworks`, requiredBody, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -11,12 +11,13 @@ export const getTeacherDetailsById = async (token, userName) => {
   });
 };
 
-export const getUserDetailsByUserId = async (token, userName) => {
-  return await axios.get(`${teacherService}/v1/teachers/${userName}`, {
+export const getHomeworkByTeacher = async (token, params) => {
+  return await axios.get(`${teacherService}/v1/homeworks`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
       Host: host,
     },
+    params: params,
   });
 };

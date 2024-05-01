@@ -1,11 +1,14 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
-import { Concentrix, Header, SafeScreen, BarChart } from '@/components/template';
+import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
+import { MMKV } from 'react-native-mmkv';
+// import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Line from '@/theme/assets/images/line.png';
 import Info from '@/theme/assets/images/info.png';
@@ -14,7 +17,12 @@ import Progressbar from '@/components/template/Progressbar/Progressbar';
 import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
+import { getUserDetailsByUserId } from '../../services/teacherService';
+import { updateUserRole } from '../../store/redux-slice/LoginSlice';
+// import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
+import { notifyMessage } from '../../utils/error-toast-API';
 
+const storage = new MMKV();
 const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
@@ -28,18 +36,20 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const homeworkProgress = 60 / 100;
   const diagnosticProgress = 50 / 100;
-  const productScrollRef = useRef(null);
-  const scrollViewRef = useRef(null);
-  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const userName = storage.getString('username');
+  const dispatch = useDispatch();
+  // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
+  const subjectName = useSelector((state) => state.selectedSubject.subjectName);
+  // const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  // const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  // const [sectionId, setSectionId] = useState(null);
+  // const [gradeId, setGradeId] = useState(null);
+  // const userRole = useSelector((state) => state.login.userRole);
 
-  const [subjects, setSubjects] = useState([
-    { id: 1, subjectName: 'Physics', isChecked: true },
-    { id: 2, subjectName: 'Chemistry', isChecked: false },
-    { id: 3, subjectName: 'Mathematics', isChecked: false },
-    { id: 4, subjectName: 'Bengali', isChecked: false },
-    { id: 5, subjectName: 'English', isChecked: false },
-  ]);
+  // const resFromMMKV = storage.getString('teacherDetails');
+  // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
@@ -55,71 +65,65 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
+  // useEffect(() => {
+  //   if (teacherDetails && teacherDetails.length > 0) {
+  //     for (let item of teacherDetails) {
+  //       if (item.sectionName === sectionName) {
+  //         setGradeId(item.gradeId);
+  //         setSectionId(item.id);
+  //         return;
+  //       }
+  //     }
+  //   }
+  // }, [sectionName, teacherDetails]);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     if (sectionId && gradeId && selectedSubjectId) {
+  //       getSubjectReports();
+  //     }
+  //   }, [selectedSubjectId, sectionId, gradeId])
+  // );
+
+  useEffect(() => {
+    getTeacheDetails();
+  }, []);
+
+  // const getSubjectReports = () => {
+  //   const access_token = storage.getString('access_token');
+  //   let params = {
+  //     gradeId: gradeId,
+  //     sectionId: sectionId,
+  //     subjectId: selectedSubjectId,
+  //   };
+  //   getSubjectWiseReport(access_token, params)
+  //     .then((res) => {
+  //       console.log('responst subwise report', res.data);
+  //     })
+  //     .catch((error) => {
+  //       notifyMessage('failed to fetch subjectwise report', error);
+  //     });
+  // };
+
+  const getTeacheDetails = () => {
+    const accessToken = storage.getString('access_token');
+    getUserDetailsByUserId(accessToken, userName)
+      .then((res) => {
+        if (res.data) {
+          dispatch(updateUserRole(res.data.teacherRole));
+        }
+      })
+      .catch((error) => {
+        notifyMessage('Something Went Wrong fetching teacher details', error);
+      });
+  };
+
   const toggleContent = () => {
     setShowContent(!showContent);
   };
 
-  const handleButtonPress = (index) => {
-    const updatedSubjects = subjects.map((subject, i) => {
-      if (i === index) {
-        return { ...subject, isChecked: true };
-      } else {
-        return { ...subject, isChecked: false };
-      }
-    });
-    setSubjects(updatedSubjects);
-    const buttonWidth = 100;
-    const scrollX = index * buttonWidth;
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
-    }
-    if (productScrollRef.current) {
-      productScrollRef.current?.scrollTo({ x: 0, animated: true });
-    }
-  };
-
   return (
     <SafeScreen>
-      <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
-        <Header />
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[
-            layout.paddingForFullScreen,
-            { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
-          ]}
-        >
-          <View style={[layout.display, layout.rowHCenter]}>
-            {subjects.map((ele, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[
-                  styles.button,
-                  {
-                    borderColor: ele.isChecked ? '#27D4FA' : '#22222F',
-                    borderWidth: ele.isChecked ? 2 : 0,
-                  },
-                ]}
-                onPress={() => {
-                  handleButtonPress(i, ele);
-                }}
-              >
-                <Text
-                  style={[
-                    ele.isChecked == true ? styles.activeButton : styles.buttonText,
-                    fonts.size_14,
-                    fonts.bold,
-                  ]}
-                >
-                  {ele.subjectName}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
@@ -165,7 +169,7 @@ const HomeScreen = () => {
               { color: colors.white, marginTop: '3%' },
             ]}
           >
-            Physics
+            {subjectName}
           </Text>
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
             <Concentrix scorePercentage={20} />
@@ -740,24 +744,5 @@ const HomeScreen = () => {
     </SafeScreen>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    height: 45,
-    borderRadius: 12,
-    backgroundColor: '#22222F',
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-  activeButton: {
-    color: '#27D4FA',
-  },
-  buttonText: {
-    color: '#7A7A82',
-  },
-});
 
 export default HomeScreen;
