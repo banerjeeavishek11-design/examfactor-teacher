@@ -17,11 +17,8 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import { activateHomeworkByTeacher } from '../../../services/activateHomeworkService';
 import { Searchbar } from 'react-native-paper';
 import Search from '@/theme/assets/images/search.png';
-import { MMKV } from 'react-native-mmkv';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import ClassSuccessfullySelectedBottomSheet from '../ClassSuccessfullySelectedBottomSheet';
-
-const storage = new MMKV();
 
 const ActivateMoreTopicBottomSheet = ({
   setOpenClassSuccessfullySelectedBottomSheet,
@@ -53,9 +50,8 @@ const ActivateMoreTopicBottomSheet = ({
 
   const handleActivateMoreTopics = () => {
     let reqBody = { ...requiredBody, topicIds: selectedTopics };
-    const accessToken = storage.getString('access_token');
     setIsLoading(true);
-    activateHomeworkByTeacher(accessToken, reqBody)
+    activateHomeworkByTeacher(reqBody)
       .then(() => {
         return new Promise((resolve) => {
           setTimeout(() => {

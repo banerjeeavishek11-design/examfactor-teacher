@@ -70,8 +70,7 @@ const SideBarAuthedScreen = (props) => {
   };
 
   const getTeacheDetails = () => {
-    const accessToken = storage.getString('access_token');
-    getUserDetailsByUserId(accessToken, userName)
+    getUserDetailsByUserId(userName)
       .then((res) => {
         setUserDetails(res.data);
       })

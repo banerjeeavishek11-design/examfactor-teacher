@@ -58,9 +58,8 @@ const ActiveHomeworkConfirmBottomSheet = ({
   };
 
   const handleTopicActivate = () => {
-    const accessToken = storage.getString('access_token');
     setIsLoading(true);
-    activateHomeworkByTeacher(accessToken, requiredBody)
+    activateHomeworkByTeacher(requiredBody)
       .then(() => {
         return new Promise((resolve) => {
           setTimeout(() => {

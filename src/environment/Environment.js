@@ -3,7 +3,7 @@ import current from '../../env.current.json';
 const env = current.current === 'dev' ? dev : null;
 export const host = env.HOST;
 export const rootApiUrl = env.ROOT_API_URL;
-export const loginService = `${rootApiUrl}/auth-service`;
+export const authService = `${rootApiUrl}/auth-service`;
 export const teacherService = `${rootApiUrl}/teacher-service`;
 export const masterDataService = `${rootApiUrl}/master-data-service`;
 export const b2bStudentService = `${rootApiUrl}/b2b-student-service`;

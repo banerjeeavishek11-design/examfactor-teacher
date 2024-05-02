@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 // import { loginAction } from '@/store/redux-slice/LoginSlice';
 import { showSelectedClasses } from '../../store/redux-slice/TeacherClassSlice';
-import { loginByUsername } from '../../services/loginService';
+import { loginByUsername } from '../../services/authService';
 // import Base64 from 'react-native-base64';
 import hidePasswordIcon from '../../theme/assets/images/hidePassword.png';
 import showPasswordIcon from '../../theme/assets/images/showPassword.png';

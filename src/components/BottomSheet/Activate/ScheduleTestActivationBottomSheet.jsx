@@ -30,7 +30,6 @@ const ScheduleTestActivationBottomSheet = ({
   const { layout, colors, fonts } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const subjectId = useSelector((state) => state.selectedSubject.subject);
-  const accessToken = storage.getString('access_token');
   const userName = storage.getString('username');
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -103,7 +102,7 @@ const ScheduleTestActivationBottomSheet = ({
     setSelectedDate(null);
     setSelectedFromTime(null);
     setSelectedToTime(null);
-    activateClassworkByTeacher(accessToken, requiredBody)
+    activateClassworkByTeacher(requiredBody)
       .then((res) => {
         console.log('response', res.data);
         return new Promise((resolve) => {
