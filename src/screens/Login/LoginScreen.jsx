@@ -83,8 +83,8 @@ const LoginScreen = () => {
       });
   };
   const getTeacheDetails = (userName) => {
-    const accessToken = storage.getString('access_token');
-    getTeacherDetailsById(accessToken, userName)
+    // const accessToken = storage.getString('access_token');
+    getTeacherDetailsById(userName)
       .then((res) => {
         storage.set('teacherDetails', JSON.stringify(res.data));
         dispatch(showSelectedClasses(res.data));
@@ -94,7 +94,9 @@ const LoginScreen = () => {
         });
       })
       .catch((error) => {
-        notifyMessage('Something Went Wrong', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Something Went Wrong', error);
+        }
       });
   };
 

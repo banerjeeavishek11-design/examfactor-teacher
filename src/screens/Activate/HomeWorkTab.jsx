@@ -67,7 +67,6 @@ const HomeWorkTab = () => {
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
     getHomeworks();
-    // setSearchChapterName(chapterDetails);
   }, [selectedSubjectId]);
 
   const onSearchChapters = (search) => {
@@ -98,9 +97,8 @@ const HomeWorkTab = () => {
   };
 
   const getAllChaptersDetails = (subjectId) => {
-    const access_token = storage.getString('access_token');
     setIsLoading(true);
-    getChaptersBySubjectId(access_token, subjectId)
+    getChaptersBySubjectId(subjectId)
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
@@ -116,20 +114,21 @@ const HomeWorkTab = () => {
   };
 
   const getHomeworks = () => {
-    const accessToken = storage.getString('access_token');
     let params = {
       gradeId: gradeId,
       sectionId: sectionId,
       subjectId: subjectId,
     };
     setIsLoading(true);
-    getHomeworkByTeacher(accessToken, params)
+    getHomeworkByTeacher(params)
       .then((res) => {
         setHomeworkData(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
-        notifyMessage('unabled to get Homework details', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get Homework details', error);
+        }
         setIsLoading(false);
       });
   };

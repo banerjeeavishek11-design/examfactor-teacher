@@ -115,7 +115,9 @@ const ScheduleTestActivationBottomSheet = ({
         });
       })
       .catch((error) => {
-        notifyMessage('error fetching classworks' + error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('error fetching classworks' + error);
+        }
       });
   };
 

@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { host, loginService } from '../environment/Environment';
+import api from '../utils/axios.config';
 
 export const loginByUsername = async (requiredBody) => {
-  return await axios.post(`${loginService}/v1/auth/login`, requiredBody, {
+  return await api.post(`${loginService}/v1/auth/login`, requiredBody, {
     headers: {
       'Content-Type': 'application/json',
       Host: host,
@@ -10,12 +10,6 @@ export const loginByUsername = async (requiredBody) => {
   });
 };
 
-export const resetPassword = async (token, requiredBody) => {
-  return await axios.put(`${loginService}/v1/auth/reset-password`, requiredBody, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Host: host,
-    },
-  });
+export const resetPassword = async (requiredBody) => {
+  return await api.put(`${loginService}/v1/auth/reset-password`, requiredBody);
 };
