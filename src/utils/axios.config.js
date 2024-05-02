@@ -38,11 +38,11 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401 && navigationRef) {
+    if (error.response && error.response.status === 401) {
       notifyMessage('Token Expired, Login required');
       setTimeout(() => {
         navigationRef.navigate('LoginScreen');
-      }, 2000);
+      }, 1000);
     }
     return Promise.reject(error);
   }

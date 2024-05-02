@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { setNavigationReference } from '../utils/axios.config';
@@ -15,7 +15,9 @@ function ApplicationNavigator() {
   const { variant, navigationTheme } = useTheme();
   const navigationRef = useRef();
 
-  setNavigationReference(navigationRef.current);
+  useEffect(() => {
+    setNavigationReference(navigationRef.current);
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef} theme={navigationTheme}>
