@@ -98,12 +98,8 @@ const DiagnosticTab = () => {
   };
 
   const getAllChaptersDetails = (subjectId) => {
-    // const access_token = storage.getString('access_token');
     setIsLoading(true);
-    getSubjectsBySubjectId(
-      // access_token,
-      subjectId
-    )
+    getSubjectsBySubjectId(subjectId)
       .then((res) => {
         res.data.units.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapList(res.data.units);

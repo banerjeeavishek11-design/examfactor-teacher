@@ -19,7 +19,6 @@ import { Searchbar } from 'react-native-paper';
 import Search from '@/theme/assets/images/search.png';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import ClassSuccessfullySelectedBottomSheet from '../ClassSuccessfullySelectedBottomSheet';
-
 const ActivateMoreTopicBottomSheet = ({
   setOpenClassSuccessfullySelectedBottomSheet,
   openClassSuccessfullySelectedBottomSheet,

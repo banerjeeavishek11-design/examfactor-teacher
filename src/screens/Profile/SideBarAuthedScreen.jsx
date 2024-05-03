@@ -78,6 +78,7 @@ const SideBarAuthedScreen = (props) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Something Went Wrong fetching teacher details', error);
         }
+
       });
   };
 
