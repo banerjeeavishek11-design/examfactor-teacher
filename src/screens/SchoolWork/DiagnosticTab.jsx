@@ -9,34 +9,124 @@ import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import { Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
+import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
 
-const topic = [
-  {
-    id: 1,
-    topicName: 'Introduction to Motion',
-    subTitle: 'Students completed the homework',
-    progress: 60,
-  },
-  {
-    id: 2,
-    topicName: 'Rate of Motion',
-    subTitle: 'Based on concepts covered till date',
-    progress: 65,
-  },
-  {
-    id: 3,
-    topicName: 'Rate of Change of Velocity',
-    subTitle: 'Rate of Change of Velocity',
-    progress: 50,
-  },
-];
+// const topic = [
+//   {
+//     id: 1,
+//     topicName: 'Introduction to Motion',
+//     subTitle: 'Students completed the homework',
+//     progress: 60,
+//   },
+//   {
+//     id: 2,
+//     topicName: 'Rate of Motion',
+//     subTitle: 'Based on concepts covered till date',
+//     progress: 65,
+//   },
+//   {
+//     id: 3,
+//     topicName: 'Rate of Change of Velocity',
+//     subTitle: 'Rate of Change of Velocity',
+//     progress: 50,
+//   },
+// ];
 
-const leaderboardData = [
-  { name: 'Rahul K. ', progress: 'Yes', achievable: 5 },
-  { name: 'Sanya M.', progress: 'No', achievable: 10 },
-  { name: 'Karan K.', progress: 'Yes', achievable: 11 },
-  { name: 'Piyush K.', progress: 'No', achievable: 7 },
-  { name: 'Anmol S.', progress: 'Yes', achievable: 9 },
+// const leaderboardData = [
+//   { name: 'Rahul K. ', progress: 'Yes', achievable: 5 },
+//   { name: 'Sanya M.', progress: 'No', achievable: 10 },
+//   { name: 'Karan K.', progress: 'Yes', achievable: 11 },
+//   { name: 'Piyush K.', progress: 'No', achievable: 7 },
+//   { name: 'Anmol S.', progress: 'Yes', achievable: 9 },
+// ];
+
+const data = [
+  {
+    chapterId: 'chpater-id-1-1-2',
+    noOfStudentCompletionCount: 1,
+    b2BStudentDiagnosticSummaryDtoList: [
+      {
+        id: null,
+        fullName: 'Sashi',
+        diagnosticChapterCompletionPercentage: 100,
+        chapterId: 'chpater-id-1-1-2',
+        sectionId: '1230851261945909248_1232324480313888768_CBSE_CLASS_12_B',
+        dignosticWeakTopicSummary: [
+          {
+            topicId: 'topic-id-1-1-2-15',
+            subTopicIds: [
+              'subtopic-id-115',
+              'subtopic-id-114',
+              'subtopic-id-125',
+              'subtopic-id-117',
+              'subtopic-id-116',
+              'subtopic-id-119',
+              'subtopic-id-118',
+              'subtopic-id-120',
+              'subtopic-id-122',
+              'subtopic-id-121',
+              'subtopic-id-124',
+              'subtopic-id-123',
+            ],
+          },
+          {
+            topicId: 'topic-id-1-1-2-16',
+            subTopicIds: [
+              'subtopic-id-126',
+              'subtopic-id-137',
+              'subtopic-id-136',
+              'subtopic-id-128',
+              'subtopic-id-127',
+              'subtopic-id-138',
+              'subtopic-id-129',
+              'subtopic-id-131',
+              'subtopic-id-130',
+              'subtopic-id-132',
+            ],
+          },
+          {
+            topicId: 'topic-id-1-1-2-17',
+            subTopicIds: [
+              'subtopic-id-139',
+              'subtopic-id-140',
+              'subtopic-id-142',
+              'subtopic-id-141',
+              'subtopic-id-144',
+              'subtopic-id-143',
+            ],
+          },
+          {
+            topicId: 'topic-id-1-1-2-18',
+            subTopicIds: [],
+          },
+          {
+            topicId: 'topic-id-1-1-2-19',
+            subTopicIds: [
+              'subtopic-id-159',
+              'subtopic-id-158',
+              'subtopic-id-153',
+              'subtopic-id-154',
+              'subtopic-id-157',
+            ],
+          },
+          {
+            topicId: 'topic-id-1-1-2-20',
+            subTopicIds: [
+              'subtopic-id-162',
+              'subtopic-id-161',
+              'subtopic-id-164',
+              'subtopic-id-163',
+              'subtopic-id-166',
+              'subtopic-id-165',
+            ],
+          },
+        ],
+        studentId: 'sashief',
+        noOfWeakSubTopics: 39,
+      },
+    ],
+  },
 ];
 
 const DiagnosticTab = () => {
@@ -59,9 +149,39 @@ const DiagnosticTab = () => {
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
+        <View
+          style={[layout.row, layout.justifyBetween, { marginTop: '4%', marginHorizontal: '2%' }]}
+        >
+          <TouchableOpacity
+          // onPress={() => handleChapterChangePress('left')}
+          // disabled={chapListIndex === 0}
+          // style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
+          >
+            <Image source={leftArrow} style={{ width: 28, height: 16 }} />
+          </TouchableOpacity>
+          <Text
+            style={[
+              fonts.size_13,
+              fonts.bold,
+              { color: colors.white, width: '80%', textAlign: 'center' },
+            ]}
+          >
+            C1:Motion
+            {/* Unit {chapListIndex + 1} : {chapList[chapListIndex]?.displayNames[0].name} */}
+          </Text>
+          <TouchableOpacity
+          // onPress={() => handleChapterChangePress('right')}
+          // style={{
+          //   opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
+          // }}
+          // disabled={chapListIndex === chapList.length - 1}
+          >
+            <Image source={rightArrow} style={{ width: 28, height: 16 }} />
+          </TouchableOpacity>
+        </View>
         {activatedChapter === true ? (
           <>
-            {topic.map((ele) => {
+            {data.map((ele) => {
               return (
                 <TouchableOpacity
                   onPress={() => toggleContent(ele.id)}
@@ -90,7 +210,7 @@ const DiagnosticTab = () => {
                         numberOfLines={2}
                         style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                       >
-                        {ele.topicName}
+                        {ele.chapterId}
                       </Text>
                       <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                         <Text
@@ -103,7 +223,7 @@ const DiagnosticTab = () => {
                           No. of Students
                         </Text>
                         <View style={{ width: '70%', left: 10 }}>
-                          <Progressbar progress={0.8} color="#3DD598" />
+                          <Progressbar progress={0.1} color="#3DD598" />
                         </View>
                         <Text
                           style={[
@@ -112,7 +232,7 @@ const DiagnosticTab = () => {
                             { color: colors.white, left: 20 },
                           ]}
                         >
-                          22/30
+                          {ele.noOfStudentCompletionCount}/30
                         </Text>
                       </View>
                     </View>
@@ -163,13 +283,13 @@ const DiagnosticTab = () => {
                             </Text>
                           </View>
                         </View>
-                        {leaderboardData.map((item, index) => (
-                          <View
+                        {ele.b2BStudentDiagnosticSummaryDtoList.map((item, index) => (
+                          <TouchableOpacity
                             key={index}
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                              index === leaderboardData.length - 1 && styles.lastRow,
+                              // index === leaderboardData.length - 1 && styles.lastRow,
                             ]}
                           >
                             <View
@@ -185,7 +305,7 @@ const DiagnosticTab = () => {
                                   { color: colors.white, opacity: 0.7 },
                                 ]}
                               >
-                                {item.name}
+                                {item.fullName}
                               </Text>
                             </View>
                             <View
@@ -204,13 +324,18 @@ const DiagnosticTab = () => {
                                   },
                                 ]}
                               >
-                                {item.progress}
+                                {item.diagnosticChapterCompletionPercentage === 100 ? 'YES' : 'NO'}
                               </Text>
                             </View>
                             <View
-                              style={{
-                                width: '30%',
-                              }}
+                              style={[
+                                layout.row,
+                                layout.itemsCenter,
+                                {
+                                  width: '30%',
+                                  gap: 6,
+                                },
+                              ]}
                             >
                               <Text
                                 numberOfLines={1}
@@ -220,10 +345,11 @@ const DiagnosticTab = () => {
                                   { color: colors.white, opacity: 0.7 },
                                 ]}
                               >
-                                {item.achievable}
+                                {item.dignosticWeakTopicSummary.length}
                               </Text>
+                              <Image style={{ width: 10, height: 5 }} source={DownArrow} />
                             </View>
-                          </View>
+                          </TouchableOpacity>
                         ))}
                       </View>
                     </View>
