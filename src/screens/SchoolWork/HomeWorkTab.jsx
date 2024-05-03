@@ -2,6 +2,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
+// import { useNavigation } from '@react-navigation/native';
 import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
@@ -42,6 +43,7 @@ const leaderboardData = [
 
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
+  // const navigation = useNavigation();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [expandedCards, setExpandedCards] = useState({});
   const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] = useState(false);
@@ -56,6 +58,7 @@ const HomeWorkTab = () => {
 
   const handleActiveHomework = () => {
     setActivatedHomeWork(true);
+    // navigation.navigate('ActivateHomeWorkTab');
   };
 
   return (

@@ -122,6 +122,7 @@ const DiagnosticTab = () => {
     setIsLoading(true);
     getDiagnosticsByTeacher(params)
       .then((res) => {
+        storage.set('activateDiagnostic', JSON.stringify(res.data));
         setDiagnosticData(res.data);
         setIsLoading(false);
       })

@@ -40,7 +40,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo('HomeWorkTab');
+            props.navigation.jumpTo('ActivateHomeWorkTab');
           }}
         >
           <Text
@@ -72,7 +72,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo('DiagnosticTab');
+            props.navigation.jumpTo('ActivateDiagnosticTab');
           }}
         >
           <Text
@@ -104,7 +104,7 @@ const TabBar = (props) => {
             },
           ]}
           onPress={() => {
-            props.navigation.jumpTo('ClassWorkTab');
+            props.navigation.jumpTo('ActivateClassWorkTab');
           }}
         >
           <Text
@@ -138,9 +138,9 @@ const ActivateTopTabNavigator = () => {
       }}
       tabBar={(props) => <TabBar {...props} />}
     >
-      <Tab.Screen name="HomeWorkTab" component={HomeWorkTab} />
-      <Tab.Screen name="DiagnosticTab" component={DiagnosticTab} />
-      <Tab.Screen name="ClassWorkTab" component={ClassWorkTab} />
+      <Tab.Screen name="ActivateHomeWorkTab" component={HomeWorkTab} />
+      <Tab.Screen name="ActivateDiagnosticTab" component={DiagnosticTab} />
+      <Tab.Screen name="ActivateClassWorkTab" component={ClassWorkTab} />
     </Tab.Navigator>
   );
 };

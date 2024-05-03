@@ -17,6 +17,15 @@ const fromTimeData = [
   { id: 12, time: '3:30 pm' },
   { id: 13, time: '4:00 pm' },
   { id: 14, time: '4:30 pm' },
+  { id: 15, time: '5:00 pm' },
+  { id: 16, time: '5:30 pm' },
+  { id: 17, time: '6:00 pm' },
+  { id: 18, time: '6:30 pm' },
+  { id: 19, time: '7:00 pm' },
+  { id: 20, time: '7:30 pm' },
+  { id: 21, time: '8:00 pm' },
+  { id: 22, time: '8:30 pm' },
+  { id: 23, time: '11:00 pm' },
 ];
 const toTimeData = [
   { id: 1, time: '10:30 am' },
@@ -33,6 +42,15 @@ const toTimeData = [
   { id: 12, time: '4:00 pm' },
   { id: 13, time: '4:30 pm' },
   { id: 14, time: '5:00 pm' },
+  { id: 15, time: '5:30 pm' },
+  { id: 16, time: '6:00 pm' },
+  { id: 17, time: '6:30 pm' },
+  { id: 18, time: '7:00 pm' },
+  { id: 19, time: '7:30 pm' },
+  { id: 20, time: '8:00 pm' },
+  { id: 21, time: '8:30 pm' },
+  { id: 22, time: '9:00 pm' },
+  { id: 23, time: '11:30 pm' },
 ];
 
 const ScheduleTimeBottomSheet = (props) => {
