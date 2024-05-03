@@ -43,7 +43,6 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
   }, [sectionName, teacherDetails]);
 
   const handleDiagnosticActivate = () => {
-    const accessToken = storage.getString('access_token');
     let requiredBody = {
       gradeId: gradeId,
       sectionId: sectionId,
@@ -52,7 +51,7 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
       chapterId: chapterId,
     };
     setIsLoading(true);
-    activateDiagnosticByTeacher(accessToken, requiredBody)
+    activateDiagnosticByTeacher(requiredBody)
       .then(() => {
         return new Promise((resolve) => {
           setTimeout(() => {

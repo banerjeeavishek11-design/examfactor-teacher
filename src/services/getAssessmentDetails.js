@@ -1,13 +1,8 @@
-import axios from 'axios';
-import { host, assessmentService } from '../environment/Environment';
+import { assessmentService } from '../environment/Environment';
+import api from '../utils/axios.config';
 
-export const getAssessmentDetails = async (token, params) => {
-  return await axios.get(`${assessmentService}/v1/assessments`, {
+export const getAssessmentDetails = async (params) => {
+  return await api.get(`${assessmentService}/v1/assessments`, {
     params: params,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Host: host,
-    },
   });
 };

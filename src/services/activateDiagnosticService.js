@@ -1,23 +1,12 @@
-import axios from 'axios';
-import { host, teacherService } from '../environment/Environment';
+import { teacherService } from '../environment/Environment';
+import api from '../utils/axios.config';
 
-export const activateDiagnosticByTeacher = async (token, requiredBody) => {
-  return await axios.post(`${teacherService}/v1/diagnostics`, requiredBody, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Host: host,
-    },
-  });
+export const activateDiagnosticByTeacher = async (requiredBody) => {
+  return await api.post(`${teacherService}/v1/diagnostics`, requiredBody, {});
 };
 
-export const getDiagnosticsByTeacher = async (token, params) => {
-  return await axios.get(`${teacherService}/v1/diagnostics`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Host: host,
-    },
+export const getDiagnosticsByTeacher = async (params) => {
+  return await api.get(`${teacherService}/v1/diagnostics`, {
     params: params,
   });
 };

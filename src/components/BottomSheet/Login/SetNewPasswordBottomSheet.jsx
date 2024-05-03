@@ -19,7 +19,7 @@ import RightArrow from '@/theme/assets/images/rightarrow.png';
 import { MMKV } from 'react-native-mmkv';
 import { useNavigation } from '@react-navigation/native';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
-import { resetPassword } from '../../../services/loginService';
+import { resetPassword } from '../../../services/authService';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import { jwtDecode } from 'jwt-decode';
 import { getTeacherDetailsById } from '../../../services/teacherService';
@@ -46,13 +46,12 @@ const SetNewPasswordBottomSheet = ({
   };
 
   const handleSetNewPassword = (data) => {
-    const accessToken = storage.getString('access_token');
     const oldPassword = storage.getString('oldPassword');
     let requiredBody = {
       oldPassword: oldPassword,
       newPassword: data.retypenewPassword,
     };
-    resetPassword(accessToken, requiredBody)
+    resetPassword(requiredBody)
       .then(() => {
         const accessToken = storage.getString('access_token');
         const decodedPayload = jwtDecode(accessToken);
@@ -67,8 +66,7 @@ const SetNewPasswordBottomSheet = ({
   };
 
   const getTeacheDetails = (userName) => {
-    const accessToken = storage.getString('access_token');
-    getTeacherDetailsById(accessToken, userName)
+    getTeacherDetailsById(userName)
       .then((res) => {
         storage.set('teacherDetails', JSON.stringify(res.data));
         navigation.reset({

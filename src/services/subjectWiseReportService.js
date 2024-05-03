@@ -1,13 +1,8 @@
-import axios from 'axios';
-import { host, b2bStudentService } from '../environment/Environment';
+import { b2bStudentService } from '../environment/Environment';
+import api from '../utils/axios.config';
 
-export const getSubjectWiseReport = async (token, params) => {
-  return await axios.get(`${b2bStudentService}/v1/consolidated-report`, {
+export const getSubjectWiseReport = async (params) => {
+  return await api.get(`${b2bStudentService}/v1/consolidated-report`, {
     params: params,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Host: host,
-    },
   });
 };

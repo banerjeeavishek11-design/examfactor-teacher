@@ -70,13 +70,15 @@ const SideBarAuthedScreen = (props) => {
   };
 
   const getTeacheDetails = () => {
-    const accessToken = storage.getString('access_token');
-    getUserDetailsByUserId(accessToken, userName)
+    getUserDetailsByUserId(userName)
       .then((res) => {
         setUserDetails(res.data);
       })
       .catch((error) => {
-        notifyMessage('Something Went Wrong fetching teacher details', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Something Went Wrong fetching teacher details', error);
+        }
+
       });
   };
 

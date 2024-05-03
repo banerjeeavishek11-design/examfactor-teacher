@@ -98,9 +98,8 @@ const DiagnosticTab = () => {
   };
 
   const getAllChaptersDetails = (subjectId) => {
-    const access_token = storage.getString('access_token');
     setIsLoading(true);
-    getSubjectsBySubjectId(access_token, subjectId)
+    getSubjectsBySubjectId(subjectId)
       .then((res) => {
         res.data.units.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapList(res.data.units);
@@ -115,20 +114,21 @@ const DiagnosticTab = () => {
   };
 
   const getDiagnostics = () => {
-    const access_token = storage.getString('access_token');
     let params = {
       gradeId: gradeId,
       sectionId: sectionId,
       subjectId: subjectId,
     };
     setIsLoading(true);
-    getDiagnosticsByTeacher(access_token, params)
+    getDiagnosticsByTeacher(params)
       .then((res) => {
         setDiagnosticData(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
-        notifyMessage('unabled to get diagnostic details', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get diagnostic details', error);
+        }
         setIsLoading(false);
       });
   };
@@ -267,8 +267,6 @@ const DiagnosticTab = () => {
                                   setActivateConfirmationModalVisible
                                 }
                                 chapterId={ele.chapterId}
-                                // unitId={unitId}
-                                // topics={ele.topics}
                                 onToggleClick={(chapterId) => {
                                   handleToggleClick(chapterId);
                                   setSelectedChapter(`C${index + 1} : ${ele.chapterDesc}`);

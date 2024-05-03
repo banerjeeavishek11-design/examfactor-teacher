@@ -51,14 +51,12 @@ const HomeScreen = () => {
   // const resFromMMKV = storage.getString('teacherDetails');
   // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
-  //Sort By Modal handling
   const [sortByValue, setSortbyValue] = useState(null);
   const [sortbyModalVisible, setSortbyModalVisible] = useState(false);
   const closeSortbyModal = () => {
     setSortbyModalVisible(false);
   };
 
-  //Practice Duration Modal Handling
   const [practiceDurationValue, setPracticeDurationValue] = useState(null);
   const [practiceDurationModalVisible, setPracticeDurationModalVisible] = useState(false);
   const closePracticeDurationModal = () => {
@@ -106,15 +104,16 @@ const HomeScreen = () => {
   // };
 
   const getTeacheDetails = () => {
-    const accessToken = storage.getString('access_token');
-    getUserDetailsByUserId(accessToken, userName)
+    getUserDetailsByUserId(userName)
       .then((res) => {
         if (res.data) {
           dispatch(updateUserRole(res.data.teacherRole));
         }
       })
       .catch((error) => {
-        notifyMessage('Something Went Wrong fetching teacher details', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Something Went Wrong fetching teacher details', error);
+        }
       });
   };
 

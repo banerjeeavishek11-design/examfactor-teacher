@@ -1,43 +1,34 @@
-import React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import React, { useRef, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { setNavigationReference } from '../utils/axios.config';
 
-import { Example, LandingScreen, LoginScreen, Startup } from '@/screens';
+import { Example, Startup } from '@/screens';
 import { useTheme } from '@/theme';
 
-import type { ApplicationStackParamList } from '@/types/navigation';
 import UnAuthorizedStack from './UnAuthorizedStack';
 import AuthorizedStack from './AuthorizedStack';
 
-const Stack = createStackNavigator<ApplicationStackParamList>();
-
-interface Styles {
-  container: StyleProp<ViewStyle>;
-}
+const Stack = createStackNavigator();
 
 function ApplicationNavigator() {
-  const { variant, navigationTheme, layout, backgrounds } = useTheme();
+  const { variant, navigationTheme } = useTheme();
+  const navigationRef = useRef();
+
+  useEffect(() => {
+    setNavigationReference(navigationRef.current);
+  }, []);
 
   return (
-    <NavigationContainer theme={navigationTheme}>
-      {/* <View style={styles.container}> */}
+    <NavigationContainer ref={navigationRef} theme={navigationTheme}>
       <Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Startup" component={Startup} />
         <Stack.Screen name="Example" component={Example} />
         <Stack.Screen name="UnAuthorizedStack" component={UnAuthorizedStack} />
         <Stack.Screen name="AuthorizedStack" component={AuthorizedStack} />
       </Stack.Navigator>
-      {/* </View> */}
     </NavigationContainer>
   );
 }
-
-const styles: Styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#09070E',
-  },
-});
 
 export default ApplicationNavigator;

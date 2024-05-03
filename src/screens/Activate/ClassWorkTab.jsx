@@ -32,7 +32,6 @@ const ClassWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
-  const accessToken = storage.getString('access_token');
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
   const [searchChapterName, setSearchChapterName] = useState([]);
@@ -102,7 +101,7 @@ const ClassWorkTab = () => {
       partnerId: partnerId,
     };
     setIsLoading(true);
-    getAssessmentDetails(accessToken, params)
+    getAssessmentDetails(params)
       .then((res) => {
         if (res.data.content.length == 0) {
           setIsLoading(false);
@@ -122,15 +121,16 @@ const ClassWorkTab = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        notifyMessage('something went wrong fetching assessments' + error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('something went wrong fetching assessments' + error);
+        }
         setIsLoading(false);
       });
   };
 
   const getAllChaptersDetails = (subjectId) => {
-    const access_token = storage.getString('access_token');
     setIsLoading(true);
-    getChaptersBySubjectId(access_token, subjectId)
+    getChaptersBySubjectId(subjectId)
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
@@ -157,13 +157,15 @@ const ClassWorkTab = () => {
       subjectId: selectedSubjectId,
     };
     setIsLoading(true);
-    getClasswoksByTeacher(accessToken, params)
+    getClasswoksByTeacher(params)
       .then((res) => {
         setClassworkData(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
-        notifyMessage('Failed to fetch classwork Data' + error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Failed to fetch classwork Data' + error);
+        }
         setIsLoading(false);
       });
   };

@@ -1,15 +1,16 @@
-import { Text, View, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
 import Logo from '@/theme/assets/images/examfactorlogo.png';
+import tabLogo from '../../theme/assets/images/tabStartupLogo.png';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
 const screenWidth = Dimensions.get('window').width;
 const isTablet = screenWidth >= 600;
 
 const LandingScreen = ({ navigation }) => {
-  const { colors, layout, fonts, backgrounds } = useTheme();
+  const { layout, backgrounds } = useTheme();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,14 +23,13 @@ const LandingScreen = ({ navigation }) => {
     <View style={[backgrounds.screenBackgroundColor, layout.flex_1]}>
       <View style={[layout.itemsCenter, layout.justifyCenter, { flex: 1, flexDirection: 'row' }]}>
         {isTablet ? (
-          <View style={[layout.row]}>
+          <View style={[layout.row, layout.itemsCenter]}>
             <ImageVariant
               testID="brand-img"
-              style={{ width: moderateScale(200), height: moderateVerticalScale(200) }}
-              source={Logo}
+              style={{ width: moderateScale(220), height: moderateVerticalScale(200) }}
+              source={tabLogo}
               resizeMode="contain"
             />
-            <Text style={[fonts.size_16, { color: colors.white }]}>ExamFactor</Text>
           </View>
         ) : (
           <ImageVariant

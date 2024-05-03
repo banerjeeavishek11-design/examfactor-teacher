@@ -111,7 +111,6 @@ const SubjectDetailsScreen = () => {
               borderColor: 'rgba(275, 275, 275, 0.5)',
               borderWidth: 1,
               borderRadius: 8,
-              // fontSize: 20,
             }}
             clearButtonMode="while-editing"
             selectionColor={colors.buttonTextColor}
