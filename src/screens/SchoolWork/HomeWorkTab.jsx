@@ -1,37 +1,25 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
-// import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
+import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
+import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
 import ActivatedHomeWork from '@/theme/assets/images/homework.png';
 import { Divider } from 'react-native-paper';
 import RemindStudentBottomSheet from '@/components/BottomSheet/SchoolWork/RemindStudentBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { getStudentHomeworkReports } from '../../services/SchoolWorkServices/schoolWorkServices';
+import { getChaptersBySubjectId } from '../../services/chapterListService';
+import { notifyMessage } from '../../utils/error-toast-API';
+import { MMKV } from 'react-native-mmkv';
 
-const topic = [
-  {
-    id: 1,
-    topicName: 'Introduction to Motion',
-    subTitle: 'Students completed the homework',
-    progress: 60,
-  },
-  {
-    id: 2,
-    topicName: 'Rate of Motion',
-    subTitle: 'Based on concepts covered till date',
-    progress: 65,
-  },
-  {
-    id: 3,
-    topicName: 'Rate of Change of Velocity',
-    subTitle: 'Rate of Change of Velocity',
-    progress: 50,
-  },
-];
+const storage = new MMKV();
 
 const leaderboardData = [
   { name: 'Rahul K.', progress: 88, achievable: 87 },
@@ -43,42 +31,199 @@ const leaderboardData = [
 
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const homeFromMMKV = storage.getString('activateHomework');
+  const homework = homeFromMMKV ? JSON.parse(homeFromMMKV) : [];
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
+  const [expandCardId, setExpandedCardId] = useState('');
   const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] = useState(false);
-  const [activatedHomeWork, setActivatedHomeWork] = useState(false);
+  // const [activatedHomeWork, setActivatedHomeWork] = useState(false);
+  const [showChapterName, setShowChapterName] = useState();
+  const [sectionId, setSectionId] = useState();
+  const [chapList, setChapList] = useState([]);
+  const [chapListIndex, setChapListIndex] = useState(0);
+  const [chapterId, setChapterId] = useState();
+  const [data, setData] = useState([]);
+  const [topicWiseResponse, setTopicWiseResponse] = useState([]);
+
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllChaptersDetails(selectedSubjectId);
+    }, [selectedSubjectId])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setShowChapterName(chapList[chapListIndex]?.chapterDesc);
+    }, [chapList[chapListIndex]])
+  );
+
+  const getAllChaptersDetails = (subjectId) => {
+    // setIsLoading(true);
+    getChaptersBySubjectId(subjectId)
+      .then((res) => {
+        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
+        setChapList(res.data.chapters);
+        setChapterId(res.data.chapters[0].chapterId);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get chapter details');
+        }
+        // setIsLoading(false);
+      });
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getStudentHomeworks();
+    }, [chapterId])
+  );
+
+  const getStudentHomeworks = () => {
+    let params = {
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+      chapterId: chapterId,
+    };
+    getStudentHomeworkReports(params)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  };
 
   const toggleContent = (id) => {
+    setExpandedCardId(id);
     setExpandedCards((prevState) => ({
-      ...prevState,
       [id]: !prevState[id],
     }));
+    getTopicWiseDetails(id);
+  };
+
+  const getTopicWiseDetails = (topicId) => {
+    let params = {
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+      chapterId: chapterId,
+      topicId: topicId,
+    };
+    getStudentHomeworkReports(params)
+      .then((res) => {
+        setTopicWiseResponse(res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
   };
 
   const handleActiveHomework = () => {
-    setActivatedHomeWork(true);
-    // navigation.navigate('ActivateHomeWorkTab');
+    // setActivatedHomeWork(true);
+    navigation.navigate('ActivateHomeWorkTab');
   };
+
+  const handleChapterChangePress = (type) => {
+    const index = chapListIndex;
+    if (type === 'right') {
+      if (index + 1 >= chapList.length) {
+        setChapListIndex(0);
+        setChapterId(chapList[0].chapterId);
+      } else {
+        setChapListIndex((prev) => prev + 1);
+        setChapterId(chapList[index + 1].chapterId);
+      }
+    } else {
+      if (index - 1 < 0) {
+        setChapListIndex(chapList.length - 1);
+        setChapterId(chapList[chapList.length - 1].chapterId);
+      } else {
+        setChapListIndex((prev) => prev - 1);
+        setChapterId(chapList[index - 1].chapterId);
+      }
+    }
+  };
+
+  function getTopicDescById(topicId) {
+    const topicsArrays = chapList.map((chap) => chap.topics);
+    const allTopics = [].concat(...topicsArrays);
+    const matchedTopic = allTopics.filter((topic) => topic.topicId === topicId);
+    return matchedTopic.length > 0 ? matchedTopic[0].topicDesc : null;
+  }
 
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
-        {activatedHomeWork === true ? (
+        {homework.length > 0 && (
+          <View
+            style={[layout.row, layout.justifyBetween, { marginTop: '4%', marginHorizontal: '2%' }]}
+          >
+            <TouchableOpacity
+              onPress={() => handleChapterChangePress('left')}
+              disabled={chapListIndex === 0}
+              style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
+            >
+              <Image source={leftArrow} style={{ width: 28, height: 16 }} />
+            </TouchableOpacity>
+            <Text
+              style={[
+                fonts.size_13,
+                fonts.bold,
+                { color: colors.white, width: '80%', textAlign: 'center' },
+              ]}
+            >
+              C{chapListIndex + 1} : {showChapterName}
+            </Text>
+            <TouchableOpacity
+              onPress={() => handleChapterChangePress('right')}
+              style={{
+                opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
+              }}
+              disabled={chapListIndex === chapList.length - 1}
+            >
+              <Image source={rightArrow} style={{ width: 28, height: 16 }} />
+            </TouchableOpacity>
+          </View>
+        )}
+        {homework.length > 0 ? (
           <>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.bold,
+                { color: colors.white, opacity: 0.4, marginTop: '2%' },
+              ]}
+            >
               Last 7 Days Assigned homework
             </Text>
-            {topic.map((ele) => {
+            {data.map((ele) => {
               return (
                 <TouchableOpacity
-                  onPress={() => toggleContent(ele.id)}
-                  key={ele.topicName}
+                  onPress={() => toggleContent(ele.topicId)}
+                  key={ele.topicId}
                   style={[
                     layout.fullWidth,
                     {
                       backgroundColor: colors.cardBackgroundColor,
-                      height: expandedCards[ele.id] ? 'auto' : 130,
+                      height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 110 : 100,
                       borderRadius: 14,
                       marginTop: '3%',
                     },
@@ -98,7 +243,7 @@ const HomeWorkTab = () => {
                         numberOfLines={2}
                         style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                       >
-                        {ele.topicName}
+                        {getTopicDescById(ele.topicId)}
                       </Text>
                       <Text
                         style={[
@@ -107,15 +252,18 @@ const HomeWorkTab = () => {
                           { color: colors.backButtonColor, marginBottom: '5%' },
                         ]}
                       >
-                        {ele.subTitle}
+                        Student Completed The Homework
                       </Text>
                     </View>
                     <View style={{ width: isTablet ? '0%' : '20%', top: -5 }}>
-                      <Circularprogressbar progress={ele.progress} />
+                      <Circularprogressbar
+                        total={ele.totalStudentCount}
+                        progress={ele.totalStudentCompletionCount}
+                      />
                     </View>
                     <View style={{ width: '5%' }}>
                       <TouchableOpacity>
-                        {expandedCards[ele.id] ? (
+                        {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                           <Image
                             style={{ width: 12, height: 8 }}
                             source={UpArrow}
@@ -131,29 +279,31 @@ const HomeWorkTab = () => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View
-                    style={[
-                      layout.paddingForCard,
-                      { paddingTop: '0%', marginTop: isTablet ? '-1%' : null },
-                    ]}
-                  >
-                    <TouchableOpacity onPress={() => setOpenRemindStudentBottomSheet(true)}>
-                      <Text
-                        style={[
-                          fonts.size_12,
-                          fonts.fontWeignt_600,
-                          {
-                            color: colors.termsLinkColor,
-                            textDecorationLine: 'underline',
-                          },
-                        ]}
-                      >
-                        Remind Students
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  {ele.remindOn === null ? null : (
+                    <View
+                      style={[
+                        layout.paddingForCard,
+                        { paddingTop: '0%', marginTop: isTablet ? '-1%' : null },
+                      ]}
+                    >
+                      <TouchableOpacity onPress={() => setOpenRemindStudentBottomSheet(true)}>
+                        <Text
+                          style={[
+                            fonts.size_12,
+                            fonts.fontWeignt_600,
+                            {
+                              color: colors.termsLinkColor,
+                              textDecorationLine: 'underline',
+                            },
+                          ]}
+                        >
+                          Remind Students
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
 
-                  {expandedCards[ele.id] ? (
+                  {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                     <View>
                       <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
                         <Text
@@ -182,13 +332,13 @@ const HomeWorkTab = () => {
                             Name
                           </Text>
                           <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                            Progress
+                            Home Work Time
                           </Text>
                           <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                            Achievable
+                            Progress
                           </Text>
                         </View>
-                        {leaderboardData.map((item, index) => (
+                        {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map((item, index) => (
                           <View
                             key={index}
                             style={[
@@ -204,7 +354,7 @@ const HomeWorkTab = () => {
                                 { color: colors.white, opacity: 0.7 },
                               ]}
                             >
-                              {item.name}
+                              {item.studentName}
                             </Text>
                             <Text
                               style={[
@@ -213,7 +363,7 @@ const HomeWorkTab = () => {
                                 { color: colors.white, opacity: 0.7 },
                               ]}
                             >
-                              {item.progress}
+                              {item.timeSpent}
                             </Text>
                             <Text
                               style={[
@@ -222,7 +372,7 @@ const HomeWorkTab = () => {
                                 { color: colors.white, opacity: 0.7 },
                               ]}
                             >
-                              {item.achievable}
+                              {item.completionPercentage} %
                             </Text>
                           </View>
                         ))}
@@ -281,7 +431,7 @@ const HomeWorkTab = () => {
             >
               Go to activate and assign Home Work for students at first
             </Text>
-            <TouchableOpacity onPress={handleActiveHomework}>
+            <TouchableOpacity onPress={() => handleActiveHomework()}>
               <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                 <View style={[layout.display, layout.rowHCenter]}>
                   <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>

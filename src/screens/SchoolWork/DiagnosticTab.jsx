@@ -120,11 +120,11 @@ const DiagnosticTab = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
-  const diagnostic = JSON.parse(storage.getString('activateDiagnostic'));
+  const diagFromMMKV = storage.getString('activateDiagnostic');
+  const diagnostic = diagFromMMKV ? JSON.parse(diagFromMMKV) : [];
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
-  // const [activatedChapter, setActivatedChapter] = useState(false);
   const [showWeakSubtopics, setShowWeakSubtopics] = useState(false);
   const [chapList, setChapList] = useState([]);
   const [chapListIndex, setChapListIndex] = useState(0);
@@ -145,17 +145,18 @@ const DiagnosticTab = () => {
     }
   }, [sectionName, teacherDetails]);
 
-  // useEffect(() => {
-  //   setShowChapterName(chapList[chapListIndex]?.chapterDesc);
-  // }, [chapList[chapListIndex]]);
-
   useFocusEffect(
     React.useCallback(() => {
       setShowChapterName(chapList[chapListIndex]?.chapterDesc);
     }, [chapList[chapListIndex]])
   );
+  useFocusEffect(
+    React.useCallback(() => {
+      getStudentDiagnostics();
+    }, [chapterId])
+  );
 
-  useEffect(() => {
+  const getStudentDiagnostics = () => {
     let params = {
       sectionId: sectionId,
       subjectId: selectedSubjectId,
@@ -163,23 +164,19 @@ const DiagnosticTab = () => {
     };
     getStudentDiagnosticReports(params)
       .then((res) => {
-        // console.log('respone', res.data);
         setData(res.data);
       })
       .catch((error) => {
         console.log('error', error);
       });
-  }, [chapterId]);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
+      setChapListIndex(0);
     }, [selectedSubjectId])
   );
-
-  useEffect(() => {
-    getAllChaptersDetails(selectedSubjectId);
-  }, [selectedSubjectId]);
 
   const getAllChaptersDetails = (subjectId) => {
     setIsLoading(true);
@@ -260,7 +257,7 @@ const DiagnosticTab = () => {
   }
 
   // console.log('CP', chapList[0].topics);
-  console.log('diagnostic from schoolwork', diagnostic);
+  // console.log('diagnostic from schoolwork', diagnostic);
 
   return (
     <SafeScreen>
@@ -587,7 +584,7 @@ const DiagnosticTab = () => {
               >
                 Go to activate and assign Diagnostic for students at first
               </Text>
-              <TouchableOpacity onPress={handleActiveChapter}>
+              <TouchableOpacity onPress={() => handleActiveChapter()}>
                 <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                   <View style={[layout.display, layout.rowHCenter]}>
                     <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>

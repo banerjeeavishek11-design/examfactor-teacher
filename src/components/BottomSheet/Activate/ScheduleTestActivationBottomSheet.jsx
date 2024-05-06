@@ -62,7 +62,6 @@ const ScheduleTestActivationBottomSheet = ({
   };
 
   const handleDateSelect = (date) => {
-    console.log('DATE', date);
     const formattedDate = formatDate(date);
     setSelectedDate(formattedDate);
     setForDate(date);

@@ -34,6 +34,7 @@ const ClassWorkTab = () => {
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
+  const [expandCardId, setExpandedCardId] = useState('');
   const [searchChapterName, setSearchChapterName] = useState([]);
   const [chapterDetails, setChapterDetails] = useState([]);
   const [gradeId, setGradeId] = useState(null);
@@ -86,8 +87,8 @@ const ClassWorkTab = () => {
   };
 
   const toggleContent = (id) => {
+    setExpandedCardId(id);
     setExpandedCards((prevState) => ({
-      ...prevState,
       [id]: !prevState[id],
     }));
     let params = {
@@ -266,7 +267,7 @@ const ClassWorkTab = () => {
                             numberOfLines={1}
                           >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
                           <TouchableOpacity>
-                            {expandedCards[ele.chapterId] ? (
+                            {expandCardId === ele.chapterId && expandedCards[ele.chapterId] ? (
                               <Image
                                 style={{ width: 12, height: 8 }}
                                 source={UpArrow}
@@ -282,7 +283,7 @@ const ClassWorkTab = () => {
                           </TouchableOpacity>
                         </View>
                         <View>
-                          {expandedCards[ele.chapterId] ? (
+                          {expandCardId === ele.chapterId && expandedCards[ele.chapterId] ? (
                             <>
                               {ele?.assessments?.map((element) => {
                                 const assignedObj = getAssigned(ele.chapterId, element.id);

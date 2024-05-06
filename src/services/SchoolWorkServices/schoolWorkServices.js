@@ -6,3 +6,9 @@ export const getStudentDiagnosticReports = async (params) => {
     params: params,
   });
 };
+
+export const getStudentHomeworkReports = async (params) => {
+  return api.get(`${b2bStudentService}/v1/student-homework-summary`, {
+    params: params,
+  });
+};
