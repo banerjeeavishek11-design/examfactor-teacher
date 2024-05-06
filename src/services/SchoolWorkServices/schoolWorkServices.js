@@ -12,3 +12,14 @@ export const getStudentHomeworkReports = async (params) => {
     params: params,
   });
 };
+
+export const getStudentClassworkReports = async (params) => {
+  return api.get(`${b2bStudentService}/v1/classwork-report`, {
+    params: params,
+  });
+};
+export const getStudentWiseClassworkReports = async (params) => {
+  return api.get(`${b2bStudentService}/v1/classwork-report/students`, {
+    params: params,
+  });
+};

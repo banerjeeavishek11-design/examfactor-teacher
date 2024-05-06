@@ -161,6 +161,7 @@ const ClassWorkTab = () => {
     getClasswoksByTeacher(params)
       .then((res) => {
         setClassworkData(res.data);
+        storage.set('activateClasswork', JSON.stringify(res.data));
         setIsLoading(false);
       })
       .catch((error) => {

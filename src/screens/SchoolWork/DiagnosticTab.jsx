@@ -185,9 +185,6 @@ const DiagnosticTab = () => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapList(res.data.chapters);
         setChapterId(res.data.chapters[0].chapterId);
-        // if (res.data.chapters.length > 0) {
-        //   setActivatedChapter(true);
-        // }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -347,7 +344,7 @@ const DiagnosticTab = () => {
                             No. of Students
                           </Text>
                           <View style={{ width: '70%', left: 10 }}>
-                            <Progressbar progress={0.1} color="#3DD598" />
+                            <Progressbar progress={0} color="#3DD598" />
                           </View>
                           <Text
                             style={[

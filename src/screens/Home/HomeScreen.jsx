@@ -22,6 +22,60 @@ import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 // import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 
+// const responseOfConsolidatedReport = {
+//   score: 0,
+//   homeworkProgress: 0,
+//   diagnosisProgress: 0,
+//   chapters: [
+//     {
+//       chapterId: 'Relations and Functions',
+//       score: 0,
+//       homeworkProgress: 0,
+//       diagnosisProgress: 0,
+//       timeSpent: 0,
+//       topicCount: 0,
+//       activatedtopicCount: 0,
+//       topics: [
+//         {
+//           topicId: 'Operation on real function',
+//           score: 0,
+//           progress: 0,
+//           timeSpent: 0,
+//         },
+//         {
+//           topicId: 'Types of function',
+//           score: 0,
+//           progress: 0,
+//           timeSpent: 0,
+//         },
+//       ],
+//     },
+//     {
+//       chapterId: 'Inverse Trigonometric Function',
+//       score: 0,
+//       homeworkProgress: 0,
+//       diagnosisProgress: 0,
+//       timeSpent: 0,
+//       topicCount: 0,
+//       activatedtopicCount: 0,
+//       topics: [
+//         {
+//           topicId: 'Sum and diffeences of angles',
+//           score: 0,
+//           progress: 0,
+//           timeSpent: 0,
+//         },
+//         {
+//           topicId: 'comprehension',
+//           score: 0,
+//           progress: 0,
+//           timeSpent: 0,
+//         },
+//       ],
+//     },
+//   ],
+// };
+
 const storage = new MMKV();
 const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
@@ -88,13 +142,12 @@ const HomeScreen = () => {
   }, []);
 
   // const getSubjectReports = () => {
-  //   const access_token = storage.getString('access_token');
   //   let params = {
   //     gradeId: gradeId,
   //     sectionId: sectionId,
   //     subjectId: selectedSubjectId,
   //   };
-  //   getSubjectWiseReport(access_token, params)
+  //   getSubjectWiseReport(params)
   //     .then((res) => {
   //       console.log('responst subwise report', res.data);
   //     })

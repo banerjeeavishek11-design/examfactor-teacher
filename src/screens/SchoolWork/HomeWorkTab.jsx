@@ -17,6 +17,7 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import { getStudentHomeworkReports } from '../../services/SchoolWorkServices/schoolWorkServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { notifyMessage } from '../../utils/error-toast-API';
+import moment from 'moment';
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
@@ -48,6 +49,8 @@ const HomeWorkTab = () => {
   const [chapList, setChapList] = useState([]);
   const [chapListIndex, setChapListIndex] = useState(0);
   const [chapterId, setChapterId] = useState();
+  const [gradeId, setGradeId] = useState();
+  const [topicId, setTopicId] = useState('');
   const [data, setData] = useState([]);
   const [topicWiseResponse, setTopicWiseResponse] = useState([]);
 
@@ -56,6 +59,7 @@ const HomeWorkTab = () => {
       for (let item of teacherDetails) {
         if (item.sectionName === sectionName) {
           setSectionId(item.id);
+          setGradeId(item.gradeId);
           return;
         }
       }
@@ -169,6 +173,14 @@ const HomeWorkTab = () => {
     return matchedTopic.length > 0 ? matchedTopic[0].topicDesc : null;
   }
 
+  let payloadForReminder = {
+    gradeId: gradeId,
+    sectionId: sectionId,
+    subjectId: selectedSubjectId,
+    chapterId: chapterId,
+    topicId: topicId,
+  };
+
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
@@ -223,7 +235,7 @@ const HomeWorkTab = () => {
                     layout.fullWidth,
                     {
                       backgroundColor: colors.cardBackgroundColor,
-                      height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 110 : 100,
+                      height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 110 : 110,
                       borderRadius: 14,
                       marginTop: '3%',
                     },
@@ -240,7 +252,7 @@ const HomeWorkTab = () => {
                   >
                     <View style={{ width: '55%' }}>
                       <Text
-                        numberOfLines={2}
+                        numberOfLines={1}
                         style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                       >
                         {getTopicDescById(ele.topicId)}
@@ -249,7 +261,7 @@ const HomeWorkTab = () => {
                         style={[
                           fonts.size_10,
                           fonts.fontWeight_small,
-                          { color: colors.backButtonColor, marginBottom: '5%' },
+                          { color: colors.backButtonColor, marginBottom: '8%' },
                         ]}
                       >
                         Student Completed The Homework
@@ -279,44 +291,50 @@ const HomeWorkTab = () => {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {ele.remindOn === null ? null : (
-                    <View
-                      style={[
-                        layout.paddingForCard,
-                        { paddingTop: '0%', marginTop: isTablet ? '-1%' : null },
-                      ]}
+                  <View
+                    style={[
+                      layout.paddingForCard,
+                      { paddingTop: '0%', marginTop: isTablet ? '-1%' : null },
+                    ]}
+                  >
+                    <TouchableOpacity
+                      onPress={() => {
+                        setOpenRemindStudentBottomSheet(true);
+                        setTopicId(ele.topicId);
+                      }}
                     >
-                      <TouchableOpacity onPress={() => setOpenRemindStudentBottomSheet(true)}>
-                        <Text
-                          style={[
-                            fonts.size_12,
-                            fonts.fontWeignt_600,
-                            {
-                              color: colors.termsLinkColor,
-                              textDecorationLine: 'underline',
-                            },
-                          ]}
-                        >
-                          Remind Students
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeignt_600,
+                          {
+                            color: colors.termsLinkColor,
+                            textDecorationLine: 'underline',
+                            marginTop: -18,
+                          },
+                        ]}
+                      >
+                        Remind Students
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
                   {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                     <View>
                       <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
-                        <Text
-                          style={[
-                            fonts.size_12,
-                            fonts.fontWeight_small,
-                            {
-                              color: '#7A7A82',
-                            },
-                          ]}
-                        >
-                          Reminded on Aug 28, 2023
-                        </Text>
+                        {ele.remindOn !== null ? (
+                          <Text
+                            style={[
+                              fonts.size_12,
+                              fonts.fontWeight_small,
+                              {
+                                color: '#7A7A82',
+                              },
+                            ]}
+                          >
+                            Reminded on {moment(ele.remindOn).format('MMM DD, YYYY')}
+                          </Text>
+                        ) : null}
                         <View style={[layout.itemsCenter]}>
                           <Divider
                             style={{
@@ -340,11 +358,12 @@ const HomeWorkTab = () => {
                         </View>
                         {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map((item, index) => (
                           <View
-                            key={index}
+                            key={ele.studentId}
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,
                               index === leaderboardData.length - 1 && styles.lastRow,
+                              { borderRadius: 14 },
                             ]}
                           >
                             <Text
@@ -356,24 +375,35 @@ const HomeWorkTab = () => {
                             >
                               {item.studentName}
                             </Text>
-                            <Text
+                            <View
                               style={[
-                                fonts.size_14,
-                                fonts.fontWeight_small,
-                                { color: colors.white, opacity: 0.7 },
+                                layout.row,
+                                layout.itemsCenter,
+                                {
+                                  width: '55%',
+                                  justifyContent: 'space-between',
+                                },
                               ]}
                             >
-                              {item.timeSpent}
-                            </Text>
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.fontWeight_small,
-                                { color: colors.white, opacity: 0.7 },
-                              ]}
-                            >
-                              {item.completionPercentage} %
-                            </Text>
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.white, opacity: 0.7 },
+                                ]}
+                              >
+                                {item.timeSpent}
+                              </Text>
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.white, opacity: 0.7 },
+                                ]}
+                              >
+                                {item.completionPercentage} %
+                              </Text>
+                            </View>
                           </View>
                         ))}
                       </View>
@@ -446,6 +476,8 @@ const HomeWorkTab = () => {
       <RemindStudentBottomSheet
         setOpenRemindStudentBottomSheet={setOpenRemindStudentBottomSheet}
         openRemindStudentBottomSheet={openRemindStudentBottomSheet}
+        payloadForReminder={payloadForReminder}
+        getStudentHomeworks={getStudentHomeworks}
       />
     </SafeScreen>
   );
