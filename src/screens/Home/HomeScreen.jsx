@@ -22,59 +22,59 @@ import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 // import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 
-// const responseOfConsolidatedReport = {
-//   score: 0,
-//   homeworkProgress: 0,
-//   diagnosisProgress: 0,
-//   chapters: [
-//     {
-//       chapterId: 'Relations and Functions',
-//       score: 0,
-//       homeworkProgress: 0,
-//       diagnosisProgress: 0,
-//       timeSpent: 0,
-//       topicCount: 0,
-//       activatedtopicCount: 0,
-//       topics: [
-//         {
-//           topicId: 'Operation on real function',
-//           score: 0,
-//           progress: 0,
-//           timeSpent: 0,
-//         },
-//         {
-//           topicId: 'Types of function',
-//           score: 0,
-//           progress: 0,
-//           timeSpent: 0,
-//         },
-//       ],
-//     },
-//     {
-//       chapterId: 'Inverse Trigonometric Function',
-//       score: 0,
-//       homeworkProgress: 0,
-//       diagnosisProgress: 0,
-//       timeSpent: 0,
-//       topicCount: 0,
-//       activatedtopicCount: 0,
-//       topics: [
-//         {
-//           topicId: 'Sum and diffeences of angles',
-//           score: 0,
-//           progress: 0,
-//           timeSpent: 0,
-//         },
-//         {
-//           topicId: 'comprehension',
-//           score: 0,
-//           progress: 0,
-//           timeSpent: 0,
-//         },
-//       ],
-//     },
-//   ],
-// };
+const dataOfConsolidatedReport = {
+  score: 0,
+  homeworkProgress: 10,
+  diagnosisProgress: 40,
+  chapters: [
+    {
+      chapterId: 'Relations and Functions',
+      score: 70,
+      homeworkProgress: 70,
+      diagnosisProgress: 0,
+      timeSpent: 0,
+      topicCount: 0,
+      activatedtopicCount: 0,
+      topics: [
+        {
+          topicId: 'Operation on real function',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+        {
+          topicId: 'Types of function',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+      ],
+    },
+    {
+      chapterId: 'Inverse Trigonometric Function',
+      score: 40,
+      homeworkProgress: 40,
+      diagnosisProgress: 0,
+      timeSpent: 0,
+      topicCount: 0,
+      activatedtopicCount: 0,
+      topics: [
+        {
+          topicId: 'Sum and diffeences of angles',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+        {
+          topicId: 'comprehension',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+      ],
+    },
+  ],
+};
 
 const storage = new MMKV();
 const data = ['03', '06', '09', '12'];
@@ -88,8 +88,6 @@ const yAxisTitle = 'No. of students';
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const homeworkProgress = 60 / 100;
-  const diagnosticProgress = 50 / 100;
   const userName = storage.getString('username');
   const dispatch = useDispatch();
   // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
@@ -183,7 +181,12 @@ const HomeScreen = () => {
           </Text>
           <TouchableOpacity
             style={[layout.display, layout.rowHCenter]}
-            onPress={() => navigation.navigate('SubjectDetailsScreen')}
+            onPress={() =>
+              navigation.navigate('SubjectDetailsScreen', {
+                chapters: dataOfConsolidatedReport.chapters,
+                subjectName: subjectName,
+              })
+            }
           >
             <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
               SEE DETAILS
@@ -224,7 +227,7 @@ const HomeScreen = () => {
             {subjectName}
           </Text>
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
-            <Concentrix scorePercentage={20} />
+            <Concentrix scorePercentage={dataOfConsolidatedReport.score} />
           </View>
           <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
             <Divider
@@ -250,11 +253,14 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${homeworkProgress * 100}% Complete`}
+              {`${dataOfConsolidatedReport.homeworkProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
-            <Progressbar progress={homeworkProgress} color={'#3DD598'} />
+            <Progressbar
+              progress={dataOfConsolidatedReport.homeworkProgress / 100}
+              color={'#3DD598'}
+            />
           </View>
           <View
             style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
@@ -263,11 +269,14 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${diagnosticProgress * 100}% Complete`}
+              {`${dataOfConsolidatedReport.diagnosisProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
-            <Progressbar progress={diagnosticProgress} color={'#BBA041'} />
+            <Progressbar
+              progress={dataOfConsolidatedReport.diagnosisProgress / 100}
+              color={'#BBA041'}
+            />
           </View>
         </View>
         {/* <View
