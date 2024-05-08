@@ -43,8 +43,6 @@ const RemindStudentBottomSheet = (props) => {
     }, 500);
   };
 
-  console.log('payloadForReminder', payloadForReminder);
-
   return (
     <View style={styles.container}>
       <Modal visible={openRemindStudentBottomSheet} animationType="slide" transparent={true}>

@@ -11,6 +11,7 @@ import {
   Platform,
   ActivityIndicator,
   Image,
+  Linking,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -98,6 +99,18 @@ const LoginScreen = () => {
           notifyMessage('Something Went Wrong', error);
         }
       });
+  };
+
+  const openTermsAndCondition = () => {
+    Linking.openURL('https://www.examfactor.com/terms-and-conditions/')
+      .then(() => {})
+      .catch(() => {});
+  };
+
+  const openPrivacyPolicy = () => {
+    Linking.openURL('https://www.examfactor.com/privacy-policy/')
+      .then(() => {})
+      .catch(() => {});
   };
 
   return (
@@ -312,10 +325,7 @@ const LoginScreen = () => {
                 >
                   By logging in, you agree to
                 </Text>
-                <TouchableOpacity
-                  style={{ marginRight: '2%' }}
-                  // onPress={openTermsAndCondition}
-                >
+                <TouchableOpacity style={{ marginRight: '2%' }} onPress={openTermsAndCondition}>
                   <Text
                     style={[
                       fonts.size_12,
@@ -335,9 +345,7 @@ const LoginScreen = () => {
                 >
                   and
                 </Text>
-                <TouchableOpacity
-                // onPress={openPrivacyPolicy}
-                >
+                <TouchableOpacity onPress={openPrivacyPolicy}>
                   <Text
                     style={[
                       fonts.size_12,

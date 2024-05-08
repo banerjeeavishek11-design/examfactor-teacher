@@ -6,7 +6,7 @@ import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
-// import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
@@ -19,7 +19,11 @@ import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { updateUserRole } from '../../store/redux-slice/LoginSlice';
-// import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
+import {
+  // getSubjectWiseReport,
+  get7daysScoreForChart,
+  get7daysStudyTimeForChart,
+} from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 
 const dataOfConsolidatedReport = {
@@ -94,14 +98,14 @@ const HomeScreen = () => {
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
-  // const sectionName = useSelector((state) => state.selectedSubject.sectionName);
-  // const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
-  // const [sectionId, setSectionId] = useState(null);
-  // const [gradeId, setGradeId] = useState(null);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [sectionId, setSectionId] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
   // const userRole = useSelector((state) => state.login.userRole);
 
-  // const resFromMMKV = storage.getString('teacherDetails');
-  // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   const [sortByValue, setSortbyValue] = useState(null);
   const [sortbyModalVisible, setSortbyModalVisible] = useState(false);
@@ -115,17 +119,23 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  // useEffect(() => {
-  //   if (teacherDetails && teacherDetails.length > 0) {
-  //     for (let item of teacherDetails) {
-  //       if (item.sectionName === sectionName) {
-  //         setGradeId(item.gradeId);
-  //         setSectionId(item.id);
-  //         return;
-  //       }
-  //     }
-  //   }
-  // }, [sectionName, teacherDetails]);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  let params = {
+    gradeId: gradeId,
+    sectionId: sectionId,
+    subjectId: selectedSubjectId,
+  };
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -138,6 +148,13 @@ const HomeScreen = () => {
   useEffect(() => {
     getTeacheDetails();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      get7daysScore();
+      get7daysStudyTime();
+    }, [selectedSubjectId, sectionId, gradeId])
+  );
 
   // const getSubjectReports = () => {
   //   let params = {
@@ -165,6 +182,27 @@ const HomeScreen = () => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Something Went Wrong fetching teacher details', error);
         }
+      });
+  };
+
+  const get7daysScore = () => {
+    get7daysScoreForChart(params)
+      .then((res) => {
+        console.log('7 days score', res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        // notifyMessage('Failed to get 7 days score');
+      });
+  };
+  const get7daysStudyTime = () => {
+    get7daysStudyTimeForChart(params)
+      .then((res) => {
+        console.log('7 days study time', res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        // notifyMessage('Failed to get 7 days score');
       });
   };
 
@@ -300,7 +338,6 @@ const HomeScreen = () => {
           xAxisTitle={xAxisTitle}
           yAxisTitle={yAxisTitle}
         />
-        {/* <BarChartsCarousel /> */}
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >

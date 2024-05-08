@@ -213,6 +213,7 @@ const ActiveHomeworkConfirmBottomSheet = ({
         topics={topics}
         requiredBody={requiredBody}
         getHomeworks={getHomeworks}
+        selectedTopicId={topicId}
       />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}

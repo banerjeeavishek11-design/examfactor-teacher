@@ -28,6 +28,7 @@ const ActivateMoreTopicBottomSheet = ({
   topics,
   requiredBody,
   getHomeworks,
+  selectedTopicId,
 }) => {
   const { layout, fonts, colors } = useTheme();
 
@@ -43,6 +44,10 @@ const ActivateMoreTopicBottomSheet = ({
       setSelectedTopics([...selectedTopics, topicId]);
     }
   };
+
+  useEffect(() => {
+    setSelectedTopics([selectedTopicId]);
+  }, [selectedTopicId]);
 
   useEffect(() => {
     setSearchTopicName(topics);

@@ -196,6 +196,13 @@ const ClassWorkTab = () => {
 
         {classwork.length > 0 ? (
           <>
+            {data.length === 0 && (
+              <View style={[layout.justifyCenter, layout.itemsCenter, { height: 450 }]}>
+                <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                  No Data
+                </Text>
+              </View>
+            )}
             {data?.map((ele) => {
               return (
                 <TouchableOpacity
