@@ -10,38 +10,38 @@ import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
 
-const topic = [
-  {
-    id: 1,
-    topicName: 'Introduction to Motion',
-    subTitle: 'Students completed the homework',
-    progress: 60,
-  },
-  {
-    id: 2,
-    topicName: 'Rate of Motion',
-    subTitle: 'Based on concepts covered till date',
-    progress: 65,
-  },
-  {
-    id: 3,
-    topicName: 'Rate of Change of Velocity',
-    subTitle: 'Rate of Change of Velocity',
-    progress: 50,
-  },
-  {
-    id: 4,
-    topicName: 'Graphical Representation...',
-    subTitle: 'Based on concepts covered till date',
-    progress: 70,
-  },
-  {
-    id: 5,
-    topicName: 'Equations of Motion by Gr...',
-    subTitle: 'Students completed the homework',
-    progress: 68,
-  },
-];
+// const topic = [
+//   {
+//     id: 1,
+//     topicName: 'Introduction to Motion',
+//     subTitle: 'Students completed the homework',
+//     progress: 60,
+//   },
+//   {
+//     id: 2,
+//     topicName: 'Rate of Motion',
+//     subTitle: 'Based on concepts covered till date',
+//     progress: 65,
+//   },
+//   {
+//     id: 3,
+//     topicName: 'Rate of Change of Velocity',
+//     subTitle: 'Rate of Change of Velocity',
+//     progress: 50,
+//   },
+//   {
+//     id: 4,
+//     topicName: 'Graphical Representation...',
+//     subTitle: 'Based on concepts covered till date',
+//     progress: 70,
+//   },
+//   {
+//     id: 5,
+//     topicName: 'Equations of Motion by Gr...',
+//     subTitle: 'Students completed the homework',
+//     progress: 68,
+//   },
+// ];
 
 const leaderboardData = [
   { name: 'Rahul K.', progress: 88, achievable: 87 },
@@ -55,20 +55,19 @@ const TopicWiseDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { topicName } = route.params || {};
+  const { topics, chapterName, subjectName } = route.params || {};
   const [expandedCards, setExpandedCards] = useState({});
 
   const toggleContent = (id) => {
     setExpandedCards((prevState) => ({
-      ...prevState,
       [id]: !prevState[id],
     }));
   };
 
   useEffect(() => {
     const initialExpandedState = {};
-    topic.forEach((ele) => {
-      initialExpandedState[ele.id] = false;
+    topics.forEach((ele) => {
+      initialExpandedState[ele.topicId] = false;
     });
     setExpandedCards(initialExpandedState);
   }, []);
@@ -87,7 +86,11 @@ const TopicWiseDetailsScreen = () => {
       >
         <TouchableOpacity
           style={[layout.display, layout.rowHCenter]}
-          onPress={() => navigation.navigate('SubjectDetailsScreen')}
+          onPress={() =>
+            navigation.navigate('SubjectDetailsScreen', {
+              subjectName: subjectName,
+            })
+          }
         >
           <ImageVariant
             testID="brand-img"
@@ -101,23 +104,23 @@ const TopicWiseDetailsScreen = () => {
             resizeMode="contain"
           />
           <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
-            {topicName}
+            {chapterName}
           </Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
-        {topic.map((ele) => {
+        {topics.map((ele) => {
           const progressPercentage = ele.progress / 100;
           return (
             <TouchableOpacity
-              onPress={() => toggleContent(ele.id)}
-              key={ele.topicName}
+              onPress={() => toggleContent(ele.topicId)}
+              key={ele.topicId}
               style={[
                 layout.fullWidth,
                 // layout.paddingForCard,
                 {
                   backgroundColor: colors.cardBackgroundColor,
-                  height: expandedCards[ele.id] ? 'auto' : 100,
+                  height: expandedCards[ele.topicId] ? 'auto' : 100,
                   borderRadius: 14,
                   marginTop: '3%',
                 },
@@ -137,7 +140,7 @@ const TopicWiseDetailsScreen = () => {
                     numberOfLines={2}
                     style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                   >
-                    {ele.topicName}
+                    {ele.topicId}
                   </Text>
                   <Text
                     style={[
@@ -146,7 +149,7 @@ const TopicWiseDetailsScreen = () => {
                       { color: colors.backButtonColor },
                     ]}
                   >
-                    {ele.subTitle}
+                    Students completed the homework
                   </Text>
                 </View>
                 <View style={{ width: '25%', top: -5 }}>
@@ -154,7 +157,7 @@ const TopicWiseDetailsScreen = () => {
                 </View>
                 <View style={{ width: '5%' }}>
                   <TouchableOpacity>
-                    {expandedCards[ele.id] ? (
+                    {expandedCards[ele.topicId] ? (
                       <Image
                         style={{ width: 14, height: 10 }}
                         source={UpArrow}
@@ -171,7 +174,7 @@ const TopicWiseDetailsScreen = () => {
                 </View>
               </View>
 
-              {expandedCards[ele.id] ? (
+              {expandedCards[ele.topicId] ? (
                 <View>
                   <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
                     <Text

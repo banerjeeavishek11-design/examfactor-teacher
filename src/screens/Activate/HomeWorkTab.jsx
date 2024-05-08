@@ -122,6 +122,7 @@ const HomeWorkTab = () => {
     setIsLoading(true);
     getHomeworkByTeacher(params)
       .then((res) => {
+        storage.set('activateHomework', JSON.stringify(res.data));
         setHomeworkData(res.data);
         setIsLoading(false);
       })

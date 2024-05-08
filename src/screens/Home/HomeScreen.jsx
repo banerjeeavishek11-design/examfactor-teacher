@@ -6,7 +6,7 @@ import { Concentrix, SafeScreen, BarChart } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
-// import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
@@ -19,8 +19,66 @@ import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { updateUserRole } from '../../store/redux-slice/LoginSlice';
-// import { getSubjectWiseReport } from '../../services/subjectWiseReportService';
+import {
+  // getSubjectWiseReport,
+  get7daysScoreForChart,
+  get7daysStudyTimeForChart,
+} from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
+
+const dataOfConsolidatedReport = {
+  score: 0,
+  homeworkProgress: 10,
+  diagnosisProgress: 40,
+  chapters: [
+    {
+      chapterId: 'Relations and Functions',
+      score: 70,
+      homeworkProgress: 70,
+      diagnosisProgress: 0,
+      timeSpent: 0,
+      topicCount: 0,
+      activatedtopicCount: 0,
+      topics: [
+        {
+          topicId: 'Operation on real function',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+        {
+          topicId: 'Types of function',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+      ],
+    },
+    {
+      chapterId: 'Inverse Trigonometric Function',
+      score: 40,
+      homeworkProgress: 40,
+      diagnosisProgress: 0,
+      timeSpent: 0,
+      topicCount: 0,
+      activatedtopicCount: 0,
+      topics: [
+        {
+          topicId: 'Sum and diffeences of angles',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+        {
+          topicId: 'comprehension',
+          score: 0,
+          progress: 0,
+          timeSpent: 0,
+        },
+      ],
+    },
+  ],
+};
 
 const storage = new MMKV();
 const data = ['03', '06', '09', '12'];
@@ -34,22 +92,20 @@ const yAxisTitle = 'No. of students';
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const homeworkProgress = 60 / 100;
-  const diagnosticProgress = 50 / 100;
   const userName = storage.getString('username');
   const dispatch = useDispatch();
   // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const [showContent, setShowContent] = useState(false);
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
-  // const sectionName = useSelector((state) => state.selectedSubject.sectionName);
-  // const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
-  // const [sectionId, setSectionId] = useState(null);
-  // const [gradeId, setGradeId] = useState(null);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [sectionId, setSectionId] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
   // const userRole = useSelector((state) => state.login.userRole);
 
-  // const resFromMMKV = storage.getString('teacherDetails');
-  // const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   const [sortByValue, setSortbyValue] = useState(null);
   const [sortbyModalVisible, setSortbyModalVisible] = useState(false);
@@ -63,17 +119,23 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  // useEffect(() => {
-  //   if (teacherDetails && teacherDetails.length > 0) {
-  //     for (let item of teacherDetails) {
-  //       if (item.sectionName === sectionName) {
-  //         setGradeId(item.gradeId);
-  //         setSectionId(item.id);
-  //         return;
-  //       }
-  //     }
-  //   }
-  // }, [sectionName, teacherDetails]);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  let params = {
+    gradeId: gradeId,
+    sectionId: sectionId,
+    subjectId: selectedSubjectId,
+  };
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -87,14 +149,20 @@ const HomeScreen = () => {
     getTeacheDetails();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      get7daysScore();
+      get7daysStudyTime();
+    }, [selectedSubjectId, sectionId, gradeId])
+  );
+
   // const getSubjectReports = () => {
-  //   const access_token = storage.getString('access_token');
   //   let params = {
   //     gradeId: gradeId,
   //     sectionId: sectionId,
   //     subjectId: selectedSubjectId,
   //   };
-  //   getSubjectWiseReport(access_token, params)
+  //   getSubjectWiseReport(params)
   //     .then((res) => {
   //       console.log('responst subwise report', res.data);
   //     })
@@ -117,6 +185,27 @@ const HomeScreen = () => {
       });
   };
 
+  const get7daysScore = () => {
+    get7daysScoreForChart(params)
+      .then((res) => {
+        console.log('7 days score', res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        // notifyMessage('Failed to get 7 days score');
+      });
+  };
+  const get7daysStudyTime = () => {
+    get7daysStudyTimeForChart(params)
+      .then((res) => {
+        console.log('7 days study time', res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        // notifyMessage('Failed to get 7 days score');
+      });
+  };
+
   const toggleContent = () => {
     setShowContent(!showContent);
   };
@@ -130,7 +219,12 @@ const HomeScreen = () => {
           </Text>
           <TouchableOpacity
             style={[layout.display, layout.rowHCenter]}
-            onPress={() => navigation.navigate('SubjectDetailsScreen')}
+            onPress={() =>
+              navigation.navigate('SubjectDetailsScreen', {
+                chapters: dataOfConsolidatedReport.chapters,
+                subjectName: subjectName,
+              })
+            }
           >
             <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
               SEE DETAILS
@@ -171,7 +265,7 @@ const HomeScreen = () => {
             {subjectName}
           </Text>
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
-            <Concentrix scorePercentage={20} />
+            <Concentrix scorePercentage={dataOfConsolidatedReport.score} />
           </View>
           <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
             <Divider
@@ -197,11 +291,14 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${homeworkProgress * 100}% Complete`}
+              {`${dataOfConsolidatedReport.homeworkProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
-            <Progressbar progress={homeworkProgress} color={'#3DD598'} />
+            <Progressbar
+              progress={dataOfConsolidatedReport.homeworkProgress / 100}
+              color={'#3DD598'}
+            />
           </View>
           <View
             style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
@@ -210,11 +307,14 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${diagnosticProgress * 100}% Complete`}
+              {`${dataOfConsolidatedReport.diagnosisProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
-            <Progressbar progress={diagnosticProgress} color={'#BBA041'} />
+            <Progressbar
+              progress={dataOfConsolidatedReport.diagnosisProgress / 100}
+              color={'#BBA041'}
+            />
           </View>
         </View>
         {/* <View
@@ -238,7 +338,6 @@ const HomeScreen = () => {
           xAxisTitle={xAxisTitle}
           yAxisTitle={yAxisTitle}
         />
-        {/* <BarChartsCarousel /> */}
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >

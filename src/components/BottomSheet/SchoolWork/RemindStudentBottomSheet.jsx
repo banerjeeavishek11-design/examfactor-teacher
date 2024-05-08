@@ -5,9 +5,15 @@ import Cross from '@/theme/assets/images/cross.png';
 import { ImageVariant } from '../../atoms';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import RemindStudentSuccessfullyBottomSheet from './RemindStudentSuccessfullyBottomSheet';
+import { setReminderForHomework } from '../../../services/teacherService';
 
 const RemindStudentBottomSheet = (props) => {
-  const { setOpenRemindStudentBottomSheet, openRemindStudentBottomSheet } = props;
+  const {
+    setOpenRemindStudentBottomSheet,
+    openRemindStudentBottomSheet,
+    payloadForReminder,
+    getStudentHomeworks,
+  } = props;
   const { colors, layout, fonts } = useTheme();
   const [openRemindStudentSuccessfully, setOpenRemindStudentSuccessfully] = useState(false);
 
@@ -16,6 +22,21 @@ const RemindStudentBottomSheet = (props) => {
   };
 
   const handleYes = () => {
+    setReminderForHomework(payloadForReminder)
+      .then((res) => {
+        console.log('res remind', res.data);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            getStudentHomeworks();
+            setOpenRemindStudentSuccessfully(true);
+            resolve(true);
+            // setIsLoading(false);
+          }, 1000);
+        });
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
     setOpenRemindStudentSuccessfully(true);
     setTimeout(() => {
       setOpenRemindStudentBottomSheet(false);

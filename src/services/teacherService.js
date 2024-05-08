@@ -9,3 +9,7 @@ export const getTeacherDetailsById = async (userName) => {
 export const getUserDetailsByUserId = async (userName) => {
   return await api.get(`${teacherService}/v1/teachers/${userName}`);
 };
+
+export const setReminderForHomework = async (requestBody) => {
+  return await api.post(`${teacherService}/v1/homeworks/reminders`, requestBody);
+};

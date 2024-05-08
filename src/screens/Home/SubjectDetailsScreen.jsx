@@ -1,6 +1,6 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
 import { ImageVariant } from '@/components/atoms';
@@ -12,52 +12,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
 
-const chapters = [
-  {
-    id: 1,
-    chapterName: 'C1: Rate of Change of Velocity',
-    achievableScore: 70,
-    progressPercentage: 75,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 2,
-    chapterName: 'C2: Motion',
-    achievableScore: 70,
-    progressPercentage: 60,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 3,
-    chapterName: 'C3: Force and Laws of Motion',
-    achievableScore: 70,
-    progressPercentage: 50,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 4,
-    chapterName: 'C4: Gravitation',
-    achievableScore: 70,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-];
-
 const SubjectDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+  const { chapters, subjectName } = route.params || {};
   const [searchChapterName, setSearchChapterName] = useState([]);
 
-  const goToTopicWiseDetailsScreen = (chapterName, progress) => {
-    navigation.navigate('TopicWiseDetailsScreen', {
-      topicName: chapterName,
-      progress: progress,
-    });
-  };
+  // const goToTopicWiseDetailsScreen = (chapterName, progress) => {
+  //   navigation.navigate('TopicWiseDetailsScreen', {
+  //     topicName: chapterName,
+  //     progress: progress,
+  //   });
+  // };
+  // console.log('chaps', chapters);
 
   useEffect(() => {
     setSearchChapterName(chapters);
@@ -93,7 +61,7 @@ const SubjectDetailsScreen = () => {
             resizeMode="contain"
           />
           <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
-            Physics
+            {subjectName}
           </Text>
         </TouchableOpacity>
         <View style={{ width: '100%', marginTop: '4%' }}>
@@ -155,10 +123,9 @@ const SubjectDetailsScreen = () => {
           </View>
         </LinearGradient>
         {searchChapterName?.map((ele) => {
-          const progress = ele.progressPercentage / 100;
           return (
             <View
-              key={ele.chapterName}
+              key={ele.chapterId}
               style={[
                 layout.fullWidth,
                 layout.paddingForCard,
@@ -173,7 +140,7 @@ const SubjectDetailsScreen = () => {
               <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                 <View>
                   <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                    {ele.chapterName}
+                    {ele.chapterId}
                   </Text>
                   <Text
                     style={[
@@ -185,24 +152,28 @@ const SubjectDetailsScreen = () => {
                       },
                     ]}
                   >
-                    Achievable Score {`${ele.achievableScore}/100`}
+                    Achievable Score {`${ele.score}/100`}
                   </Text>
                   <Text
                     style={[
                       fonts.size_12,
                       fonts.fontWeight_small,
                       {
-                        color: ele.progressPercentage >= 60 ? '#3DD598' : '#FFAB48',
+                        color: ele.homeworkProgress >= 60 ? '#3DD598' : '#FFAB48',
                         marginTop: '5%',
                       },
                     ]}
                   >
-                    Progress {`${ele.progressPercentage}%`}
+                    Progress {`${ele.homeworkProgress}%`}
                   </Text>
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    goToTopicWiseDetailsScreen(ele.chapterName, ele.progressPercentage)
+                    navigation.navigate('TopicWiseDetailsScreen', {
+                      topics: ele.topics,
+                      chapterName: ele.chapterId,
+                      subjectName: subjectName,
+                    })
                   }
                 >
                   <Image
@@ -218,8 +189,8 @@ const SubjectDetailsScreen = () => {
               </View>
               <View style={{ marginTop: '4%' }}>
                 <Progressbar
-                  progress={progress}
-                  color={ele.progressPercentage >= 60 ? '#3DD598' : '#FFAB48'}
+                  progress={ele.homeworkProgress / 100}
+                  color={ele.homeworkProgress >= 60 ? '#3DD598' : '#FFAB48'}
                 />
               </View>
               <View>
@@ -244,7 +215,7 @@ const SubjectDetailsScreen = () => {
                       },
                     ]}
                   >
-                    {`${ele.activatedTopic}/12`}
+                    {`${ele.activatedtopicCount}/${ele.topicCount}`}
                   </Text>
                 </View>
                 <Text
@@ -257,7 +228,7 @@ const SubjectDetailsScreen = () => {
                     },
                   ]}
                 >
-                  {ele.subTitle}
+                  Progress is calculated based on the activated topics.
                 </Text>
               </View>
             </View>
