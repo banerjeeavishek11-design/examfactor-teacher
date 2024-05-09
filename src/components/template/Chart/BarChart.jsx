@@ -5,7 +5,6 @@ import Svg, { Rect, Defs, Stop, Line, LinearGradient } from 'react-native-svg';
 import { useTheme } from '@/theme';
 
 const GradientBarChart = ({
-  data,
   colors,
   width,
   height,
@@ -13,23 +12,26 @@ const GradientBarChart = ({
   xAxisTitle,
   yAxisTitle,
   labels,
+  actualData,
 }) => {
   const { fonts } = useTheme();
-  const maxValue = Math.max(...data) * 1.1;
+  const maxArr = actualData[0].map((ele) => ele);
+  const maxValue = Math.max(...maxArr.flat()) * 1.05;
   const xAxisHeight = 20; // Height of the x-axis
   const yAxisWidth = 30; // Width of the y-axis
-  const barWidth = (width - yAxisWidth) / data.length;
+  const barWidth = (width - yAxisWidth) / actualData[0].length;
   const tickSize = 5;
   const singleBarWidth = 16;
 
   // Calculate y-axis labels
   const yAxisLabels = Array.from({ length: 4 }, (_, i) => (maxValue / 5) * (4 - i));
 
+  // console.log('actualData', actualData[0].length);
   return (
     <View
       style={{
         width: '100%',
-        height: height + 80,
+        height: height + 85,
         backgroundColor: '#22222E',
         justifyContent: 'center',
         alignItems: 'center',
@@ -42,7 +44,7 @@ const GradientBarChart = ({
           position: 'absolute',
           color: '#96A7AF',
           left: 270,
-          bottom: 290,
+          bottom: 308,
         }}
       >
         Last 7 Days
@@ -82,7 +84,7 @@ const GradientBarChart = ({
         </Text>
 
         {/* Draw y-axis labels */}
-        {yAxisLabels.map((label, index) => (
+        {yAxisLabels.reverse().map((label, index) => (
           <Text
             key={index}
             style={{
@@ -92,7 +94,7 @@ const GradientBarChart = ({
               color: '#96A7AF',
             }}
           >
-            {(55 - label).toFixed(0)}
+            {label.toFixed(0) - 1}
           </Text>
         ))}
       </View>
@@ -138,8 +140,49 @@ const GradientBarChart = ({
           );
         })}
 
+        {actualData[0].map((value, index) => {
+          // if(oIndex == 0 ) return null;
+
+          const _x =
+            index * barWidth +
+            yAxisWidth +
+            barWidth / 2 +
+            0 * singleBarWidth +
+            1 * 2 -
+            (singleBarWidth * actualData[0].length) / 2 -
+            (actualData[0].length - 1) +
+            15;
+          const _y = height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 19;
+          // const __height = (value / maxValue) * (height - xAxisHeight);
+
+          return (
+            <View
+              key={index}
+              style={{
+                position: 'absolute',
+                left: _x,
+                top: _y,
+                width: singleBarWidth,
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={[
+                  fonts.size_13,
+                  fonts.bold,
+                  {
+                    color: 'white',
+                  },
+                ]}
+              >
+                {value}
+              </Text>
+            </View>
+          );
+        })}
+
         {/* Draw bars */}
-        {data.map((value, index) => (
+        {actualData[0].map((value, index) => (
           <Rect
             key={index}
             x={index * barWidth + yAxisWidth + barWidth / 2 - singleBarWidth - 1}

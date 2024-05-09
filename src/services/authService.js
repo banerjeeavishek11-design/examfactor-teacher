@@ -10,5 +10,7 @@ export const resetPassword = async (requiredBody) => {
 };
 
 export const refreshToken = async (refreshToken) => {
-  return await api.put(`${authService}/v1/aauth/refresh_token`, refreshToken);
+  return await api.put(`${authService}/v1/auth/refresh_token`, {
+    refreshToken: refreshToken,
+  });
 };

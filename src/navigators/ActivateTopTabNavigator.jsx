@@ -131,11 +131,11 @@ const TabBar = (props) => {
 };
 
 const ActivateTopTabNavigator = () => {
-  console.log('Activate top tab mounted');
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        lazy: false,
       }}
       tabBar={(props) => <TabBar {...props} />}
     >

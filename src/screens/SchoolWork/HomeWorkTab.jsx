@@ -384,7 +384,7 @@ const HomeWorkTab = () => {
                             {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
                               (item, index) => (
                                 <View
-                                  key={ele.studentId}
+                                  key={index}
                                   style={[
                                     styles.row,
                                     index % 2 === 0 ? styles.evenRow : styles.oddRow,
