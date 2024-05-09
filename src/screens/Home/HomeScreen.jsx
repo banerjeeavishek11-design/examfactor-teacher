@@ -86,8 +86,9 @@ const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
 const height = 250;
 const borderRadius = 5;
-const xAxisTitle = 'Achievable Score (%)';
 const yAxisTitle = 'No. of students';
+const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
+const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -329,15 +330,37 @@ const HomeScreen = () => {
             },
           ]}
         ></View> */}
-        <BarChart
-          data={data}
-          colors={barchartColor}
-          width={width}
-          height={height}
-          borderRadius={borderRadius}
-          xAxisTitle={xAxisTitle}
-          yAxisTitle={yAxisTitle}
-        />
+        <ScrollView
+          contentContainerStyle={[{ gap: 14, paddingRight: 160 }]}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={{ width: '62%' }}>
+            <BarChart
+              data={data}
+              colors={barchartColor}
+              width={width}
+              height={height}
+              borderRadius={borderRadius}
+              xAxisTitle={'Achievable Score (%)'}
+              yAxisTitle={yAxisTitle}
+              labels={labelsForScore}
+            />
+          </View>
+          <View style={{ width: '62%' }}>
+            <BarChart
+              data={data}
+              colors={barchartColor}
+              width={width}
+              height={height}
+              borderRadius={borderRadius}
+              xAxisTitle={'Study Time (Min)'}
+              yAxisTitle={yAxisTitle}
+              labels={labelsForStudyTime}
+            />
+          </View>
+        </ScrollView>
+
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >

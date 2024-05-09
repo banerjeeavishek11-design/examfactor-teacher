@@ -1,7 +1,8 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text } from 'react-native';
 // import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Rect, Defs, Stop, Line, LinearGradient } from "react-native-svg";
+import Svg, { Rect, Defs, Stop, Line, LinearGradient } from 'react-native-svg';
+import { useTheme } from '@/theme';
 
 const GradientBarChart = ({
   data,
@@ -11,7 +12,9 @@ const GradientBarChart = ({
   borderRadius,
   xAxisTitle,
   yAxisTitle,
+  labels,
 }) => {
+  const { fonts } = useTheme();
   const maxValue = Math.max(...data) * 1.1;
   const xAxisHeight = 20; // Height of the x-axis
   const yAxisWidth = 30; // Width of the y-axis
@@ -20,29 +23,26 @@ const GradientBarChart = ({
   const singleBarWidth = 16;
 
   // Calculate y-axis labels
-  const yAxisLabels = Array.from(
-    { length: 4 },
-    (_, i) => (maxValue / 5) * (4 - i)
-  );
+  const yAxisLabels = Array.from({ length: 4 }, (_, i) => (maxValue / 5) * (4 - i));
 
   return (
     <View
       style={{
-        width: "100%",
-        height: height + 50,
-        backgroundColor: "#22222E",
-        justifyContent: "center",
-        alignItems: "center",
+        width: '100%',
+        height: height + 80,
+        backgroundColor: '#22222E',
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 12,
         marginTop: 20,
       }}
     >
       <Text
         style={{
-          position: "absolute",
-          color: "#96A7AF",
+          position: 'absolute',
+          color: '#96A7AF',
           left: 270,
-          bottom: 270,
+          bottom: 290,
         }}
       >
         Last 7 Days
@@ -51,18 +51,18 @@ const GradientBarChart = ({
         style={{
           width,
           height,
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
         }}
       >
         {/* Draw x-axis title */}
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: width / 2 - 50,
-            bottom: -10,
-            color: "#96A7AF",
+            bottom: -28,
+            color: '#96A7AF',
           }}
         >
           {xAxisTitle}
@@ -71,11 +71,11 @@ const GradientBarChart = ({
         {/* Draw y-axis title */}
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             right: 265,
             bottom: 110,
-            transform: [{ rotate: "-90deg" }],
-            color: "#96A7AF",
+            transform: [{ rotate: '-90deg' }],
+            color: '#96A7AF',
           }}
         >
           {yAxisTitle}
@@ -86,12 +86,10 @@ const GradientBarChart = ({
           <Text
             key={index}
             style={{
-              position: "absolute",
+              position: 'absolute',
               left: 5,
-              bottom:
-                (index / (yAxisLabels.length - 1)) * (height - xAxisHeight) +
-                10,
-              color: "#96A7AF",
+              bottom: (index / (yAxisLabels.length - 1)) * (height - xAxisHeight) + 10,
+              color: '#96A7AF',
             }}
           >
             {(55 - label).toFixed(0)}
@@ -112,19 +110,40 @@ const GradientBarChart = ({
           </LinearGradient>
         </Defs>
 
+        {labels?.map((label, index) => {
+          const w = barWidth / 1.1;
+          return (
+            <View
+              style={{
+                position: 'absolute',
+                // bottom: 10,
+                top: 235,
+                left: index * barWidth + yAxisWidth + barWidth / 2 - w / 2 - 8,
+                width: w,
+                alignItems: 'center',
+              }}
+              key={index}
+            >
+              <Text
+                style={[
+                  fonts.size_12,
+                  {
+                    color: '#96A7AF',
+                  },
+                ]}
+              >
+                {label}
+              </Text>
+            </View>
+          );
+        })}
+
         {/* Draw bars */}
         {data.map((value, index) => (
           <Rect
             key={index}
-            x={
-              index * barWidth + yAxisWidth + barWidth / 2 - singleBarWidth - 1
-            }
-            y={
-              height -
-              (value / maxValue) * (height - xAxisHeight) -
-              xAxisHeight -
-              1
-            }
+            x={index * barWidth + yAxisWidth + barWidth / 2 - singleBarWidth - 1}
+            y={height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 1}
             width={singleBarWidth}
             height={(value / maxValue) * (height - xAxisHeight)}
             fill="url(#gradient)"
@@ -132,26 +151,6 @@ const GradientBarChart = ({
             ry={borderRadius}
           />
         ))}
-        {/* {data.map((_value, index) => {
-          const value = _value * 0.56;
-          return (
-            <Rect
-              key={index}
-              x={index * barWidth + yAxisWidth + barWidth / 2 + 1}
-              y={
-                height -
-                (value / maxValue) * (height - xAxisHeight) -
-                xAxisHeight -
-                1
-              }
-              width={singleBarWidth}
-              height={(value / maxValue) * (height - xAxisHeight)}
-              fill="url(#gradient)"
-              rx={borderRadius}
-              ry={borderRadius}
-            />
-          );
-        })} */}
 
         {/* Draw x-axis */}
         <Line
@@ -172,19 +171,6 @@ const GradientBarChart = ({
           stroke="#474752"
           strokeWidth={1}
         />
-
-        {/* Draw x-axis tick marks */}
-        {/* {data.map((_, index) => (
-          <Line
-            key={index}
-            x1={index * barWidth + yAxisWidth + barWidth / 2}
-            y1={height - xAxisHeight}
-            x2={index * barWidth + yAxisWidth + barWidth / 2}
-            y2={height - xAxisHeight + tickSize}
-            stroke="black"
-            strokeWidth={1}
-          />
-        ))} */}
 
         {/* Draw y-axis tick marks */}
         {yAxisLabels.map((_, index) => (
