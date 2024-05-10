@@ -23,7 +23,6 @@ let navigationRef;
 export const setNavigationReference = (ref) => {
   navigationRef = ref;
 };
-console.log('just to push code without eslint error', navigationRef);
 
 api.interceptors.request.use(
   (config) => {
@@ -55,7 +54,12 @@ api.interceptors.response.use(
             storage.set('refresh_token', res.data.refresh_token);
           })
           .catch((error) => {
-            notifyMessage(error);
+            if (error?.response.status === 400 || error?.response.code === 'ERR-03') {
+              notifyMessage('Token Expired, Login Required');
+              setTimeout(() => {
+                navigationRef.navigate('LoginScreen');
+              }, 800);
+            }
           });
       } catch (error) {
         console.log(error);

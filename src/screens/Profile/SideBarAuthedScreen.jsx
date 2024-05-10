@@ -22,6 +22,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import appVersion from '../../../package.json';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { notifyMessage } from '../../utils/error-toast-API';
+// import { logOutService } from '../../services/authService';
 
 const SideBarAuthedScreen = (props) => {
   const { colors, layout, fonts } = useTheme();

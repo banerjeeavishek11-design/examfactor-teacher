@@ -80,30 +80,30 @@ const dataOfConsolidatedReport = {
   ],
 };
 
-const dummyDataFor7dayScore = [
-  { score: 36, sudentId: 'suninef' },
-  { score: 92, sudentId: 'rahul' },
-  { score: 43, sudentId: 'raja' },
-  { score: 65, sudentId: 'durga' },
-  { score: 55, sudentId: 'amit' },
-  { score: 86, sudentId: 'sayan' },
-  { score: 80, sudentId: 'deep' },
-  { score: 97, sudentId: 'sayantan' },
-  { score: 34, sudentId: 'amarnath' },
-  { score: 45, sudentId: 'sourav' },
-];
-const dummyDataFor7dayStudyTime = [
-  { studyTime: 36, sudentId: 'suninef' },
-  { studyTime: 92, sudentId: 'rahul' },
-  { studyTime: 43, sudentId: 'raja' },
-  { studyTime: 65, sudentId: 'durga' },
-  { studyTime: 55, sudentId: 'amit' },
-  { studyTime: 86, sudentId: 'sayan' },
-  { studyTime: 80, sudentId: 'deep' },
-  { studyTime: 32, sudentId: 'sayantan' },
-  { studyTime: 34, sudentId: 'amarnath' },
-  { studyTime: 78, sudentId: 'sourav' },
-];
+// const dummyDataFor7dayScore = [
+//   { score: 36, sudentId: 'suninef' },
+//   { score: 92, sudentId: 'rahul' },
+//   { score: 43, sudentId: 'raja' },
+//   { score: 65, sudentId: 'durga' },
+//   { score: 55, sudentId: 'amit' },
+//   { score: 86, sudentId: 'sayan' },
+//   { score: 80, sudentId: 'deep' },
+//   { score: 97, sudentId: 'sayantan' },
+//   { score: 34, sudentId: 'amarnath' },
+//   { score: 45, sudentId: 'sourav' },
+// ];
+// const dummyDataFor7dayStudyTime = [
+//   { studyTime: 36, sudentId: 'suninef' },
+//   { studyTime: 92, sudentId: 'rahul' },
+//   { studyTime: 43, sudentId: 'raja' },
+//   { studyTime: 65, sudentId: 'durga' },
+//   { studyTime: 55, sudentId: 'amit' },
+//   { studyTime: 86, sudentId: 'sayan' },
+//   { studyTime: 80, sudentId: 'deep' },
+//   { studyTime: 32, sudentId: 'sayantan' },
+//   { studyTime: 34, sudentId: 'amarnath' },
+//   { studyTime: 78, sudentId: 'sourav' },
+// ];
 
 const configForScore = [
   { groupName: '<60', from: 0, to: 60 },
@@ -159,14 +159,8 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
-  const [
-    // scoreChartData,
-    setScoreChartData,
-  ] = useState([]);
-  const [
-    // studyTimeChartData,
-    setStudyTimeChartData,
-  ] = useState([]);
+  const [scoreChartData, setScoreChartData] = useState([[]]);
+  const [studyTimeChartData, setStudyTimeChartData] = useState([[]]);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -239,7 +233,7 @@ const HomeScreen = () => {
     get7daysScoreForChart(params)
       .then((res) => {
         setScoreChartData(res.data);
-        // console.log('7 days score', res.data);
+        console.log('7 days score', res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -255,7 +249,7 @@ const HomeScreen = () => {
     get7daysStudyTimeForChart(params)
       .then((res) => {
         setStudyTimeChartData(res.data);
-        // console.log('7 days study time', res.data);
+        console.log('7 days study time', res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -268,33 +262,36 @@ const HomeScreen = () => {
   };
 
   function categorizeData(data, conf) {
-    const result = [[], []];
-
-    conf.forEach(() => result[0].push(0));
+    if (data.length === 0) {
+      return [
+        [0, 0, 0, 0],
+        ['0-20', '21-40', '41-60', '60+'],
+      ];
+    }
+    const result = [[0, 0, 0, 0], []];
 
     data.forEach((entry) => {
-      const value = entry.studyTime || entry.score;
+      const value = entry.studyTime || entry.score; // Get the value to compare
       let foundGroup = false;
 
-      conf.forEach((group, index) => {
-        if (value >= group.from && value <= group.to) {
+      for (let index = 0; index < 4; index++) {
+        const group = conf[index];
+        if (!foundGroup && value >= group.from && value <= group.to) {
           result[0][index]++;
           foundGroup = true;
         }
-      });
-
-      if (!foundGroup) {
-        result[0][conf.length]++;
       }
     });
 
-    conf.forEach((group) => result[1].push(group.groupName));
+    for (let index = 0; index < 4; index++) {
+      result[1].push(conf[index].groupName);
+    }
 
     return result;
   }
 
-  const resultScr = categorizeData(dummyDataFor7dayScore, configForScore);
-  const resultStudtim = categorizeData(dummyDataFor7dayStudyTime, configForStudyTime);
+  const resultScr = categorizeData(scoreChartData, configForScore);
+  const resultStudtim = categorizeData(studyTimeChartData, configForStudyTime);
   // console.log('result score', resultScr);
   // console.log('result stu time', resultStudtim);
   // console.log('scdt', scoreChartData);

@@ -16,7 +16,7 @@ const GradientBarChart = ({
 }) => {
   const { fonts } = useTheme();
   const maxArr = actualData[0].map((ele) => ele);
-  const maxValue = Math.max(...maxArr.flat()) * 1.05;
+  const maxValue = Math.max(...maxArr.flat()) * 1.05 || 1;
   const xAxisHeight = 20; // Height of the x-axis
   const yAxisWidth = 30; // Width of the y-axis
   const barWidth = (width - yAxisWidth) / actualData[0].length;
@@ -24,9 +24,8 @@ const GradientBarChart = ({
   const singleBarWidth = 16;
 
   // Calculate y-axis labels
-  const yAxisLabels = Array.from({ length: 4 }, (_, i) => (maxValue / 5) * (4 - i));
+  const yAxisLabels = Array.from({ length: 5 }, (_, i) => maxValue * (5 - i));
 
-  // console.log('actualData', actualData[0].length);
   return (
     <View
       style={{
@@ -152,8 +151,10 @@ const GradientBarChart = ({
             (singleBarWidth * actualData[0].length) / 2 -
             (actualData[0].length - 1) +
             15;
-          const _y = height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 19;
-          // const __height = (value / maxValue) * (height - xAxisHeight);
+          const _y =
+            maxValue !== 0
+              ? height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 19
+              : height - xAxisHeight - 19;
 
           return (
             <View
@@ -182,18 +183,30 @@ const GradientBarChart = ({
         })}
 
         {/* Draw bars */}
-        {actualData[0].map((value, index) => (
-          <Rect
-            key={index}
-            x={index * barWidth + yAxisWidth + barWidth / 2 - singleBarWidth - 1}
-            y={height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 1}
-            width={singleBarWidth}
-            height={(value / maxValue) * (height - xAxisHeight)}
-            fill="url(#gradient)"
-            rx={borderRadius}
-            ry={borderRadius}
-          />
-        ))}
+        {actualData[0].map((value, index) => {
+          // console.log('Actual DAta', actualData);
+          // console.log('height', height);
+          return (
+            <Rect
+              key={index}
+              x={index * barWidth + yAxisWidth + barWidth / 2 - singleBarWidth - 1}
+              y={
+                maxValue !== 0
+                  ? height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 1
+                  : height - xAxisHeight - 19
+              }
+              width={singleBarWidth}
+              height={
+                maxValue !== 0
+                  ? (value / maxValue) * (height - xAxisHeight)
+                  : height - xAxisHeight - 19
+              }
+              fill="url(#gradient)"
+              rx={borderRadius}
+              ry={borderRadius}
+            />
+          );
+        })}
 
         {/* Draw x-axis */}
         <Line

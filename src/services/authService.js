@@ -14,3 +14,8 @@ export const refreshToken = async (refreshToken) => {
     refreshToken: refreshToken,
   });
 };
+export const logOutService = async (refreshToken) => {
+  return await api.post(`${authService}/v1/auth/logout`, {
+    refreshToken: refreshToken,
+  });
+};
