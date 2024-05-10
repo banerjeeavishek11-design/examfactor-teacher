@@ -120,7 +120,6 @@ const configForStudyTime = [
 ];
 
 const storage = new MMKV();
-// const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
 const height = 250;
@@ -233,11 +232,9 @@ const HomeScreen = () => {
     get7daysScoreForChart(params)
       .then((res) => {
         setScoreChartData(res.data);
-        console.log('7 days score', res.data);
       })
       .catch((error) => {
         console.log(error);
-        notifyMessage('Failed to get 7 days score');
       });
   };
   const get7daysStudyTime = () => {
@@ -249,11 +246,9 @@ const HomeScreen = () => {
     get7daysStudyTimeForChart(params)
       .then((res) => {
         setStudyTimeChartData(res.data);
-        console.log('7 days study time', res.data);
       })
       .catch((error) => {
         console.log(error);
-        notifyMessage('Failed to get 7 days score');
       });
   };
 

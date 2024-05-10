@@ -63,7 +63,7 @@ const SideBarAuthedScreen = (props) => {
   };
 
   const logOut = () => {
-    storage.clearAll('username');
+    storage.clearAll();
     navigation.reset({
       index: 0,
       routes: [{ name: 'LoginScreen' }],

@@ -231,7 +231,7 @@ const ClassWorkTab = () => {
             { color: colors.gray200, marginTop: '4%' },
           ]}
         >
-          Use toggle to activate the homework
+          Use toggle to activate the classwork
         </Text>
         {isLoading ? (
           <View style={styles.loader}>

@@ -1,4 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
@@ -42,7 +50,6 @@ const ClassWorkTab = () => {
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
   const [expandCardId, setExpandedCardId] = useState('');
-  // const [activatedTest, setActivatedTest] = useState(false);
   const [showChapterName, setShowChapterName] = useState();
   const [chapList, setChapList] = useState([]);
   const [chapListIndex, setChapListIndex] = useState(0);
@@ -50,6 +57,7 @@ const ClassWorkTab = () => {
   const [chapterId, setChapterId] = useState();
   const [assessmentWiseReport, setAssessmentWiseReport] = useState([]);
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -129,11 +137,14 @@ const ClassWorkTab = () => {
       chapterId: chapterId,
       assessmentId: id,
     };
+    setIsLoading(true);
     getStudentWiseClassworkReports(params)
       .then((res) => {
         setAssessmentWiseReport(res.data);
+        setIsLoading(false);
       })
       .catch((error) => {
+        setIsLoading(false);
         console.log('error', error);
       });
   };
@@ -204,7 +215,11 @@ const ClassWorkTab = () => {
               </View>
             )}
             {data?.map((ele) => {
-              return (
+              return isLoading ? (
+                <View style={styles.loader}>
+                  <ActivityIndicator size="large" color={colors.termsLinkColor} />
+                </View>
+              ) : (
                 <TouchableOpacity
                   onPress={() => toggleContent(ele.assessmentId)}
                   key={ele.assessmentId}
@@ -325,7 +340,7 @@ const ClassWorkTab = () => {
                         </View>
                         {assessmentWiseReport?.map((item, index) => (
                           <View
-                            key={index}
+                            key={item.studentName}
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,
@@ -483,5 +498,11 @@ const styles = StyleSheet.create({
   },
   oddRow: {
     backgroundColor: '#222230',
+  },
+  loader: {
+    minHeight: '80%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
