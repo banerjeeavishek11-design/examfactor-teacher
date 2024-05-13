@@ -97,6 +97,7 @@ const ScheduleTestActivationBottomSheet = ({
       totalTime: totalTime,
       totalQuestions: totalQuestions,
     };
+
     setActivateConfirmationModalVisible(false);
     setSelectedDate(null);
     setSelectedFromTime(null);

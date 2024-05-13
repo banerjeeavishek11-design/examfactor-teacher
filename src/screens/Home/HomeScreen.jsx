@@ -20,13 +20,13 @@ import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeD
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 import {
-  // getSubjectWiseReport,
+  getSubjectWiseReport,
   get7daysScoreForChart,
   get7daysStudyTimeForChart,
 } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 
-const dataOfConsolidatedReport = {
+/* const dataOfConsolidatedReport = {
   score: 0,
   homeworkProgress: 10,
   diagnosisProgress: 40,
@@ -78,7 +78,7 @@ const dataOfConsolidatedReport = {
       ],
     },
   ],
-};
+}; */
 
 // const dummyDataFor7dayScore = [
 //   { score: 36, sudentId: 'suninef' },
@@ -160,6 +160,11 @@ const HomeScreen = () => {
 
   const [scoreChartData, setScoreChartData] = useState([[]]);
   const [studyTimeChartData, setStudyTimeChartData] = useState([[]]);
+  const [dataOfConsolidatedReport, setDataOfConsolidatedReport] = useState({
+    score: 0,
+    homeworkProgress: 0,
+    diagnosisProgress: 0,
+  });
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -190,24 +195,26 @@ const HomeScreen = () => {
       if (sectionId && gradeId) {
         get7daysScore();
         get7daysStudyTime();
+        getSubjectReports();
       }
     }, [selectedSubjectId, sectionId, gradeId])
   );
 
-  // const getSubjectReports = () => {
-  //   let params = {
-  //     gradeId: gradeId,
-  //     sectionId: sectionId,
-  //     subjectId: selectedSubjectId,
-  //   };
-  //   getSubjectWiseReport(params)
-  //     .then((res) => {
-  //       console.log('responst subwise report', res.data);
-  //     })
-  //     .catch((error) => {
-  //       notifyMessage('failed to fetch subjectwise report', error);
-  //     });
-  // };
+  const getSubjectReports = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    getSubjectWiseReport(params)
+      .then((res) => {
+        console.log('responst subwise report -- .', JSON.stringify(res.data));
+        setDataOfConsolidatedReport(res.data);
+      })
+      .catch((error) => {
+        notifyMessage('failed to fetch subjectwise report', error);
+      });
+  };
 
   const getTeacheDetails = () => {
     getUserDetailsByUserId(userName)
