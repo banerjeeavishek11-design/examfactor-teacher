@@ -344,7 +344,10 @@ const DiagnosticTab = () => {
                             No. of Students
                           </Text>
                           <View style={{ width: '70%', left: 10 }}>
-                            <Progressbar progress={0} color="#3DD598" />
+                            <Progressbar
+                              progress={ele.noOfStudentCompletionCount / 100}
+                              color="#3DD598"
+                            />
                           </View>
                           <Text
                             style={[

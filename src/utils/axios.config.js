@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { MMKV } from 'react-native-mmkv';
 import { notifyMessage } from './error-toast-API';
+import { refreshToken } from '../services/authService';
 
 const storage = new MMKV();
 const api = axios.create({
@@ -10,6 +11,11 @@ const api = axios.create({
 const getAccessToken = () => {
   const accessToken = storage.getString('access_token');
   return accessToken;
+};
+
+const getRefreshToken = () => {
+  const refreshToken = storage.getString('refresh_token');
+  return refreshToken;
 };
 
 let navigationRef;
@@ -39,10 +45,29 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      notifyMessage('Token Expired, Login required');
-      setTimeout(() => {
-        navigationRef.navigate('LoginScreen');
-      }, 1000);
+      try {
+        const rt = getRefreshToken();
+        const at = getAccessToken();
+        refreshToken(rt, at)
+          .then((res) => {
+            storage.set('access_token', res.data.access_token);
+            storage.set('refresh_token', res.data.refresh_token);
+          })
+          .catch((error) => {
+            if (error?.response.status === 400 || error?.response.code === 'ERR-03') {
+              notifyMessage('Token Expired, Login Required');
+              setTimeout(() => {
+                navigationRef.navigate('LoginScreen');
+              }, 800);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+      // notifyMessage('Token Expired, Login required');
+      // setTimeout(() => {
+      //   navigationRef.navigate('LoginScreen');
+      // }, 1000);
     }
     return Promise.reject(error);
   }

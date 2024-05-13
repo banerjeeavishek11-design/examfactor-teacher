@@ -68,6 +68,7 @@ const LoginScreen = () => {
       .then((res) => {
         storage.set('username', data.userName);
         storage.set('access_token', res.data.access_token);
+        storage.set('refresh_token', res.data.refresh_token);
         if (res.data?.temporary) {
           setOpensetNewPasswordBottomSheet(true);
         } else {

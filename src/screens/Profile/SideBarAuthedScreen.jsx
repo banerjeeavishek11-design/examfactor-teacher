@@ -22,6 +22,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import appVersion from '../../../package.json';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { notifyMessage } from '../../utils/error-toast-API';
+// import { logOutService } from '../../services/authService';
 
 const SideBarAuthedScreen = (props) => {
   const { colors, layout, fonts } = useTheme();
@@ -62,7 +63,7 @@ const SideBarAuthedScreen = (props) => {
   };
 
   const logOut = () => {
-    storage.clearAll('username');
+    storage.clearAll();
     navigation.reset({
       index: 0,
       routes: [{ name: 'LoginScreen' }],
@@ -78,7 +79,6 @@ const SideBarAuthedScreen = (props) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Something Went Wrong fetching teacher details', error);
         }
-
       });
   };
 

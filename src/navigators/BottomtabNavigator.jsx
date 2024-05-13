@@ -184,6 +184,7 @@ const BottomTabNavigator = () => {
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
+          // lazy: false,
         }}
         tabBar={(props) => <TabBar {...props} />}
       >

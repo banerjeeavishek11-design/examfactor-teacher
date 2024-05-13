@@ -80,14 +80,53 @@ const dataOfConsolidatedReport = {
   ],
 };
 
+// const dummyDataFor7dayScore = [
+//   { score: 36, sudentId: 'suninef' },
+//   { score: 92, sudentId: 'rahul' },
+//   { score: 43, sudentId: 'raja' },
+//   { score: 65, sudentId: 'durga' },
+//   { score: 55, sudentId: 'amit' },
+//   { score: 86, sudentId: 'sayan' },
+//   { score: 80, sudentId: 'deep' },
+//   { score: 97, sudentId: 'sayantan' },
+//   { score: 34, sudentId: 'amarnath' },
+//   { score: 45, sudentId: 'sourav' },
+// ];
+// const dummyDataFor7dayStudyTime = [
+//   { studyTime: 36, sudentId: 'suninef' },
+//   { studyTime: 92, sudentId: 'rahul' },
+//   { studyTime: 43, sudentId: 'raja' },
+//   { studyTime: 65, sudentId: 'durga' },
+//   { studyTime: 55, sudentId: 'amit' },
+//   { studyTime: 86, sudentId: 'sayan' },
+//   { studyTime: 80, sudentId: 'deep' },
+//   { studyTime: 32, sudentId: 'sayantan' },
+//   { studyTime: 34, sudentId: 'amarnath' },
+//   { studyTime: 78, sudentId: 'sourav' },
+// ];
+
+const configForScore = [
+  { groupName: '<60', from: 0, to: 60 },
+  { groupName: '60-80', from: 61, to: 80 },
+  { groupName: '81-90', from: 81, to: 90 },
+  { groupName: '90+', from: 91, to: 100 },
+];
+
+const configForStudyTime = [
+  { groupName: '0-20', from: 0, to: 20 },
+  { groupName: '21-40', from: 21, to: 40 },
+  { groupName: '41-60', from: 41, to: 60 },
+  { groupName: '60+', from: 61, to: 180 },
+];
+
 const storage = new MMKV();
-const data = ['03', '06', '09', '12'];
 const barchartColor = ['#7AF4FC', '#27D4FA'];
 const width = 300;
 const height = 250;
 const borderRadius = 5;
-const xAxisTitle = 'Achievable Score (%)';
 const yAxisTitle = 'No. of students';
+const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
+const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -119,6 +158,9 @@ const HomeScreen = () => {
     setPracticeDurationModalVisible(false);
   };
 
+  const [scoreChartData, setScoreChartData] = useState([[]]);
+  const [studyTimeChartData, setStudyTimeChartData] = useState([[]]);
+
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
       for (let item of teacherDetails) {
@@ -130,12 +172,6 @@ const HomeScreen = () => {
       }
     }
   }, [sectionName, teacherDetails]);
-
-  let params = {
-    gradeId: gradeId,
-    sectionId: sectionId,
-    subjectId: selectedSubjectId,
-  };
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -151,8 +187,10 @@ const HomeScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      get7daysScore();
-      get7daysStudyTime();
+      if (sectionId && gradeId) {
+        get7daysScore();
+        get7daysStudyTime();
+      }
     }, [selectedSubjectId, sectionId, gradeId])
   );
 
@@ -186,29 +224,73 @@ const HomeScreen = () => {
   };
 
   const get7daysScore = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
     get7daysScoreForChart(params)
       .then((res) => {
-        console.log('7 days score', res.data);
+        setScoreChartData(res.data);
       })
       .catch((error) => {
         console.log(error);
-        // notifyMessage('Failed to get 7 days score');
       });
   };
   const get7daysStudyTime = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
     get7daysStudyTimeForChart(params)
       .then((res) => {
-        console.log('7 days study time', res.data);
+        setStudyTimeChartData(res.data);
       })
       .catch((error) => {
         console.log(error);
-        // notifyMessage('Failed to get 7 days score');
       });
   };
 
   const toggleContent = () => {
     setShowContent(!showContent);
   };
+
+  function categorizeData(data, conf) {
+    if (data.length === 0) {
+      return [
+        [0, 0, 0, 0],
+        ['0-20', '21-40', '41-60', '60+'],
+      ];
+    }
+    const result = [[0, 0, 0, 0], []];
+
+    data.forEach((entry) => {
+      const value = entry.studyTime || entry.score; // Get the value to compare
+      let foundGroup = false;
+
+      for (let index = 0; index < 4; index++) {
+        const group = conf[index];
+        if (!foundGroup && value >= group.from && value <= group.to) {
+          result[0][index]++;
+          foundGroup = true;
+        }
+      }
+    });
+
+    for (let index = 0; index < 4; index++) {
+      result[1].push(conf[index].groupName);
+    }
+
+    return result;
+  }
+
+  const resultScr = categorizeData(scoreChartData, configForScore);
+  const resultStudtim = categorizeData(studyTimeChartData, configForStudyTime);
+  // console.log('result score', resultScr);
+  // console.log('result stu time', resultStudtim);
+  // console.log('scdt', scoreChartData);
+  // console.log('stdychrt', studyTimeChartData);
 
   return (
     <SafeScreen>
@@ -329,15 +411,37 @@ const HomeScreen = () => {
             },
           ]}
         ></View> */}
-        <BarChart
-          data={data}
-          colors={barchartColor}
-          width={width}
-          height={height}
-          borderRadius={borderRadius}
-          xAxisTitle={xAxisTitle}
-          yAxisTitle={yAxisTitle}
-        />
+        <ScrollView
+          contentContainerStyle={[{ gap: 14, paddingRight: 160 }]}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={{ width: '62%' }}>
+            <BarChart
+              actualData={resultScr}
+              colors={barchartColor}
+              width={width}
+              height={height}
+              borderRadius={borderRadius}
+              xAxisTitle={'Achievable Score (%)'}
+              yAxisTitle={yAxisTitle}
+              labels={labelsForScore}
+            />
+          </View>
+          <View style={{ width: '62%' }}>
+            <BarChart
+              actualData={resultStudtim}
+              colors={barchartColor}
+              width={width}
+              height={height}
+              borderRadius={borderRadius}
+              xAxisTitle={'Study Time (Min)'}
+              yAxisTitle={yAxisTitle}
+              labels={labelsForStudyTime}
+            />
+          </View>
+        </ScrollView>
+
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
         >

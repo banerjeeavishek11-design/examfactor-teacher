@@ -23,6 +23,8 @@ import { resetPassword } from '../../../services/authService';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import { jwtDecode } from 'jwt-decode';
 import { getTeacherDetailsById } from '../../../services/teacherService';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../utils/toast.config';
 
 const storage = new MMKV();
 const SetNewPasswordBottomSheet = ({
@@ -35,17 +37,26 @@ const SetNewPasswordBottomSheet = ({
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
   const [textInputValues, setTextInputValues] = useState({
     newPassword: '',
     retypenewPassword: '',
   });
 
+  const comparePasswords = () => {
+    return watch('newPassword') === watch('retypenewPassword');
+  };
+
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
 
   const handleSetNewPassword = (data) => {
+    if (!comparePasswords()) {
+      notifyMessage('Passwords do not match!');
+      return;
+    }
     const oldPassword = storage.getString('oldPassword');
     let requiredBody = {
       oldPassword: oldPassword,
@@ -260,6 +271,7 @@ const SetNewPasswordBottomSheet = ({
             </View>
           </TouchableWithoutFeedback>
         </View>
+        <Toast config={toastConfig} />
       </Modal>
     </View>
   );

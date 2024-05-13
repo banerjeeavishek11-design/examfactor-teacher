@@ -177,33 +177,6 @@ const DiagnosticTab = () => {
           clearButtonMode="while-editing"
           selectionColor={colors.buttonTextColor}
         />
-        <View style={[layout.row, layout.justifyBetween, { marginTop: '4%' }]}>
-          <TouchableOpacity
-            onPress={() => handleChapterChangePress('left')}
-            disabled={chapListIndex === 0}
-            style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
-          >
-            <Image source={leftArrow} style={{ width: 28, height: 16 }} />
-          </TouchableOpacity>
-          <Text
-            style={[
-              fonts.size_13,
-              fonts.bold,
-              { color: colors.white, width: '80%', textAlign: 'center' },
-            ]}
-          >
-            Unit {chapListIndex + 1} : {chapList[chapListIndex]?.displayNames[0].name}
-          </Text>
-          <TouchableOpacity
-            onPress={() => handleChapterChangePress('right')}
-            style={{
-              opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
-            }}
-            disabled={chapListIndex === chapList.length - 1}
-          >
-            <Image source={rightArrow} style={{ width: 28, height: 16 }} />
-          </TouchableOpacity>
-        </View>
         <Text
           style={[
             fonts.size_13,
@@ -211,8 +184,41 @@ const DiagnosticTab = () => {
             { color: colors.gray200, marginTop: '4%' },
           ]}
         >
-          Use toggle to activate the homework
+          Use toggle to activate the Diagnostic
         </Text>
+        {isLoading ? (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color={colors.termsLinkColor} />
+          </View>
+        ) : (
+          <View style={[layout.row, layout.justifyBetween, { marginTop: '4%' }]}>
+            <TouchableOpacity
+              onPress={() => handleChapterChangePress('left')}
+              disabled={chapListIndex === 0}
+              style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
+            >
+              <Image source={leftArrow} style={{ width: 28, height: 16 }} />
+            </TouchableOpacity>
+            <Text
+              style={[
+                fonts.size_13,
+                fonts.bold,
+                { color: colors.white, width: '80%', textAlign: 'center' },
+              ]}
+            >
+              Unit {chapListIndex + 1} : {chapList[chapListIndex]?.displayNames[0].name}
+            </Text>
+            <TouchableOpacity
+              onPress={() => handleChapterChangePress('right')}
+              style={{
+                opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
+              }}
+              disabled={chapListIndex === chapList.length - 1}
+            >
+              <Image source={rightArrow} style={{ width: 28, height: 16 }} />
+            </TouchableOpacity>
+          </View>
+        )}
         {isLoading ? (
           <View style={styles.loader}>
             <ActivityIndicator size="large" color={colors.termsLinkColor} />
