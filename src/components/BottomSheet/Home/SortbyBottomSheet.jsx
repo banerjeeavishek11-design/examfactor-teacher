@@ -7,19 +7,20 @@ import { useTheme } from '@/theme';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const sortBy = [
-  { id: 1, sortBy: 'Practice Progress: High To Low' },
-  { id: 2, sortBy: 'Practice Progress: Low To High' },
-  { id: 3, sortBy: 'Achievable Score: High To Low' },
-  { id: 4, sortBy: 'Achievable Score: Low to High' },
-  { id: 5, sortBy: 'Last Test Score: High To Low' },
-  { id: 6, sortBy: 'Last Test Score: Low to High' },
+  { id: 'practiceCompletionPercentage dsc', sortBy: 'Practice Progress: High To Low' },
+  { id: 'practiceCompletionPercentage asc', sortBy: 'Practice Progress: Low To High' },
+  { id: 'score dsc', sortBy: 'Achievable Score: High To Low' },
+  { id: 'score asc', sortBy: 'Achievable Score: Low to High' },
+  { id: 'lastTestScore dsc', sortBy: 'Last Test Score: High To Low' },
+  { id: 'lastTestScore asc', sortBy: 'Last Test Score: Low to High' },
 ];
 
-const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue }) => {
+const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue, setSortByBody }) => {
   const { fonts, layout, colors } = useTheme();
-  const [option, setOption] = useState('first');
-  const handleOptionChange = (op) => {
+  const [option, setOption] = useState('Practice Progress: High To Low');
+  const handleOptionChange = (op, id) => {
     setOption(op);
+    setSortByBody(id);
   };
 
   const handleApply = () => {
@@ -69,7 +70,7 @@ const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue }) => {
                   <TouchableOpacity
                     key={ele.id}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.sortBy)}
+                    onPress={() => handleOptionChange(ele.sortBy, ele.id)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>

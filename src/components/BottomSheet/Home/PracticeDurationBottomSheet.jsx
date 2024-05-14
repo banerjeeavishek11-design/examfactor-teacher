@@ -7,19 +7,25 @@ import { useTheme } from '@/theme';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const practiceDuration = [
-  { id: 1, practiceDuration: 'All Students in class' },
-  { id: 2, practiceDuration: 'Not Practiced yesterday' },
+  { id: 0, practiceDuration: 'All Students in class' },
+  { id: 1, practiceDuration: 'Not Practiced yesterday' },
   { id: 3, practiceDuration: 'Not Practiced in 3 Days' },
-  { id: 3, practiceDuration: 'Not Practiced in 7 Days' },
-  { id: 3, practiceDuration: 'Not Practiced in 15 Days' },
-  { id: 3, practiceDuration: 'Not Practiced in 30 Days' },
+  { id: 7, practiceDuration: 'Not Practiced in 7 Days' },
+  { id: 15, practiceDuration: 'Not Practiced in 15 Days' },
+  { id: 30, practiceDuration: 'Not Practiced in 30 Days' },
 ];
 
-const PracticeDurationBottomSheet = ({ visible, closeModal, setPracticeDurationValue }) => {
+const PracticeDurationBottomSheet = ({
+  visible,
+  closeModal,
+  setPracticeDurationValue,
+  setPracticeDurationBody,
+}) => {
   const { fonts, layout, colors } = useTheme();
-  const [option, setOption] = useState('first');
-  const handleOptionChange = (op) => {
+  const [option, setOption] = useState('Not Practiced in 7 Days');
+  const handleOptionChange = (op, id) => {
     setOption(op);
+    setPracticeDurationBody(id);
   };
 
   const handleApply = () => {
@@ -68,7 +74,7 @@ const PracticeDurationBottomSheet = ({ visible, closeModal, setPracticeDurationV
                   <TouchableOpacity
                     key={ele.practiceDuration}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.practiceDuration)}
+                    onPress={() => handleOptionChange(ele.practiceDuration, ele.id)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>

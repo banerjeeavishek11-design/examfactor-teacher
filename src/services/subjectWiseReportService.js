@@ -16,3 +16,15 @@ export const get7daysStudyTimeForChart = async (params) => {
     params: params,
   });
 };
+
+export const getStudentProgress = async (params) => {
+  return await api.get(`${b2bStudentService}/v1/student-progress`, {
+    params: params,
+  });
+};
+
+export const getStudentHomeworkReport = async (params) => {
+  return await api.get(`${b2bStudentService}/v1/student-homework-report`, {
+    params: params,
+  });
+};

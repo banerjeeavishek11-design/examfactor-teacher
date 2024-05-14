@@ -25,6 +25,7 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import { getStudentHomeworkReports } from '../../services/SchoolWorkServices/schoolWorkServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { notifyMessage } from '../../utils/error-toast-API';
+import { getTopicDescById } from '../../utils/namesByIds';
 import moment from 'moment';
 import { MMKV } from 'react-native-mmkv';
 
@@ -181,13 +182,6 @@ const HomeWorkTab = () => {
     }
   };
 
-  function getTopicDescById(topicId) {
-    const topicsArrays = chapList.map((chap) => chap.topics);
-    const allTopics = [].concat(...topicsArrays);
-    const matchedTopic = allTopics.filter((topic) => topic.topicId === topicId);
-    return matchedTopic.length > 0 ? matchedTopic[0].topicDesc : null;
-  }
-
   let payloadForReminder = {
     gradeId: gradeId,
     sectionId: sectionId,
@@ -280,7 +274,7 @@ const HomeWorkTab = () => {
                             numberOfLines={1}
                             style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                           >
-                            {getTopicDescById(ele.topicId)}
+                            {getTopicDescById(chapList, ele.topicId)}
                           </Text>
                           <Text
                             style={[
