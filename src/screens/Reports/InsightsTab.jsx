@@ -8,16 +8,32 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import SelectChapterBottomSheet from '@/components/BottomSheet/Reports/SelectChapterBottomSheet';
 import SelectAreaBottomSheet from '@/components/BottomSheet/Reports/SelectAreaBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-import reportChapterDetails from './ReportChapterDetails';
+// import reportChapterDetails from './ReportChapterDetails';
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
+import { getReportInsights } from '../../services/ReportsServices/reportsServices';
+import { getChaptersBySubjectId } from '../../services/chapterListService';
+
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const InsightsScreen = () => {
   const { fonts, layout, colors } = useTheme();
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
-  const [chapters, setChapters] = useState([]);
+  const [insightReportsData, setInsightReportsData] = useState([]);
+  // const [chapList, setChapList] = useState([]);
 
   const [selectedChapter, setSelectedChapter] = useState(null);
+  const [selectedChapterName, setSelectedChapterName] = useState(null);
+  const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedArea, setSelectedArea] = useState(null);
+
+  const [chapterSelectionType, setChapterSelectionType] = useState();
+  const [sectionId, setSectionId] = useState(null);
 
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
@@ -32,18 +48,63 @@ const InsightsScreen = () => {
   };
 
   useEffect(() => {
-    if (selectedChapter !== null) {
-      const result = reportChapterDetails.find(
-        (chapter) => chapter.chapterId === selectedChapter?.chapterId
-      );
-      //result.data may come undefined because project is using limited dummy data
-      if (result?.data === undefined) {
-        setChapters([]);
-        return;
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setSectionId(item.id);
+          return;
+        }
       }
-      setChapters(result?.data);
     }
-  }, [selectedChapter]);
+  }, [sectionName, teacherDetails]);
+
+  useEffect(() => {
+    if (selectedChapter && chapterSelectionType) getInsights();
+  }, [selectedSubjectId, selectedChapter, chapterSelectionType, selectedUnit]);
+
+  // useEffect(() => {
+  //   if (selectedChapter !== null) {
+  //     const result = chapList.find((chapter) => chapter.chapterId === selectedChapter);
+  //     //result.data may come undefined because project is using limited dummy data
+  //     if (result?.data === undefined) {
+  //       setInsightReportsData([]);
+  //       return;
+  //     }
+  //     setInsightReportsData(result?.data);
+  //   }
+  // }, [selectedChapter]);
+
+  useEffect(() => {
+    getChaptersBySubjectId(selectedSubjectId)
+      .then(() => {
+        // setChapList(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [selectedSubjectId]);
+
+  const getInsights = () => {
+    let params = {
+      subjectId: selectedSubjectId,
+      unitId: selectedUnit,
+      chapterId: selectedChapter,
+      sectionId: sectionId,
+      selectionType: chapterSelectionType,
+    };
+    getReportInsights(params)
+      .then((res) => {
+        setInsightReportsData(res.data);
+        console.log('reports ressult', res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  };
+
+  // console.log('cid', selectedChapter);
+  // console.log('uid', selectedUnit);
+  // console.log('area', chapterSelectionType);
 
   return (
     <SafeScreen>
@@ -73,7 +134,7 @@ const InsightsScreen = () => {
                   borderColor: selectedChapter !== null ? colors.termsLinkColor : null,
                   width:
                     selectedChapter !== null
-                      ? Math.min(190, Math.max(90, selectedChapter.chapterName.length * 10))
+                      ? Math.min(210, Math.max(90, selectedChapterName.length * 8))
                       : 72,
                   height: isTablet ? 40 : 28,
                   borderRadius: 4,
@@ -93,9 +154,7 @@ const InsightsScreen = () => {
                   },
                 ]}
               >
-                {selectedChapter !== null
-                  ? selectedChapter.chapterId + ': ' + selectedChapter.chapterName
-                  : 'Chapter'}
+                {selectedChapter !== null ? selectedChapterName : 'Chapter'}
               </Text>
               <ImageVariant
                 testID="brand-img"
@@ -162,55 +221,44 @@ const InsightsScreen = () => {
           <View style={[]}>
             {selectedChapter !== null ? (
               <View>
-                {chapters.map((ele) => {
+                {insightReportsData.map((ele) => {
                   return (
-                    <View key={ele.topic}>
-                      <View style={{ marginTop: isTablet ? '3%' : '5%' }}>
-                        <Text style={[fonts.size_16, fonts.bold, { color: colors.gray200 }]}>
-                          {ele.topic}
+                    <View
+                      key={ele.id}
+                      style={[
+                        layout.fullWidth,
+                        isTablet ? { padding: '2%' } : layout.paddingForCard,
+                        {
+                          height: 'auto',
+                          backgroundColor: colors.cardBackgroundColor,
+                          borderRadius: 16,
+                          marginTop: isTablet ? '2%' : '5%',
+                        },
+                      ]}
+                    >
+                      <View style={[layout.display, layout.justifyBetween]}>
+                        <Text style={[fonts.size_14, fonts.bold, { color: colors.gray100 }]}>
+                          {ele.subTopicId}
                         </Text>
-                      </View>
-                      {ele.subtopics.map((subtopic) => {
-                        return (
-                          <View
-                            key={subtopic}
+                        <View
+                          style={[
+                            layout.rowHCenter,
+                            layout.itemsCenter,
+                            { marginTop: isTablet ? '1%' : '4%', gap: 8 },
+                          ]}
+                        >
+                          <Image source={Weak} style={{ width: 25, height: 25 }} />
+                          <Text
                             style={[
-                              layout.fullWidth,
-                              isTablet ? { padding: '2%' } : layout.paddingForCard,
-                              {
-                                height: 'auto',
-                                backgroundColor: colors.cardBackgroundColor,
-                                borderRadius: 16,
-                                marginTop: isTablet ? '2%' : '5%',
-                              },
+                              fonts.size_12,
+                              fonts.fontWeight_small,
+                              { color: colors.gray100 },
                             ]}
                           >
-                            <View style={[layout.display, layout.justifyBetween]}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.gray100 }]}>
-                                {subtopic}
-                              </Text>
-                              <View
-                                style={[
-                                  layout.rowHCenter,
-                                  layout.itemsCenter,
-                                  { marginTop: isTablet ? '1%' : '4%', gap: 8 },
-                                ]}
-                              >
-                                <Image source={Weak} style={{ width: 25, height: 25 }} />
-                                <Text
-                                  style={[
-                                    fonts.size_12,
-                                    fonts.fontWeight_small,
-                                    { color: colors.gray100 },
-                                  ]}
-                                >
-                                  Weak for 68% of the student
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                        );
-                      })}
+                            Weak for 68% of the student
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   );
                 })}
@@ -268,11 +316,15 @@ const InsightsScreen = () => {
         visible={selectChapterModalVisible}
         closeModal={closeSelectChapterModal}
         setSelectedChapter={setSelectedChapter}
+        setSelectedChapterName={setSelectedChapterName}
+        setSelectedUnit={setSelectedUnit}
+        setSelectAreaModalVisible={setSelectAreaModalVisible}
       />
       <SelectAreaBottomSheet
         visible={selectAreaModalVisible}
         closeModal={closeSelectAreaModal}
         setSelectedArea={setSelectedArea}
+        setChapterSelectionType={setChapterSelectionType}
       />
     </SafeScreen>
   );

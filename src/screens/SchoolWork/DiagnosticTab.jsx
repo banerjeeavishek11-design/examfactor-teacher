@@ -228,8 +228,6 @@ const DiagnosticTab = () => {
       }
     }
   };
-  // console.log('CP', chapList[0].topics);
-  // console.log('diagnostic from schoolwork', diagnostic);
 
   return (
     <SafeScreen>

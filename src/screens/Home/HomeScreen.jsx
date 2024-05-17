@@ -27,6 +27,9 @@ import {
 } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
+import { getClasswoksByTeacher } from '../../services/ActivateServices/activeClassworkServices';
+import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticService';
+import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
 import Caraosal from './Caraosal';
 
 const configForScore = [
@@ -107,7 +110,17 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getAllChaptersDetails();
+    getClassworks();
+    getDiagnostics();
+    getHomeworks();
   }, [selectedSubjectId]);
+
+  useEffect(() => {
+    getAllChaptersDetails();
+    getClassworks();
+    getDiagnostics();
+    getHomeworks();
+  }, []);
 
   useEffect(() => {
     getTeacheDetails();
@@ -138,6 +151,70 @@ const HomeScreen = () => {
       });
   };
 
+  const getClassworks = () => {
+    let params = {
+      // gradeId: gradeId,
+      // sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getClasswoksByTeacher(params)
+      .then((res) => {
+        // setClassworkData(res.data);
+        storage.set('activateClasswork', JSON.stringify(res.data));
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Failed to fetch classwork Data' + error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
+  const getDiagnostics = () => {
+    let params = {
+      // gradeId: gradeId,
+      // sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getDiagnosticsByTeacher(params)
+      .then((res) => {
+        storage.set('activateDiagnostic', JSON.stringify(res.data));
+
+        // setDiagnosticData(res.data);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get diagnostic details', error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
+  const getHomeworks = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getHomeworkByTeacher(params)
+      .then((res) => {
+        storage.set('activateHomework', JSON.stringify(res.data));
+        // setHomeworkData(res.data);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get Homework details', error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
   const getSubjectReports = () => {
     let params = {
       gradeId: gradeId,
@@ -152,7 +229,8 @@ const HomeScreen = () => {
       })
       .catch((error) => {
         if (error?.response?.status !== 401)
-          notifyMessage('failed to fetch subjectwise report', error);
+          // notifyMessage('failed to fetch subjectwise report', error);
+          console.log('subwise', error);
       });
   };
 
@@ -210,7 +288,6 @@ const HomeScreen = () => {
     getStudentProgress(paramsOfStudentProgress)
       .then((res) => {
         setStudentProgressData(res.data);
-        console.log('student progress reports', res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -263,7 +340,10 @@ const HomeScreen = () => {
 
   return (
     <SafeScreen>
-      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
+      <ScrollView
+        nestedScrollEnabled={true}
+        contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}
+      >
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             CLASS PREPAREDNESS
@@ -377,48 +457,6 @@ const HomeScreen = () => {
             />
           </View>
         </View>
-        {/* <View
-          style={[
-            layout.fullWidth,
-            layout.paddingForCard,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 350,
-              borderRadius: 12,
-              marginTop: '4%',
-            },
-          ]}
-        ></View> */}
-        {/* <ScrollView
-          contentContainerStyle={[{ gap: 14, paddingRight: 160 }]}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          <View style={{ width: '62%' }}>
-            <BarChart
-              actualData={resultScr}
-              colors={barchartColor}
-              width={width}
-              height={height}
-              borderRadius={borderRadius}
-              xAxisTitle={'Achievable Score (%)'}
-              yAxisTitle={yAxisTitle}
-              labels={labelsForScore}
-            />
-          </View>
-          <View style={{ width: '62%' }}>
-            <BarChart
-              actualData={resultStudtim}
-              colors={barchartColor}
-              width={width}
-              height={height}
-              borderRadius={borderRadius}
-              xAxisTitle={'Study Time (Min)'}
-              yAxisTitle={yAxisTitle}
-              labels={labelsForStudyTime}
-            />
-          </View>
-        </ScrollView> */}
 
         <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 

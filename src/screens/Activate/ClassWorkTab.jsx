@@ -18,6 +18,7 @@ import { SafeScreen } from '@/components/template';
 import ToggleButton from '@/components/template/ToggleButton/ToggleButton';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
+import Cross from '@/theme/assets/images/cross.png';
 import ScheduleTestActivationBottomSheet from '@/components/BottomSheet/Activate/ScheduleTestActivationBottomSheet';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getAssessmentDetails } from '../../services/getAssessmentDetails';
@@ -49,6 +50,7 @@ const ClassWorkTab = () => {
   const [selectedChapterId, setSelectedChapterId] = useState('');
   const [classworkData, setClassworkData] = useState();
   const [forDate, setForDate] = useState();
+  const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const formattedDate = moment(forDate).format('DD MMM YYYY');
@@ -73,6 +75,12 @@ const ClassWorkTab = () => {
     }, [selectedSubjectId])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
+  );
+
   useEffect(() => {}, [searchChapterName]);
 
   useEffect(() => {
@@ -84,6 +92,7 @@ const ClassWorkTab = () => {
       ele.chapterDesc.toLowerCase().includes(search.toLowerCase())
     );
     setSearchChapterName(searchItem);
+    setSearchValue(search);
   };
 
   const toggleContent = (id) => {
@@ -221,8 +230,10 @@ const ClassWorkTab = () => {
             borderWidth: 1,
             borderRadius: 8,
           }}
+          value={searchValue}
           clearButtonMode="while-editing"
           selectionColor={colors.buttonTextColor}
+          clearIcon={() => <Image style={{ width: 10, height: 10 }} source={Cross} />}
         />
         <Text
           style={[
@@ -242,7 +253,7 @@ const ClassWorkTab = () => {
             <View style={{ marginBottom: '30%' }}>
               {searchChapterName && searchChapterName.length > 0 ? (
                 <>
-                  {searchChapterName.map((ele, i) => {
+                  {searchChapterName.map((ele) => {
                     return (
                       <TouchableOpacity
                         onPress={() => toggleContent(ele.chapterId)}
@@ -266,7 +277,7 @@ const ClassWorkTab = () => {
                               { color: colors.white, width: '95%' },
                             ]}
                             numberOfLines={1}
-                          >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
+                          >{`C${ele.displaySeq}: ${ele.chapterDesc}`}</Text>
                           <TouchableOpacity>
                             {expandCardId === ele.chapterId && expandedCards[ele.chapterId] ? (
                               <Image

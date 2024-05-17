@@ -8,19 +8,28 @@ import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const area = [
-  { id: 1, area: 'All' },
-  { id: 2, area: 'Improvement Area' },
-  { id: 3, area: 'Strong Area' },
+  { id: 'ALL', area: 'All' },
+  { id: 'WEAK', area: 'Improvement Area' },
+  { id: 'STRONG', area: 'Strong Area' },
 ];
 
-const SelectAreaBottomSheet = ({ visible, closeModal, setSelectedArea }) => {
+const SelectAreaBottomSheet = ({
+  visible,
+  closeModal,
+  setSelectedArea,
+  setChapterSelectionType,
+}) => {
   const { fonts, layout, colors } = useTheme();
   const [option, setOption] = useState('first');
-  const handleOptionChange = (op) => {
+  const [areaId, setAreaId] = useState();
+
+  const handleOptionChange = (op, id) => {
     setOption(op);
+    setAreaId(id);
   };
   const handleApply = () => {
     setSelectedArea(option);
+    setChapterSelectionType(areaId);
     closeModal();
   };
   return (
@@ -65,7 +74,7 @@ const SelectAreaBottomSheet = ({ visible, closeModal, setSelectedArea }) => {
                   <TouchableOpacity
                     key={ele.id}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.area)}
+                    onPress={() => handleOptionChange(ele.area, ele.id)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>

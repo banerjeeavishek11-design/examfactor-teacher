@@ -49,14 +49,15 @@ const Caraosal = ({ scoreChartData, studyTimeChartData }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <PanGestureHandler onGestureEvent={handleSwipe}>
+    <PanGestureHandler onGestureEvent={handleSwipe}>
+      <View style={styles.container}>
         <ScrollView
           ref={scrollViewRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           style={(styles.scrollView, { marginBottom: '3%' })}
+          nestedScrollEnabled={true} // Ensure ScrollView can handle touches
         >
           {DATA.map((chartData, index) => (
             <View key={index} style={styles.chartContainer}>
@@ -73,20 +74,20 @@ const Caraosal = ({ scoreChartData, studyTimeChartData }) => {
             </View>
           ))}
         </ScrollView>
-      </PanGestureHandler>
-      <View style={styles.paginationContainer}>
-        {DATA.map((_, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.paginationIndicator,
-              activeIndex === index && styles.activePaginationIndicator,
-            ]}
-            onPress={() => handlePaginationPress(index)}
-          />
-        ))}
+        <View style={styles.paginationContainer}>
+          {DATA.map((_, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.paginationIndicator,
+                activeIndex === index && styles.activePaginationIndicator,
+              ]}
+              onPress={() => handlePaginationPress(index)}
+            />
+          ))}
+        </View>
       </View>
-    </View>
+    </PanGestureHandler>
   );
 };
 

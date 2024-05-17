@@ -236,15 +236,24 @@ const HomeWorkTab = () => {
             )}
             {homework.length > 0 ? (
               <>
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.bold,
-                    { color: colors.white, opacity: 0.4, marginTop: '2%' },
-                  ]}
-                >
-                  Last 7 Days Assigned homework
-                </Text>
+                {data.length !== 0 && (
+                  <Text
+                    style={[
+                      fonts.size_14,
+                      fonts.bold,
+                      { color: colors.white, opacity: 0.4, marginTop: '2%' },
+                    ]}
+                  >
+                    Last 7 Days Assigned homework
+                  </Text>
+                )}
+                {data.length === 0 && (
+                  <View style={[layout.justifyCenter, layout.itemsCenter, { height: 450 }]}>
+                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                      No Data
+                    </Text>
+                  </View>
+                )}
                 {data.map((ele, index) => {
                   return (
                     <TouchableOpacity

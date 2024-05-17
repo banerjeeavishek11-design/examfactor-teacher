@@ -2,30 +2,63 @@ import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'rea
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
+import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import RadioButton from '../../RadioButton/RadioButton';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { getChaptersBySubjectId } from '../../../services/chapterListService';
 
-const chapters = [
-  { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
-  { id: 2, chapterId: 'C2', chapterName: 'Force and Laws of Motion', strong: true },
-  { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
-  { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
-  { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
-  { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
-  { id: 5, chapterId: 'C7', chapterName: 'Electricity and Magnetism', strong: true },
-  { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
-];
+// const chapters = [
+//   { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
+//   { id: 2, chapterId: 'C2', chapterName: 'Force and Laws of Motion', strong: true },
+//   { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
+//   { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
+//   { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
+//   { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
+//   { id: 5, chapterId: 'C7', chapterName: 'Electricity and Magnetism', strong: true },
+//   { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
+// ];
 
-const SelectChapterBottomSheet = ({ visible, closeModal, setSelectedChapter }) => {
+const SelectChapterBottomSheet = ({
+  visible,
+  closeModal,
+  setSelectedChapter,
+  setSelectAreaModalVisible,
+  setSelectedUnit,
+  setSelectedChapterName,
+}) => {
   const { fonts, layout, colors } = useTheme();
-  const [option, setOption] = useState(null);
-  const handleOptionChange = (op) => {
-    setOption(op);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [chapOption, setChapOption] = useState(null);
+  const [unitOption, setUnitOption] = useState(null);
+  const [chapters, setChapters] = useState([]);
+  const handleOptionChange = (chap, unit, chapName) => {
+    setChapOption(chap);
+    setUnitOption(unit);
+    setSelectedChapterName(chapName);
   };
   const handleApply = () => {
-    setSelectedChapter(option);
+    setSelectedChapter(chapOption);
+    setSelectedUnit(unitOption);
+    setSelectAreaModalVisible(true);
     closeModal();
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getChapterDetails();
+    }, [selectedSubjectId])
+  );
+
+  const getChapterDetails = () => {
+    getChaptersBySubjectId(selectedSubjectId)
+      .then((res) => {
+        setChapters(res.data.chapters);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -66,21 +99,21 @@ const SelectChapterBottomSheet = ({ visible, closeModal, setSelectedChapter }) =
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: '5%' }}
               >
-                {chapters?.map((ele) => (
+                {chapters?.map((ele, index) => (
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele)}
+                    onPress={() => handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
-                      <RadioButton isActive={option === ele} />
+                      <RadioButton isActive={chapOption === ele.chapterId} />
                     </View>
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.chapterId}:
+                      {`C${index + 1}`}:
                     </Text>
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.chapterName}
+                      {ele.chapterDesc}
                     </Text>
                   </TouchableOpacity>
                 ))}

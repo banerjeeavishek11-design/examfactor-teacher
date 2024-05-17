@@ -10,8 +10,9 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import rightArrow from '@/theme/assets/images/rightarrow.png';
 import { Formik } from 'formik';
 import { ImageVariant } from '../../atoms';
@@ -20,22 +21,117 @@ import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Calender from '@/theme/assets/images/calendar.png';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
+import { editTeacherDetails, getUserDetailsByUserId } from '../../../services/teacherService';
+import { notifyWarningMessage } from '../../../utils/error-toast-API';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
   closeModal,
   profileData,
-  saveNewData,
-  userDetails,
+  setProfileData,
 }) => {
   const { fonts, colors, layout } = useTheme();
+  const teacherId = storage.getString('username');
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [openCalender, setOpenCalender] = useState(false);
   const [selectedDob, setSelectedDob] = useState('');
+  const [sectionId, setSectionId] = useState(null);
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
   };
 
+  const [formValues, setFormValues] = useState({
+    firstName: '',
+    dob: '',
+    emailId: '',
+    mobileNumber: '',
+    emergencyContactNumber: '',
+  });
+
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  const handleSubmit = (values) => {
+    console.log('values', values);
+    let requiredBody = {
+      id: teacherId,
+      serialNumber: 0,
+      // password: 'string',
+      mobileNumber: values.mobileNumber,
+      emailId: values.emailId,
+      firstName: values.firstName,
+      // middleName: 'string',
+      // lastName: 'string',
+      sectionId: sectionId,
+      dob: values.dob,
+      gender: values.gender,
+      teacherRole: 'TEACHER',
+      // bloodGroup: 'string',
+      emergencyContactNumber: values.emergencyContactNumber,
+      // emergencyContactPerson: 'string',
+      // emergencyEmailId: 'string',
+      // orgCode: 'string',
+      // orgId: 'string',
+      // partnerId: 'string',
+      // codes: ['string'],
+      // address: 'string',
+      // teacherViewMode: 'TEACHER',
+      temporary: true,
+    };
+    editTeacherDetails(requiredBody, teacherId)
+      .then((res) => {
+        console.log('req bod', res.data);
+        notifyWarningMessage(res.data.status);
+        getUserDetailsByUserId(teacherId)
+          .then(() => {
+            // console.log(res.data);
+            setProfileData(res.data);
+          })
+          .catch(() => {});
+        closeModal();
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+  };
+
+  useEffect(() => {
+    if (profileData) {
+      const formattedDate = profileData.dob ? moment(profileData.dob).format('DD/MM/YYYY') : '';
+      setSelectedDob(formattedDate);
+      setFormValues({
+        firstName: profileData.firstName || '',
+        dob: formattedDate || '',
+        gender: profileData.gender || '',
+        emailId: profileData.emailId || '',
+        emergencyContactNumber: profileData.emergencyContactNumber || '',
+        address: profileData.address || '',
+      });
+    }
+  }, [profileData]);
+
+  // console.log('pd,', profileData);
+  console.log('selectedDOB', selectedDob);
+  console.log('pd', profileData.dob);
+  console.log('new date', new Date());
+
+  // const convertedDate = new Date(selectedDob);
+
+  // console.log('convertedDate',convertedDate);
   return (
     <Modal visible={personalDetailBottomSheetVisible} animationType="slide" transparent={true}>
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
@@ -62,20 +158,8 @@ const EditPersonalDetailBottomSheet = ({
             <Text style={[fonts.size_18, fonts.bold, { color: colors.white }]}>
               Edit personal details
             </Text>
-            <Formik
-              initialValues={{
-                dob: profileData.dob,
-                mobile: profileData.mobile,
-                emergencyContact: profileData.emergencyContact,
-                address: '',
-              }}
-              onSubmit={(values, actions) => {
-                saveNewData(values);
-                actions.setSubmitting(false);
-                closeModal();
-              }}
-            >
-              {({ handleChange, handleSubmit, values, setFieldValue }) => {
+            <Formik initialValues={formValues} onSubmit={handleSubmit}>
+              {({ handleChange, handleSubmit, values }) => {
                 return (
                   <View style={{ marginTop: '8%' }}>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ height: '90%' }}>
@@ -107,9 +191,9 @@ const EditPersonalDetailBottomSheet = ({
                             },
                           ]}
                           editable={false}
-                          placeholder={profileData.fullName}
+                          placeholder={profileData.firstName}
                           placeholderTextColor={colors.gray200}
-                          value={userDetails?.firstName}
+                          value={values?.firstName}
                         />
                       </View>
 
@@ -149,6 +233,13 @@ const EditPersonalDetailBottomSheet = ({
                             placeholder={profileData.dob}
                             placeholderTextColor={colors.gray400}
                             value={selectedDob}
+                            // onChangeText={(text) => {
+                            //   setSelectedDob(text);
+                            //   setFieldValue('dob', text)
+                            //     .then(() => {})
+                            //     .catch(() => {});
+                            // }}
+                            onChangeText={handleChange('dob')}
                           />
                           <TouchableOpacity
                             onPress={() => {
@@ -165,9 +256,10 @@ const EditPersonalDetailBottomSheet = ({
                             />
                           </TouchableOpacity>
                           <DateTimePicker
+                            date={new Date(selectedDob)}
                             mode="date"
                             onConfirm={(date) => {
-                              setSelectedDob(moment(date).format('DD-MM-YYYY'));
+                              setSelectedDob(moment(date).format('DD/MM/YYYY'));
                               setOpenCalender(false);
                             }}
                             isVisible={openCalender}
@@ -288,9 +380,9 @@ const EditPersonalDetailBottomSheet = ({
                             },
                           ]}
                           editable={false}
-                          placeholder={profileData.email}
+                          placeholder={profileData.emailId}
                           placeholderTextColor={colors.gray200}
-                          value={profileData.email}
+                          value={values?.emailId}
                         />
                       </View>
 
@@ -321,10 +413,10 @@ const EditPersonalDetailBottomSheet = ({
                             },
                           ]}
                           keyboardType="phone-pad"
-                          placeholder={profileData.mobile}
+                          placeholder={profileData.mobileNumber}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange('mobile')}
-                          value={values.mobile}
+                          onChangeText={handleChange('mobileNumber')}
+                          value={values.mobileNumber}
                         />
                       </View>
 
@@ -355,10 +447,10 @@ const EditPersonalDetailBottomSheet = ({
                             },
                           ]}
                           keyboardType="phone-pad"
-                          placeholder={profileData.emergencyContact}
+                          placeholder={profileData.emergencyContactNumber}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange('emergencyContact')}
-                          value={values.emergencyContact}
+                          onChangeText={handleChange('emergencyContactNumber')}
+                          value={values.emergencyContactNumber}
                         />
                       </View>
 
@@ -388,20 +480,15 @@ const EditPersonalDetailBottomSheet = ({
                               paddingLeft: '3%',
                             },
                           ]}
-                          placeholder={profileData.address}
+                          placeholder={profileData?.address}
                           placeholderTextColor={colors.gray400}
                           onChangeText={handleChange('address')}
-                          value={values.address}
+                          value={values?.address}
                         />
                       </View>
                     </ScrollView>
 
-                    <TouchableOpacity
-                      onPress={() => {
-                        void setFieldValue('dob', selectedDob);
-                        handleSubmit();
-                      }}
-                    >
+                    <TouchableOpacity onPress={handleSubmit}>
                       <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                         <View style={[layout.display, layout.rowHCenter]}>
                           <Text
