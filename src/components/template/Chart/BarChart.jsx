@@ -25,11 +25,10 @@ const GradientBarChart = ({
 
   // Calculate y-axis labels
   const yAxisLabels = Array.from({ length: 5 }, (_, i) => maxValue * (5 - i));
-
   return (
     <View
       style={{
-        width: '100%',
+        width: '92%',
         height: height + 85,
         backgroundColor: '#22222E',
         justifyContent: 'center',

@@ -2,7 +2,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
-import { Concentrix, SafeScreen, BarChart } from '@/components/template';
+import { Concentrix, SafeScreen } from '@/components/template';
 import Arrow from '@/theme/assets/images/arrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
 import { getUserDetailsByUserId } from '../../services/teacherService';
+import { getStudentProgress } from '../../services/subjectWiseReportService';
 import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 import {
   getSubjectWiseReport,
@@ -25,85 +26,11 @@ import {
   get7daysStudyTimeForChart,
 } from '../../services/subjectWiseReportService';
 import { notifyMessage } from '../../utils/error-toast-API';
-
-/* const dataOfConsolidatedReport = {
-  score: 0,
-  homeworkProgress: 10,
-  diagnosisProgress: 40,
-  chapters: [
-    {
-      chapterId: 'Relations and Functions',
-      score: 70,
-      homeworkProgress: 70,
-      diagnosisProgress: 0,
-      timeSpent: 0,
-      topicCount: 0,
-      activatedtopicCount: 0,
-      topics: [
-        {
-          topicId: 'Operation on real function',
-          score: 0,
-          progress: 0,
-          timeSpent: 0,
-        },
-        {
-          topicId: 'Types of function',
-          score: 0,
-          progress: 0,
-          timeSpent: 0,
-        },
-      ],
-    },
-    {
-      chapterId: 'Inverse Trigonometric Function',
-      score: 40,
-      homeworkProgress: 40,
-      diagnosisProgress: 0,
-      timeSpent: 0,
-      topicCount: 0,
-      activatedtopicCount: 0,
-      topics: [
-        {
-          topicId: 'Sum and diffeences of angles',
-          score: 0,
-          progress: 0,
-          timeSpent: 0,
-        },
-        {
-          topicId: 'comprehension',
-          score: 0,
-          progress: 0,
-          timeSpent: 0,
-        },
-      ],
-    },
-  ],
-}; */
-
-// const dummyDataFor7dayScore = [
-//   { score: 36, sudentId: 'suninef' },
-//   { score: 92, sudentId: 'rahul' },
-//   { score: 43, sudentId: 'raja' },
-//   { score: 65, sudentId: 'durga' },
-//   { score: 55, sudentId: 'amit' },
-//   { score: 86, sudentId: 'sayan' },
-//   { score: 80, sudentId: 'deep' },
-//   { score: 97, sudentId: 'sayantan' },
-//   { score: 34, sudentId: 'amarnath' },
-//   { score: 45, sudentId: 'sourav' },
-// ];
-// const dummyDataFor7dayStudyTime = [
-//   { studyTime: 36, sudentId: 'suninef' },
-//   { studyTime: 92, sudentId: 'rahul' },
-//   { studyTime: 43, sudentId: 'raja' },
-//   { studyTime: 65, sudentId: 'durga' },
-//   { studyTime: 55, sudentId: 'amit' },
-//   { studyTime: 86, sudentId: 'sayan' },
-//   { studyTime: 80, sudentId: 'deep' },
-//   { studyTime: 32, sudentId: 'sayantan' },
-//   { studyTime: 34, sudentId: 'amarnath' },
-//   { studyTime: 78, sudentId: 'sourav' },
-// ];
+import { getChaptersBySubjectId } from '../../services/chapterListService';
+import { getClasswoksByTeacher } from '../../services/ActivateServices/activeClassworkServices';
+import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticService';
+import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
+import Caraosal from './Caraosal';
 
 const configForScore = [
   { groupName: '<60', from: 0, to: 60 },
@@ -120,13 +47,13 @@ const configForStudyTime = [
 ];
 
 const storage = new MMKV();
-const barchartColor = ['#7AF4FC', '#27D4FA'];
-const width = 300;
-const height = 250;
-const borderRadius = 5;
-const yAxisTitle = 'No. of students';
-const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
-const labelsForScore = ['<60', '60-80', '81-90', '90+'];
+// const barchartColor = ['#7AF4FC', '#27D4FA'];
+// const width = 300;
+// const height = 250;
+// const borderRadius = 5;
+// const yAxisTitle = 'No. of students';
+// const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
+// const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -146,13 +73,15 @@ const HomeScreen = () => {
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
-  const [sortByValue, setSortbyValue] = useState(null);
+  const [sortByValue, setSortbyValue] = useState('Practice Progress: High To Low');
+  const [sortByBody, setSortByBody] = useState('practiceCompletionPercentage dsc');
   const [sortbyModalVisible, setSortbyModalVisible] = useState(false);
   const closeSortbyModal = () => {
     setSortbyModalVisible(false);
   };
 
-  const [practiceDurationValue, setPracticeDurationValue] = useState(null);
+  const [practiceDurationValue, setPracticeDurationValue] = useState('Not Practiced in 7 Days');
+  const [practiceDurationBody, setPracticeDurationBody] = useState(7);
   const [practiceDurationModalVisible, setPracticeDurationModalVisible] = useState(false);
   const closePracticeDurationModal = () => {
     setPracticeDurationModalVisible(false);
@@ -160,11 +89,12 @@ const HomeScreen = () => {
 
   const [scoreChartData, setScoreChartData] = useState([[]]);
   const [studyTimeChartData, setStudyTimeChartData] = useState([[]]);
-  const [dataOfConsolidatedReport, setDataOfConsolidatedReport] = useState({
-    score: 0,
-    homeworkProgress: 0,
-    diagnosisProgress: 0,
-  });
+  // const [dataOfConsolidatedReport, setDataOfConsolidatedReport] = useState();
+  const [consolidatedReportData, setConsolidatedReportData] = useState();
+
+  const [studentProgressData, setStudentProgressData] = useState([]);
+
+  const [chapList, setChapList] = useState([]);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -178,17 +108,27 @@ const HomeScreen = () => {
     }
   }, [sectionName, teacherDetails]);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     if (sectionId && gradeId && selectedSubjectId) {
-  //       getSubjectReports();
-  //     }
-  //   }, [selectedSubjectId, sectionId, gradeId])
-  // );
+  useEffect(() => {
+    getAllChaptersDetails();
+    getClassworks();
+    getDiagnostics();
+    getHomeworks();
+  }, [selectedSubjectId]);
+
+  useEffect(() => {
+    getAllChaptersDetails();
+    getClassworks();
+    getDiagnostics();
+    getHomeworks();
+  }, []);
 
   useEffect(() => {
     getTeacheDetails();
   }, []);
+
+  useEffect(() => {
+    getProgressForStudents();
+  }, [sortByBody, practiceDurationBody, selectedSubjectId, sectionId]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -200,6 +140,81 @@ const HomeScreen = () => {
     }, [selectedSubjectId, sectionId, gradeId])
   );
 
+  const getAllChaptersDetails = () => {
+    getChaptersBySubjectId(selectedSubjectId)
+      .then((res) => {
+        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
+        setChapList(res.data.chapters);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getClassworks = () => {
+    let params = {
+      // gradeId: gradeId,
+      // sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getClasswoksByTeacher(params)
+      .then((res) => {
+        // setClassworkData(res.data);
+        storage.set('activateClasswork', JSON.stringify(res.data));
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('Failed to fetch classwork Data' + error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
+  const getDiagnostics = () => {
+    let params = {
+      // gradeId: gradeId,
+      // sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getDiagnosticsByTeacher(params)
+      .then((res) => {
+        storage.set('activateDiagnostic', JSON.stringify(res.data));
+
+        // setDiagnosticData(res.data);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get diagnostic details', error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
+  const getHomeworks = () => {
+    let params = {
+      gradeId: gradeId,
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    // setIsLoading(true);
+    getHomeworkByTeacher(params)
+      .then((res) => {
+        storage.set('activateHomework', JSON.stringify(res.data));
+        // setHomeworkData(res.data);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to get Homework details', error);
+        }
+        // setIsLoading(false);
+      });
+  };
+
   const getSubjectReports = () => {
     let params = {
       gradeId: gradeId,
@@ -208,11 +223,14 @@ const HomeScreen = () => {
     };
     getSubjectWiseReport(params)
       .then((res) => {
-        console.log('responst subwise report -- .', JSON.stringify(res.data));
-        setDataOfConsolidatedReport(res.data);
+        // console.log('responst subwise report -- .', JSON.stringify(res.data));
+        setConsolidatedReportData(res.data);
+        // setDataOfConsolidatedReport(res.data);
       })
       .catch((error) => {
-        notifyMessage('failed to fetch subjectwise report', error);
+        if (error?.response?.status !== 401)
+          // notifyMessage('failed to fetch subjectwise report', error);
+          console.log('subwise', error);
       });
   };
 
@@ -259,6 +277,23 @@ const HomeScreen = () => {
       });
   };
 
+  const getProgressForStudents = () => {
+    let paramsOfStudentProgress = {
+      practiceDuration: practiceDurationBody,
+      sort: sortByBody,
+      subjectId: selectedSubjectId,
+      sectionId: sectionId,
+      // scoreCriteria: 'string',
+    };
+    getStudentProgress(paramsOfStudentProgress)
+      .then((res) => {
+        setStudentProgressData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const toggleContent = () => {
     setShowContent(!showContent);
   };
@@ -298,10 +333,17 @@ const HomeScreen = () => {
   // console.log('result stu time', resultStudtim);
   // console.log('scdt', scoreChartData);
   // console.log('stdychrt', studyTimeChartData);
+  // console.log('hwp', consolidatedReportData?.homeworkProgress);
+
+  // console.log('sbBODY', sortByBody);
+  // console.log('pdBODY', practiceDurationBody);
 
   return (
     <SafeScreen>
-      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
+      <ScrollView
+        nestedScrollEnabled={true}
+        contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}
+      >
         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             CLASS PREPAREDNESS
@@ -310,8 +352,9 @@ const HomeScreen = () => {
             style={[layout.display, layout.rowHCenter]}
             onPress={() =>
               navigation.navigate('SubjectDetailsScreen', {
-                chapters: dataOfConsolidatedReport.chapters,
+                chapters: consolidatedReportData?.chapters,
                 subjectName: subjectName,
+                chapList: chapList,
               })
             }
           >
@@ -354,7 +397,7 @@ const HomeScreen = () => {
             {subjectName}
           </Text>
           <View style={{ marginTop: '1%', alignItems: 'center' }}>
-            <Concentrix scorePercentage={dataOfConsolidatedReport.score} />
+            <Concentrix scorePercentage={consolidatedReportData?.score || 0} />
           </View>
           <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
             <Divider
@@ -380,12 +423,16 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${dataOfConsolidatedReport.homeworkProgress}% Complete`}
+              {`${consolidatedReportData?.homeworkProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
             <Progressbar
-              progress={dataOfConsolidatedReport.homeworkProgress / 100}
+              progress={
+                consolidatedReportData?.homeworkProgress === undefined
+                  ? 0
+                  : consolidatedReportData?.homeworkProgress / 100
+              }
               color={'#3DD598'}
             />
           </View>
@@ -396,58 +443,22 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${dataOfConsolidatedReport.diagnosisProgress}% Complete`}
+              {`${consolidatedReportData?.diagnosisProgress}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
             <Progressbar
-              progress={dataOfConsolidatedReport.diagnosisProgress / 100}
+              progress={
+                consolidatedReportData?.homeworkProgress === undefined
+                  ? 0
+                  : consolidatedReportData?.homeworkProgress / 100
+              }
               color={'#BBA041'}
             />
           </View>
         </View>
-        {/* <View
-          style={[
-            layout.fullWidth,
-            layout.paddingForCard,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 350,
-              borderRadius: 12,
-              marginTop: '4%',
-            },
-          ]}
-        ></View> */}
-        <ScrollView
-          contentContainerStyle={[{ gap: 14, paddingRight: 160 }]}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          <View style={{ width: '62%' }}>
-            <BarChart
-              actualData={resultScr}
-              colors={barchartColor}
-              width={width}
-              height={height}
-              borderRadius={borderRadius}
-              xAxisTitle={'Achievable Score (%)'}
-              yAxisTitle={yAxisTitle}
-              labels={labelsForScore}
-            />
-          </View>
-          <View style={{ width: '62%' }}>
-            <BarChart
-              actualData={resultStudtim}
-              colors={barchartColor}
-              width={width}
-              height={height}
-              borderRadius={borderRadius}
-              xAxisTitle={'Study Time (Min)'}
-              yAxisTitle={yAxisTitle}
-              labels={labelsForStudyTime}
-            />
-          </View>
-        </ScrollView>
+
+        <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
@@ -478,7 +489,7 @@ const HomeScreen = () => {
                 backgroundColor: colors.bottomTabBackground,
                 borderWidth: 1,
                 borderColor: sortByValue !== null ? colors.termsLinkColor : null,
-                width: 72,
+                width: sortByValue.length * 6.8,
                 height: 28,
                 borderRadius: 4,
                 paddingHorizontal: 6,
@@ -497,7 +508,7 @@ const HomeScreen = () => {
                 },
               ]}
             >
-              Sort By
+              {sortByValue}
             </Text>
             <ImageVariant
               testID="brand-img"
@@ -542,7 +553,7 @@ const HomeScreen = () => {
                 fonts.alignCenter,
               ]}
             >
-              Not Practiced in 7 Days
+              {practiceDurationValue}
             </Text>
             <ImageVariant
               testID="brand-img"
@@ -619,336 +630,199 @@ const HomeScreen = () => {
           </Text>
         </View> */}
 
-        <TouchableOpacity
-          onPress={toggleContent}
-          style={[
-            layout.fullWidth,
-            layout.paddingForCard,
+        {studentProgressData.map((ele) => (
+          <TouchableOpacity
+            key={ele.studentId}
+            onPress={toggleContent}
+            style={[
+              layout.fullWidth,
+              layout.paddingForCard,
 
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 'auto',
-              marginTop: '4%',
-              borderRadius: 14,
-            },
-          ]}
-        >
-          <View style={[layout.display, layout.rowHCenter]}>
-            <View style={{ width: '30%' }}>
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>75%</Text>
-              <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                Achievable Score
-              </Text>
-            </View>
-            <ImageVariant
-              testID="brand-img"
-              style={{
-                // width: 60,
-                height: 70,
-                tintColor: colors.lineBackgroundColor,
-                right: 6,
-              }}
-              source={Line}
-              resizeMode="contain"
-            />
-            <View style={{ width: '65%' }}>
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                Shashank Kumar
-              </Text>
-              <View style={[layout.display, layout.rowHCenter]}>
-                <View style={{ width: '30%' }}>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.backButtonColor },
-                    ]}
-                  >
-                    Home Work
-                  </Text>
-                </View>
-                <View style={{ width: '50%' }}>
-                  <Progressbar progress={0.5} color={'#3DD598'} />
-                </View>
-                <View style={{ width: '20%' }}>
-                  <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                    60%
-                  </Text>
-                </View>
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                height: 'auto',
+                marginTop: '4%',
+                borderRadius: 14,
+              },
+            ]}
+          >
+            <View style={[layout.display, layout.rowHCenter]}>
+              <View style={{ width: '30%' }}>
+                <Text
+                  style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                >{`${ele?.score} %`}</Text>
+                <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
+                  Achievable Score
+                </Text>
               </View>
-
-              <View style={[layout.display, layout.rowHCenter]}>
-                <View style={{ width: '30%' }}>
-                  <Text
-                    style={[
-                      fonts.size_10,
-                      fonts.fontWeight_small,
-                      { color: colors.backButtonColor },
-                    ]}
-                  >
-                    Diagnostic
-                  </Text>
-                </View>
-                <View style={{ width: '50%' }}>
-                  <Progressbar progress={0.3} color={'#FF575F'} />
-                </View>
-                <View style={{ width: '20%' }}>
-                  <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                    27%
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View style={{ width: '10%' }}>
-              <TouchableOpacity>
-                {showContent ? (
-                  <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
-                ) : (
-                  <Image style={{ width: 12, height: 8 }} source={DownArrow} resizeMode="contain" />
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-          {showContent && (
-            <>
-              <Divider
+              <ImageVariant
+                testID="brand-img"
                 style={{
-                  marginTop: '2%',
-                  width: '100%',
-                  backgroundColor: colors.lineBackgroundColor,
+                  // width: 60,
+                  height: 70,
+                  tintColor: colors.lineBackgroundColor,
+                  right: 6,
                 }}
+                source={Line}
+                resizeMode="contain"
               />
-              <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  { marginTop: '2%' },
-                ]}
-              >
-                <View style={{ width: '35%' }}>
-                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                    8 days ago
-                  </Text>
-                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                    Last practice
-                  </Text>
+              <View style={{ width: '65%' }}>
+                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                  {ele?.fullName}
+                </Text>
+                <View style={[layout.display, layout.rowHCenter]}>
+                  <View style={{ width: '30%' }}>
+                    <Text
+                      style={[
+                        fonts.size_10,
+                        fonts.fontWeight_small,
+                        { color: colors.backButtonColor },
+                      ]}
+                    >
+                      Home Work
+                    </Text>
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Progressbar
+                      progress={ele?.practiceCompletionPercentage / 100}
+                      color={
+                        ele?.practiceCompletionPercentage <= 25
+                          ? '#FF575F'
+                          : ele?.practiceCompletionPercentage <= 60
+                            ? '#BBA041'
+                            : '#3DD598'
+                      }
+                    />
+                  </View>
+                  <View style={{ width: '20%' }}>
+                    <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
+                      {ele?.practiceCompletionPercentage} %
+                    </Text>
+                  </View>
                 </View>
-                <View style={{ width: '45%' }}>
-                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                    55 Min
-                  </Text>
-                  <View style={[layout.display, layout.rowHCenter]}>
+
+                <View style={[layout.display, layout.rowHCenter]}>
+                  <View style={{ width: '30%' }}>
+                    <Text
+                      style={[
+                        fonts.size_10,
+                        fonts.fontWeight_small,
+                        { color: colors.backButtonColor },
+                      ]}
+                    >
+                      Diagnostic
+                    </Text>
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Progressbar
+                      progress={ele?.diagnosticCompletionPercentage / 100}
+                      color={
+                        ele?.diagnosticCompletionPercentage <= 25
+                          ? '#FF575F'
+                          : ele?.diagnosticCompletionPercentage <= 60
+                            ? '#BBA041'
+                            : '#3DD598'
+                      }
+                    />
+                  </View>
+                  <View style={{ width: '20%' }}>
+                    <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
+                      {ele?.diagnosticCompletionPercentage} %
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={{ width: '10%' }}>
+                <TouchableOpacity>
+                  {showContent ? (
+                    <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
+                  ) : (
+                    <Image
+                      style={{ width: 12, height: 8 }}
+                      source={DownArrow}
+                      resizeMode="contain"
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+            {showContent && (
+              <>
+                <Divider
+                  style={{
+                    marginTop: '2%',
+                    width: '100%',
+                    backgroundColor: colors.lineBackgroundColor,
+                  }}
+                />
+                <View
+                  style={[
+                    layout.display,
+                    layout.rowHCenter,
+                    layout.justifyBetween,
+                    { marginTop: '2%' },
+                  ]}
+                >
+                  <View style={{ width: '35%' }}>
+                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                      {ele.lastPracticeDate != null ? ele.lastPracticeDate : '0'} days ago
+                    </Text>
                     <Text
                       style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
                     >
-                      Avg. Study Time
+                      Last practice
                     </Text>
-                    <ImageVariant
-                      testID="brand-img"
-                      style={{
-                        width: 10,
-                        height: 10,
-                        tintColor: '#A9A9AD',
-                        left: 6,
-                      }}
-                      source={Info}
-                      resizeMode="contain"
-                    />
+                  </View>
+                  <View style={{ width: '45%' }}>
+                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                      {ele?.avgStudyTime} Min
+                    </Text>
+                    <View style={[layout.display, layout.rowHCenter]}>
+                      <Text
+                        style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
+                      >
+                        Avg. Study Time
+                      </Text>
+                      <ImageVariant
+                        testID="brand-img"
+                        style={{
+                          width: 10,
+                          height: 10,
+                          tintColor: '#A9A9AD',
+                          left: 6,
+                        }}
+                        source={Info}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  </View>
+                  <View style={{ width: '25%' }}>
+                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                      {ele?.lastTestScore}
+                    </Text>
+                    <Text
+                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
+                    >
+                      Last test score
+                    </Text>
                   </View>
                 </View>
-                <View style={{ width: '25%' }}>
-                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                    75%
-                  </Text>
-                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                    Last test score
-                  </Text>
-                </View>
-              </View>
-            </>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            layout.fullWidth,
-            layout.paddingForCard,
-            layout.display,
-            layout.rowHCenter,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 92,
-              marginTop: '4%',
-              borderRadius: 14,
-            },
-          ]}
-        >
-          <View style={{ width: '30%' }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, left: 5 }]}>0%</Text>
-            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-              Achievable Score
-            </Text>
-          </View>
-          <ImageVariant
-            testID="brand-img"
-            style={{
-              // width: 60,
-              height: 70,
-              tintColor: colors.lineBackgroundColor,
-              right: 6,
-            }}
-            source={Line}
-            resizeMode="contain"
-          />
-          <View style={{ width: '65%' }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Rahul Gupta</Text>
-            <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: '30%' }}>
-                <Text
-                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
-                >
-                  Home Work
-                </Text>
-              </View>
-              <View style={{ width: '50%' }}>
-                <Progressbar progress={0} color={'#3DD598'} />
-              </View>
-              <View style={{ width: '20%' }}>
-                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                  0%
-                </Text>
-              </View>
-            </View>
-
-            <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: '30%' }}>
-                <Text
-                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
-                >
-                  Diagnostic
-                </Text>
-              </View>
-              <View style={{ width: '50%' }}>
-                <Progressbar progress={0} color={'#3DD598'} />
-              </View>
-              <View style={{ width: '20%' }}>
-                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                  0%
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={{ width: '10%' }}>
-            <TouchableOpacity>
-              <ImageVariant
-                testID="brand-img"
-                style={{
-                  width: 12,
-                  height: 8,
-                  tintColor: colors.white,
-                }}
-                source={DownArrow}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            layout.fullWidth,
-            layout.paddingForCard,
-            layout.display,
-            layout.rowHCenter,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 92,
-              marginTop: '4%',
-              borderRadius: 14,
-            },
-          ]}
-        >
-          <View style={{ width: '30%' }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>52%</Text>
-            <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-              Achievable Score
-            </Text>
-          </View>
-          <ImageVariant
-            testID="brand-img"
-            style={{
-              // width: 60,
-              height: 70,
-              tintColor: colors.lineBackgroundColor,
-              right: 6,
-            }}
-            source={Line}
-            resizeMode="contain"
-          />
-          <View style={{ width: '65%' }}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Utkarsh Sharma</Text>
-            <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: '30%' }}>
-                <Text
-                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
-                >
-                  Home Work
-                </Text>
-              </View>
-              <View style={{ width: '50%' }}>
-                <Progressbar progress={0.7} color={'#FFAB48'} />
-              </View>
-              <View style={{ width: '20%' }}>
-                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                  45%
-                </Text>
-              </View>
-            </View>
-
-            <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: '30%' }}>
-                <Text
-                  style={[fonts.size_10, fonts.fontWeight_small, { color: colors.backButtonColor }]}
-                >
-                  Diagnostic
-                </Text>
-              </View>
-              <View style={{ width: '50%' }}>
-                <Progressbar progress={0.6} color={'#3DD598'} />
-              </View>
-              <View style={{ width: '20%' }}>
-                <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                  60%
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={{ width: '10%' }}>
-            <TouchableOpacity>
-              <ImageVariant
-                testID="brand-img"
-                style={{
-                  width: 12,
-                  height: 8,
-                  tintColor: colors.white,
-                }}
-                source={DownArrow}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
+              </>
+            )}
+          </TouchableOpacity>
+        ))}
       </ScrollView>
       <SortbyBottomSheet
         visible={sortbyModalVisible}
         closeModal={closeSortbyModal}
         setSortbyValue={setSortbyValue}
+        setSortByBody={setSortByBody}
       />
       <PracticeDurationBottomSheet
         visible={practiceDurationModalVisible}
         closeModal={closePracticeDurationModal}
         setPracticeDurationValue={setPracticeDurationValue}
+        setPracticeDurationBody={setPracticeDurationBody}
       />
     </SafeScreen>
   );

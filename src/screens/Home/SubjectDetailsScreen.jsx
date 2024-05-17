@@ -11,12 +11,13 @@ import Circularprogressbar from '@/components/template/CircularProgressBar/Circu
 import LinearGradient from 'react-native-linear-gradient';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
+import { getChapterDescById } from '../../utils/namesByIds';
 
 const SubjectDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { chapters, subjectName } = route.params || {};
+  const { chapters, subjectName, chapList } = route.params || {};
   const [searchChapterName, setSearchChapterName] = useState([]);
 
   // const goToTopicWiseDetailsScreen = (chapterName, progress) => {
@@ -140,7 +141,7 @@ const SubjectDetailsScreen = () => {
               <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                 <View>
                   <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                    {ele.chapterId}
+                    {getChapterDescById(chapList, ele.chapterId)}
                   </Text>
                   <Text
                     style={[
@@ -173,6 +174,7 @@ const SubjectDetailsScreen = () => {
                       topics: ele.topics,
                       chapterName: ele.chapterId,
                       subjectName: subjectName,
+                      chapList: chapList,
                     })
                   }
                 >
@@ -215,7 +217,7 @@ const SubjectDetailsScreen = () => {
                       },
                     ]}
                   >
-                    {`${ele.activatedtopicCount}/${ele.topicCount}`}
+                    {`${ele.activatedTopicCount}/${ele.topicCount}`}
                   </Text>
                 </View>
                 <Text

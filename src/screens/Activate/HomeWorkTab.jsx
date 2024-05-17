@@ -17,6 +17,7 @@ import { SafeScreen } from '@/components/template';
 import ToggleButton from '@/components/template/ToggleButton/ToggleButton';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
+import Cross from '@/theme/assets/images/cross.png';
 import ActiveHomeworkConfirmBottomSheet from '@/components/BottomSheet/Activate/ActiveHomeworkConfirmBottomSheet';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
@@ -44,6 +45,7 @@ const HomeWorkTab = () => {
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [homeworkData, setHomeworkData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -56,6 +58,17 @@ const HomeWorkTab = () => {
       }
     }
   }, [sectionName, teacherDetails]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+      if (chapterDetails.length != 0) {
+        setExpandedCards((prevState) => ({
+          [chapterDetails[0].chapterId]: !prevState[chapterDetails[0].chapterId],
+        }));
+      }
+    }, [])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -74,11 +87,11 @@ const HomeWorkTab = () => {
       ele.chapterDesc.toLowerCase().includes(search.toLowerCase())
     );
     setSearchChapterName(searchItem);
+    setSearchValue(search);
   };
 
   const toggleContent = (id) => {
     setExpandedCards((prevState) => ({
-      ...prevState,
       [id]: !prevState[id],
     }));
   };
@@ -103,7 +116,11 @@ const HomeWorkTab = () => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
         setSearchChapterName(res.data.chapters);
+        // console.log('ch', res.data.chapters);
         setIsLoading(false);
+        setExpandedCards(() => ({
+          [res.data.chapters[0].chapterId]: [res.data.chapters[0].chapterId],
+        }));
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
@@ -165,6 +182,8 @@ const HomeWorkTab = () => {
           }}
           clearButtonMode="while-editing"
           selectionColor={colors.buttonTextColor}
+          value={searchValue}
+          clearIcon={() => <Image style={{ width: 10, height: 10 }} source={Cross} />}
         />
         <Text
           style={[
@@ -186,7 +205,7 @@ const HomeWorkTab = () => {
           >
             {searchChapterName && searchChapterName.length > 0 ? (
               <>
-                {searchChapterName.map((ele, i) => {
+                {searchChapterName.map((ele) => {
                   return (
                     <TouchableOpacity
                       onPress={() => toggleContent(ele.chapterId)}
@@ -206,7 +225,7 @@ const HomeWorkTab = () => {
                         <Text
                           style={[fonts.size_14, fonts.bold, { color: colors.white, width: '95%' }]}
                           numberOfLines={1}
-                        >{`C${i + 1}: ${ele.chapterDesc}`}</Text>
+                        >{`C${ele.displaySeq}: ${ele.chapterDesc}`}</Text>
                         <TouchableOpacity>
                           {expandedCards[ele.chapterId] ? (
                             <Image

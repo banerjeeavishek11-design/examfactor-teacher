@@ -56,6 +56,7 @@ const LoginScreen = () => {
   const [opensetNewPasswordBottomSheet, setOpensetNewPasswordBottomSheet] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showInvalidPassword, setShowInvalidPassword] = useState(false);
 
   const handleOutsideTap = () => {
     Keyboard.dismiss();
@@ -71,15 +72,17 @@ const LoginScreen = () => {
         storage.set('refresh_token', res.data.refresh_token);
         if (res.data?.temporary) {
           setOpensetNewPasswordBottomSheet(true);
+          setShowInvalidPassword(false);
         } else {
           const decodedPayload = jwtDecode(res.data.access_token);
           getTeacheDetails(decodedPayload.preferred_username);
+          setShowInvalidPassword(false);
         }
         setIsLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR_BAD_REQUEST') {
-          notifyMessage('Invalid UserName Or Passowrd');
+          setShowInvalidPassword(true);
           setIsLoading(false);
         }
       });
@@ -199,6 +202,7 @@ const LoginScreen = () => {
                             onBlur={onBlur}
                             onChangeText={(value) => {
                               onChange(value);
+                              setShowInvalidPassword(false);
                               setTextInputValues((prevState) => ({
                                 ...prevState,
                                 userName: value,
@@ -260,6 +264,7 @@ const LoginScreen = () => {
                             onBlur={onBlur}
                             onChangeText={(value) => {
                               onChange(value);
+                              setShowInvalidPassword(false);
                               setTextInputValues((prevState) => ({
                                 ...prevState,
                                 password: value,
@@ -291,6 +296,18 @@ const LoginScreen = () => {
                       >
                         {errors.password.message || null}
                       </Text>
+                    )}
+                    {showInvalidPassword && (
+                      <View>
+                        <Text
+                          style={{
+                            color: '#FF575F',
+                            marginTop: '2%',
+                          }}
+                        >
+                          Invalid Username or Password
+                        </Text>
+                      </View>
                     )}
                   </View>
                 </KeyboardAvoidingView>
@@ -361,7 +378,12 @@ const LoginScreen = () => {
               <TouchableOpacity
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onPress={handleSubmit(isLoading ? null : handleUsernameLogin)}
-                disabled={!isDirty || isLoading}
+                disabled={
+                  !isDirty ||
+                  isLoading ||
+                  !textInputValues.userName.trim() ||
+                  !textInputValues.password.trim()
+                }
               >
                 <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                   {isLoading ? (
@@ -369,16 +391,44 @@ const LoginScreen = () => {
                   ) : (
                     <View style={[layout.display, layout.rowHCenter]}>
                       <Text
-                        style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          {
+                            color:
+                              !isDirty ||
+                              isLoading ||
+                              !textInputValues.userName.trim() ||
+                              !textInputValues.password.trim()
+                                ? colors.gray300
+                                : colors.loginBtnTextColor,
+                          },
+                        ]}
                       >
                         LOGIN
                       </Text>
                       <ImageVariant
                         testID="brand-img"
-                        style={{ width: 16, height: 9, left: 5, top: -2 }}
+                        style={{
+                          width: 16,
+                          height: 9,
+                          left: 5,
+                          top: -2,
+                          tintColor:
+                            !isDirty ||
+                            isLoading ||
+                            !textInputValues.userName.trim() ||
+                            !textInputValues.password.trim()
+                              ? colors.gray300
+                              : colors.loginBtnTextColor,
+                        }}
                         source={rightArrow}
                         resizeMode="contain"
                       />
+                      {/* <Image
+                        style={{ width: 14, height: 9, left: 5, top: -2,tintColor: 'red'}}
+                        source={rightArrow}
+                      /> */}
                     </View>
                   )}
                 </PrimaryGradient>

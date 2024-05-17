@@ -22,6 +22,8 @@ import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticServic
 import { notifyMessage } from '../../utils/error-toast-API';
 import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
 import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
+import Cross from '@/theme/assets/images/cross.png';
+
 import moment from 'moment';
 
 const storage = new MMKV();
@@ -42,6 +44,7 @@ const DiagnosticTab = () => {
   const [diagnosticData, setDiagnosticData] = useState();
   const [sectionId, setSectionId] = useState(null);
   const [gradeId, setGradeId] = useState(null);
+  const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const resFromMMKV = storage.getString('teacherDetails');
@@ -64,6 +67,12 @@ const DiagnosticTab = () => {
       getAllChaptersDetails(selectedSubjectId);
       getDiagnostics();
     }, [selectedSubjectId])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
   );
 
   useEffect(() => {
@@ -146,6 +155,7 @@ const DiagnosticTab = () => {
       ele.chapterDesc.toLowerCase().includes(search.toLowerCase())
     );
     setSearchChapterName(searchItem);
+    setSearchValue(search);
   };
 
   const isAlreadyAssigned = (chapterId) => {
@@ -174,8 +184,10 @@ const DiagnosticTab = () => {
             borderWidth: 1,
             borderRadius: 8,
           }}
+          value={searchValue}
           clearButtonMode="while-editing"
           selectionColor={colors.buttonTextColor}
+          clearIcon={() => <Image style={{ width: 10, height: 10 }} source={Cross} />}
         />
         <Text
           style={[
@@ -265,7 +277,7 @@ const DiagnosticTab = () => {
                                 ]}
                                 numberOfLines={1}
                               >
-                                {`C${index + 1}`}: {ele.chapterDesc}
+                                {`C${ele.displaySeq}`}: {ele.chapterDesc}
                               </Text>
                             </View>
                             <View style={{ width: '0%' }}>

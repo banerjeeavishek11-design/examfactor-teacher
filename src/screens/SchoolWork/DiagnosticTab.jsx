@@ -25,6 +25,7 @@ import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getStudentDiagnosticReports } from '../../services/SchoolWorkServices/schoolWorkServices';
 import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
+import { getChapterDescById, getTopicDescById, getSubTopicDescById } from '../../utils/namesByIds';
 
 const storage = new MMKV();
 //   {
@@ -228,34 +229,6 @@ const DiagnosticTab = () => {
     }
   };
 
-  function getChapterDescById(chapterId) {
-    const chapters = chapList.map((chap) => ({
-      chapterId: chap.chapterId,
-      chapterDesc: chap.chapterDesc,
-    }));
-    const matchedChapter = chapters.filter((chapter) => chapter.chapterId === chapterId);
-    return matchedChapter.length > 0 ? matchedChapter[0].chapterDesc : null;
-  }
-
-  function getTopicDescById(topicId) {
-    const topicsArrays = chapList.map((chap) => chap.topics);
-    const allTopics = [].concat(...topicsArrays);
-    const matchedTopic = allTopics.filter((topic) => topic.topicId === topicId);
-    return matchedTopic.length > 0 ? matchedTopic[0].topicDesc : null;
-  }
-
-  function getSubTopicDescById(subTopicId) {
-    const topicsArrays = chapList.map((chap) => chap.topics);
-    const allTopics = [].concat(...topicsArrays);
-    const subTopicsArrays = allTopics.map((topic) => topic.subTopics || []);
-    const allSubTopics = [].concat(...subTopicsArrays);
-    const matchedSubTopic = allSubTopics.filter((subTopic) => subTopic.subTopicId === subTopicId);
-    return matchedSubTopic.length > 0 ? matchedSubTopic[0].subTopicDesc : null;
-  }
-
-  // console.log('CP', chapList[0].topics);
-  // console.log('diagnostic from schoolwork', diagnostic);
-
   return (
     <SafeScreen>
       {isLoading ? (
@@ -331,7 +304,7 @@ const DiagnosticTab = () => {
                           numberOfLines={2}
                           style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                         >
-                          {getChapterDescById(ele.chapterId)}
+                          {getChapterDescById(chapList, ele.chapterId)}
                         </Text>
                         <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                           <Text
@@ -501,7 +474,7 @@ const DiagnosticTab = () => {
                                             { color: colors.white, paddingHorizontal: 20 },
                                           ]}
                                         >
-                                          {getTopicDescById(topic.topicId)}
+                                          {getTopicDescById(chapList, topic.topicId)}
                                         </Text>
                                         {topic.subTopicIds.map((subTopic) => (
                                           <View style={{ paddingLeft: 30 }} key={subTopic}>
@@ -512,7 +485,7 @@ const DiagnosticTab = () => {
                                                 { color: colors.gray200 },
                                               ]}
                                             >
-                                              {getSubTopicDescById(subTopic)}
+                                              {getSubTopicDescById(chapList, subTopic)}
                                             </Text>
                                           </View>
                                         ))}

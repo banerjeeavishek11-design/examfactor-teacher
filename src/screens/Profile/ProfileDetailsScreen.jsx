@@ -8,30 +8,49 @@ import Profile from '@/theme/assets/images/profile.png';
 import EditPersonalDetailBottomSheet from '@/components/BottomSheet/Profile/EditPersonalDetailBottomSheet';
 import ChangePasswordBottomSheet from '@/components/BottomSheet/Profile/ChangePasswordBottomSheet';
 import { useRoute } from '@react-navigation/native';
-
-const ProfileData = {
-  fullName: 'Vinay Dua',
-  dob: '18',
-  email: 'vin****a@gmail.com',
-  gender: 'Male',
-  city: 'New Delhi',
-  mobile: '9988776655',
-  emergencyContact: '9*****32412',
-  address: 'axyz, Abc Street, new delhi, pin -700001 ',
-};
+import { launchImageLibrary } from 'react-native-image-picker';
+import { uploadPicture } from '../../services/teacherService';
+import moment from 'moment';
 
 const ProfileDetailsScreen = ({ navigation }) => {
   const route = useRoute();
   const { userDetails } = route.params;
-  const [profileData, setProfileData] = useState(ProfileData);
+  const [profileData, setProfileData] = useState(userDetails);
   const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible] = useState(false);
   const [changePasswordBottomSheetVisible, setChangePasswordBottomSheetVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState();
 
-  const saveNewData = (newData) => {
-    setProfileData((prevData) => ({
-      ...prevData,
-      ...newData,
-    }));
+  // const saveNewData = (newData) => {
+  //   setProfileData((prevData) => ({
+  //     ...prevData,
+  //     ...newData,
+  //   }));
+  // };
+
+  const chooseImage = () => {
+    let options = {
+      storageOptions: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options)
+      .then((response) => {
+        console.log(response);
+        setSelectedImage(response.assets[0].uri);
+        uploadPicture(response.assets[0].uri)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            err;
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const openEditPersonalDetailModal = () => {
@@ -78,10 +97,16 @@ const ProfileDetailsScreen = ({ navigation }) => {
               resizeMode="cover"
             />
           ) : (
-            <Image source={Profile} />
+            <Image source={!selectedImage ? Profile : selectedImage} />
           )}
-          <TouchableOpacity>
-            <Text style={[fonts.size_12, { color: colors.termsLinkColor, marginTop: '2%' }]}>
+          <TouchableOpacity onPress={chooseImage}>
+            <Text
+              style={[
+                fonts.size_12,
+                fonts.fontWeight_small,
+                { color: colors.termsLinkColor, marginTop: '2%' },
+              ]}
+            >
               Add Image
             </Text>
           </TouchableOpacity>
@@ -158,7 +183,9 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {userDetails?.dob || '-  '}
+                {moment(userDetails?.dob).format('DD/MM/YYYY') === 'Invalid date'
+                  ? '-  '
+                  : moment(userDetails?.dob).format('DD/MM/YYYY')}
               </Text>
             </View>
             <View
@@ -188,33 +215,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 {userDetails?.gender}
               </Text>
             </View>
-            <View
-              style={[
-                layout.rowHCenter,
-                layout.justifyBetween,
-                styles.dataFeild,
-                { borderBottomColor: colors.gray200 },
-              ]}
-            >
-              <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.4 },
-                ]}
-              >
-                City
-              </Text>
-              <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
-              >
-                {userDetails?.city || '-  '}
-              </Text>
-            </View>
+
             <View
               style={[
                 layout.rowHCenter,
@@ -239,7 +240,9 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {userDetails?.emailId}
+                {userDetails?.emailId.length < 25
+                  ? userDetails?.emailId
+                  : userDetails?.emailId.substring(0, 25) + '...'}
               </Text>
             </View>
             <View
@@ -294,7 +297,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
           <Text
             style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
           >
-            {userDetails?.mobileNumber}
+            {userDetails?.mobileNumber || '-  '}
           </Text>
         </View>
         <TouchableOpacity onPress={openChangePasswordModal}>
@@ -310,7 +313,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
         closeModal={closeEditPersonalDetailModal}
         personalDetailBottomSheetVisible={personalDetailBottomSheetVisible}
         profileData={profileData}
-        saveNewData={saveNewData}
+        setProfileData={setProfileData}
+        // saveNewData={saveNewData}
       />
       <ChangePasswordBottomSheet
         visible={changePasswordBottomSheetVisible}

@@ -3,45 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ImageVariant } from '@/components/atoms';
+import { useSelector } from 'react-redux';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
+import { getTopicDescById, getChapterDescById } from '../../utils/namesByIds';
+import { getStudentHomeworkReport } from '../../services/subjectWiseReportService';
+import { MMKV } from 'react-native-mmkv';
 
-// const topic = [
-//   {
-//     id: 1,
-//     topicName: 'Introduction to Motion',
-//     subTitle: 'Students completed the homework',
-//     progress: 60,
-//   },
-//   {
-//     id: 2,
-//     topicName: 'Rate of Motion',
-//     subTitle: 'Based on concepts covered till date',
-//     progress: 65,
-//   },
-//   {
-//     id: 3,
-//     topicName: 'Rate of Change of Velocity',
-//     subTitle: 'Rate of Change of Velocity',
-//     progress: 50,
-//   },
-//   {
-//     id: 4,
-//     topicName: 'Graphical Representation...',
-//     subTitle: 'Based on concepts covered till date',
-//     progress: 70,
-//   },
-//   {
-//     id: 5,
-//     topicName: 'Equations of Motion by Gr...',
-//     subTitle: 'Students completed the homework',
-//     progress: 68,
-//   },
-// ];
+const storage = new MMKV();
 
 const leaderboardData = [
   { name: 'Rahul K.', progress: 88, achievable: 87 },
@@ -55,13 +28,35 @@ const TopicWiseDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { topics, chapterName, subjectName } = route.params || {};
+  const { topics, chapterName, subjectName, chapList } = route.params || {};
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
+  const [sectionId, setSectionId] = useState(null);
+  const [gradeId, setGradeId] = useState(null);
+  const [homeworkReportData, setHomeworkReportData] = useState();
+  // const [selectedTopicId, setSelectedTopicId] = useState();
+
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
 
   const toggleContent = (id) => {
+    // setSelectedTopicId(id);
     setExpandedCards((prevState) => ({
       [id]: !prevState[id],
     }));
+    getHomeworkReports(id);
   };
 
   useEffect(() => {
@@ -71,6 +66,26 @@ const TopicWiseDetailsScreen = () => {
     });
     setExpandedCards(initialExpandedState);
   }, []);
+
+  const getHomeworkReports = (topicId) => {
+    let params = {
+      sectionId: sectionId,
+      topicId: topicId,
+      gradeId: gradeId,
+      subjectId: subjectId,
+      chapterId: chapterName,
+      // duration: 0,
+    };
+    getStudentHomeworkReport(params)
+      .then((res) => {
+        setHomeworkReportData(res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  };
+
+  // console.log('response of HW report', homeworkReportData);
 
   return (
     <SafeScreen>
@@ -89,6 +104,7 @@ const TopicWiseDetailsScreen = () => {
           onPress={() =>
             navigation.navigate('SubjectDetailsScreen', {
               subjectName: subjectName,
+              chapList: chapList,
             })
           }
         >
@@ -104,23 +120,23 @@ const TopicWiseDetailsScreen = () => {
             resizeMode="contain"
           />
           <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
-            {chapterName}
+            {getChapterDescById(chapList, chapterName)}
           </Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
         {topics.map((ele) => {
-          const progressPercentage = ele.progress / 100;
+          const progressPercentage = ele?.progress / 100;
           return (
             <TouchableOpacity
-              onPress={() => toggleContent(ele.topicId)}
-              key={ele.topicId}
+              onPress={() => toggleContent(ele?.topicId)}
+              key={ele?.topicId}
               style={[
                 layout.fullWidth,
                 // layout.paddingForCard,
                 {
                   backgroundColor: colors.cardBackgroundColor,
-                  height: expandedCards[ele.topicId] ? 'auto' : 100,
+                  height: expandedCards[ele?.topicId] ? 'auto' : 100,
                   borderRadius: 14,
                   marginTop: '3%',
                 },
@@ -137,10 +153,10 @@ const TopicWiseDetailsScreen = () => {
               >
                 <View style={{ width: '60%' }}>
                   <Text
-                    numberOfLines={2}
+                    numberOfLines={1}
                     style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                   >
-                    {ele.topicId}
+                    {getTopicDescById(chapList, ele?.topicId)}
                   </Text>
                   <Text
                     style={[
@@ -153,11 +169,11 @@ const TopicWiseDetailsScreen = () => {
                   </Text>
                 </View>
                 <View style={{ width: '25%', top: -5 }}>
-                  <Circularprogressbar progress={ele.progress} />
+                  <Circularprogressbar progress={ele?.progress} />
                 </View>
                 <View style={{ width: '5%' }}>
                   <TouchableOpacity>
-                    {expandedCards[ele.topicId] ? (
+                    {expandedCards[ele?.topicId] ? (
                       <Image
                         style={{ width: 14, height: 10 }}
                         source={UpArrow}
@@ -174,7 +190,7 @@ const TopicWiseDetailsScreen = () => {
                 </View>
               </View>
 
-              {expandedCards[ele.topicId] ? (
+              {expandedCards[ele?.topicId] ? (
                 <View>
                   <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
                     <Text
@@ -182,15 +198,18 @@ const TopicWiseDetailsScreen = () => {
                         fonts.size_12,
                         fonts.fontWeight_small,
                         {
-                          color: '#3DD598',
+                          color: ele?.progress <= 60 ? '#FFAB48' : '#3DD598',
                           // marginTop: "5%",
                         },
                       ]}
                     >
-                      Progress {`${ele.progress}%`}
+                      Progress {`${ele?.progress}%`}
                     </Text>
                     <View style={{ marginTop: '4%' }}>
-                      <Progressbar progress={progressPercentage} color={'#3DD598'} />
+                      <Progressbar
+                        progress={progressPercentage}
+                        color={progressPercentage <= 0.6 ? '#FFAB48' : '#3DD598'}
+                      />
                     </View>
                   </View>
                   <View>
@@ -203,7 +222,7 @@ const TopicWiseDetailsScreen = () => {
                         Achievable
                       </Text>
                     </View>
-                    {leaderboardData.map((item, index) => (
+                    {homeworkReportData?.map((item, index) => (
                       <View
                         key={index}
                         style={[
@@ -215,17 +234,17 @@ const TopicWiseDetailsScreen = () => {
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          {item.name}
+                          {item.studentName}
                         </Text>
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          {`${item.progress}%`}
+                          {`${item.completionPercentage}%`}
                         </Text>
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          {`${item.achievable}/100`}
+                          {`${item.score}/100`}
                         </Text>
                       </View>
                     ))}

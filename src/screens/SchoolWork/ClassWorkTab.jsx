@@ -57,6 +57,7 @@ const ClassWorkTab = () => {
   const [chapterId, setChapterId] = useState();
   const [assessmentWiseReport, setAssessmentWiseReport] = useState([]);
   const [data, setData] = useState([]);
+  const [maxStudentNumber, setMaxStudentNumber] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -339,59 +340,68 @@ const ClassWorkTab = () => {
                           </Text>
                         </View>
                         {assessmentWiseReport?.map((item, index) => (
-                          <View
-                            key={item.studentName}
-                            style={[
-                              styles.row,
-                              index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                              index === leaderboardData.length - 1 && styles.lastRow,
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.fontWeight_small,
-                                { color: colors.white, opacity: 0.7 },
-                              ]}
-                            >
-                              {item.studentName}
-                            </Text>
-                            <View
-                              style={[
-                                layout.row,
-                                layout.itemsCenter,
-                                {
-                                  width: '55%',
-                                  justifyContent: 'space-between',
-                                },
-                              ]}
-                            >
-                              <Text
+                          <>
+                            {index < maxStudentNumber ? (
+                              <View
+                                key={item.studentName}
                                 style={[
-                                  fonts.size_14,
-                                  fonts.fontWeight_small,
-                                  { color: colors.white, opacity: 0.7 },
+                                  styles.row,
+                                  index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                  index === leaderboardData.length - 1 && styles.lastRow,
                                 ]}
                               >
-                                {item.score}
-                              </Text>
-                              <Text
-                                style={[
-                                  fonts.size_14,
-                                  fonts.fontWeight_small,
-                                  { color: colors.white, opacity: 0.7 },
-                                ]}
-                              >
-                                {item.accuracy} %
-                              </Text>
-                            </View>
-                          </View>
+                                <Text
+                                  style={[
+                                    fonts.size_14,
+                                    fonts.fontWeight_small,
+                                    { color: colors.white, opacity: 0.7 },
+                                  ]}
+                                >
+                                  {item.studentName}
+                                </Text>
+                                <View
+                                  style={[
+                                    layout.row,
+                                    layout.itemsCenter,
+                                    {
+                                      width: '55%',
+                                      justifyContent: 'space-between',
+                                    },
+                                  ]}
+                                >
+                                  <Text
+                                    style={[
+                                      fonts.size_14,
+                                      fonts.fontWeight_small,
+                                      { color: colors.white, opacity: 0.7 },
+                                    ]}
+                                  >
+                                    {item.score}
+                                  </Text>
+                                  <Text
+                                    style={[
+                                      fonts.size_14,
+                                      fonts.fontWeight_small,
+                                      { color: colors.white, opacity: 0.7 },
+                                    ]}
+                                  >
+                                    {item.accuracy} %
+                                  </Text>
+                                </View>
+                              </View>
+                            ) : null}
+                          </>
                         ))}
                       </View>
                     </View>
                   ) : null}
                   {expandedCards[ele.assessmentId] && (
-                    <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        maxStudentNumber === 2 ? setMaxStudentNumber(1000) : setMaxStudentNumber(5);
+                      }}
+                      style={{ marginTop: '4%', marginBottom: '4%' }}
+                    >
                       <Text
                         style={[
                           fonts.size_14,
