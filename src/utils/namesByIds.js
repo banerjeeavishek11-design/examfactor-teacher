@@ -1,4 +1,5 @@
 export function getChapterDescById(chapList, chapterId) {
+  console.log('chap from utils', chapList);
   const chapters = chapList.map((chap) => ({
     chapterId: chap.chapterId,
     chapterDesc: chap.chapterDesc,

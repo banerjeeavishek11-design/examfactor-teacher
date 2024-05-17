@@ -228,9 +228,9 @@ const HomeScreen = () => {
         // setDataOfConsolidatedReport(res.data);
       })
       .catch((error) => {
-        if (error?.response?.status !== 401)
-          // notifyMessage('failed to fetch subjectwise report', error);
-          console.log('subwise', error);
+        if (error?.response?.status === 404 && error?.response?.status !== 401)
+          notifyMessage('Consolidated report not found', error);
+        console.log('subwise', error);
       });
   };
 
@@ -423,7 +423,7 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.homeworkProgress}% Complete`}
+              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
@@ -443,7 +443,7 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.diagnosisProgress}% Complete`}
+              {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>

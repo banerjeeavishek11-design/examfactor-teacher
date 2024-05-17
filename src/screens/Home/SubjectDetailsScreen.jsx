@@ -38,6 +38,7 @@ const SubjectDetailsScreen = () => {
     );
     setSearchChapterName(searchItem);
   };
+  // console.log('searchChapterName', searchChapterName);
 
   return (
     <SafeScreen>
@@ -123,6 +124,13 @@ const SubjectDetailsScreen = () => {
             <Circularprogressbar progress={60} />
           </View>
         </LinearGradient>
+        {!searchChapterName && (
+          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 600 }]}>
+            <Text style={[fonts.fontWeignt_600, fonts.size_20, { color: colors.white }]}>
+              No Data
+            </Text>
+          </View>
+        )}
         {searchChapterName?.map((ele) => {
           return (
             <View
