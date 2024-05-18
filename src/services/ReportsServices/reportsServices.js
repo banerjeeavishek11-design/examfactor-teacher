@@ -31,6 +31,10 @@ export const mySubjectInsightAssessmentDetails = async (subjectId, params) => {
   });
 };
 
+export const mySubjectInsightScores = async (subjectId) => {
+  return await api.get(`${b2bStudentService}/v1/my-subject-insight/${subjectId}/chapters?q=st`, {});
+};
+
 export const bookMarkedQuestionsList = async (params) => {
   return api.get(`${b2bStudentService}/v1/my-bookmark`, {
     params: params,

@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Dimensions,
   Image,
   Pressable,
   ScrollView,
@@ -11,7 +12,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useNavigation } from '@react-navigation/native';
-import { Concentrix, SafeScreen, StudentLevelBarChart } from '@/components/template';
+import { Concentrix, SafeScreen } from '@/components/template';
 import { ImageVariant } from '@/components/atoms';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
@@ -23,25 +24,13 @@ import {
   bookMarkedQuestionsList,
   mySubjectInsightAssessmentDetails,
   mySubjectInsightByStudentId,
+  mySubjectInsightScores,
   mySubjectInsightTimeSpend,
 } from '../../services/ReportsServices/reportsServices';
 import { useSelector } from 'react-redux';
 import { notifyMessage } from '../../utils/error-toast-API';
 import { formatSecond2 } from '../../utils/date-time-utility';
-
-const data = [
-  [20, 5, 10, 4, 80],
-  [10, 20, 30, 40, 50],
-];
-const barChartColor = [
-  ['#FF575F', '#ff575ff5'],
-  ['#27d4fa', '#7af4fc'],
-];
-const width = 300;
-const height = 320;
-const borderRadius = 2;
-const xAxisTitle = 'Chapters';
-const yAxisTitle = 'Achievable Score %';
+import ChapterInsightCarousel from '../../components/carousel/ChapterInsightCarousel';
 
 const StudentWiseReportScreen = () => {
   const navigation = useNavigation();
@@ -55,14 +44,16 @@ const StudentWiseReportScreen = () => {
   const [classworkData, setClassworkData] = useState();
   const [classworkInsightDetails, setClassworkInsightDetails] = useState();
   const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
+  const [chapterScoreMap, setChapterScoreMap] = useState({});
   const overallProgress = specificStudentDetails
     ? specificStudentDetails?.completionPercentage / 100
     : 0;
-
+  const chaptersStatusInfo = specificStudentDetails?.chaptersStatusInfo || [];
   useEffect(() => {
     mySubjectInsight();
     mySubjectTimeSpend();
     getBookmarkQuestions();
+    getMySubjectInsightData();
   }, [selectedSubjectId]);
 
   const mySubjectInsight = () => {
@@ -166,6 +157,36 @@ const StudentWiseReportScreen = () => {
       });
   };
 
+  const getMySubjectInsightData = () => {
+    mySubjectInsightScores(selectedSubjectId)
+      .then((res) => {
+        console.log('res from score', res.data);
+        const chapterScoreMap = res.data.reduce((ac, ch) => ({ ...ac, [ch.chapterId]: ch }), {});
+        setChapterScoreMap(chapterScoreMap);
+      })
+      .catch((error) => {
+        console.log('error from chapter', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to fetch score and study time');
+        } else if (error?.response?.status === 404) {
+          notifyMessage('Data not found');
+        }
+        setIsLoading(false);
+      });
+  };
+
+  let data = [];
+  const scoreArray = [];
+  const timeSpentArray = [];
+
+  chaptersStatusInfo?.forEach((cs) => {
+    const score = chapterScoreMap[cs.chapterId]?.score || 0;
+    const timespent = chapterScoreMap[cs.chapterId]?.timeSpent || 0;
+    scoreArray.push(score);
+    timeSpentArray.push(timespent);
+  });
+  data.push(scoreArray, timeSpentArray);
+
   return (
     <SafeScreen>
       <View
@@ -257,7 +278,7 @@ const StudentWiseReportScreen = () => {
               </View>
             </View>
             {/* <BarChart /> */}
-            <StudentLevelBarChart
+            {/* <StudentLevelBarChart
               data={data}
               colors={barChartColor}
               width={width}
@@ -265,7 +286,20 @@ const StudentWiseReportScreen = () => {
               borderRadius={borderRadius}
               xAxisTitle={xAxisTitle}
               yAxisTitle={yAxisTitle}
-            />
+            /> */}
+            <View style={{ marginVertical: '2%' }}>
+              <ChapterInsightCarousel
+                data={data}
+                labels={chaptersStatusInfo.map((cs, idx) => `C${idx + 1}`)}
+                colors={[['#7af4fc', '#27d4fa']]}
+                width={Dimensions.get('window').width - 30}
+                otherStyles={{ borderRadius: 6, marginTop: '4%', paddingTop: 30 }}
+                barBorderRadius={3}
+                height={220}
+                xAxisTitle={'Chapters'}
+                yAxisTitle={'Achievable Score %'}
+              />
+            </View>
             <View
               style={[
                 layout.display,
@@ -622,7 +656,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, opacity: 0.7 },
                   ]}
                 >
-                  See bookmarked questions {allBookmarkedQuestionsDetails?.length}
+                  See bookmarked questions {allBookmarkedQuestionsDetails?.totalElements ?? 0}
                 </Text>
                 <TouchableOpacity>
                   <Image
