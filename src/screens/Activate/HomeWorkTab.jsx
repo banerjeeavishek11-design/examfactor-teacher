@@ -74,13 +74,13 @@ const HomeWorkTab = () => {
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
       getHomeworks();
-    }, [selectedSubjectId])
+    }, [selectedSubjectId, sectionId, gradeId])
   );
 
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
     getHomeworks();
-  }, [selectedSubjectId]);
+  }, [selectedSubjectId, sectionId, gradeId]);
 
   const onSearchChapters = (search) => {
     const searchItem = chapterDetails.filter((ele) =>

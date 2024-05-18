@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable prettier/prettier */
 import {
   Image,
   ScrollView,
@@ -133,6 +135,7 @@ const DiagnosticTab = () => {
   const [sectionId, setSectionId] = useState();
   const [showChapterName, setShowChapterName] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -362,157 +365,189 @@ const DiagnosticTab = () => {
                             }}
                           />
                         </View>
-                        <View>
-                          <View style={styles.header}>
-                            <View style={{ width: '30%' }}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Name
-                              </Text>
-                            </View>
-                            <View style={{ width: '40%' }}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Diagnostic Completed
-                              </Text>
-                            </View>
-                            <View style={{ width: '30%' }}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                No. of Weak Subtopics
-                              </Text>
-                            </View>
+                        {ele.b2BStudentDiagnosticSummaryDtoList.length === 0 ? (
+                          <View
+                            style={[
+                              layout.justifyCenter,
+                              layout.itemsCenter,
+                              { marginVertical: '3%' },
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                fonts.fontWeight_small,
+                                fonts.size_14,
+                                { color: colors.white },
+                              ]}
+                            >
+                              No Data Found
+                            </Text>
                           </View>
-                          {ele.b2BStudentDiagnosticSummaryDtoList.map((item, index) => (
-                            <>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  setShowWeakSubtopics(!showWeakSubtopics);
-                                }}
-                                key={index}
-                                style={[
-                                  styles.row,
-                                  index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                  index === ele.b2BStudentDiagnosticSummaryDtoList.length - 1 &&
-                                    styles.lastRow,
-                                ]}
-                              >
-                                <View
-                                  style={{
-                                    width: '30%',
+                        ) : (
+                          <View>
+                            <View style={styles.header}>
+                              <View style={{ width: '30%' }}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Name
+                                </Text>
+                              </View>
+                              <View style={{ width: '40%' }}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Diagnostic Completed
+                                </Text>
+                              </View>
+                              <View style={{ width: '30%' }}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  No. of Weak Subtopics
+                                </Text>
+                              </View>
+                            </View>
+                            {ele.b2BStudentDiagnosticSummaryDtoList.map((item, index) => (
+                              <>
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    setShowWeakSubtopics(!showWeakSubtopics);
                                   }}
+                                  key={index}
+                                  style={[
+                                    styles.row,
+                                    index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                    index === ele.b2BStudentDiagnosticSummaryDtoList.length - 1 &&
+                                      styles.lastRow,
+                                  ]}
                                 >
-                                  <Text
-                                    numberOfLines={1}
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, opacity: 0.7 },
-                                    ]}
+                                  <View
+                                    style={{
+                                      width: '30%',
+                                    }}
                                   >
-                                    {item.fullName}
-                                  </Text>
-                                </View>
-                                <View
-                                  style={{
-                                    width: '40%',
-                                  }}
-                                >
-                                  <Text
-                                    numberOfLines={1}
+                                    <Text
+                                      numberOfLines={1}
+                                      style={[
+                                        fonts.size_14,
+                                        fonts.fontWeight_small,
+                                        { color: colors.white, opacity: 0.7 },
+                                      ]}
+                                    >
+                                      {item.fullName}
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{
+                                      width: '40%',
+                                    }}
+                                  >
+                                    <Text
+                                      numberOfLines={1}
+                                      style={[
+                                        fonts.size_14,
+                                        fonts.fontWeight_small,
+                                        {
+                                          color: colors.white,
+                                          opacity: 0.7,
+                                        },
+                                      ]}
+                                    >
+                                      {item.diagnosticChapterCompletionPercentage === 100
+                                        ? 'YES'
+                                        : 'NO'}
+                                    </Text>
+                                  </View>
+                                  <View
                                     style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
+                                      layout.row,
+                                      layout.itemsCenter,
                                       {
-                                        color: colors.white,
-                                        opacity: 0.7,
+                                        width: '30%',
+                                        gap: 6,
                                       },
                                     ]}
                                   >
-                                    {item.diagnosticChapterCompletionPercentage === 100
-                                      ? 'YES'
-                                      : 'NO'}
-                                  </Text>
-                                </View>
-                                <View
-                                  style={[
-                                    layout.row,
-                                    layout.itemsCenter,
-                                    {
-                                      width: '30%',
-                                      gap: 6,
-                                    },
-                                  ]}
-                                >
-                                  <Text
-                                    numberOfLines={1}
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, opacity: 0.7 },
-                                    ]}
-                                  >
-                                    {item.dignosticWeakTopicSummary.length}
-                                  </Text>
-                                  {showWeakSubtopics ? (
-                                    <Image style={{ width: 12, height: 6 }} source={UpArrow} />
-                                  ) : (
-                                    <Image style={{ width: 10, height: 5 }} source={DownArrow} />
-                                  )}
-                                </View>
-                              </TouchableOpacity>
-                              <View style={{ flexDirection: 'column' }}>
-                                {showWeakSubtopics && item.dignosticWeakTopicSummary.length > 0 ? (
-                                  <View
-                                    style={[
-                                      { backgroundColor: '#2C2C39', marginTop: -1, height: 'auto' },
-                                    ]}
-                                  >
-                                    {item.dignosticWeakTopicSummary.map((topic) => (
-                                      <View style={{ marginBottom: 10 }} key={topic.topicId}>
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.bold,
-                                            { color: colors.white, paddingHorizontal: 20 },
-                                          ]}
-                                        >
-                                          {getTopicDescById(chapList, topic.topicId)}
-                                        </Text>
-                                        {topic.subTopicIds.map((subTopic) => (
-                                          <View style={{ paddingLeft: 30 }} key={subTopic}>
-                                            <Text
-                                              style={[
-                                                fonts.size_12,
-                                                fonts.fontWeignt_600,
-                                                { color: colors.gray200 },
-                                              ]}
-                                            >
-                                              {getSubTopicDescById(chapList, subTopic)}
-                                            </Text>
-                                          </View>
-                                        ))}
-                                      </View>
-                                    ))}
+                                    <Text
+                                      numberOfLines={1}
+                                      style={[
+                                        fonts.size_14,
+                                        fonts.fontWeight_small,
+                                        { color: colors.white, opacity: 0.7 },
+                                      ]}
+                                    >
+                                      {item.dignosticWeakTopicSummary.length}
+                                    </Text>
+                                    {showWeakSubtopics ? (
+                                      <Image style={{ width: 12, height: 6 }} source={UpArrow} />
+                                    ) : (
+                                      <Image style={{ width: 10, height: 5 }} source={DownArrow} />
+                                    )}
                                   </View>
-                                ) : null}
-                              </View>
-                            </>
-                          ))}
-                        </View>
+                                </TouchableOpacity>
+
+                                <View style={{ flexDirection: 'column' }}>
+                                  {showWeakSubtopics &&
+                                  item.dignosticWeakTopicSummary.length > 0 ? (
+                                    <View
+                                      style={[
+                                        {
+                                          backgroundColor: '#2C2C39',
+                                          marginTop: -1,
+                                          height: 'auto',
+                                        },
+                                      ]}
+                                    >
+                                      {item.dignosticWeakTopicSummary.map((topic) => (
+                                        <View style={{ marginBottom: 10 }} key={topic.topicId}>
+                                          <Text
+                                            style={[
+                                              fonts.size_14,
+                                              fonts.bold,
+                                              { color: colors.white, paddingHorizontal: 20 },
+                                            ]}
+                                          >
+                                            {getTopicDescById(chapList, topic.topicId)}
+                                          </Text>
+                                          {topic.subTopicIds.map((subTopic) => (
+                                            <View style={{ paddingLeft: 30 }} key={subTopic}>
+                                              <Text
+                                                style={[
+                                                  fonts.size_12,
+                                                  fonts.fontWeignt_600,
+                                                  { color: colors.gray200 },
+                                                ]}
+                                              >
+                                                {getSubTopicDescById(chapList, subTopic)}
+                                              </Text>
+                                            </View>
+                                          ))}
+                                        </View>
+                                      ))}
+                                    </View>
+                                  ) : null}
+                                </View>
+                              </>
+                            ))}
+                          </View>
+                        )}
                       </View>
                     ) : null}
-                    {expandedCards[ele.id] && (
-                      <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeignt_600,
-                            fonts.alignCenter,
-                            { color: colors.termsLinkColor },
-                          ]}
+                    {expandedCards[ele.id] &&
+                      ele.b2BStudentDiagnosticSummaryDtoList.length != 0 && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                          }}
+                          style={{ marginTop: '4%', marginBottom: '4%' }}
                         >
-                          See More
-                        </Text>
-                      </TouchableOpacity>
-                    )}
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeignt_600,
+                              fonts.alignCenter,
+                              { color: colors.termsLinkColor },
+                            ]}
+                          >
+                            See More
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                   </TouchableOpacity>
                 );
               })}

@@ -1,117 +1,94 @@
-import { Image, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Searchbar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { SafeScreen } from '@/components/template';
 import Search from '@/theme/assets/images/search.png';
 import Arrow from '@/theme/assets/images/arrow.png';
+import { getStudentDetails } from '../../services/ReportsServices/reportsServices';
+import { MMKV } from 'react-native-mmkv';
+import { notifyMessage } from '../../utils/error-toast-API';
 
-const studentDetails = [
-  {
-    id: 1,
-    name: 'Viney Dua',
-    achievableScore: 30,
-    progressPercentage: 75,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 2,
-    name: 'Ratnakar Gautam',
-    achievableScore: 40,
-    progressPercentage: 60,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 3,
-    name: 'Sarthak Chadha',
-    achievableScore: 80,
-    progressPercentage: 50,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 4,
-    name: 'Ankit',
-    achievableScore: 10,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 5,
-    name: 'Avishek',
-    achievableScore: 50,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 6,
-    name: 'Aman',
-    achievableScore: 90,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 7,
-    name: 'Prasenjit',
-    achievableScore: 78,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 8,
-    name: 'Saikat',
-    achievableScore: 98,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 9,
-    name: 'Saptarshi',
-    achievableScore: 43,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-  {
-    id: 10,
-    name: 'Subho',
-    achievableScore: 66,
-    progressPercentage: 45,
-    activatedTopic: '05',
-    subTitle: 'Progress is calculated based on the activated topics.',
-  },
-];
-
+const storage = new MMKV();
 const StudentLevelScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
-  const [searchChapterName, setSearchChapterName] = useState([]);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const [studentName, setSearchStudentName] = useState([]);
+  const [sectionId, setSectionId] = useState(null);
+  const [studentDetails, setStudentDetails] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setSearchChapterName(studentDetails);
-  }, []);
+    setSearchStudentName(studentDetails);
+  }, [studentDetails]);
 
-  const onSearchChapters = (search) => {
-    const searchItem = studentDetails.filter((ele) =>
-      ele.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setSearchChapterName(searchItem);
+  useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setSectionId(item.id);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (sectionId) {
+        getStudentList();
+      }
+    }, [selectedSubjectId, sectionId])
+  );
+
+  const getStudentList = () => {
+    setIsLoading(true);
+    let params = {
+      sectionId: sectionId,
+      subjectId: selectedSubjectId,
+    };
+    getStudentDetails(params)
+      .then((res) => {
+        setStudentDetails(res.data.content);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to fetch chapter details');
+        }
+        setIsLoading(false);
+      });
   };
 
-  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const onSearchChapters = (search) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const searchItem = studentDetails.filter((ele) =>
+        ele.firstName.toLowerCase().includes(search.toLowerCase())
+      );
+      setSearchStudentName(searchItem);
+      setIsLoading(false);
+    }, 500);
+  };
 
   const goToStudentWiseReportScreen = (studentDetails) => {
     navigation.navigate('StudentWiseReportScreen', { studentDetails: studentDetails });
-    // navigation.navigate('StudentWiseReportScreen')
   };
 
   return (
@@ -145,44 +122,61 @@ const StudentLevelScreen = () => {
           />
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: '50%' }}>
-          {searchChapterName?.map((ele) => {
-            return (
-              <Pressable
-                key={ele.id}
-                style={[
-                  layout.fullWidth,
-                  isTablet ? { padding: '3%' } : layout.paddingForCard,
-                  {
-                    backgroundColor: colors.cardBackgroundColor,
-                    borderRadius: 8,
-                    marginTop: '3%',
-                  },
-                ]}
-                onPress={() => goToStudentWiseReportScreen(ele)}
-              >
-                <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-                  <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                    {ele.name}
-                  </Text>
-                  <TouchableOpacity>
-                    <Image
-                      source={Arrow}
-                      resizeMode="contain"
-                      style={{
-                        width: 10,
-                        height: 10,
-                        tintColor: colors.termsLinkColor,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </Pressable>
-            );
-          })}
+          {isLoading ? (
+            <View style={styles.loader}>
+              <ActivityIndicator size="large" color={colors.termsLinkColor} />
+            </View>
+          ) : (
+            <>
+              {studentName?.map((ele) => {
+                return (
+                  <Pressable
+                    key={ele?.firstName}
+                    style={[
+                      layout.fullWidth,
+                      isTablet ? { padding: '3%' } : layout.paddingForCard,
+                      {
+                        backgroundColor: colors.cardBackgroundColor,
+                        borderRadius: 8,
+                        marginTop: '3%',
+                      },
+                    ]}
+                    onPress={() => goToStudentWiseReportScreen(ele)}
+                  >
+                    <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+                      <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                        {ele?.firstName}
+                      </Text>
+                      <TouchableOpacity>
+                        <Image
+                          source={Arrow}
+                          resizeMode="contain"
+                          style={{
+                            width: 10,
+                            height: 10,
+                            tintColor: colors.termsLinkColor,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </>
+          )}
         </ScrollView>
       </View>
     </SafeScreen>
   );
 };
+
+const styles = StyleSheet.create({
+  loader: {
+    marginTop: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default StudentLevelScreen;

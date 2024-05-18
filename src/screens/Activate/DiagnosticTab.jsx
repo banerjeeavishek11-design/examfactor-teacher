@@ -66,7 +66,13 @@ const DiagnosticTab = () => {
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
       getDiagnostics();
-    }, [selectedSubjectId])
+    }, [selectedSubjectId, sectionId, gradeId])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
   );
 
   useFocusEffect(
@@ -78,7 +84,7 @@ const DiagnosticTab = () => {
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
     getDiagnostics();
-  }, [selectedSubjectId]);
+  }, [selectedSubjectId, sectionId, gradeId]);
 
   useEffect(() => {
     if (chapList[chapListIndex]?.unitId) {

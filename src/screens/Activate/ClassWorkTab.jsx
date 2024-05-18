@@ -72,7 +72,13 @@ const ClassWorkTab = () => {
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
       getClassworks();
-    }, [selectedSubjectId])
+    }, [selectedSubjectId, sectionId, gradeId])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
   );
 
   useFocusEffect(

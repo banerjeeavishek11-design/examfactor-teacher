@@ -62,6 +62,7 @@ const HomeWorkTab = () => {
   const [topicId, setTopicId] = useState('');
   const [data, setData] = useState([]);
   const [topicWiseResponse, setTopicWiseResponse] = useState([]);
+  const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -386,73 +387,82 @@ const HomeWorkTab = () => {
                             </View>
                             {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
                               (item, index) => (
-                                <View
-                                  key={index}
-                                  style={[
-                                    styles.row,
-                                    index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                    index === leaderboardData.length - 1 && styles.lastRow,
-                                    { borderRadius: 14 },
-                                  ]}
-                                >
-                                  <Text
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, opacity: 0.7 },
-                                    ]}
-                                  >
-                                    {item.studentName}
-                                  </Text>
-                                  <View
-                                    style={[
-                                      layout.row,
-                                      layout.itemsCenter,
-                                      {
-                                        width: '55%',
-                                        justifyContent: 'space-between',
-                                      },
-                                    ]}
-                                  >
-                                    <Text
+                                <>
+                                  {index < seeMaxStudent && (
+                                    <View
+                                      key={item.studentName}
                                       style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
-                                        { color: colors.white, opacity: 0.7 },
+                                        styles.row,
+                                        index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                        index === leaderboardData.length - 1 && styles.lastRow,
+                                        { borderRadius: 14 },
                                       ]}
                                     >
-                                      {item.timeSpent}
-                                    </Text>
-                                    <Text
-                                      style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
-                                        { color: colors.white, opacity: 0.7 },
-                                      ]}
-                                    >
-                                      {item.completionPercentage} %
-                                    </Text>
-                                  </View>
-                                </View>
+                                      <Text
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.white, opacity: 0.7 },
+                                        ]}
+                                      >
+                                        {item.studentName}
+                                      </Text>
+                                      <View
+                                        style={[
+                                          layout.row,
+                                          layout.itemsCenter,
+                                          {
+                                            width: '55%',
+                                            justifyContent: 'space-between',
+                                          },
+                                        ]}
+                                      >
+                                        <Text
+                                          style={[
+                                            fonts.size_14,
+                                            fonts.fontWeight_small,
+                                            { color: colors.white, opacity: 0.7 },
+                                          ]}
+                                        >
+                                          {item.timeSpent}
+                                        </Text>
+                                        <Text
+                                          style={[
+                                            fonts.size_14,
+                                            fonts.fontWeight_small,
+                                            { color: colors.white, opacity: 0.7 },
+                                          ]}
+                                        >
+                                          {item.completionPercentage} %
+                                        </Text>
+                                      </View>
+                                    </View>
+                                  )}
+                                </>
                               )
                             )}
                           </View>
                         </View>
                       ) : null}
-                      {expandedCards[ele.id] && (
-                        <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeignt_600,
-                              fonts.alignCenter,
-                              { color: colors.termsLinkColor },
-                            ]}
-                          >
-                            See More
-                          </Text>
-                        </TouchableOpacity>
-                      )}
+                      {/* {expandedCards[ele.id] && ( */}
+                      <TouchableOpacity
+                        onPress={() => {
+                          setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                        }}
+                        style={{ marginTop: '4%', marginBottom: '4%' }}
+                      >
+                        <Text
+                          style={[
+                            fonts.size_14,
+                            fonts.fontWeignt_600,
+                            fonts.alignCenter,
+                            { color: colors.termsLinkColor },
+                          ]}
+                        >
+                          {seeMaxStudent === 5 ? 'See More' : 'See Less'}
+                        </Text>
+                      </TouchableOpacity>
+                      {/* )} */}
                     </TouchableOpacity>
                   );
                 })}

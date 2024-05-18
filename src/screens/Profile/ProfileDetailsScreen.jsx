@@ -97,7 +97,10 @@ const ProfileDetailsScreen = ({ navigation }) => {
               resizeMode="cover"
             />
           ) : (
-            <Image source={!selectedImage ? Profile : selectedImage} />
+            <Image
+              style={{ width: 60, height: 60 }}
+              source={!selectedImage ? Profile : selectedImage}
+            />
           )}
           <TouchableOpacity onPress={chooseImage}>
             <Text

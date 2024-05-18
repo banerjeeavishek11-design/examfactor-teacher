@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
-import menu from '@/theme/assets/images/3dotMenu.png';
+// import menu from '@/theme/assets/images/3dotMenu.png';
 import Filter from '@/theme/assets/images/questionAnalysisFilter.png';
 import { useRoute } from '@react-navigation/native';
 import RightArrow from '@/theme/assets/images/arrow.png';
 import BookmarkedQuestionFilterBottomSheet from '@/components/BottomSheet/Reports/BookmarkedQuestionFilterBottomSheet';
+import { bookMarkedQuestionsList } from '../../services/ReportsServices/reportsServices';
+import { useSelector } from 'react-redux';
+import { notifyMessage } from '../../utils/error-toast-API';
 
 const BookmarkedQuestions = [
   {
@@ -66,10 +69,9 @@ const questionsPerPage = 4;
 
 const BookmarkedQuestionsScreen = ({ navigation }) => {
   const { layout, colors, fonts } = useTheme();
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalTabs, setTotalTabs] = useState([]);
-  const startIndex = currentPage * questionsPerPage;
-  const endIndex = Math.min(startIndex + questionsPerPage, BookmarkedQuestions.length);
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
+  // const [isLoading, setIsLoading] = useState(false);
 
   const route = useRoute();
   const { studentDetails } = route.params || {};
@@ -85,8 +87,36 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     for (let i = 0; i < noOfTabs; i++) {
       tabs.push(i);
     }
-    setTotalTabs(tabs);
   }, []);
+
+  useEffect(() => {
+    getBookmarkQuestions();
+  }, [selectedSubjectId]);
+
+  const getBookmarkQuestions = () => {
+    // setIsLoading(true);
+    let params = {
+      subjectCode: selectedSubjectId,
+      active: true,
+    };
+    bookMarkedQuestionsList(params)
+      .then((res) => {
+        setAllBookmarkedQuestionsDetails(res?.data);
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        // setIsLoading(false);
+        if (
+          error?.response?.status === 400 ||
+          error.code === 'ERR-10' ||
+          error?.response?.status === 401
+        ) {
+          notifyMessage('unable to fetch bookmarkdetails');
+        } else if (error?.response?.status === 404) {
+          notifyMessage('Data not found');
+        }
+      });
+  };
 
   return (
     <SafeScreen>
@@ -98,57 +128,79 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
             }}
           >
             <View style={[layout.rowHCenter, layout.display]}>
-              <Image style={{ width: 7, height: 11 }} source={LeftArrow} resizeMode="contain" />
+              <Image
+                style={{ width: 7, height: 11, top: -1 }}
+                source={LeftArrow}
+                resizeMode="contain"
+              />
               <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
                 Bookmarked Questions
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
-            <Image source={Filter} />
-          </TouchableOpacity>
+          {allBookmarkedQuestionsDetails?.length === 0 ? null : (
+            <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
+              <Image source={Filter} />
+            </TouchableOpacity>
+          )}
         </View>
 
         <View>
-          <ScrollView>
-            {BookmarkedQuestions.slice(startIndex, endIndex).map((ques) => {
-              return (
-                <View key={ques.id}>
-                  <View
-                    style={[
-                      layout.fullWidth,
-                      layout.paddingForCard,
-                      {
-                        height: 'auto',
-                        backgroundColor: colors.cardBackgroundColor,
-                        borderRadius: 16,
-                        marginTop: '3%',
-                        gap: 10,
-                      },
-                    ]}
-                  >
-                    <View style={[layout.row, layout.justifyBetween]}>
-                      <Text
-                        style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
+          <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
+            {allBookmarkedQuestionsDetails?.length > 0 ? (
+              <>
+                {allBookmarkedQuestionsDetails?.map((ques) => {
+                  return (
+                    <View key={ques.id}>
+                      <View
+                        style={[
+                          layout.fullWidth,
+                          layout.paddingForCard,
+                          {
+                            height: 'auto',
+                            backgroundColor: colors.cardBackgroundColor,
+                            borderRadius: 16,
+                            marginTop: '3%',
+                            gap: 10,
+                          },
+                        ]}
                       >
-                        {ques.id}.
-                      </Text>
-                      <View style={{ width: '80%' }}>
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
-                        >
-                          {ques.question}
-                        </Text>
+                        <View style={[layout.row]}>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeight_small,
+                              { color: colors.white, width: '5%' },
+                            ]}
+                          >
+                            {ques.id}.
+                          </Text>
+
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeight_small,
+                              { color: colors.white, width: '90%', textAlign: 'justify', top: -2 },
+                            ]}
+                          >
+                            {ques?.subTopic}
+                          </Text>
+                        </View>
+
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('QuestionSolutionScreen', {
-                              AllQuestions: BookmarkedQuestions,
-                              currentQuestionId: ques.id,
-                              currentQuestion: ques.question,
-                              studentDetails: studentDetails,
-                            })
-                          }
-                          style={[layout.row, layout.itemsCenter, { marginTop: '3%' }]}
+                          // onPress={() =>
+                          //   navigation.navigate('QuestionSolutionScreen', {
+                          //     AllQuestions: BookmarkedQuestions,
+                          //     currentQuestionId: ques.id,
+                          //     currentQuestion: ques.question,
+                          //     studentDetails: studentDetails,
+                          //   })
+                          // }
+                          style={[
+                            layout.row,
+                            layout.itemsCenter,
+                            { marginTop: '3%', marginLeft: '5%' },
+                          ]}
                         >
                           <Text
                             style={[
@@ -161,8 +213,9 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                           </Text>
                           <Image
                             style={{
-                              width: 10,
+                              width: 6,
                               height: 8,
+                              left: 3,
                               tintColor: colors.termsLinkColor,
                             }}
                             source={RightArrow}
@@ -170,55 +223,21 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                    <Image source={menu} />
-                  </View>
-                </View>
-              );
-            })}
-            <View
-              style={[
-                layout.row,
-                {
-                  justifyContent: 'center',
-                  gap: 8,
-                  marginBottom: '20%',
-                  marginTop: '5%',
-                },
-              ]}
-            >
-              {totalTabs.map((index) => {
-                return (
-                  <TouchableOpacity onPress={() => setCurrentPage(index)} key={index}>
-                    <View
-                      style={[
-                        layout.justifyCenter,
-                        layout.itemsCenter,
-                        {
-                          width: 45,
-                          height: 45,
-                          borderWidth: currentPage === index ? 1 : 0,
-                          borderColor: currentPage === index ? colors.termsLinkColor : null,
-                          borderRadius: 8,
-                          backgroundColor:
-                            currentPage === index ? 'black' : colors.cardBackgroundColor,
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          fonts.bold,
-                          {
-                            color: currentPage === index ? colors.termsLinkColor : colors.white,
-                          },
-                        ]}
-                      >
-                        {index + 1}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                  );
+                })}
+              </>
+            ) : (
+              <Text
+                style={[
+                  fonts.size_16,
+                  fonts.fontWeight_small,
+                  fonts.alignCenter,
+                  { color: colors.white, marginTop: '90%' },
+                ]}
+              >
+                No Bookmarked Questions Found
+              </Text>
+            )}
           </ScrollView>
         </View>
       </View>
