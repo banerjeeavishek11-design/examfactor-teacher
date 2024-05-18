@@ -29,7 +29,7 @@ export default ToggleButton;
 const styles = StyleSheet.create({
   container: {
     width: 34,
-    height: 23,
+    height: 25,
     borderRadius: 15,
     justifyContent: 'center',
     alignSelf: 'flex-end',
@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#96A7AF',
   },
   toggle: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     borderRadius: 13,
     backgroundColor: '#fff',
   },
   activeToggle: {
-    transform: [{ translateX: 15 }],
+    transform: [{ translateX: 12 }],
   },
   inactiveToggle: {
     transform: [{ translateX: 2 }],

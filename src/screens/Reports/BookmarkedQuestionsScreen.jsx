@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
-import menu from '@/theme/assets/images/3dotMenu.png';
+// import menu from '@/theme/assets/images/3dotMenu.png';
 import Filter from '@/theme/assets/images/questionAnalysisFilter.png';
 import { useRoute } from '@react-navigation/native';
 import RightArrow from '@/theme/assets/images/arrow.png';
@@ -98,7 +98,11 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
             }}
           >
             <View style={[layout.rowHCenter, layout.display]}>
-              <Image style={{ width: 7, height: 11 }} source={LeftArrow} resizeMode="contain" />
+              <Image
+                style={{ width: 7, height: 11, top: -1 }}
+                source={LeftArrow}
+                resizeMode="contain"
+              />
               <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
                 Bookmarked Questions
               </Text>
@@ -110,7 +114,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
         </View>
 
         <View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {BookmarkedQuestions.slice(startIndex, endIndex).map((ques) => {
               return (
                 <View key={ques.id}>
@@ -127,50 +131,65 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                       },
                     ]}
                   >
-                    <View style={[layout.row, layout.justifyBetween]}>
+                    <View style={[layout.row]}>
                       <Text
-                        style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
+                        style={[
+                          fonts.size_14,
+                          fonts.fontWeight_small,
+                          { color: colors.white, width: '5%' },
+                        ]}
                       >
                         {ques.id}.
                       </Text>
-                      <View style={{ width: '80%' }}>
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
-                        >
-                          {ques.question}
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('QuestionSolutionScreen', {
-                              AllQuestions: BookmarkedQuestions,
-                              currentQuestionId: ques.id,
-                              currentQuestion: ques.question,
-                              studentDetails: studentDetails,
-                            })
-                          }
-                          style={[layout.row, layout.itemsCenter, { marginTop: '3%' }]}
-                        >
-                          <Text
-                            style={[
-                              fonts.size_12,
-                              fonts.fontWeight_small,
-                              { color: colors.termsLinkColor },
-                            ]}
-                          >
-                            View Solution
-                          </Text>
-                          <Image
-                            style={{
-                              width: 10,
-                              height: 8,
-                              tintColor: colors.termsLinkColor,
-                            }}
-                            source={RightArrow}
-                          />
-                        </TouchableOpacity>
-                      </View>
+
+                      <Text
+                        style={[
+                          fonts.size_14,
+                          fonts.fontWeight_small,
+                          { color: colors.white, width: '90%', textAlign: 'justify', top: -2 },
+                        ]}
+                      >
+                        {ques.question}
+                      </Text>
+                      {/* <View style={{ width: '5%', marginLeft: '3%',top:3 }}>
+                        <Image source={menu} />
+                      </View> */}
                     </View>
-                    <Image source={menu} />
+
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('QuestionSolutionScreen', {
+                          AllQuestions: BookmarkedQuestions,
+                          currentQuestionId: ques.id,
+                          currentQuestion: ques.question,
+                          studentDetails: studentDetails,
+                        })
+                      }
+                      style={[
+                        layout.row,
+                        layout.itemsCenter,
+                        { marginTop: '3%', marginLeft: '5%' },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          { color: colors.termsLinkColor },
+                        ]}
+                      >
+                        View Solution
+                      </Text>
+                      <Image
+                        style={{
+                          width: 6,
+                          height: 8,
+                          left: 3,
+                          tintColor: colors.termsLinkColor,
+                        }}
+                        source={RightArrow}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               );

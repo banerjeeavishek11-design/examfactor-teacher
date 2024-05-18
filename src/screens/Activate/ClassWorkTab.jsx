@@ -81,6 +81,12 @@ const ClassWorkTab = () => {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
+  );
+
   useEffect(() => {}, [searchChapterName]);
 
   useEffect(() => {

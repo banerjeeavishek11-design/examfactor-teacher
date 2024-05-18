@@ -33,7 +33,7 @@ const TabBar = (props) => {
           style={[
             layout.justifyCenter,
             layout.itemsCenter,
-            { width: '28%' },
+            { width: '20%' },
             props.state.index !== 0 && {
               borderBottomWidth: 4,
               borderBottomColor: colors.lineBackgroundColor,
@@ -65,7 +65,7 @@ const TabBar = (props) => {
           style={[
             layout.justifyCenter,
             layout.itemsCenter,
-            { width: '35%' },
+            { width: '50%' },
             props.state.index !== 1 && {
               borderBottomWidth: 4,
               borderBottomColor: colors.lineBackgroundColor,
@@ -97,7 +97,7 @@ const TabBar = (props) => {
           style={[
             layout.justifyCenter,
             layout.itemsCenter,
-            { width: '37%' },
+            { width: '30%' },
             props.state.index !== 2 && {
               borderBottomWidth: 4,
               borderBottomColor: colors.lineBackgroundColor,

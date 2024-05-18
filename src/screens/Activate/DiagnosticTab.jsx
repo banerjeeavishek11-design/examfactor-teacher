@@ -75,6 +75,12 @@ const DiagnosticTab = () => {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setSearchValue('');
+    }, [])
+  );
+
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
     getDiagnostics();

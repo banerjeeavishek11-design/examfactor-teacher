@@ -243,14 +243,9 @@ const InsightsScreen = () => {
                           <View
                             key={ele.id}
                             style={[
-                              layout.fullWidth,
-                              isTablet ? { padding: '2%' } : layout.paddingForCard,
-                              {
-                                height: 'auto',
-                                backgroundColor: colors.cardBackgroundColor,
-                                borderRadius: 16,
-                                marginTop: isTablet ? '2%' : '5%',
-                              },
+                              fonts.size_12,
+                              fonts.fontWeight_small,
+                              { color: colors.gray100 },
                             ]}
                           >
                             <View style={[layout.display, layout.justifyBetween]}>

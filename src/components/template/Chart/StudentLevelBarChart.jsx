@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Svg, { Rect, Defs, Stop, Line, LinearGradient } from "react-native-svg";
+import React from 'react';
+import { View, Text } from 'react-native';
+import Svg, { Rect, Defs, Stop, Line, LinearGradient } from 'react-native-svg';
 
 const StudentLevelBarChart = ({
   data,
@@ -15,73 +15,66 @@ const StudentLevelBarChart = ({
   const xAxisHeight = 20; // Height of the x-axis
   const yAxisWidth = 35; // Width of the y-axis
   const barWidth = (width - yAxisWidth) / data[0].length;
-  const tickSize = 5;
   const singleBarWidth = 10;
   const spacing = 6;
-
-  // Calculate y-axis labels
-  const yAxisLabels = Array.from(
-    { length: 5 },
-    (_, i) => (maxValue / 4) * (4 - i)
-  );
 
   return (
     <View
       style={{
-        width: "100%",
+        width: '100%',
         height: height + 30,
-        backgroundColor: "#22222E",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: '#22222E',
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: 0,
-        position: "relative",
+        position: 'relative',
         borderRadius: 12,
-        marginTop: "5%",
+        marginTop: '5%',
       }}
     >
       <View
         style={{
-          width: "40%",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          width: '40%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View
             style={{
               width: 6,
               height: 6,
               borderRadius: 2,
-              backgroundColor: "#27D4FA",
+              backgroundColor: '#27D4FA',
               right: 9,
             }}
           />
           <Text
             style={{
-              position: "absolute",
-              color: "#96A7AF",
+              position: 'absolute',
+              color: '#96A7AF',
             }}
           >
             Achievable Score
           </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center", right: 5 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', right: 5 }}>
           <View
             style={{
               width: 6,
               height: 6,
               borderRadius: 2,
-              backgroundColor: "#FF575F",
+              backgroundColor: '#FF575F',
               right: 9,
             }}
           />
           <Text
             style={{
-              position: "absolute",
+              position: 'absolute',
               //   top: 20,
               //   left: 200,
-              color: "#96A7AF",
+              color: '#96A7AF',
             }}
           >
             Total Study Time
@@ -104,19 +97,19 @@ const StudentLevelBarChart = ({
         style={{
           width,
           height,
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          backgroundColor: "transparent",
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          backgroundColor: 'transparent',
         }}
       >
         {/* Draw x-axis title */}
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: width / 2 - 20,
             bottom: -10,
-            color: "#96A7AF",
+            color: '#96A7AF',
           }}
         >
           {xAxisTitle}
@@ -125,11 +118,11 @@ const StudentLevelBarChart = ({
         {/* Draw y-axis title */}
         <Text
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: -yAxisWidth - 30,
             bottom: height / 2 - 20,
-            transform: [{ rotate: "-90deg" }],
-            color: "#96A7AF",
+            transform: [{ rotate: '-90deg' }],
+            color: '#96A7AF',
           }}
         >
           {yAxisTitle}
@@ -155,10 +148,10 @@ const StudentLevelBarChart = ({
         style={{
           width,
           height,
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          backgroundColor: "transparent",
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          backgroundColor: 'transparent',
         }}
       >
         {/* data.map((series, oIndex) => {
@@ -193,13 +186,7 @@ const StudentLevelBarChart = ({
         {/* Define gradient */}
         <Defs>
           {colors.map((_colors, idx) => (
-            <LinearGradient
-              id={`gradient-${idx}`}
-              x1="0%"
-              y1="0%"
-              x2="0%"
-              y2="100%"
-            >
+            <LinearGradient key={idx} id={`gradient-${idx}`} x1="0%" y1="0%" x2="0%" y2="100%">
               {_colors.map((color, index) => (
                 <Stop
                   key={index}
@@ -216,7 +203,7 @@ const StudentLevelBarChart = ({
           // if(oIndex == 0 ) return null;
           return series.map((value, index) => (
             <Rect
-              key={value}
+              key={index}
               x={
                 index * barWidth +
                 yAxisWidth +
@@ -226,12 +213,7 @@ const StudentLevelBarChart = ({
                 (singleBarWidth * data.length) / 2 -
                 (data.length - 1) * spacing
               }
-              y={
-                height -
-                (value / maxValue) * (height - xAxisHeight) -
-                xAxisHeight -
-                1
-              }
+              y={height - (value / maxValue) * (height - xAxisHeight) - xAxisHeight - 1}
               width={singleBarWidth}
               height={(value / maxValue) * (height - xAxisHeight)}
               fill={`url(#gradient-${oIndex})`}

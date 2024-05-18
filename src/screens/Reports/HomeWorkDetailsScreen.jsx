@@ -10,80 +10,11 @@ import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Star from '@/theme/assets/images/Star.png';
 
-const chapterDetails = [
-  {
-    id: 'C1',
-    chapterName: 'Electric Current',
-    strongArea: 4,
-    weakArea: 3,
-    topic: [
-      {
-        topicName: 'T1: Introduction to Electric Field',
-        subtopic: [
-          { name: 'Drift of electrons & origin of resistance', important: true },
-          { name: 'Electric current and voltage', important: true },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: 'Combination of cells', important: false },
-        ],
-      },
-      {
-        topicName: 'T2: Electric Field',
-        subtopic: [
-          { name: 'Drift of electrons & origin of resistance', important: true },
-          { name: 'Electric current and voltage', important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'C2',
-    chapterName: 'Electric Field',
-    strongArea: 4,
-    weakArea: 3,
-    topic: [
-      {
-        topic1: 'T1: Introduction to Electric Field',
-        subtopic: [
-          { name: 'Drift of electrons & origin of resistance', important: true },
-          { name: 'Electric current and voltage', important: true },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: 'Combination of cells', important: false },
-        ],
-      },
-      {
-        topic2: 'T2: Electric Field',
-        subtopic: [
-          { name: 'Drift of electrons & origin of resistance', important: true },
-          { name: 'Electric current and voltage', important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-          { name: "Resistivity, and Ohm's law", important: false },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'C3',
-    chapterName: 'Electric Current',
-    strongArea: 4,
-    weakArea: 3,
-  },
-  {
-    id: 'C4',
-    chapterName: 'Electric Current',
-    strongArea: 4,
-    weakArea: 3,
-  },
-];
-
 const HomeWorkDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { studentDetails } = route.params || {};
+  const { chapterDetails } = route.params || {};
   const [expandedCards, setExpandedCards] = useState({});
 
   const toggleContent = (id) => {
@@ -100,7 +31,7 @@ const HomeWorkDetailsScreen = () => {
           style={[layout.display, layout.rowHCenter, { paddingBottom: '1%' }]}
           onPress={() =>
             navigation.navigate('StudentWiseReportScreen', {
-              studentDetails: studentDetails,
+              chapterDetails: chapterDetails,
             })
           }
         >
@@ -120,7 +51,7 @@ const HomeWorkDetailsScreen = () => {
           </Text>
         </TouchableOpacity>
         <ScrollView contentContainerStyle={{ paddingBottom: '15%' }}>
-          {chapterDetails?.map((ele) => {
+          {chapterDetails?.map((ele, i) => {
             return (
               <TouchableOpacity
                 onPress={() => toggleContent(ele.id)}
@@ -139,7 +70,7 @@ const HomeWorkDetailsScreen = () => {
                 <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
                   <View>
                     <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                      {ele.id}: {ele.chapterName}
+                      {`C${i + 1}`}: {ele?.chapter}
                     </Text>
                     <Text
                       style={[
@@ -148,7 +79,7 @@ const HomeWorkDetailsScreen = () => {
                         { color: '#FFAB48' },
                         { marginTop: '2%' },
                       ]}
-                    >{`${ele.strongArea} strong & ${ele.weakArea} weak areas indentified`}</Text>
+                    >{`${ele?.strongAreaCount} strong & ${ele?.weakAreaCount} weak areas indentified`}</Text>
                   </View>
                   <View style={{ width: '5%' }}>
                     <TouchableOpacity>
