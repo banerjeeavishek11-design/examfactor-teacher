@@ -40,20 +40,13 @@ const configForScore = [
 ];
 
 const configForStudyTime = [
-  { groupName: '0-20', from: 0, to: 20 },
-  { groupName: '21-40', from: 21, to: 40 },
-  { groupName: '41-60', from: 41, to: 60 },
+  { groupName: '0-10', from: 0, to: 10 },
+  { groupName: '11-30', from: 11, to: 30 },
+  { groupName: '31-60', from: 31, to: 60 },
   { groupName: '60+', from: 61, to: 180 },
 ];
 
 const storage = new MMKV();
-// const barchartColor = ['#7AF4FC', '#27D4FA'];
-// const width = 300;
-// const height = 250;
-// const borderRadius = 5;
-// const yAxisTitle = 'No. of students';
-// const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
-// const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -329,14 +322,6 @@ const HomeScreen = () => {
 
   const resultScr = categorizeData(scoreChartData, configForScore);
   const resultStudtim = categorizeData(studyTimeChartData, configForStudyTime);
-  // console.log('result score', resultScr);
-  // console.log('result stu time', resultStudtim);
-  // console.log('scdt', scoreChartData);
-  // console.log('stdychrt', studyTimeChartData);
-  // console.log('hwp', consolidatedReportData?.homeworkProgress);
-
-  // console.log('sbBODY', sortByBody);
-  // console.log('pdBODY', practiceDurationBody);
 
   return (
     <SafeScreen>

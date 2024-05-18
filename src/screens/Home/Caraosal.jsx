@@ -10,7 +10,7 @@ const chartwidth = 300;
 const chartheight = 250;
 const borderRadius = 5;
 const yAxisTitle = 'No. of students';
-const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
+const labelsForStudyTime = ['0-10', '11-30', '31-60', '60+'];
 const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const Caraosal = ({ scoreChartData, studyTimeChartData }) => {
