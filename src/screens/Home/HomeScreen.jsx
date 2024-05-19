@@ -216,14 +216,11 @@ const HomeScreen = () => {
     };
     getSubjectWiseReport(params)
       .then((res) => {
-        // console.log('responst subwise report -- .', JSON.stringify(res.data));
         setConsolidatedReportData(res.data);
-        // setDataOfConsolidatedReport(res.data);
       })
       .catch((error) => {
         if (error?.response?.status === 404 && error?.response?.status !== 401)
-          notifyMessage('Consolidated report not found', error);
-        console.log('subwise', error);
+          setConsolidatedReportData({});
       });
   };
 

@@ -444,25 +444,25 @@ const HomeWorkTab = () => {
                           </View>
                         </View>
                       ) : null}
-                      {/* {expandedCards[ele.id] && ( */}
-                      <TouchableOpacity
-                        onPress={() => {
-                          setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
-                        }}
-                        style={{ marginTop: '4%', marginBottom: '4%' }}
-                      >
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeignt_600,
-                            fonts.alignCenter,
-                            { color: colors.termsLinkColor },
-                          ]}
+                      {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length > 5 && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                          }}
+                          style={{ marginTop: '4%', marginBottom: '4%' }}
                         >
-                          {seeMaxStudent === 5 ? 'See More' : 'See Less'}
-                        </Text>
-                      </TouchableOpacity>
-                      {/* )} */}
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeignt_600,
+                              fonts.alignCenter,
+                              { color: colors.termsLinkColor },
+                            ]}
+                          >
+                            {seeMaxStudent === 5 ? 'See More' : 'See Less'}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </TouchableOpacity>
                   );
                 })}
