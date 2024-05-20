@@ -48,7 +48,7 @@ const EditPersonalDetailBottomSheet = ({
 
   const [formValues, setFormValues] = useState({
     firstName: '',
-    dob: '',
+    // dob: '',
     gender: '',
     emailId: '',
     mobileNumber: '',
@@ -73,7 +73,7 @@ const EditPersonalDetailBottomSheet = ({
       setSelectedDob(formattedDate);
       setFormValues({
         firstName: profileData.firstName || '',
-        dob: formattedDate || '',
+        dob: formattedDate,
         gender: profileData.gender || '',
         emailId: profileData.emailId || '',
         mobileNumber: profileData.mobileNumber || '',
@@ -94,7 +94,14 @@ const EditPersonalDetailBottomSheet = ({
       // middleName: 'string',
       // lastName: 'string',
       sectionId: sectionId,
-      // dob: values.dob,
+      dob: moment(selectedDob, 'DD-MM-YYYY')
+        .set({
+          hour: 15,
+          minute: 14,
+          second: 50,
+          millisecond: 520,
+        })
+        .toISOString(),
       gender: values.gender,
       teacherRole: 'TEACHER',
       emergencyContactNumber: values.emergencyContactNumber,
@@ -215,7 +222,7 @@ const EditPersonalDetailBottomSheet = ({
                             placeholder={profileData.dob}
                             placeholderTextColor={colors.gray400}
                             value={selectedDob}
-                            onChangeText={handleChange('dob')}
+                            // onChangeText={handleChange('dob')}
                           />
                           {/* <TouchableOpacity
                             onPress={() => {

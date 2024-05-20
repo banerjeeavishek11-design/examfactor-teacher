@@ -15,15 +15,26 @@ import Bookmark from '@/theme/assets/images/questionBookmark.png';
 import MostlyFilterBottomSheet from '@/components/BottomSheet/Reports/MostlyFilterBottomSheet';
 import Cross from '@/theme/assets/images/cross.png';
 import { useNavigation } from '@react-navigation/native';
+import { getQuestionAnalysis } from '../../services/ReportsServices/reportsServices';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const QuestionAnalysisScreen = () => {
   const navigation = useNavigation();
   const { fonts, layout, colors } = useTheme();
+  const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [chapterQuestions, setChapterQuestions] = useState([]);
   const [selectedChapter, setSelectedChapter] = useState(null);
+  const [chapterOption, setChapterOption] = useState(null);
   const [selectChapterQAModalVisible, setSelectChapterQAModalVisible] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [questionActivityType, setQuestionActivityType] = useState();
+  const [gradeId, setGradeId] = useState(null);
   const closeFilterModal = () => {
     setFilterModalVisible(false);
   };
@@ -35,22 +46,59 @@ const QuestionAnalysisScreen = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   useEffect(() => {
+    if (teacherDetails && teacherDetails.length > 0) {
+      for (let item of teacherDetails) {
+        if (item.sectionName === sectionName) {
+          setGradeId(item.gradeId);
+          return;
+        }
+      }
+    }
+  }, [sectionName, teacherDetails]);
+
+  useEffect(() => {
     if (selectedChapter !== null) {
       const result = questions.find((chapter) => chapter.chapterId === selectedChapter?.chapterId);
-      //result.data may come undefined because project is using limited dummy data
       if (result?.data === undefined) {
         setChapterQuestions([]);
         return;
       }
       setChapterQuestions(result?.data);
-      // setSelectedQuestionType(true);
     }
   }, [selectedChapter]);
+
+  useEffect(() => {
+    if (chapterOption && questionActivityType) getQuestions();
+  }, [subjectId, chapterOption, questionActivityType]);
 
   const changeQuestionType = (option) => {
     setSelectedQuestionType(option);
   };
 
+  const getQuestions = () => {
+    let params = {
+      // page: 0,
+      // size: 1,
+      // summary: true,
+      active: true,
+      // sort: ['string']
+      // searchKey: 'string',
+      // countOnly: true,
+      // eventType: 'string',
+      chapterId: chapterOption,
+      subjectId: subjectId,
+      gradeId: gradeId,
+      activityType: questionActivityType,
+      processFlag: true,
+    };
+    getQuestionAnalysis(params)
+      .then((res) => {
+        console.log('response of Q Analysis', res.data);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  };
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
@@ -80,7 +128,7 @@ const QuestionAnalysisScreen = () => {
                     borderColor: selectedChapter !== null ? colors.termsLinkColor : null,
                     width:
                       selectedChapter !== null
-                        ? Math.min(190, Math.max(90, selectedChapter.chapterName.length * 10))
+                        ? Math.min(190, Math.max(90, selectedChapter.length * 10))
                         : 72,
                     height: isTablet ? 40 : 28,
                     borderRadius: 4,
@@ -100,9 +148,7 @@ const QuestionAnalysisScreen = () => {
                     },
                   ]}
                 >
-                  {selectedChapter !== null
-                    ? selectedChapter.chapterId + ': ' + selectedChapter.chapterName
-                    : 'Chapter'}
+                  {selectedChapter !== null ? selectedChapter : 'Chapter'}
                 </Text>
                 <ImageVariant
                   testID="brand-img"
@@ -363,10 +409,12 @@ const QuestionAnalysisScreen = () => {
         </View>
       </ScrollView>
       <SelectChapterQABottomSheet
+        setChapterOption={setChapterOption}
         setSelectedChapter={setSelectedChapter}
         visible={selectChapterQAModalVisible}
         closeModal={closeSelectChapterQAModal}
         changeQuestionType={changeQuestionType}
+        setQuestionActivityType={setQuestionActivityType}
       />
       <MostlyFilterBottomSheet
         setSelectedFilter={setSelectedFilter}

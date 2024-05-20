@@ -40,3 +40,9 @@ export const bookMarkedQuestionsList = async (params) => {
     params: params,
   });
 };
+
+export const getQuestionAnalysis = async (params) => {
+  return api.get(`${b2bStudentService}/v1/b2b-question-analysis-report`, {
+    params: params,
+  });
+};

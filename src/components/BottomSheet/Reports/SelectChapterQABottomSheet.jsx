@@ -2,55 +2,84 @@ import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'rea
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import { ImageVariant } from '@/components/atoms';
+import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import RadioButton from '../../RadioButton/RadioButton';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import SelectQuestionTypeBottomSheet from './SelectQuestionTypeBottomSheet';
+import { getChaptersBySubjectId } from '../../../services/chapterListService';
 
-const chapters = [
-  { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
-  {
-    id: 2,
-    chapterId: 'C2',
-    chapterName: 'Force and Laws of Motion',
-    strong: true,
-  },
-  { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
-  { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
-  { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
-  { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
-  {
-    id: 5,
-    chapterId: 'C7',
-    chapterName: 'Electricity and Magnetism',
-    strong: true,
-  },
-  { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
-];
+// const chaptersDummy = [
+//   { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
+//   {
+//     id: 2,
+//     chapterId: 'C2',
+//     chapterName: 'Force and Laws of Motion',
+//     strong: true,
+//   },
+//   { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
+//   { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
+//   { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
+//   { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
+//   {
+//     id: 5,
+//     chapterId: 'C7',
+//     chapterName: 'Electricity and Magnetism',
+//     strong: true,
+//   },
+//   { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
+// ];
 
 const SelectChapterQABottomSheet = ({
   visible,
   closeModal,
   setSelectedChapter,
   changeQuestionType,
+  setQuestionActivityType,
+  setChapterOption,
 }) => {
   const { fonts, layout, colors } = useTheme();
-
+  const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const [chapters, setChapters] = useState([]);
   const [selectedValue, setSelectedValue] = useState(null);
-
+  // const [selectedChap, setSelectedChap] = useState();
   const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
   const closeQuestionTypeModal = () => {
     setOpenQuestionTypeModal(false);
   };
   const [option, setOption] = useState(null);
-  const handleOptionChange = (op) => {
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getChapterDetails();
+    }, [selectedSubjectId])
+  );
+
+  const getChapterDetails = () => {
+    getChaptersBySubjectId(selectedSubjectId)
+      .then((res) => {
+        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
+        setChapters(res.data.chapters);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleOptionChange = (op, chapName) => {
     setOption(op);
+    setSelectedChapter(chapName);
   };
   const handleApply = () => {
     setSelectedValue(option);
+    setChapterOption(option);
     closeModal();
     setOpenQuestionTypeModal(true);
   };
+
+  // console.log('chapsss', chapters);
+
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
@@ -93,17 +122,17 @@ const SelectChapterQABottomSheet = ({
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele)}
+                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
-                      <RadioButton isActive={option === ele} />
+                      <RadioButton isActive={option === ele.chapterId} />
                     </View>
-                    <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
+                    {/* <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
                       {ele.chapterId}:
-                    </Text>
+                    </Text> */}
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.chapterName}
+                      {ele.chapterDesc}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -162,10 +191,11 @@ const SelectChapterQABottomSheet = ({
       </Modal>
       <SelectQuestionTypeBottomSheet
         changeQuestionType={changeQuestionType}
-        setSelectedChapter={setSelectedChapter}
+        // setSelectedChapter={setSelectedChapter}
         selectedValue={selectedValue}
         visible={openQuestionTypeModal}
         closeModal={closeQuestionTypeModal}
+        setQuestionActivityType={setQuestionActivityType}
       />
     </View>
   );

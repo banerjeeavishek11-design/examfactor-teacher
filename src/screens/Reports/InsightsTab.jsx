@@ -8,6 +8,7 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import SelectChapterBottomSheet from '@/components/BottomSheet/Reports/SelectChapterBottomSheet';
 import SelectAreaBottomSheet from '@/components/BottomSheet/Reports/SelectAreaBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+// import reportChapterDetails from './ReportChapterDetails';
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
 import { getReportInsights } from '../../services/ReportsServices/reportsServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
@@ -241,9 +242,14 @@ const InsightsScreen = () => {
                           <View
                             key={ele.id}
                             style={[
-                              fonts.size_12,
-                              fonts.fontWeight_small,
-                              { color: colors.gray100 },
+                              layout.fullWidth,
+                              isTablet ? { padding: '2%' } : layout.paddingForCard,
+                              {
+                                height: 'auto',
+                                backgroundColor: colors.cardBackgroundColor,
+                                borderRadius: 16,
+                                marginTop: isTablet ? '2%' : '5%',
+                              },
                             ]}
                           >
                             <View style={[layout.display, layout.justifyBetween]}>
