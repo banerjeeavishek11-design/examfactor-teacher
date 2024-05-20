@@ -128,7 +128,7 @@ const QuestionAnalysisScreen = () => {
                     borderColor: selectedChapter !== null ? colors.termsLinkColor : null,
                     width:
                       selectedChapter !== null
-                        ? Math.min(190, Math.max(90, selectedChapter.length * 10))
+                        ? Math.min(210, Math.max(90, selectedChapter.length * 10))
                         : 72,
                     height: isTablet ? 40 : 28,
                     borderRadius: 4,
@@ -268,7 +268,7 @@ const QuestionAnalysisScreen = () => {
           <View>
             {selectedChapter !== null ? (
               <View>
-                {chapterQuestions.map((ele) => {
+                {questions[0].data.map((ele) => {
                   return (
                     <View key={ele.qNo}>
                       <View
