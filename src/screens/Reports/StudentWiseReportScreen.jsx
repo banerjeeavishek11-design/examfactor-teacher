@@ -137,6 +137,7 @@ const StudentWiseReportScreen = () => {
     let params = {
       subjectCode: selectedSubjectId,
       active: true,
+      studentId: studentDetails?.userName,
     };
     bookMarkedQuestionsList(params)
       .then((res) => {
