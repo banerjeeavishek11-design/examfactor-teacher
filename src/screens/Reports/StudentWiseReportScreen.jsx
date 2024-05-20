@@ -161,7 +161,6 @@ const StudentWiseReportScreen = () => {
   const getMySubjectInsightData = () => {
     mySubjectInsightScores(selectedSubjectId)
       .then((res) => {
-        console.log('res from score', res.data);
         const chapterScoreMap = res.data.reduce((ac, ch) => ({ ...ac, [ch.chapterId]: ch }), {});
         setChapterScoreMap(chapterScoreMap);
       })
@@ -657,7 +656,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, opacity: 0.7 },
                   ]}
                 >
-                  See bookmarked questions {allBookmarkedQuestionsDetails?.totalElements ?? 0}
+                  {`See bookmarked questions (${allBookmarkedQuestionsDetails?.totalElements ?? 0})`}
                 </Text>
                 <TouchableOpacity>
                   <Image

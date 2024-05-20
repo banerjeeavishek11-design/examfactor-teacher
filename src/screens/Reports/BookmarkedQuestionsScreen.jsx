@@ -83,7 +83,6 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
 
   const route = useRoute();
   const { studentDetails } = route.params || {};
-  // console.log('studentDetails',studentDetails)
 
   const [bookmarkFilterVisible, setBookmarkFilterVisible] = useState(false);
   const closeBookmarkFilterModal = () => {
@@ -111,8 +110,8 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     };
     bookMarkedQuestionsList(params)
       .then((res) => {
-        setAllBookmarkedQuestionsDetails(res?.data);
-        console.log('bookmark', res.data.content);
+        setAllBookmarkedQuestionsDetails(res?.data?.content);
+        console.log('res for bookmark', res.data?.content);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -166,9 +165,10 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
               <>
                 {allBookmarkedQuestionsDetails?.length > 0 ? (
                   <>
-                    {allBookmarkedQuestionsDetails?.map((ques) => {
+                    {allBookmarkedQuestionsDetails?.map((ques, i) => {
+                      console.log('ques', ques);
                       return (
-                        <View key={ques.id}>
+                        <View key={ques.questionId}>
                           <View
                             style={[
                               layout.fullWidth,
@@ -190,7 +190,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                                   { color: colors.white, width: '5%' },
                                 ]}
                               >
-                                {ques.id}.
+                                {i + 1}.
                               </Text>
 
                               <Text
@@ -205,7 +205,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                                   },
                                 ]}
                               >
-                                {ques?.subTopic}
+                                {ques?.subTopic}vvvvvvvvvvvvvvvvvvvvvvvv
                               </Text>
                             </View>
 

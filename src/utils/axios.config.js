@@ -64,10 +64,6 @@ api.interceptors.response.use(
       } catch (error) {
         console.log(error);
       }
-      // notifyMessage('Token Expired, Login required');
-      // setTimeout(() => {
-      //   navigationRef.navigate('LoginScreen');
-      // }, 1000);
     }
     return Promise.reject(error);
   }

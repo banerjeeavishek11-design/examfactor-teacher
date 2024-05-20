@@ -95,7 +95,6 @@ const InsightsScreen = () => {
     getReportInsights(params)
       .then((res) => {
         setInsightReportsData(res.data);
-        console.log('reports ressult', res.data);
       })
       .catch((error) => {
         console.log('error', error);
