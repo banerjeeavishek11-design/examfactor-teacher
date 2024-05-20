@@ -7,8 +7,9 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import { Formik } from 'formik';
 import { ImageVariant } from '../../atoms';
@@ -16,6 +17,11 @@ import RightArrow from '@/theme/assets/images/rightarrow.png';
 import Cross from '@/theme/assets/images/cross.png';
 import { useNavigation } from '@react-navigation/native';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
+import { MMKV } from 'react-native-mmkv';
+import { resetPassword } from '../../../services/authService';
+import { getUserDetailsByUserId } from '../../../services/teacherService';
+
+const storage = new MMKV();
 
 const handleOutsideTap = () => {
   Keyboard.dismiss();
@@ -24,6 +30,56 @@ const handleOutsideTap = () => {
 const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
   const navigation = useNavigation();
   const { layout, colors, fonts } = useTheme();
+
+  const [currentPassWrong, setCurrentPassWrong] = useState();
+  const [passMatch, setPassMatch] = useState(false);
+  const [userDetails, setUserDetails] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (values) => {
+    setIsLoading(true);
+    setCurrentPassWrong(false);
+    setPassMatch(false);
+    const oldPassword = storage.getString('oldPassword');
+    const teacherId = storage.getString('username');
+
+    if (values.currentPassword !== oldPassword) {
+      setCurrentPassWrong(true);
+      setIsLoading(false);
+      console.log('old pass', oldPassword);
+      return;
+    }
+
+    if (values.newPassword !== values.retypePassword) {
+      setPassMatch(true);
+      setIsLoading(false);
+      return;
+    }
+    let requestBody = {
+      oldPassword: values.currentPassword,
+      newPassword: values.newPassword,
+    };
+    resetPassword(requestBody)
+      .then(() => {
+        storage.set('oldPassword', values.newPassword);
+        getUserDetailsByUserId(teacherId)
+          .then((res) => {
+            setUserDetails(res.data);
+          })
+          .catch(() => {});
+        navigation.navigate('NewPasswordStatusScreen', {
+          data: 'Updated',
+          userDetails: userDetails,
+        });
+        setIsLoading(false);
+        closeModal();
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log('error', error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
@@ -55,6 +111,7 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                   newPassword: '',
                   retypePassword: '',
                 }}
+                onSubmit={handleSubmit}
               >
                 {({ handleChange, handleSubmit, values }) => {
                   return (
@@ -80,6 +137,18 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             onChangeText={handleChange('currentPassword')}
                             value={values.currentPassword}
                           />
+                          {currentPassWrong && (
+                            <View>
+                              <Text
+                                style={{
+                                  color: '#FF575F',
+                                  marginTop: '2%',
+                                }}
+                              >
+                                Wrong Password
+                              </Text>
+                            </View>
+                          )}
                         </View>
                         <View style={styles.inputContainer}>
                           <TextInput
@@ -122,6 +191,18 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             onChangeText={handleChange('retypePassword')}
                             value={values.retypePassword}
                           />
+                          {passMatch && (
+                            <View>
+                              <Text
+                                style={{
+                                  color: '#FF575F',
+                                  marginTop: '2%',
+                                }}
+                              >
+                                Passwords do not match
+                              </Text>
+                            </View>
+                          )}
                         </View>
                       </View>
                       <Text style={[fonts.size_14, { color: colors.gray200, width: '66%' }]}>
@@ -134,30 +215,32 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                       <TouchableOpacity
                         onPress={() => {
                           handleSubmit();
-                          closeModal();
-                          navigation.navigate('NewPasswordStatusScreen', {
-                            data: 'Updated',
-                          });
                         }}
                       >
                         <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
-                          <View style={[layout.display, layout.rowHCenter]}>
-                            <Text
-                              style={[
-                                fonts.size_16,
-                                fonts.bold,
-                                { color: colors.loginBtnTextColor },
-                              ]}
-                            >
-                              Save
-                            </Text>
-                            <ImageVariant
-                              testID="brand-img"
-                              style={{ width: 16, height: 9, left: 5 }}
-                              source={RightArrow}
-                              resizeMode="contain"
-                            />
-                          </View>
+                          {isLoading ? (
+                            <View>
+                              <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                            </View>
+                          ) : (
+                            <View style={[layout.display, layout.rowHCenter]}>
+                              <Text
+                                style={[
+                                  fonts.size_16,
+                                  fonts.bold,
+                                  { color: colors.loginBtnTextColor },
+                                ]}
+                              >
+                                Save
+                              </Text>
+                              <ImageVariant
+                                testID="brand-img"
+                                style={{ width: 16, height: 9, left: 5 }}
+                                source={RightArrow}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
                         </PrimaryGradient>
                       </TouchableOpacity>
                     </View>

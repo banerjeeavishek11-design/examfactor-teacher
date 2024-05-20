@@ -229,6 +229,7 @@ const HomeScreen = () => {
       .then((res) => {
         if (res.data) {
           dispatch(updateUserRole(res.data.teacherRole));
+          storage.set('oldPassword', res.data.password);
         }
       })
       .catch((error) => {

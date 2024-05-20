@@ -25,7 +25,9 @@ const NewPasswordStatusScreen = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('ProfileDetailsScreen');
+            navigation.navigate('ProfileDetailsScreen', {
+              userDetails: route.params?.userDetails,
+            });
           }}
           style={layout.fullWidth}
         >
