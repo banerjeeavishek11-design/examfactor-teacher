@@ -374,17 +374,37 @@ const HomeWorkTab = () => {
                             </View>
                           </View>
                           <View>
-                            <View style={styles.header}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Name
-                              </Text>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Home Work Time
-                              </Text>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Progress
-                              </Text>
-                            </View>
+                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length === 0 ? (
+                              <View
+                                style={[
+                                  layout.justifyCenter,
+                                  layout.itemsCenter,
+                                  { marginVertical: '3%' },
+                                ]}
+                              >
+                                <Text
+                                  style={[
+                                    fonts.fontWeight_small,
+                                    fonts.size_14,
+                                    { color: colors.gray100 },
+                                  ]}
+                                >
+                                  No Data Found
+                                </Text>
+                              </View>
+                            ) : (
+                              <View style={styles.header}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Name
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Home Work Time
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Progress
+                                </Text>
+                              </View>
+                            )}
                             {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
                               (item, index) => (
                                 <>

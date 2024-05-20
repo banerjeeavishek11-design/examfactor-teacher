@@ -1,7 +1,7 @@
 import dev from '../../env.dev.json';
-import uat from '../../env.uat.json';
+// import uat from '../../env.uat.json';
 import current from '../../env.current.json';
-const env = current.current === 'dev' ? dev : current.current === 'uat' ? uat : null;
+const env = current.current === 'dev' ? dev : null;
 export const host = env.HOST;
 export const rootApiUrl = env.ROOT_API_URL;
 export const authService = `${rootApiUrl}/auth-service`;

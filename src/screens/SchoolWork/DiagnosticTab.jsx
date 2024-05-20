@@ -377,7 +377,7 @@ const DiagnosticTab = () => {
                               style={[
                                 fonts.fontWeight_small,
                                 fonts.size_14,
-                                { color: colors.white },
+                                { color: colors.gray100 },
                               ]}
                             >
                               No Data Found
