@@ -40,20 +40,13 @@ const configForScore = [
 ];
 
 const configForStudyTime = [
-  { groupName: '0-20', from: 0, to: 20 },
-  { groupName: '21-40', from: 21, to: 40 },
-  { groupName: '41-60', from: 41, to: 60 },
+  { groupName: '0-10', from: 0, to: 10 },
+  { groupName: '11-30', from: 11, to: 30 },
+  { groupName: '31-60', from: 31, to: 60 },
   { groupName: '60+', from: 61, to: 180 },
 ];
 
 const storage = new MMKV();
-// const barchartColor = ['#7AF4FC', '#27D4FA'];
-// const width = 300;
-// const height = 250;
-// const borderRadius = 5;
-// const yAxisTitle = 'No. of students';
-// const labelsForStudyTime = ['0-20', '21-40', '41-60', '60+'];
-// const labelsForScore = ['<60', '60-80', '81-90', '90+'];
 
 const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -223,14 +216,11 @@ const HomeScreen = () => {
     };
     getSubjectWiseReport(params)
       .then((res) => {
-        // console.log('responst subwise report -- .', JSON.stringify(res.data));
         setConsolidatedReportData(res.data);
-        // setDataOfConsolidatedReport(res.data);
       })
       .catch((error) => {
-        if (error?.response?.status !== 401)
-          // notifyMessage('failed to fetch subjectwise report', error);
-          console.log('subwise', error);
+        if (error?.response?.status === 404 && error?.response?.status !== 401)
+          setConsolidatedReportData({});
       });
   };
 
@@ -329,14 +319,6 @@ const HomeScreen = () => {
 
   const resultScr = categorizeData(scoreChartData, configForScore);
   const resultStudtim = categorizeData(studyTimeChartData, configForStudyTime);
-  // console.log('result score', resultScr);
-  // console.log('result stu time', resultStudtim);
-  // console.log('scdt', scoreChartData);
-  // console.log('stdychrt', studyTimeChartData);
-  // console.log('hwp', consolidatedReportData?.homeworkProgress);
-
-  // console.log('sbBODY', sortByBody);
-  // console.log('pdBODY', practiceDurationBody);
 
   return (
     <SafeScreen>
@@ -355,6 +337,7 @@ const HomeScreen = () => {
                 chapters: consolidatedReportData?.chapters,
                 subjectName: subjectName,
                 chapList: chapList,
+                avgAchivableScore: consolidatedReportData?.score,
               })
             }
           >
@@ -383,6 +366,7 @@ const HomeScreen = () => {
               height: 'auto',
               borderRadius: 12,
               marginTop: '4%',
+              marginBottom: '-1%',
             },
           ]}
         >
@@ -423,7 +407,7 @@ const HomeScreen = () => {
               Home work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.homeworkProgress}% Complete`}
+              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
@@ -443,7 +427,7 @@ const HomeScreen = () => {
               Diagnostic
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.diagnosisProgress}% Complete`}
+              {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
@@ -461,7 +445,7 @@ const HomeScreen = () => {
         <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 
         <View
-          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
+          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '6%' }]}
         >
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             STUDENT PROGRESS
@@ -606,29 +590,31 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* <View
-          style={[
-            layout.fullWidth,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 200,
-              marginTop: "3%",
-              borderRadius: 13,
-              justifyContent: "center",
-            },
-          ]}
-        >
-          <Text
+        {studentProgressData?.length === 0 && (
+          <View
             style={[
-              fonts.size_20,
-              fonts.fontWeignt_600,
-               fonts.alignCenter,
-              { color: colors.white,},
+              layout.fullWidth,
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                height: 400,
+                marginTop: '3%',
+                borderRadius: 13,
+                justifyContent: 'center',
+              },
             ]}
           >
-            Students data not available
-          </Text>
-        </View> */}
+            <Text
+              style={[
+                fonts.size_20,
+                fonts.fontWeignt_600,
+                fonts.alignCenter,
+                { color: colors.white },
+              ]}
+            >
+              Students data not available
+            </Text>
+          </View>
+        )}
 
         {studentProgressData.map((ele) => (
           <TouchableOpacity

@@ -74,13 +74,13 @@ const HomeWorkTab = () => {
     React.useCallback(() => {
       getAllChaptersDetails(selectedSubjectId);
       getHomeworks();
-    }, [selectedSubjectId])
+    }, [selectedSubjectId, sectionId, gradeId])
   );
 
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
     getHomeworks();
-  }, [selectedSubjectId]);
+  }, [selectedSubjectId, sectionId, gradeId]);
 
   const onSearchChapters = (search) => {
     const searchItem = chapterDetails.filter((ele) =>
@@ -244,60 +244,62 @@ const HomeWorkTab = () => {
                       </View>
                       {expandedCards[ele.chapterId] ? (
                         <>
-                          {ele.topics.map((item) => {
-                            const assignedObj = getAssigned(ele.chapterId, item.topicId);
-                            return (
-                              <View key={item.topicId}>
-                                <View
-                                  style={[
-                                    layout.display,
-                                    layout.rowHCenter,
-                                    layout.justifyBetween,
-                                    {
-                                      borderTopColor: colors.gray400,
-                                      borderTopWidth: 1,
-                                      paddingVertical: '5%',
-                                      marginTop: '2%',
-                                    },
-                                  ]}
-                                >
-                                  <View style={{ width: '70%' }}>
-                                    <Text
-                                      style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
-                                        { color: '#D5D5D7' },
-                                      ]}
-                                    >
-                                      {item.topicDesc}
-                                    </Text>
-                                  </View>
-                                  <View style={{ width: '0%' }}>
-                                    <ToggleButton
-                                      chapterId={ele.chapterId}
-                                      topicId={item.topicId}
-                                      topics={ele.topics}
-                                      onToggleClick={(chapterId, topicId, topics) =>
-                                        handleToggleClick(chapterId, topicId, topics)
-                                      }
-                                      isEnabled={isAlreadyAssigned(ele.chapterId, item.topicId)}
-                                    />
-                                  </View>
-                                </View>
-                                {assignedObj ? (
-                                  <Text
+                          {ele.topics
+                            .sort((a, b) => a.displaySeq - b.displaySeq)
+                            .map((item) => {
+                              const assignedObj = getAssigned(ele.chapterId, item.topicId);
+                              return (
+                                <View key={item.topicId}>
+                                  <View
                                     style={[
-                                      fonts.size_12,
-                                      fonts.fontWeight_small,
-                                      { color: colors.gray200, marginTop: -10 },
+                                      layout.display,
+                                      layout.rowHCenter,
+                                      layout.justifyBetween,
+                                      {
+                                        borderTopColor: colors.gray400,
+                                        borderTopWidth: 1,
+                                        paddingVertical: '5%',
+                                        marginTop: '2%',
+                                      },
                                     ]}
                                   >
-                                    Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}
-                                  </Text>
-                                ) : null}
-                              </View>
-                            );
-                          })}
+                                    <View style={{ width: '70%' }}>
+                                      <Text
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: '#D5D5D7' },
+                                        ]}
+                                      >
+                                        {item.topicDesc}
+                                      </Text>
+                                    </View>
+                                    <View style={{ width: '0%' }}>
+                                      <ToggleButton
+                                        chapterId={ele.chapterId}
+                                        topicId={item.topicId}
+                                        topics={ele.topics}
+                                        onToggleClick={(chapterId, topicId, topics) =>
+                                          handleToggleClick(chapterId, topicId, topics)
+                                        }
+                                        isEnabled={isAlreadyAssigned(ele.chapterId, item.topicId)}
+                                      />
+                                    </View>
+                                  </View>
+                                  {assignedObj ? (
+                                    <Text
+                                      style={[
+                                        fonts.size_12,
+                                        fonts.fontWeight_small,
+                                        { color: colors.gray200, marginTop: -10 },
+                                      ]}
+                                    >
+                                      Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}
+                                    </Text>
+                                  ) : null}
+                                </View>
+                              );
+                            })}
                         </>
                       ) : null}
                     </TouchableOpacity>

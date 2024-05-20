@@ -11,6 +11,7 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
 import { getReportInsights } from '../../services/ReportsServices/reportsServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
+import { getTopicDescById, getSubTopicDescById } from '../../utils/namesByIds';
 
 import { MMKV } from 'react-native-mmkv';
 
@@ -24,7 +25,7 @@ const InsightsScreen = () => {
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
 
   const [insightReportsData, setInsightReportsData] = useState([]);
-  // const [chapList, setChapList] = useState([]);
+  const [chapList, setChapList] = useState([]);
 
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [selectedChapterName, setSelectedChapterName] = useState(null);
@@ -75,8 +76,8 @@ const InsightsScreen = () => {
 
   useEffect(() => {
     getChaptersBySubjectId(selectedSubjectId)
-      .then(() => {
-        // setChapList(res.data);
+      .then((res) => {
+        setChapList(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -101,9 +102,14 @@ const InsightsScreen = () => {
       });
   };
 
-  // console.log('cid', selectedChapter);
-  // console.log('uid', selectedUnit);
-  // console.log('area', chapterSelectionType);
+  const groupedData = insightReportsData.reduce((acc, item) => {
+    const topicId = item.topicId;
+    if (!acc[topicId]) {
+      acc[topicId] = [];
+    }
+    acc[topicId].push(item);
+    return acc;
+  }, {});
 
   return (
     <SafeScreen>
@@ -216,99 +222,180 @@ const InsightsScreen = () => {
               />
             </TouchableOpacity>
           </ScrollView>
-
-          <View style={[]}>
-            {selectedChapter !== null ? (
-              <View>
-                {insightReportsData.map((ele) => {
-                  return (
-                    <View
-                      key={ele.id}
-                      style={[
-                        layout.fullWidth,
-                        isTablet ? { padding: '2%' } : layout.paddingForCard,
-                        {
-                          height: 'auto',
-                          backgroundColor: colors.cardBackgroundColor,
-                          borderRadius: 16,
-                          marginTop: isTablet ? '2%' : '5%',
-                        },
-                      ]}
-                    >
-                      <View style={[layout.display, layout.justifyBetween]}>
-                        <Text style={[fonts.size_14, fonts.bold, { color: colors.gray100 }]}>
-                          {ele.subTopicId}
-                        </Text>
-                        <View
-                          style={[
-                            layout.rowHCenter,
-                            layout.itemsCenter,
-                            { marginTop: isTablet ? '1%' : '4%', gap: 8 },
-                          ]}
-                        >
-                          <Image source={Weak} style={{ width: 25, height: 25 }} />
-                          <Text
+          {selectedChapter !== null ? (
+            <View>
+              {Object.keys(groupedData).map((topicId) => (
+                <View key={topicId} style={[]}>
+                  <Text
+                    style={[
+                      fonts.size_20,
+                      fonts.bold,
+                      { color: colors.white, opacity: 0.4, marginTop: '5%', marginBottom: '-2%' },
+                    ]}
+                  >
+                    {getTopicDescById(chapList.chapters, topicId)}
+                  </Text>
+                  {selectedChapter !== null ? (
+                    <View>
+                      {groupedData[topicId].map((ele) => {
+                        return (
+                          <View
+                            key={ele.id}
                             style={[
                               fonts.size_12,
                               fonts.fontWeight_small,
                               { color: colors.gray100 },
                             ]}
                           >
-                            Weak for 68% of the student
-                          </Text>
-                        </View>
-                      </View>
+                            <View style={[layout.display, layout.justifyBetween]}>
+                              <Text style={[fonts.size_14, fonts.bold, { color: colors.gray100 }]}>
+                                {getSubTopicDescById(chapList.chapters, ele.subTopicId)}
+                              </Text>
+                              {(chapterSelectionType === 'WEAK' ||
+                                chapterSelectionType === 'ALL') && (
+                                <View
+                                  style={[
+                                    layout.rowHCenter,
+                                    layout.itemsCenter,
+                                    { marginTop: isTablet ? '1%' : '4%', gap: 8 },
+                                  ]}
+                                >
+                                  <Image source={Weak} style={{ width: 25, height: 25 }} />
+                                  <Text
+                                    style={[
+                                      fonts.size_12,
+                                      fonts.fontWeight_small,
+                                      { color: colors.gray100 },
+                                    ]}
+                                  >
+                                    Weak for {Math.round(ele.weakPercentage)}% of the student
+                                  </Text>
+                                </View>
+                              )}
+                              {(chapterSelectionType === 'STRONG' ||
+                                chapterSelectionType === 'ALL') && (
+                                <View
+                                  style={[
+                                    layout.rowHCenter,
+                                    layout.itemsCenter,
+                                    { marginTop: isTablet ? '1%' : '4%', gap: 8 },
+                                  ]}
+                                >
+                                  <Image source={Weak} style={{ width: 25, height: 25 }} />
+                                  <Text
+                                    style={[
+                                      fonts.size_12,
+                                      fonts.fontWeight_small,
+                                      { color: colors.gray100 },
+                                    ]}
+                                  >
+                                    Strong for {Math.round(ele.strongPercentage)}% of the student
+                                  </Text>
+                                </View>
+                              )}
+                            </View>
+                          </View>
+                        );
+                      })}
                     </View>
-                  );
-                })}
-              </View>
-            ) : (
-              <View
+                  ) : (
+                    <View
+                      style={[
+                        layout.itemsCenter,
+                        layout.justifyCenter,
+                        {
+                          marginTop: isTablet ? '10%' : '50%',
+                          width: isTablet ? '60%' : null,
+                          alignSelf: isTablet ? 'center' : null,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          fonts.alignCenter,
+                          fonts.size_24,
+                          fonts.bold,
+                          { color: colors.white, width: '80%' },
+                        ]}
+                      >
+                        No Subtopic Available
+                      </Text>
+                      <Text
+                        style={[
+                          fonts.alignCenter,
+                          fonts.size_16,
+                          fonts.fontWeignt_600,
+                          { color: colors.gray200, marginTop: '2%' },
+                        ]}
+                      >
+                        There are no Subtopic, please select Chapter and Question type to fetch
+                        Questions
+                      </Text>
+                      <TouchableOpacity
+                        style={{ width: '85%' }}
+                        onPress={() => setSelectChapterModalVisible(true)}
+                      >
+                        <PrimaryGradient
+                          styleProp={[layout.justifyCenter, layout.itemsCenter, styles.Button]}
+                        >
+                          <Text
+                            style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}
+                          >
+                            Select Chapter
+                          </Text>
+                        </PrimaryGradient>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View
+              style={[
+                layout.itemsCenter,
+                layout.justifyCenter,
+                {
+                  marginTop: isTablet ? '10%' : '50%',
+                  width: isTablet ? '60%' : null,
+                  alignSelf: isTablet ? 'center' : null,
+                },
+              ]}
+            >
+              <Text
                 style={[
-                  layout.itemsCenter,
-                  layout.justifyCenter,
-                  {
-                    marginTop: isTablet ? '10%' : '50%',
-                    width: isTablet ? '60%' : null,
-                    alignSelf: isTablet ? 'center' : null,
-                  },
+                  fonts.alignCenter,
+                  fonts.size_24,
+                  fonts.bold,
+                  { color: colors.white, width: '80%' },
                 ]}
               >
-                <Text
-                  style={[
-                    fonts.alignCenter,
-                    fonts.size_24,
-                    fonts.bold,
-                    { color: colors.white, width: '80%' },
-                  ]}
+                No Subtopic Available
+              </Text>
+              <Text
+                style={[
+                  fonts.alignCenter,
+                  fonts.size_16,
+                  fonts.fontWeignt_600,
+                  { color: colors.gray200, marginTop: '2%' },
+                ]}
+              >
+                There are no Subtopic, please select Chapter and Question type to fetch Questions
+              </Text>
+              <TouchableOpacity
+                style={{ width: '85%' }}
+                onPress={() => setSelectChapterModalVisible(true)}
+              >
+                <PrimaryGradient
+                  styleProp={[layout.justifyCenter, layout.itemsCenter, styles.Button]}
                 >
-                  No Subtopic Available
-                </Text>
-                <Text
-                  style={[
-                    fonts.alignCenter,
-                    fonts.size_16,
-                    fonts.fontWeignt_600,
-                    { color: colors.gray200, marginTop: '2%' },
-                  ]}
-                >
-                  There are no Subtopic, please select Chapter and Question type to fetch Questions
-                </Text>
-                <TouchableOpacity
-                  style={{ width: '85%' }}
-                  onPress={() => setSelectChapterModalVisible(true)}
-                >
-                  <PrimaryGradient
-                    styleProp={[layout.justifyCenter, layout.itemsCenter, styles.Button]}
-                  >
-                    <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                      Select Chapter
-                    </Text>
-                  </PrimaryGradient>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+                  <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
+                    Select Chapter
+                  </Text>
+                </PrimaryGradient>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
       <SelectChapterBottomSheet

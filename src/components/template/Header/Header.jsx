@@ -82,7 +82,7 @@ const Header = () => {
     <View
       style={{
         backgroundColor: isTablet ? '#191924' : colors.headerBackgroundColor,
-        height: isTablet ? 60 : 'auto',
+        height: isTablet ? 60 : 135,
       }}
     >
       <View style={[layout.paddingForFullScreen, { paddingTop: isTablet ? '.5%' : '4%' }]}>
@@ -161,7 +161,7 @@ const Header = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={[
               layout.paddingForFullScreen,
-              { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
+              { paddingTop: '0%', paddingBottom: '2%', marginTop: '8%' },
             ]}
           >
             <View style={[layout.display, layout.rowHCenter]}>
@@ -210,7 +210,7 @@ const Header = () => {
 const styles = StyleSheet.create({
   button: {
     left: -12,
-    height: 45,
+    height: 49,
     borderRadius: 12,
     backgroundColor: '#22222F',
     paddingLeft: 20,

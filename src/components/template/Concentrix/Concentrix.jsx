@@ -119,20 +119,26 @@ const Concentrix = (props) => {
               </Text>
             </Text>
           ) : (
-            <Text
-              style={[
-                fonts.alignCenter,
-                fonts.size_20,
-                fonts.bold,
-                {
-                  color: colors.white,
-                  marginTop: '20%',
-                  fontFamily: 'Poppins-Bold',
-                },
-              ]}
+            <View
+              style={[layout.itemsCenter, layout.justifyCenter, layout.row, { marginTop: '20%' }]}
             >
-              0
-            </Text>
+              <Text
+                style={[
+                  fonts.alignCenter,
+                  fonts.size_20,
+                  fonts.bold,
+                  {
+                    color: colors.white,
+                    fontFamily: 'Poppins-Bold',
+                  },
+                ]}
+              >
+                0
+              </Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.gray200 }]}>
+                /100
+              </Text>
+            </View>
           )}
           {/* <Text
             style={[
@@ -151,16 +157,17 @@ const Concentrix = (props) => {
 
           <Text
             style={[
-              fonts.size_16,
+              fonts.size_14,
               fonts.fontWeight_small,
               fonts.alignCenter,
               {
                 color: colors.white,
                 fontFamily: 'Poppins-Regular',
+                width: '55%',
               },
             ]}
           >
-            Achievable Score
+            Avarage Achievable Score
           </Text>
 
           <Text

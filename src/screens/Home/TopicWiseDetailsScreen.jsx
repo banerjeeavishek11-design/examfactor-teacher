@@ -236,16 +236,35 @@ const TopicWiseDetailsScreen = () => {
                         >
                           {item.studentName}
                         </Text>
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
+                        <View
+                          style={[
+                            layout.row,
+                            layout.itemsCenter,
+                            {
+                              width: '55%',
+                              justifyContent: 'space-between',
+                            },
+                          ]}
                         >
-                          {`${item.completionPercentage}%`}
-                        </Text>
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
-                        >
-                          {`${item.score}/100`}
-                        </Text>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeight_small,
+                              { color: colors.gray200 },
+                            ]}
+                          >
+                            {`${item.completionPercentage}%`}
+                          </Text>
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeight_small,
+                              { color: colors.gray200 },
+                            ]}
+                          >
+                            {`${item.score}/100`}
+                          </Text>
+                        </View>
                       </View>
                     ))}
                   </View>

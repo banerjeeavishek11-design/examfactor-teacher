@@ -54,6 +54,7 @@ const SelectChapterBottomSheet = ({
   const getChapterDetails = () => {
     getChaptersBySubjectId(selectedSubjectId)
       .then((res) => {
+        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapters(res.data.chapters);
       })
       .catch((error) => {

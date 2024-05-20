@@ -17,7 +17,7 @@ const SubjectDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { chapters, subjectName, chapList } = route.params || {};
+  const { chapters, subjectName, chapList, avgAchivableScore } = route.params || {};
   const [searchChapterName, setSearchChapterName] = useState([]);
 
   // const goToTopicWiseDetailsScreen = (chapterName, progress) => {
@@ -38,6 +38,7 @@ const SubjectDetailsScreen = () => {
     );
     setSearchChapterName(searchItem);
   };
+  // console.log('searchChapterName', searchChapterName);
 
   return (
     <SafeScreen>
@@ -120,9 +121,16 @@ const SubjectDetailsScreen = () => {
           </View>
 
           <View>
-            <Circularprogressbar progress={60} />
+            <Circularprogressbar progress={avgAchivableScore || 0} />
           </View>
         </LinearGradient>
+        {!searchChapterName && (
+          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 600 }]}>
+            <Text style={[fonts.fontWeignt_600, fonts.size_20, { color: colors.white }]}>
+              No Data
+            </Text>
+          </View>
+        )}
         {searchChapterName?.map((ele) => {
           return (
             <View
