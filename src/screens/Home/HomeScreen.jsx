@@ -337,6 +337,7 @@ const HomeScreen = () => {
                 chapters: consolidatedReportData?.chapters,
                 subjectName: subjectName,
                 chapList: chapList,
+                avgAchivableScore: consolidatedReportData?.score,
               })
             }
           >
@@ -365,6 +366,7 @@ const HomeScreen = () => {
               height: 'auto',
               borderRadius: 12,
               marginTop: '4%',
+              marginBottom: '-1%',
             },
           ]}
         >
@@ -443,7 +445,7 @@ const HomeScreen = () => {
         <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 
         <View
-          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
+          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '6%' }]}
         >
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             STUDENT PROGRESS
@@ -588,29 +590,31 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* <View
-          style={[
-            layout.fullWidth,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 200,
-              marginTop: "3%",
-              borderRadius: 13,
-              justifyContent: "center",
-            },
-          ]}
-        >
-          <Text
+        {studentProgressData?.length === 0 && (
+          <View
             style={[
-              fonts.size_20,
-              fonts.fontWeignt_600,
-               fonts.alignCenter,
-              { color: colors.white,},
+              layout.fullWidth,
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                height: 400,
+                marginTop: '3%',
+                borderRadius: 13,
+                justifyContent: 'center',
+              },
             ]}
           >
-            Students data not available
-          </Text>
-        </View> */}
+            <Text
+              style={[
+                fonts.size_20,
+                fonts.fontWeignt_600,
+                fonts.alignCenter,
+                { color: colors.white },
+              ]}
+            >
+              Students data not available
+            </Text>
+          </View>
+        )}
 
         {studentProgressData.map((ele) => (
           <TouchableOpacity

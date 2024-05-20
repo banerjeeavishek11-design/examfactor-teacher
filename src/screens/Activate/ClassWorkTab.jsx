@@ -121,7 +121,7 @@ const ClassWorkTab = () => {
       .then((res) => {
         if (res.data.content.length == 0) {
           setIsLoading(false);
-          notifyMessage('No tests found');
+          // notifyMessage('No tests found');
           return;
         }
         const chap = chapterDetails.map((ele) => {
@@ -303,6 +303,32 @@ const ClassWorkTab = () => {
                         <View>
                           {expandCardId === ele.chapterId && expandedCards[ele.chapterId] ? (
                             <>
+                              {(ele?.assessments === undefined ||
+                                ele?.assessments?.length === 0) && (
+                                <View
+                                  style={[
+                                    layout.row,
+                                    layout.justifyBetween,
+                                    layout.itemsCenter,
+                                    {
+                                      borderTopColor: colors.gray400,
+                                      borderTopWidth: 1,
+                                      paddingVertical: '5%',
+                                      marginTop: '2%',
+                                    },
+                                  ]}
+                                >
+                                  <Text
+                                    style={[
+                                      fonts.fontWeight_small,
+                                      fonts.size_12,
+                                      { color: colors.white },
+                                    ]}
+                                  >
+                                    No Tests Found
+                                  </Text>
+                                </View>
+                              )}
                               {ele?.assessments?.map((element) => {
                                 const assignedObj = getAssigned(ele.chapterId, element.id);
                                 return (
