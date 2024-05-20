@@ -85,8 +85,6 @@ const TopicWiseDetailsScreen = () => {
       });
   };
 
-  // console.log('response of HW report', homeworkReportData);
-
   return (
     <SafeScreen>
       <View

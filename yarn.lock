@@ -7039,6 +7039,11 @@ react-native-linear-gradient@^2.8.3:
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
   integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
+react-native-mathjax@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-mathjax/-/react-native-mathjax-2.1.2.tgz#d4f8388305111b20bdc74b539b36b3bc7d7ffeb6"
+  integrity sha512-wwlAPigkwfwyLYCXoLCpQ5/kNAFhYJbvclxhJKZd4OaTAwT+b6KDKWvanozBU+OyYTxLQDW8uYjYswLfF4ujcg==
+
 react-native-mmkv@^2.12.1:
   version "2.12.1"
   resolved "https://registry.npmjs.org/react-native-mmkv/-/react-native-mmkv-2.12.1.tgz"

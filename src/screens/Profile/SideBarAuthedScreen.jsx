@@ -172,7 +172,7 @@ const SideBarAuthedScreen = (props) => {
                     >
                       <View style={{ marginLeft: '6%', width: '70%' }}>
                         <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                          {userDetails?.firstName || userName} {userDetails?.middleName || ''}{' '}
+                          {userDetails?.firstName || ''} {userDetails?.middleName || ''}{' '}
                           {userDetails?.lastName || ''}
                         </Text>
 

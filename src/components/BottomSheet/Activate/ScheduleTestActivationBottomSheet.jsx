@@ -103,8 +103,7 @@ const ScheduleTestActivationBottomSheet = ({
     setSelectedFromTime(null);
     setSelectedToTime(null);
     activateClassworkByTeacher(requiredBody)
-      .then((res) => {
-        console.log('response', res.data);
+      .then(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
             getClassworks();

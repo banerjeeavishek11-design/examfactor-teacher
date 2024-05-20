@@ -15,43 +15,11 @@ import moment from 'moment';
 const ProfileDetailsScreen = ({ navigation }) => {
   const route = useRoute();
   const { userDetails } = route.params;
+  const { layout, fonts, colors } = useTheme();
   const [profileData, setProfileData] = useState(userDetails);
   const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible] = useState(false);
   const [changePasswordBottomSheetVisible, setChangePasswordBottomSheetVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
-
-  // const saveNewData = (newData) => {
-  //   setProfileData((prevData) => ({
-  //     ...prevData,
-  //     ...newData,
-  //   }));
-  // };
-
-  const chooseImage = () => {
-    let options = {
-      storageOptions: {
-        path: 'images',
-        mediaType: 'photo',
-      },
-      includeBase64: true,
-    };
-
-    launchImageLibrary(options)
-      .then((response) => {
-        console.log(response);
-        setSelectedImage(response.assets[0].uri);
-        uploadPicture(response.assets[0].uri)
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            err;
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const openEditPersonalDetailModal = () => {
     setPersonalDetailBottomSheetVisible(true);
@@ -67,7 +35,55 @@ const ProfileDetailsScreen = ({ navigation }) => {
   const closeChangePasswordModal = () => {
     setChangePasswordBottomSheetVisible(false);
   };
-  const { layout, fonts, colors } = useTheme();
+
+  const chooseImage = () => {
+    let options = {
+      storageOptions: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options)
+      .then((response) => {
+        setSelectedImage(response.assets[0].uri);
+        uploadPicture(response.assets[0].uri)
+          .then(() => {})
+          .catch((err) => {
+            err;
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const maskEmail = (email) => {
+    // Split the email address into local and domain parts
+    const [localPart, domainPart] = email.split('@');
+
+    // Keep the first and last characters of the local part
+    const maskedLocalPart =
+      localPart.length > 2
+        ? localPart[0] + '*'.repeat(localPart.length - 2) + localPart.slice(-1)
+        : localPart;
+
+    // Combine the masked local part and the domain part
+    return `${maskedLocalPart}@${domainPart}`;
+  };
+
+  const encryptNumber = (phoneNumber) => {
+    // Check if the phone number is valid and has more than one digit
+    if (phoneNumber && phoneNumber.length > 2) {
+      const firstDigit = phoneNumber.charAt(0);
+      const encryptedDigits = '*'.repeat(phoneNumber.length - 3);
+      const lastTwoDigits = phoneNumber.slice(-2);
+      return `${firstDigit}${encryptedDigits}${lastTwoDigits}`;
+    }
+    return phoneNumber; // Return original number if it's not valid or has only one digit
+  };
+
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen, { flex: 1 }]}>
@@ -90,10 +106,10 @@ const ProfileDetailsScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <View style={[layout.justifyCenter, layout.itemsCenter, { marginTop: '10%' }]}>
-          {userDetails?.profileImageUrl ? (
+          {profileData?.profileImageUrl ? (
             <Image
               style={[{ width: 42, height: 42, borderRadius: 100 }]}
-              source={{ uri: userDetails?.profileImageUrl }}
+              source={{ uri: profileData?.profileImageUrl }}
               resizeMode="cover"
             />
           ) : (
@@ -159,7 +175,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {userDetails?.firstName} {userDetails?.lastName}
+                {profileData?.firstName} {profileData?.middleName} {profileData?.lastName}
               </Text>
             </View>
             <View
@@ -186,9 +202,9 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {moment(userDetails?.dob).format('DD/MM/YYYY') === 'Invalid date'
-                  ? '-  '
-                  : moment(userDetails?.dob).format('DD/MM/YYYY')}
+                {moment(profileData?.dob).format('DD/MM/YYYY') === 'Invalid date'
+                  ? '-'
+                  : moment(profileData?.dob).format('DD/MM/YYYY')}
               </Text>
             </View>
             <View
@@ -215,7 +231,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {userDetails?.gender}
+                {profileData?.gender}
               </Text>
             </View>
 
@@ -231,7 +247,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 style={[
                   fonts.size_16,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.4 },
+                  { color: colors.white, opacity: 0.4, width: '40%' },
                 ]}
               >
                 Email Address
@@ -240,12 +256,10 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 style={[
                   fonts.size_16,
                   fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
+                  { color: colors.white, opacity: 0.6, width: '60%', textAlign: 'right' },
                 ]}
               >
-                {userDetails?.emailId.length < 25
-                  ? userDetails?.emailId
-                  : userDetails?.emailId.substring(0, 25) + '...'}
+                {profileData?.emailId ? maskEmail(profileData.emailId) : '--'}
               </Text>
             </View>
             <View
@@ -273,7 +287,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                   { color: colors.white, opacity: 0.6 },
                 ]}
               >
-                {userDetails?.emergencyContactNumber || '-  '}
+                {encryptNumber(profileData?.emergencyContactNumber) || '--'}
               </Text>
             </View>
           </View>
@@ -300,7 +314,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
           <Text
             style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
           >
-            {userDetails?.mobileNumber || '-  '}
+            {profileData?.mobileNumber || '-'}
           </Text>
         </View>
         <TouchableOpacity onPress={openChangePasswordModal}>
@@ -312,12 +326,10 @@ const ProfileDetailsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <EditPersonalDetailBottomSheet
-        userDetails={userDetails}
         closeModal={closeEditPersonalDetailModal}
         personalDetailBottomSheetVisible={personalDetailBottomSheetVisible}
         profileData={profileData}
         setProfileData={setProfileData}
-        // saveNewData={saveNewData}
       />
       <ChangePasswordBottomSheet
         visible={changePasswordBottomSheetVisible}

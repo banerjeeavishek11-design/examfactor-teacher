@@ -307,8 +307,6 @@ const ClassWorkTab = () => {
                                 ele?.assessments?.length === 0) && (
                                 <View
                                   style={[
-                                    layout.row,
-                                    layout.justifyBetween,
                                     layout.itemsCenter,
                                     {
                                       borderTopColor: colors.gray400,
@@ -321,7 +319,8 @@ const ClassWorkTab = () => {
                                   <Text
                                     style={[
                                       fonts.fontWeight_small,
-                                      fonts.size_12,
+                                      fonts.size_14,
+                                      fonts.alignCenter,
                                       { color: colors.white },
                                     ]}
                                   >

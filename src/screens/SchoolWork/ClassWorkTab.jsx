@@ -126,8 +126,10 @@ const ClassWorkTab = () => {
   };
 
   const handleActiveChapter = () => {
-    // setActivatedTest(true);
-    navigation.navigate('ActivateClassWorkTab');
+    // navigation.navigate('ActivateClassWorkTab');
+    navigation.navigate('ActivateTab', {
+      screen: 'ActivateClassWorkTab',
+    });
   };
 
   const toggleContent = (id) => {

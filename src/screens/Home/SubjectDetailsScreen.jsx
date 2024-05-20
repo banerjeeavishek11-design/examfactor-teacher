@@ -20,14 +20,6 @@ const SubjectDetailsScreen = () => {
   const { chapters, subjectName, chapList, avgAchivableScore } = route.params || {};
   const [searchChapterName, setSearchChapterName] = useState([]);
 
-  // const goToTopicWiseDetailsScreen = (chapterName, progress) => {
-  //   navigation.navigate('TopicWiseDetailsScreen', {
-  //     topicName: chapterName,
-  //     progress: progress,
-  //   });
-  // };
-  // console.log('chaps', chapters);
-
   useEffect(() => {
     setSearchChapterName(chapters);
   }, []);
@@ -38,7 +30,6 @@ const SubjectDetailsScreen = () => {
     );
     setSearchChapterName(searchItem);
   };
-  // console.log('searchChapterName', searchChapterName);
 
   return (
     <SafeScreen>

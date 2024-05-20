@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Image,
+  // Image,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
@@ -19,7 +19,7 @@ import { ImageVariant } from '../../atoms';
 import Cross from '@/theme/assets/images/cross.png';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import Calender from '@/theme/assets/images/calendar.png';
+// import Calender from '@/theme/assets/images/calendar.png';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { editTeacherDetails, getUserDetailsByUserId } from '../../../services/teacherService';
 import { notifyWarningMessage } from '../../../utils/error-toast-API';
@@ -49,9 +49,11 @@ const EditPersonalDetailBottomSheet = ({
   const [formValues, setFormValues] = useState({
     firstName: '',
     dob: '',
+    gender: '',
     emailId: '',
     mobileNumber: '',
     emergencyContactNumber: '',
+    address: '',
   });
 
   useEffect(() => {
@@ -65,50 +67,6 @@ const EditPersonalDetailBottomSheet = ({
     }
   }, [sectionName, teacherDetails]);
 
-  const handleSubmit = (values) => {
-    console.log('values', values);
-    let requiredBody = {
-      id: teacherId,
-      serialNumber: 0,
-      // password: 'string',
-      mobileNumber: values.mobileNumber,
-      emailId: values.emailId,
-      firstName: values.firstName,
-      // middleName: 'string',
-      // lastName: 'string',
-      sectionId: sectionId,
-      dob: values.dob,
-      gender: values.gender,
-      teacherRole: 'TEACHER',
-      // bloodGroup: 'string',
-      emergencyContactNumber: values.emergencyContactNumber,
-      // emergencyContactPerson: 'string',
-      // emergencyEmailId: 'string',
-      // orgCode: 'string',
-      // orgId: 'string',
-      // partnerId: 'string',
-      // codes: ['string'],
-      // address: 'string',
-      // teacherViewMode: 'TEACHER',
-      temporary: true,
-    };
-    editTeacherDetails(requiredBody, teacherId)
-      .then((res) => {
-        console.log('req bod', res.data);
-        notifyWarningMessage(res.data.status);
-        getUserDetailsByUserId(teacherId)
-          .then(() => {
-            // console.log(res.data);
-            setProfileData(res.data);
-          })
-          .catch(() => {});
-        closeModal();
-      })
-      .catch((err) => {
-        console.log('error', err);
-      });
-  };
-
   useEffect(() => {
     if (profileData) {
       const formattedDate = profileData.dob ? moment(profileData.dob).format('DD/MM/YYYY') : '';
@@ -118,20 +76,44 @@ const EditPersonalDetailBottomSheet = ({
         dob: formattedDate || '',
         gender: profileData.gender || '',
         emailId: profileData.emailId || '',
+        mobileNumber: profileData.mobileNumber || '',
         emergencyContactNumber: profileData.emergencyContactNumber || '',
         address: profileData.address || '',
       });
     }
   }, [profileData]);
 
-  // console.log('pd,', profileData);
-  console.log('selectedDOB', selectedDob);
-  console.log('pd', profileData.dob);
-  console.log('new date', new Date());
-
-  // const convertedDate = new Date(selectedDob);
-
-  // console.log('convertedDate',convertedDate);
+  const handleSubmit = (values) => {
+    // console.log('values', values);
+    let requiredBody = {
+      id: teacherId,
+      serialNumber: 0,
+      mobileNumber: values.mobileNumber,
+      emailId: values.emailId,
+      firstName: values.firstName,
+      // middleName: 'string',
+      // lastName: 'string',
+      sectionId: sectionId,
+      // dob: values.dob,
+      gender: values.gender,
+      teacherRole: 'TEACHER',
+      emergencyContactNumber: values.emergencyContactNumber,
+      temporary: true,
+    };
+    editTeacherDetails(requiredBody, teacherId)
+      .then((res) => {
+        notifyWarningMessage(res.data.status);
+        getUserDetailsByUserId(teacherId)
+          .then((res) => {
+            setProfileData(res.data);
+          })
+          .catch(() => {});
+        closeModal();
+      })
+      .catch((err) => {
+        console.log('error', err);
+      });
+  };
   return (
     <Modal visible={personalDetailBottomSheetVisible} animationType="slide" transparent={true}>
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
@@ -233,15 +215,9 @@ const EditPersonalDetailBottomSheet = ({
                             placeholder={profileData.dob}
                             placeholderTextColor={colors.gray400}
                             value={selectedDob}
-                            // onChangeText={(text) => {
-                            //   setSelectedDob(text);
-                            //   setFieldValue('dob', text)
-                            //     .then(() => {})
-                            //     .catch(() => {});
-                            // }}
                             onChangeText={handleChange('dob')}
                           />
-                          <TouchableOpacity
+                          {/* <TouchableOpacity
                             onPress={() => {
                               setOpenCalender(true);
                             }}
@@ -254,9 +230,8 @@ const EditPersonalDetailBottomSheet = ({
                                 marginLeft: '5%',
                               }}
                             />
-                          </TouchableOpacity>
+                          </TouchableOpacity> */}
                           <DateTimePicker
-                            date={new Date(selectedDob)}
                             mode="date"
                             onConfirm={(date) => {
                               setSelectedDob(moment(date).format('DD/MM/YYYY'));
@@ -385,7 +360,6 @@ const EditPersonalDetailBottomSheet = ({
                           value={values?.emailId}
                         />
                       </View>
-
                       <View style={styles.inputContainer}>
                         <Text
                           style={[
@@ -415,7 +389,12 @@ const EditPersonalDetailBottomSheet = ({
                           keyboardType="phone-pad"
                           placeholder={profileData.mobileNumber}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange('mobileNumber')}
+                          onChangeText={(text) => {
+                            const cleanedText = text.replace(/[^0-9]/g, '');
+                            if (cleanedText.length <= 10) {
+                              handleChange('mobileNumber')(cleanedText);
+                            }
+                          }}
                           value={values.mobileNumber}
                         />
                       </View>
@@ -449,7 +428,12 @@ const EditPersonalDetailBottomSheet = ({
                           keyboardType="phone-pad"
                           placeholder={profileData.emergencyContactNumber}
                           placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange('emergencyContactNumber')}
+                          onChangeText={(text) => {
+                            const cleanedText = text.replace(/[^0-9]/g, '');
+                            if (cleanedText.length <= 10) {
+                              handleChange('emergencyContactNumber')(cleanedText);
+                            }
+                          }}
                           value={values.emergencyContactNumber}
                         />
                       </View>
