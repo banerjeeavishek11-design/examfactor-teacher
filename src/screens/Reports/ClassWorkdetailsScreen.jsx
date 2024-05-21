@@ -193,7 +193,7 @@ const ClassWorkdetailsScreen = () => {
                   { color: colors.white, marginTop: '90%' },
                 ]}
               >
-                No Data Available
+                No Classwork Found
               </Text>
             </>
           )}

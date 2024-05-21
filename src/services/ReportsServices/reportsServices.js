@@ -40,3 +40,12 @@ export const bookMarkedQuestionsList = async (params) => {
     params: params,
   });
 };
+
+export const myChapterDetails = async (subjectId, params) => {
+  return await api.get(
+    `${b2bStudentService}/v1/my-subject-insight/${subjectId}/chapters?q=hw-chpt-drilldown`,
+    {
+      params: params,
+    }
+  );
+};

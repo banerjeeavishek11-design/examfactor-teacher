@@ -17,6 +17,11 @@ export const setReminderForHomework = async (requestBody) => {
 export const editTeacherDetails = async (requestBody, id) => {
   return await api.put(`${teacherService}/v1/teachers/${id}`, requestBody);
 };
+
 export const uploadPicture = async (file) => {
-  return await api.patch(`${teacherService}/v1/teachers/pic`, file);
+  return await api.patch(`${teacherService}/v1/teachers/pic`, file, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
