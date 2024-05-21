@@ -82,7 +82,7 @@ const Header = () => {
     <View
       style={{
         backgroundColor: isTablet ? '#191924' : colors.headerBackgroundColor,
-        height: isTablet ? 60 : 135,
+        height: isTablet ? 120 : 135,
       }}
     >
       <View style={[layout.paddingForFullScreen, { paddingTop: isTablet ? '.5%' : '4%' }]}>
@@ -154,14 +154,14 @@ const Header = () => {
             </View>
           )}
         </View>
-        <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
+        <View style={{ backgroundColor: isTablet ? 'black' : colors.headerBackgroundColor }}>
           <ScrollView
             ref={scrollViewRef}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={[
               layout.paddingForFullScreen,
-              { paddingTop: '0%', paddingBottom: '2%', marginTop: '8%' },
+              { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
             ]}
           >
             <View style={[layout.display, layout.rowHCenter]}>
