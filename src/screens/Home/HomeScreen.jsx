@@ -55,7 +55,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
-  const [showContent, setShowContent] = useState(false);
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
@@ -86,6 +85,8 @@ const HomeScreen = () => {
   const [consolidatedReportData, setConsolidatedReportData] = useState();
 
   const [studentProgressData, setStudentProgressData] = useState([]);
+
+  const [expandedCards, setExpandedCards] = useState({});
 
   const [chapList, setChapList] = useState([]);
 
@@ -285,8 +286,11 @@ const HomeScreen = () => {
       });
   };
 
-  const toggleContent = () => {
-    setShowContent(!showContent);
+  const toggleContent = (id) => {
+    // setShowContent(!showContent);
+    setExpandedCards((prevState) => ({
+      [id]: !prevState[id],
+    }));
   };
 
   function categorizeData(data, conf) {
@@ -434,9 +438,9 @@ const HomeScreen = () => {
           <View style={{ marginTop: '3%' }}>
             <Progressbar
               progress={
-                consolidatedReportData?.homeworkProgress === undefined
+                consolidatedReportData?.diagnosisProgress === undefined
                   ? 0
-                  : consolidatedReportData?.homeworkProgress / 100
+                  : consolidatedReportData?.diagnosisProgress / 100
               }
               color={'#BBA041'}
             />
@@ -620,7 +624,7 @@ const HomeScreen = () => {
         {studentProgressData.map((ele) => (
           <TouchableOpacity
             key={ele.studentId}
-            onPress={toggleContent}
+            onPress={() => toggleContent(ele.studentId)}
             style={[
               layout.fullWidth,
               layout.paddingForCard,
@@ -721,7 +725,7 @@ const HomeScreen = () => {
               </View>
               <View style={{ width: '10%' }}>
                 <TouchableOpacity>
-                  {showContent ? (
+                  {expandedCards[ele.studentId] ? (
                     <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
                   ) : (
                     <Image
@@ -733,7 +737,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            {showContent && (
+            {expandedCards[ele.studentId] && (
               <>
                 <Divider
                   style={{
@@ -751,18 +755,37 @@ const HomeScreen = () => {
                   ]}
                 >
                   <View style={{ width: '35%' }}>
-                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele.lastPracticeDate != null ? ele.lastPracticeDate : '0'} days ago
-                    </Text>
-                    <Text
-                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
-                    >
-                      Last practice
-                    </Text>
+                    {ele?.avgStudyTime == -1 ? (
+                      <>
+                        <Text
+                          style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
+                        >
+                          {ele.lastPracticeDateSince != null ? ele.lastPracticeDateSince : '0'} days
+                          ago
+                        </Text>
+                        <Text
+                          style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
+                        >
+                          Last practice
+                        </Text>
+                      </>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_13,
+                          fonts.fontWeignt_600,
+                          { color: colors.white, width: '90%' },
+                        ]}
+                      >
+                        Not Yet Practiced
+                      </Text>
+                    )}
                   </View>
                   <View style={{ width: '45%' }}>
                     <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.avgStudyTime} Min
+                      {ele?.avgStudyTime < 60
+                        ? ele?.avgStudyTime + ' Sec'
+                        : Math.floor(ele?.avgStudyTime / 60) + ' Min'}
                     </Text>
                     <View style={[layout.display, layout.rowHCenter]}>
                       <Text
@@ -785,7 +808,7 @@ const HomeScreen = () => {
                   </View>
                   <View style={{ width: '25%' }}>
                     <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.lastTestScore}
+                      {ele?.lastTestScore}%
                     </Text>
                     <Text
                       style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
