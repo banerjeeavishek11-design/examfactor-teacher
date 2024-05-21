@@ -19,6 +19,7 @@ import BookmarkedQuestionFilterBottomSheet from '@/components/BottomSheet/Report
 import { bookMarkedQuestionsList } from '../../services/ReportsServices/reportsServices';
 import { useSelector } from 'react-redux';
 import { notifyMessage } from '../../utils/error-toast-API';
+import MathJax from '../../components/mathjax/Mathjax';
 
 const BookmarkedQuestions = [
   {
@@ -101,6 +102,23 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     getBookmarkQuestions();
   }, [selectedSubjectId]);
 
+  const mmlOptions = {
+    styles: {
+      '#formula': {
+        color: 'white',
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 14,
+      },
+    },
+    jax: ['input/MathML'],
+  };
+  const mathjaxStyles = {
+    mathjaxContainer: {
+      backgroundColor: 'transparent',
+      fontFamily: 'Poppins-SemiBold',
+    },
+  };
+
   const getBookmarkQuestions = () => {
     setIsLoading(true);
     let params = {
@@ -111,7 +129,6 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     bookMarkedQuestionsList(params)
       .then((res) => {
         setAllBookmarkedQuestionsDetails(res?.data?.content);
-        console.log('res for bookmark', res.data?.content);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -126,6 +143,9 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
           notifyMessage('Data not found');
         }
       });
+  };
+  const goToSolutionScreen = (questions) => {
+    navigation.navigate('QuestionSolutionScreen', { questions: questions });
   };
 
   return (
@@ -166,7 +186,10 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                 {allBookmarkedQuestionsDetails?.length > 0 ? (
                   <>
                     {allBookmarkedQuestionsDetails?.map((ques, i) => {
-                      console.log('ques', ques);
+                      const concatenatedData = ques?.question?.questionContents
+                        .filter((ele) => ele.contentType === 'TEXT')
+                        .map((ele) => ele.data)
+                        .join(' ');
                       return (
                         <View key={ques.questionId}>
                           <View
@@ -205,19 +228,19 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                                   },
                                 ]}
                               >
-                                {ques?.subTopic}vvvvvvvvvvvvvvvvvvvvvvvv
+                                {ques?.question?.subTopic}
                               </Text>
+                            </View>
+                            <View pointerEvents="none">
+                              <MathJax
+                                mathJaxOptions={mmlOptions}
+                                html={`<div>${concatenatedData}</div>`}
+                                style={[mathjaxStyles.mathjaxContainer]}
+                              />
                             </View>
 
                             <TouchableOpacity
-                              // onPress={() =>
-                              //   navigation.navigate('QuestionSolutionScreen', {
-                              //     AllQuestions: BookmarkedQuestions,
-                              //     currentQuestionId: ques.id,
-                              //     currentQuestion: ques.question,
-                              //     studentDetails: studentDetails,
-                              //   })
-                              // }
+                              onPress={() => goToSolutionScreen(ques?.question)}
                               style={[
                                 layout.row,
                                 layout.itemsCenter,

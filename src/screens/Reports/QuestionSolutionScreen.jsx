@@ -1,33 +1,72 @@
 import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import rightArrow from '@/theme/assets/images/rightarrow.png';
-import leftArrow from '@/theme/assets/images/leftArrow2.png';
+// import rightArrow from '@/theme/assets/images/rightarrow.png';
+// import leftArrow from '@/theme/assets/images/leftArrow2.png';
 import Correct from '@/theme/assets/images/correctSolution.png';
-
-const answer = [
-  { id: 'A', answer: '0.5m/s', correct: false },
-  { id: 'B', answer: '5m/s', correct: true },
-  { id: 'C', answer: '50m/s', correct: false },
-  { id: 'D', answer: '100m/s', correct: false },
-];
+import ContentParser from '../../components/ContentParser/ContentParser';
+import MathJax from '../../components/mathjax/Mathjax';
 
 const QuestionSolutionScreen = () => {
   const route = useRoute();
-  const { currentQuestion, studentDetails } = route.params;
+  const { studentDetails, questions } = route.params;
   const navigation = useNavigation();
   const { fonts, colors, layout } = useTheme();
 
-  const [question] = useState(currentQuestion);
+  const mmlOptions = {
+    styles: {
+      '#formula': {
+        color: 'white',
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 24,
+        textAlign: 'center',
+      },
+    },
+    jax: ['input/MathML'],
+  };
+  const mathjaxStyles = {
+    mathjaxContainer: {
+      backgroundColor: 'transparent',
+      fontFamily: 'Poppins-SemiBold',
+    },
+  };
 
-  // const showNextQuestion = ()=>{
-  //   const nextQestionId = currentQuestionId + 1;
-  //   const nextQuestion = AllQuestions.find((ques)=> ques.id === nextQestionId);
-  //   setQuestion(nextQuestion.question)
-  // }
+  const renderOption = (optionContent) => {
+    const content = optionContent?.map((val) => {
+      if (val?.contentType === 'IMAGE') {
+        return (
+          <Image
+            key={val.data}
+            source={{
+              uri: val.data,
+            }}
+            style={{
+              width: '90%',
+              height: 250,
+              borderRadius: 12,
+              backgroundColor: 'white',
+              marginVertical: 10,
+              resizeMode: 'contain',
+            }}
+          />
+        );
+      } else if (val?.contentType === 'TEXT') {
+        return (
+          <MathJax
+            key={val.data}
+            mathJaxOptions={mmlOptions}
+            html={`<div>${val.data}</div>`}
+            style={[mathjaxStyles.mathjaxContainer]}
+          />
+        );
+      } else return null;
+    });
+
+    return content;
+  };
 
   return (
     <SafeScreen>
@@ -46,7 +85,7 @@ const QuestionSolutionScreen = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: '15%' }}>
           <Text
             style={[
               fonts.size_16,
@@ -58,60 +97,94 @@ const QuestionSolutionScreen = () => {
           </Text>
           <View style={{ width: '90%' }}>
             <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400, marginTop: '4%' }]}>
-              TOPIC: INTRODUCTION TO MOTION
+              TOPIC: {questions?.topic}
             </Text>
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.fontWeight_small,
-                { color: colors.gray200, marginTop: '4%' },
-              ]}
-            >
-              {question}
-            </Text>
+            {questions && (
+              <View pointerEvents="none">
+                <ContentParser content={questions.questionContents} />
+              </View>
+            )}
           </View>
           <View style={{ marginVertical: '5%', gap: 10 }}>
-            {answer.map((answer) => {
-              return (
-                <View key={answer.id}>
-                  <View
-                    style={[
-                      layout.row,
-                      layout.justifyBetween,
-                      layout.itemsCenter,
-                      {
-                        borderColor: answer.correct ? '#3DD598' : colors.gray400,
-                        borderWidth: 1,
-                        height: 50,
-                        borderRadius: 10,
-                        padding: '2%',
-                      },
-                    ]}
-                  >
+            {questions &&
+              questions?.answerChoices.map((answer, index) => {
+                const id = answer.id;
+                return (
+                  <View key={id}>
                     <View
                       style={[
-                        layout.justifyStart,
-                        layout.itemsCenter,
                         layout.row,
+                        layout.justifyBetween,
+                        layout.itemsCenter,
                         {
-                          gap: 10,
+                          borderColor: answer.correct ? '#3DD598' : colors.gray400,
+                          borderWidth: 1,
+                          height: 50,
+                          borderRadius: 10,
+                          padding: '2%',
                         },
                       ]}
                     >
-                      <Text style={[fonts.size_16, fonts.bold, { color: colors.gray100 }]}>
-                        {answer.id}
-                      </Text>
-                      <Text style={[fonts.size_16, { color: colors.gray100 }]}>
-                        {answer.answer}
-                      </Text>
+                      <View
+                        style={[
+                          layout.justifyStart,
+                          layout.itemsCenter,
+                          layout.row,
+                          {
+                            gap: 10,
+                          },
+                        ]}
+                      >
+                        <Text style={[fonts.size_16, fonts.bold, { color: colors.gray100 }]}>
+                          {index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}
+                        </Text>
+                        <View
+                          style={[
+                            fonts.size_14,
+                            fonts.bold,
+                            {
+                              color: colors.white,
+                              flex: 1,
+                              justifyContent: 'center',
+                            },
+                          ]}
+                        >
+                          {renderOption(answer?.answerChoiceContents)}
+                        </View>
+                      </View>
+                      {answer.correct ? <Image source={Correct} style={{ right: 25 }} /> : null}
                     </View>
-                    {answer.correct ? <Image source={Correct} /> : null}
+                    {answer.correct ? (
+                      <Text style={{ color: '#3DD598', marginTop: 2, left: 6 }}>
+                        This is The correct Answer
+                      </Text>
+                    ) : null}
                   </View>
-                </View>
-              );
-            })}
+                );
+              })}
           </View>
-          <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400 }]}>INSIGHTS</Text>
+          <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400, marginTop: '4%' }]}>
+            SOLUTION
+          </Text>
+          <View
+            style={[
+              layout.fullWidth,
+              layout.paddingForCard,
+              {
+                height: 'auto',
+                backgroundColor: colors.cardBackgroundColor,
+                borderRadius: 16,
+                marginTop: '3%',
+                gap: 10,
+              },
+            ]}
+            pointerEvents="none"
+          >
+            <ContentParser content={questions?.solution} />
+          </View>
+          <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400, marginTop: '3%' }]}>
+            INSIGHTS
+          </Text>
           <View
             style={[
               layout.fullWidth,
@@ -142,7 +215,7 @@ const QuestionSolutionScreen = () => {
                   { color: colors.gray200, marginBottom: '3%' },
                 ]}
               >
-                Easy
+                {questions?.difficultyLevel}
               </Text>
             </View>
             <View
@@ -162,7 +235,7 @@ const QuestionSolutionScreen = () => {
                   { color: colors.gray200, marginBottom: '3%' },
                 ]}
               >
-                45
+                {questions?.totalAttemptCount}
               </Text>
             </View>
             <View
@@ -182,7 +255,7 @@ const QuestionSolutionScreen = () => {
                   { color: colors.gray200, marginBottom: '3%' },
                 ]}
               >
-                67%
+                {questions?.correctCount}
               </Text>
             </View>
             <View style={[layout.row, layout.justifyBetween]}>
@@ -190,34 +263,11 @@ const QuestionSolutionScreen = () => {
                 Time spent
               </Text>
               <Text style={[fonts.size_16, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                1 min 10 secs
+                0 secs
               </Text>
             </View>
           </View>
-          <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400, marginTop: '4%' }]}>
-            SOLUTION
-          </Text>
-          <View
-            style={[
-              layout.fullWidth,
-              layout.paddingForCard,
-              {
-                height: 'auto',
-                backgroundColor: colors.cardBackgroundColor,
-                borderRadius: 16,
-                marginTop: '3%',
-                gap: 10,
-              },
-            ]}
-          >
-            <Text style={[fonts.size_16, fonts.fontWeight_small, { color: colors.gray200 }]}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quo quisquam, aliquam
-              nostrum animi iste error delectus explicabo tempore dolorem deserunt doloremque
-              voluptate ipsam corrupti debitis a vitae enim! Error cupiditate ex doloremque omnis
-              est?
-            </Text>
-          </View>
-          <View
+          {/* <View
             style={[
               layout.row,
               layout.justifyBetween,
@@ -290,7 +340,7 @@ const QuestionSolutionScreen = () => {
                 source={rightArrow}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
     </SafeScreen>

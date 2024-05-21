@@ -72,8 +72,6 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch chapter details');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -92,8 +90,6 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch chapter details');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -125,8 +121,6 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unable to fetch assessmentDetails');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -152,8 +146,6 @@ const StudentWiseReportScreen = () => {
           error?.response?.status === 401
         ) {
           notifyMessage('unable to fetch bookmarkdetails');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
       });
   };
@@ -168,8 +160,6 @@ const StudentWiseReportScreen = () => {
         console.log('error from chapter', error);
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch score and study time');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -315,6 +305,7 @@ const StudentWiseReportScreen = () => {
                 onPress={() =>
                   navigation.navigate('HomeWorkDetailsScreen', {
                     chapterDetails: specificStudentDetails?.chaptersStatusInfo,
+                    studentDetails: studentDetails,
                   })
                 }
               >
@@ -346,8 +337,8 @@ const StudentWiseReportScreen = () => {
                   Number of chapters covered
                 </Text>
                 <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                  {specificStudentDetails?.chapterCompletedCount}/
-                  {specificStudentDetails?.noOfChapters}
+                  {specificStudentDetails?.chapterCompletedCount || '--'}/
+                  {specificStudentDetails?.noOfChapters || '--'}
                 </Text>
               </View>
               <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
