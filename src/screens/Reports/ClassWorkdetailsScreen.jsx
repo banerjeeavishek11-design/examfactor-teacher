@@ -10,7 +10,7 @@ const ClassWorkdetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { classworkInsightDetails } = route.params || {};
+  const { classworkInsightDetails, studentDetails } = route.params || {};
   const assessmentType = classworkInsightDetails?.map((val) => val.productName);
   const uniqueAssessmentType = Array.from(new Set(assessmentType));
 
@@ -45,6 +45,7 @@ const ClassWorkdetailsScreen = () => {
           onPress={() =>
             navigation.navigate('StudentWiseReportScreen', {
               classworkInsightDetails: classworkInsightDetails,
+              studentDetails: studentDetails,
             })
           }
         >
@@ -66,9 +67,9 @@ const ClassWorkdetailsScreen = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: '10%' }}>
           {newData?.length > 0 ? (
             <>
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.6 }]}>
+              {/* <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.6 }]}>
                 PHYSICS DIAGNOSTIC KIT
-              </Text>
+              </Text> */}
               {newData?.map((ele, i) => {
                 return (
                   <View key={i}>
