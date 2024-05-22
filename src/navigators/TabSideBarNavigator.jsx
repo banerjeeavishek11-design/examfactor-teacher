@@ -13,96 +13,109 @@ import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
 import ReportsTab from '@/theme/assets/images/Reportstab.png';
 import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import Header from '../components/template/Header/Header';
 
 const TabSideBarNavigator = () => {
   const { fonts, colors } = useTheme();
   const Drawer = createDrawerNavigator();
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomSideBar {...props} />}
-      screenOptions={{
-        drawerType: 'permanent',
-        drawerPosition: 'left',
-        headerShown: false,
-        drawerActiveBackgroundColor: '#191924',
-        drawerActiveTintColor: colors.termsLinkColor,
-        drawerInactiveTintColor: colors.gray100,
-        drawerLabelStyle: [fonts.size_13, { marginLeft: moderateScale(-10) }],
-        drawerStyle: {
-          backgroundColor: colors.cardBackgroundColor,
-          width: moderateScale(160),
-        },
-      }}
-    >
-      <Drawer.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          drawerIcon: ({ focused }) => (
-            <Image
-              source={HomeTab}
-              style={[
-                styles.drawerIcons,
-                {
-                  tintColor: focused ? colors.termsLinkColor : colors.gray100,
-                },
-              ]}
-            />
-          ),
+    <>
+      <View
+        style={{
+          width: '79%',
+          alignSelf: 'flex-end',
+          borderColor: 'red',
+          borderWidth: 1,
         }}
-      />
-      <Drawer.Screen
-        name="School Work"
-        component={SchoolWorkScreen}
-        options={{
-          drawerIcon: ({ focused }) => (
-            <Image
-              source={SchoolWorkTab}
-              style={[
-                styles.drawerIcons,
-                {
-                  tintColor: focused ? colors.termsLinkColor : colors.gray100,
-                },
-              ]}
-            />
-          ),
+      >
+        <Header />
+      </View>
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomSideBar {...props} />}
+        screenOptions={{
+          drawerType: 'permanent',
+          drawerPosition: 'left',
+          headerShown: false,
+          drawerActiveBackgroundColor: '#191924',
+          drawerActiveTintColor: colors.termsLinkColor,
+          drawerInactiveTintColor: colors.gray100,
+          drawerLabelStyle: [fonts.size_13, { marginLeft: moderateScale(-10) }],
+          drawerStyle: {
+            backgroundColor: colors.cardBackgroundColor,
+            width: moderateScale(160),
+          },
         }}
-      />
-      <Drawer.Screen
-        name="Reports"
-        component={ReportsScreen}
-        options={{
-          drawerIcon: ({ focused }) => (
-            <Image
-              source={ReportsTab}
-              style={[
-                styles.drawerIcons,
-                {
-                  tintColor: focused ? colors.termsLinkColor : colors.gray100,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Activate"
-        component={ActivateScreen}
-        options={{
-          drawerIcon: ({ focused }) => (
-            <Image
-              source={ActivateTab}
-              style={[
-                styles.drawerIcons,
-                {
-                  tintColor: focused ? colors.termsLinkColor : colors.gray100,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
-    </Drawer.Navigator>
+      >
+        <Drawer.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Image
+                source={HomeTab}
+                style={[
+                  styles.drawerIcons,
+                  {
+                    tintColor: focused ? colors.termsLinkColor : colors.gray100,
+                  },
+                ]}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="School Work"
+          component={SchoolWorkScreen}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Image
+                source={SchoolWorkTab}
+                style={[
+                  styles.drawerIcons,
+                  {
+                    tintColor: focused ? colors.termsLinkColor : colors.gray100,
+                  },
+                ]}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Reports"
+          component={ReportsScreen}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Image
+                source={ReportsTab}
+                style={[
+                  styles.drawerIcons,
+                  {
+                    tintColor: focused ? colors.termsLinkColor : colors.gray100,
+                  },
+                ]}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Activate"
+          component={ActivateScreen}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Image
+                source={ActivateTab}
+                style={[
+                  styles.drawerIcons,
+                  {
+                    tintColor: focused ? colors.termsLinkColor : colors.gray100,
+                  },
+                ]}
+              />
+            ),
+          }}
+        />
+      </Drawer.Navigator>
+    </>
   );
 };
 

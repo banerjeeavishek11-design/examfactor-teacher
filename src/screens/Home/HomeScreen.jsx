@@ -53,7 +53,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const userName = storage.getString('username');
   const dispatch = useDispatch();
-  // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
@@ -385,65 +385,83 @@ const HomeScreen = () => {
           >
             {subjectName}
           </Text>
-          <View style={{ marginTop: '1%', alignItems: 'center' }}>
+          <View
+            style={{
+              marginTop: '1%',
+              alignItems: 'center',
+              marginBottom: isTablet && '5%',
+            }}
+          >
             <Concentrix scorePercentage={consolidatedReportData?.score || 0} />
           </View>
-          <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
-            <Divider
-              style={{
-                width: '100%',
-                backgroundColor: colors.lineBackgroundColor,
-              }}
-            />
-          </View>
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.fontWeignt_600,
-              { color: colors.white, opacity: 0.3, top: 10 },
-            ]}
-          >
-            PRACTICE
-          </Text>
-          <View
-            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
-          >
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              Home work
+          <View style={isTablet && { width: '55%', alignSelf: 'center' }}>
+            <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
+              <Divider
+                style={{
+                  width: '100%',
+                  backgroundColor: colors.lineBackgroundColor,
+                }}
+              />
+            </View>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.fontWeignt_600,
+                { color: colors.white, opacity: 0.3, top: 10 },
+              ]}
+            >
+              PRACTICE
             </Text>
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
-            </Text>
-          </View>
-          <View style={{ marginTop: '3%' }}>
-            <Progressbar
-              progress={
-                consolidatedReportData?.homeworkProgress === undefined
-                  ? 0
-                  : consolidatedReportData?.homeworkProgress / 100
-              }
-              color={'#3DD598'}
-            />
-          </View>
-          <View
-            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
-          >
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              Diagnostic
-            </Text>
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
-            </Text>
-          </View>
-          <View style={{ marginTop: '3%' }}>
-            <Progressbar
-              progress={
-                consolidatedReportData?.diagnosisProgress === undefined
-                  ? 0
-                  : consolidatedReportData?.diagnosisProgress / 100
-              }
-              color={'#BBA041'}
-            />
+            <View
+              style={[
+                layout.display,
+                layout.rowHCenter,
+                layout.justifyBetween,
+                { marginTop: '5%' },
+              ]}
+            >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                Home work
+              </Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
+              </Text>
+            </View>
+            <View style={{ marginTop: '3%' }}>
+              <Progressbar
+                progress={
+                  consolidatedReportData?.homeworkProgress === undefined
+                    ? 0
+                    : consolidatedReportData?.homeworkProgress / 100
+                }
+                color={'#3DD598'}
+              />
+            </View>
+            <View
+              style={[
+                layout.display,
+                layout.rowHCenter,
+                layout.justifyBetween,
+                { marginTop: '5%' },
+              ]}
+            >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                Diagnostic
+              </Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
+              </Text>
+            </View>
+            <View style={{ marginTop: '3%' }}>
+              <Progressbar
+                progress={
+                  consolidatedReportData?.diagnosisProgress === undefined
+                    ? 0
+                    : consolidatedReportData?.diagnosisProgress / 100
+                }
+                color={'#BBA041'}
+              />
+            </View>
           </View>
         </View>
 
@@ -755,7 +773,7 @@ const HomeScreen = () => {
                   ]}
                 >
                   <View style={{ width: '35%' }}>
-                    {ele?.avgStudyTime == -1 ? (
+                    {ele?.lastPracticeDateSince !== -1 ? (
                       <>
                         <Text
                           style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}

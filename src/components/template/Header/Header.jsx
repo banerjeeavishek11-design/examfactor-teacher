@@ -61,7 +61,7 @@ const Header = () => {
 
   const handleOpenDrawer = () => {
     if (isTablet) {
-      navigation.navigate('SideBarAuthedScreen');
+      navigation.navigate('TabProfileScreen');
     } else {
       navigation.navigate('SideBarAuthedScreen');
     }
