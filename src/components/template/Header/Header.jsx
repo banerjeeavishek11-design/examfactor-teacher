@@ -5,6 +5,7 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
 import { useTheme } from '@/theme';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
@@ -22,6 +23,7 @@ const Header = () => {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const currentSub = useSelector((state) => state.selectedSubject.subject);
   const dispatch = useDispatch();
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -29,6 +31,12 @@ const Header = () => {
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSelectedSubject(currentSub);
+    })
+  );
 
   useEffect(() => {
     const resFromMMKV = storage.getString('teacherDetails');
@@ -82,11 +90,20 @@ const Header = () => {
     <View
       style={{
         backgroundColor: isTablet ? '#191924' : colors.headerBackgroundColor,
-        height: isTablet ? 120 : 135,
+        // height: isTablet ? 120 : 135,
       }}
     >
-      <View style={[layout.paddingForFullScreen, { paddingTop: isTablet ? '.5%' : '4%' }]}>
-        <View style={[layout.rowHCenter, layout.justifyBetween, layout.display, { width: '100%' }]}>
+      <View
+        style={[!isTablet && layout.paddingForFullScreen, { paddingTop: isTablet ? '2%' : '4%' }]}
+      >
+        <View
+          style={[
+            layout.rowHCenter,
+            layout.justifyBetween,
+            layout.display,
+            { paddingHorizontal: '4%' },
+          ]}
+        >
           <View>
             <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
               <View style={[layout.rowHCenter, { gap: 5 }]}>
@@ -154,7 +171,12 @@ const Header = () => {
             </View>
           )}
         </View>
-        <View style={{ backgroundColor: isTablet ? 'black' : colors.headerBackgroundColor }}>
+        <View
+          style={{
+            backgroundColor: isTablet ? 'black' : colors.headerBackgroundColor,
+            width: '100%',
+          }}
+        >
           <ScrollView
             ref={scrollViewRef}
             horizontal={true}

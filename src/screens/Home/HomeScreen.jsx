@@ -31,6 +31,7 @@ import { getClasswoksByTeacher } from '../../services/ActivateServices/activeCla
 import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticService';
 import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
 import Caraosal from './Caraosal';
+import Header from '../../components/template/Header/Header';
 
 const configForScore = [
   { groupName: '<60', from: 0, to: 60 },
@@ -327,6 +328,7 @@ const HomeScreen = () => {
 
   return (
     <SafeScreen>
+      {isTablet && <Header />}
       <ScrollView
         nestedScrollEnabled={true}
         contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}

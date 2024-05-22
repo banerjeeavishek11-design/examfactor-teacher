@@ -13,23 +13,21 @@ import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
 import ReportsTab from '@/theme/assets/images/Reportstab.png';
 import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
-import Header from '../components/template/Header/Header';
+// import Header from '../components/template/Header/Header';
 
 const TabSideBarNavigator = () => {
   const { fonts, colors } = useTheme();
   const Drawer = createDrawerNavigator();
   return (
     <>
-      <View
+      {/* <View
         style={{
           width: '79%',
           alignSelf: 'flex-end',
-          borderColor: 'red',
-          borderWidth: 1,
         }}
       >
         <Header />
-      </View>
+      </View> */}
       <Drawer.Navigator
         drawerContent={(props) => <CustomSideBar {...props} />}
         screenOptions={{
