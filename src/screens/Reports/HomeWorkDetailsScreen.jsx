@@ -49,9 +49,7 @@ const HomeWorkDetailsScreen = () => {
 
   const getAllChapters = () => {
     getChaptersBySubjectId(selectedSubjectId)
-      .then((res) => {
-        console.log('res from get all chapter', res.data.chapters);
-      })
+      .then(() => {})
       .catch((error) => {
         console.log('error from get all chapters', error);
       });
