@@ -365,7 +365,7 @@ const HomeScreen = () => {
         <View
           style={[
             layout.fullWidth,
-            layout.paddingForCard,
+            isTablet ? { padding: 20 } : layout.paddingForCard,
             {
               backgroundColor: colors.cardBackgroundColor,
               height: 'auto',
@@ -645,8 +645,7 @@ const HomeScreen = () => {
             onPress={() => toggleContent(ele.studentId)}
             style={[
               layout.fullWidth,
-              layout.paddingForCard,
-
+              isTablet ? { padding: 20 } : layout.paddingForCard,
               {
                 backgroundColor: colors.cardBackgroundColor,
                 height: 'auto',

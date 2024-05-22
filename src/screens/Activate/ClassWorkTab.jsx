@@ -33,6 +33,7 @@ const ClassWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [expandedCards, setExpandedCards] = useState({});
   const [expandCardId, setExpandedCardId] = useState('');
@@ -265,12 +266,12 @@ const ClassWorkTab = () => {
                         onPress={() => toggleContent(ele.chapterId)}
                         style={[
                           layout.fullWidth,
-                          layout.paddingForCard,
+                          isTablet ? { padding: 25 } : layout.paddingForCard,
                           {
                             backgroundColor: colors.cardBackgroundColor,
                             borderRadius: 14,
-                            marginTop: '3%',
-                            marginBottom: '2%',
+                            marginTop: isTablet ? '2%' : '3%',
+                            marginBottom: !isTablet && '2%',
                           },
                         ]}
                         key={ele.chapterId}
@@ -340,7 +341,7 @@ const ClassWorkTab = () => {
                                       {
                                         borderTopColor: colors.gray400,
                                         borderTopWidth: 1,
-                                        paddingVertical: '5%',
+                                        paddingVertical: isTablet ? '3%' : '5%',
                                         marginTop: '2%',
                                       },
                                     ]}
@@ -350,7 +351,10 @@ const ClassWorkTab = () => {
                                         style={[
                                           fonts.size_16,
                                           fonts.fontWeight_small,
-                                          { color: colors.white, marginBottom: '4%' },
+                                          {
+                                            color: colors.white,
+                                            marginBottom: isTablet ? '2%' : '4%',
+                                          },
                                         ]}
                                       >
                                         {element.assessmentName}

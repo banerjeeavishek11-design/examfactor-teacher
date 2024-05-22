@@ -28,6 +28,7 @@ const TopicWiseDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const { topics, chapterName, subjectName, chapList } = route.params || {};
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const subjectId = useSelector((state) => state.selectedSubject.subject);
@@ -37,6 +38,7 @@ const TopicWiseDetailsScreen = () => {
   const [sectionId, setSectionId] = useState(null);
   const [gradeId, setGradeId] = useState(null);
   const [homeworkReportData, setHomeworkReportData] = useState();
+  const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   // const [selectedTopicId, setSelectedTopicId] = useState();
 
   useEffect(() => {
@@ -92,13 +94,13 @@ const TopicWiseDetailsScreen = () => {
           layout.fullWidth,
           layout.paddingForFullScreen,
           {
-            height: 56,
+            height: 'auto',
             backgroundColor: colors.headerBackgroundColor,
           },
         ]}
       >
         <TouchableOpacity
-          style={[layout.display, layout.rowHCenter]}
+          style={[layout.display, layout.rowHCenter, { height: 'auto' }]}
           onPress={() =>
             navigation.navigate('SubjectDetailsScreen', {
               subjectName: subjectName,
@@ -112,7 +114,6 @@ const TopicWiseDetailsScreen = () => {
               width: 10,
               height: 11,
               tintColor: colors.backButtonColor,
-              top: 2,
             }}
             source={LeftArrow}
             resizeMode="contain"
@@ -122,7 +123,9 @@ const TopicWiseDetailsScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
+      <ScrollView
+        contentContainerStyle={[layout.paddingForFullScreen, isTablet && { marginTop: '-4%' }]}
+      >
         {topics.map((ele) => {
           const progressPercentage = ele?.progress / 100;
           return (
@@ -145,14 +148,18 @@ const TopicWiseDetailsScreen = () => {
                   layout.display,
                   layout.rowHCenter,
                   layout.justifyBetween,
-                  layout.paddingForCard,
+                  isTablet ? { padding: 20 } : layout.paddingForCard,
                   { paddingBottom: '0%' },
                 ]}
               >
                 <View style={{ width: '60%' }}>
                   <Text
                     numberOfLines={1}
-                    style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
+                    style={[
+                      isTablet ? fonts.size_16 : fonts.size_14,
+                      fonts.bold,
+                      { color: colors.white, top: -6 },
+                    ]}
                   >
                     {getTopicDescById(chapList, ele?.topicId)}
                   </Text>
@@ -190,7 +197,7 @@ const TopicWiseDetailsScreen = () => {
 
               {expandedCards[ele?.topicId] ? (
                 <View>
-                  <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
+                  <View style={[isTablet ? { padding: 20 } : layout.paddingForCard]}>
                     <Text
                       style={[
                         fonts.size_12,
@@ -203,7 +210,7 @@ const TopicWiseDetailsScreen = () => {
                     >
                       Progress {`${ele?.progress}%`}
                     </Text>
-                    <View style={{ marginTop: '4%' }}>
+                    <View style={{ marginTop: isTablet ? '1%' : '4%' }}>
                       <Progressbar
                         progress={progressPercentage}
                         color={progressPercentage <= 0.6 ? '#FFAB48' : '#3DD598'}
@@ -221,55 +228,68 @@ const TopicWiseDetailsScreen = () => {
                       </Text>
                     </View>
                     {homeworkReportData?.map((item, index) => (
-                      <View
-                        key={index}
-                        style={[
-                          styles.row,
-                          index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                          index === leaderboardData.length - 1 && styles.lastRow,
-                        ]}
-                      >
-                        <Text
-                          style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
-                        >
-                          {item.studentName}
-                        </Text>
-                        <View
-                          style={[
-                            layout.row,
-                            layout.itemsCenter,
-                            {
-                              width: '55%',
-                              justifyContent: 'space-between',
-                            },
-                          ]}
-                        >
-                          <Text
+                      <>
+                        {index < seeMaxStudent && (
+                          <View
+                            key={index}
                             style={[
-                              fonts.size_14,
-                              fonts.fontWeight_small,
-                              { color: colors.gray200 },
+                              styles.row,
+                              index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                              index === leaderboardData.length - 1 && styles.lastRow,
                             ]}
                           >
-                            {`${item.completionPercentage}%`}
-                          </Text>
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeight_small,
-                              { color: colors.gray200 },
-                            ]}
-                          >
-                            {`${item.score}/100`}
-                          </Text>
-                        </View>
-                      </View>
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.fontWeight_small,
+                                { color: colors.gray200 },
+                              ]}
+                            >
+                              {item.studentName}
+                            </Text>
+                            <View
+                              style={[
+                                layout.row,
+                                layout.itemsCenter,
+                                {
+                                  width: '55%',
+                                  justifyContent: 'space-between',
+                                },
+                              ]}
+                            >
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.gray200 },
+                                ]}
+                              >
+                                {`${item.completionPercentage}%`}
+                              </Text>
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.gray200 },
+                                ]}
+                              >
+                                {`${item.score}/100`}
+                              </Text>
+                            </View>
+                          </View>
+                        )}
+                      </>
                     ))}
                   </View>
                 </View>
               ) : null}
-              {expandedCards[ele.id] && (
-                <TouchableOpacity style={{ marginTop: '4%', marginBottom: '4%' }}>
+              {expandedCards[ele.topicId] && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                  }}
+                  style={{ marginVertical: isTablet ? '2%' : '4%' }}
+                >
                   <Text
                     style={[
                       fonts.size_14,
@@ -278,7 +298,7 @@ const TopicWiseDetailsScreen = () => {
                       { color: colors.termsLinkColor },
                     ]}
                   >
-                    See More
+                    {seeMaxStudent === 5 ? 'See More' : 'See Less'}
                   </Text>
                 </TouchableOpacity>
               )}

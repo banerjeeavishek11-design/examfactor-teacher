@@ -264,7 +264,7 @@ const HomeWorkTab = () => {
                         layout.fullWidth,
                         {
                           backgroundColor: colors.cardBackgroundColor,
-                          height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 110 : 110,
+                          height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 125 : 110,
                           borderRadius: 14,
                           marginTop: '3%',
                         },
@@ -469,7 +469,7 @@ const HomeWorkTab = () => {
                           onPress={() => {
                             setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
                           }}
-                          style={{ marginTop: '4%', marginBottom: '4%' }}
+                          style={{ marginVertical: isTablet ? '2%' : '4%' }}
                         >
                           <Text
                             style={[

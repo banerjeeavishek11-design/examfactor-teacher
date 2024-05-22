@@ -129,7 +129,9 @@ const QuestionAnalysisScreen = () => {
                     width:
                       selectedChapter !== null
                         ? Math.min(210, Math.max(90, selectedChapter.length * 10))
-                        : 72,
+                        : isTablet
+                          ? 90
+                          : 72,
                     height: isTablet ? 40 : 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
@@ -139,7 +141,7 @@ const QuestionAnalysisScreen = () => {
               >
                 <Text
                   style={[
-                    fonts.size_12,
+                    isTablet ? fonts.size_14 : fonts.size_12,
                     fonts.fontWeight_extraSmall,
                     fonts.alignCenter,
                     {
@@ -179,7 +181,9 @@ const QuestionAnalysisScreen = () => {
                     width:
                       selectedQuestionType !== null
                         ? Math.min(170, Math.max(55, selectedQuestionType.length * 10))
-                        : 120,
+                        : isTablet
+                          ? 130
+                          : 120,
                     height: isTablet ? 40 : 28,
                     borderRadius: 4,
                     paddingHorizontal: 6,
@@ -189,7 +193,7 @@ const QuestionAnalysisScreen = () => {
               >
                 <Text
                   style={[
-                    fonts.size_12,
+                    isTablet ? fonts.size_14 : fonts.size_12,
                     fonts.fontWeight_small,
                     {
                       color: selectedQuestionType !== null ? colors.termsLinkColor : colors.white,

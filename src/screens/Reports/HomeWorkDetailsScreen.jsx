@@ -27,6 +27,7 @@ const HomeWorkDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const { chapterDetails, studentDetails } = route.params || {};
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -139,10 +140,10 @@ const HomeWorkDetailsScreen = () => {
                     key={ele.chapterId}
                     style={[
                       layout.fullWidth,
-                      layout.paddingForCard,
+                      isTablet ? { padding: 20 } : layout.paddingForCard,
                       {
                         backgroundColor: colors.cardBackgroundColor,
-                        height: expandedCards[ele.chapterId] ? 'auto' : 78,
+                        height: expandedCards[ele.chapterId] ? 'auto' : isTablet ? 88 : 78,
                         borderRadius: 16,
                         marginTop: '3%',
                       },
@@ -203,7 +204,7 @@ const HomeWorkDetailsScreen = () => {
                                     key={index}
                                     style={[
                                       layout.fullWidth,
-                                      layout.paddingForCard,
+                                      isTablet ? { padding: 20 } : layout.paddingForCard,
                                       {
                                         backgroundColor: colors.bottomSheetBackgroundColor,
                                         borderRadius: 14,
@@ -240,7 +241,7 @@ const HomeWorkDetailsScreen = () => {
                                               fonts.fontWeight_small,
                                               {
                                                 color: colors.backButtonColor,
-                                                marginVertical: '2%',
+                                                marginVertical: isTablet ? '1%' : '2%',
                                               },
                                             ]}
                                           >

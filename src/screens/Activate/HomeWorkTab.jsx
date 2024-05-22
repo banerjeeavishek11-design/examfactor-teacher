@@ -30,6 +30,7 @@ const storage = new MMKV();
 const HomeWorkTab = () => {
   const { layout, fonts, colors } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const subjectId = useSelector((state) => state.selectedSubject.subject);
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
@@ -211,11 +212,11 @@ const HomeWorkTab = () => {
                       key={ele.chapterId}
                       style={[
                         layout.fullWidth,
-                        layout.paddingForCard,
+                        isTablet ? { padding: 25 } : layout.paddingForCard,
                         {
                           backgroundColor: colors.cardBackgroundColor,
                           borderRadius: 14,
-                          marginTop: '4%',
+                          marginTop: isTablet ? '2%' : '4%',
                           height: 'auto',
                         },
                       ]}
@@ -257,7 +258,7 @@ const HomeWorkTab = () => {
                                       {
                                         borderTopColor: colors.gray400,
                                         borderTopWidth: 1,
-                                        paddingVertical: '5%',
+                                        paddingVertical: isTablet ? '2%' : '5%',
                                         marginTop: '2%',
                                       },
                                     ]}

@@ -30,92 +30,6 @@ import { MMKV } from 'react-native-mmkv';
 import { getChapterDescById, getTopicDescById, getSubTopicDescById } from '../../utils/namesByIds';
 
 const storage = new MMKV();
-//   {
-//     chapterId: 'chpater-id-1-1-2',
-//     noOfStudentCompletionCount: 1,
-//     b2BStudentDiagnosticSummaryDtoList: [
-//       {
-//         id: null,
-//         fullName: 'Sashi',
-//         diagnosticChapterCompletionPercentage: 100,
-//         chapterId: 'chpater-id-1-1-2',
-//         sectionId: '1230851261945909248_1232324480313888768_CBSE_CLASS_12_B',
-//         dignosticWeakTopicSummary: [
-//           {
-//             topicId: 'topic-id-1-1-2-15',
-//             subTopicIds: [
-//               'subtopic-id-115',
-//               'subtopic-id-114',
-//               'subtopic-id-125',
-//               'subtopic-id-117',
-//               'subtopic-id-116',
-//               'subtopic-id-119',
-//               'subtopic-id-118',
-//               'subtopic-id-120',
-//               'subtopic-id-122',
-//               'subtopic-id-121',
-//               'subtopic-id-124',
-//               'subtopic-id-123',
-//             ],
-//           },
-//           {
-//             topicId: 'topic-id-1-1-2-16',
-//             subTopicIds: [
-//               'subtopic-id-126',
-//               'subtopic-id-137',
-//               'subtopic-id-136',
-//               'subtopic-id-128',
-//               'subtopic-id-127',
-//               'subtopic-id-138',
-//               'subtopic-id-129',
-//               'subtopic-id-131',
-//               'subtopic-id-130',
-//               'subtopic-id-132',
-//             ],
-//           },
-//           {
-//             topicId: 'topic-id-1-1-2-17',
-//             subTopicIds: [
-//               'subtopic-id-139',
-//               'subtopic-id-140',
-//               'subtopic-id-142',
-//               'subtopic-id-141',
-//               'subtopic-id-144',
-//               'subtopic-id-143',
-//             ],
-//           },
-//           {
-//             topicId: 'topic-id-1-1-2-18',
-//             subTopicIds: [],
-//           },
-//           {
-//             topicId: 'topic-id-1-1-2-19',
-//             subTopicIds: [
-//               'subtopic-id-159',
-//               'subtopic-id-158',
-//               'subtopic-id-153',
-//               'subtopic-id-154',
-//               'subtopic-id-157',
-//             ],
-//           },
-//           {
-//             topicId: 'topic-id-1-1-2-20',
-//             subTopicIds: [
-//               'subtopic-id-162',
-//               'subtopic-id-161',
-//               'subtopic-id-164',
-//               'subtopic-id-163',
-//               'subtopic-id-166',
-//               'subtopic-id-165',
-//             ],
-//           },
-//         ],
-//         studentId: 'sashief',
-//         noOfWeakSubTopics: 39,
-//       },
-//     ],
-//   },
-// ];
 
 const DiagnosticTab = () => {
   const { colors, layout, fonts } = useTheme();
@@ -408,7 +322,7 @@ const DiagnosticTab = () => {
                                   onPress={() => {
                                     setShowWeakSubtopics(!showWeakSubtopics);
                                   }}
-                                  key={index}
+                                  key={item.chapterId}
                                   style={[
                                     styles.row,
                                     index % 2 === 0 ? styles.evenRow : styles.oddRow,
