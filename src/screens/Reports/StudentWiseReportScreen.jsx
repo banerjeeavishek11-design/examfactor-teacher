@@ -42,7 +42,6 @@ const StudentWiseReportScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [timeSpentData, setTimespentData] = useState();
   const [classworkData, setClassworkData] = useState();
-  const [classworkInsightDetails, setClassworkInsightDetails] = useState();
   const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
   const [chapterScoreMap, setChapterScoreMap] = useState({});
   const overallProgress = specificStudentDetails
@@ -112,10 +111,10 @@ const StudentWiseReportScreen = () => {
     };
     mySubjectInsightAssessmentDetails(selectedSubjectId, params)
       .then((res) => {
-        setClassworkInsightDetails(res.data);
         setIsLoading(false);
         navigation.navigate('ClassWorkdetailsScreen', {
-          classworkInsightDetails: classworkInsightDetails,
+          classworkInsightDetails: res.data,
+          studentDetails: studentDetails,
         });
       })
       .catch((error) => {
