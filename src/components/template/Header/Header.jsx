@@ -106,7 +106,7 @@ const Header = () => {
         >
           <View>
             <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
-              <View style={[layout.rowHCenter, { gap: 5 }]}>
+              <View style={[layout.rowHCenter, { gap: 5, marginBottom: isTablet && '5%' }]}>
                 <Text
                   style={[
                     fonts.size_18,
@@ -134,12 +134,21 @@ const Header = () => {
           </View>
           {isTablet ? (
             <TouchableOpacity onPress={() => handleOpenDrawer()}>
-              <ImageVariant
-                testID="brand-img"
-                style={{ width: 44, height: 44, left: 5, tintColor: '#B6B6BB' }}
-                source={TabUser}
-                resizeMode="contain"
-              />
+              {teacherDetails[0]?.profileImageUrl ? (
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 44, height: 44, left: 5, borderRadius: 100, marginBottom: '8%' }}
+                  source={{ uri: teacherDetails[0]?.profileImageUrl }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 44, height: 44, left: 5, tintColor: '#B6B6BB' }}
+                  source={TabUser}
+                  resizeMode="contain"
+                />
+              )}
             </TouchableOpacity>
           ) : (
             <View>

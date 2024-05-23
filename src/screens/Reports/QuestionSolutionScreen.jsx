@@ -2,6 +2,7 @@ import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { SafeScreen } from '@/components/template';
 import { useNavigation, useRoute } from '@react-navigation/native';
 // import rightArrow from '@/theme/assets/images/rightarrow.png';
@@ -15,6 +16,7 @@ const QuestionSolutionScreen = () => {
   const { studentDetails, questions } = route.params;
   const navigation = useNavigation();
   const { fonts, colors, layout } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const mmlOptions = {
     styles: {
@@ -105,7 +107,7 @@ const QuestionSolutionScreen = () => {
               </View>
             )}
           </View>
-          <View style={{ marginVertical: '5%', gap: 10 }}>
+          <View style={{ marginVertical: isTablet ? '2%' : '5%', gap: 10 }}>
             {questions &&
               questions?.answerChoices.map((answer, index) => {
                 const id = answer.id;
@@ -163,7 +165,13 @@ const QuestionSolutionScreen = () => {
                 );
               })}
           </View>
-          <Text style={[fonts.size_18, fonts.bold, { color: colors.gray400, marginTop: '4%' }]}>
+          <Text
+            style={[
+              fonts.size_18,
+              fonts.bold,
+              { color: colors.gray400, marginTop: !isTablet && '4%' },
+            ]}
+          >
             SOLUTION
           </Text>
           <View

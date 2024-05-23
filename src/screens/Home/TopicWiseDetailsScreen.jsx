@@ -231,7 +231,7 @@ const TopicWiseDetailsScreen = () => {
                       <>
                         {index < seeMaxStudent && (
                           <View
-                            key={index}
+                            key={item.studentId}
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,

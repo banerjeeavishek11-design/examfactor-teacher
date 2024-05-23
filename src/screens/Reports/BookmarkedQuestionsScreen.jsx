@@ -79,6 +79,7 @@ const questionsPerPage = 4;
 const BookmarkedQuestionsScreen = ({ navigation }) => {
   const { layout, colors, fonts } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -195,7 +196,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                           <View
                             style={[
                               layout.fullWidth,
-                              layout.paddingForCard,
+                              isTablet ? { padding: 20 } : layout.paddingForCard,
                               {
                                 height: 'auto',
                                 backgroundColor: colors.cardBackgroundColor,
@@ -231,7 +232,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                                 {ques?.question?.subTopic}
                               </Text>
                             </View>
-                            <View pointerEvents="none">
+                            <View style={isTablet && { marginLeft: '4%' }} pointerEvents="none">
                               <MathJax
                                 mathJaxOptions={mmlOptions}
                                 html={`<div>${concatenatedData}</div>`}
@@ -244,7 +245,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                               style={[
                                 layout.row,
                                 layout.itemsCenter,
-                                { marginTop: '3%', marginLeft: '5%' },
+                                { marginTop: isTablet ? '1%' : '3%', marginLeft: '5%' },
                               ]}
                             >
                               <Text
@@ -277,7 +278,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                       fonts.size_16,
                       fonts.fontWeight_small,
                       fonts.alignCenter,
-                      { color: colors.white, marginTop: '90%' },
+                      { color: colors.white, marginTop: isTablet ? '20%' : '90%' },
                     ]}
                   >
                     No Bookmarked Questions Found

@@ -27,11 +27,14 @@ const SubjectDetailsScreen = () => {
   }, []);
 
   const onSearchChapters = (search) => {
-    const searchItem = chapters.filter((ele) =>
-      ele.chapterName.toLowerCase().includes(search.toLowerCase())
-    );
+    const searchItem = chapters?.filter((ele) => {
+      const chapName = getChapterDescById(chapList, ele.chapterId);
+      chapName.toLowerCase().includes(search.toLowerCase());
+    });
     setSearchChapterName(searchItem);
   };
+
+  console.log('chapters', chapters);
 
   return (
     <SafeScreen>
