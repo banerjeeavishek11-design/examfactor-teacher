@@ -462,6 +462,26 @@ const DiagnosticTab = () => {
                           </Text>
                         </TouchableOpacity>
                       )}
+                    {expandedCards[ele.id] &&
+                      ele.b2BStudentDiagnosticSummaryDtoList.length != 0 && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                          }}
+                          style={{ marginTop: '4%', marginBottom: '4%' }}
+                        >
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeignt_600,
+                              fonts.alignCenter,
+                              { color: colors.termsLinkColor },
+                            ]}
+                          >
+                            See More
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                   </TouchableOpacity>
                 );
               })}

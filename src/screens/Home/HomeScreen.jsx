@@ -44,6 +44,9 @@ const configForStudyTime = [
   { groupName: '0-10', from: 0, to: 10 },
   { groupName: '11-30', from: 11, to: 30 },
   { groupName: '31-60', from: 31, to: 60 },
+  { groupName: '0-10', from: 0, to: 10 },
+  { groupName: '11-30', from: 11, to: 30 },
+  { groupName: '31-60', from: 31, to: 60 },
   { groupName: '60+', from: 61, to: 180 },
 ];
 

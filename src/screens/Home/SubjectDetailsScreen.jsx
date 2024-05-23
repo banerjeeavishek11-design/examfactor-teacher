@@ -33,6 +33,7 @@ const SubjectDetailsScreen = () => {
     });
     setSearchChapterName(searchItem);
   };
+  // console.log('searchChapterName', searchChapterName);
 
   console.log('chapters', chapters);
 

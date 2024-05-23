@@ -12,6 +12,7 @@ import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
 // import menu from '@/theme/assets/images/3dotMenu.png';
+// import menu from '@/theme/assets/images/3dotMenu.png';
 import Filter from '@/theme/assets/images/questionAnalysisFilter.png';
 import { useRoute } from '@react-navigation/native';
 import RightArrow from '@/theme/assets/images/arrow.png';
@@ -164,11 +165,21 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                 source={LeftArrow}
                 resizeMode="contain"
               />
+              <Image
+                style={{ width: 7, height: 11, top: -1 }}
+                source={LeftArrow}
+                resizeMode="contain"
+              />
               <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
                 Bookmarked Questions
               </Text>
             </View>
           </TouchableOpacity>
+          {allBookmarkedQuestionsDetails?.length === 0 ? null : (
+            <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
+              <Image source={Filter} />
+            </TouchableOpacity>
+          )}
           {allBookmarkedQuestionsDetails?.length === 0 ? null : (
             <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
               <Image source={Filter} />

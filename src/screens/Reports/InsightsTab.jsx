@@ -8,7 +8,6 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import SelectChapterBottomSheet from '@/components/BottomSheet/Reports/SelectChapterBottomSheet';
 import SelectAreaBottomSheet from '@/components/BottomSheet/Reports/SelectAreaBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-// import reportChapterDetails from './ReportChapterDetails';
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
 import { getReportInsights } from '../../services/ReportsServices/reportsServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
