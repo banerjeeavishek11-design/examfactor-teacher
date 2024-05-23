@@ -24,6 +24,7 @@ const Header = () => {
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const currentSub = useSelector((state) => state.selectedSubject.subject);
+  const currentSection = useSelector((state) => state.selectedSubject.sectionName);
   const dispatch = useDispatch();
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -35,6 +36,7 @@ const Header = () => {
   useFocusEffect(
     React.useCallback(() => {
       setSelectedSubject(currentSub);
+      setShowSelectedClass(currentSection);
     })
   );
 

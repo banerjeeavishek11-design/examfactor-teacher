@@ -350,7 +350,7 @@ const HomeWorkTab = () => {
 
                       {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                         <View>
-                          <View style={[layout.paddingForCard, { paddingTop: '0%' }]}>
+                          <View style={[layout.paddingForCard, isTablet && { marginTop: '-6%' }]}>
                             {ele.remindOn !== null ? (
                               <Text
                                 style={[

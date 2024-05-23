@@ -33,6 +33,7 @@ const ScheduleTestActivationBottomSheet = ({
   const userName = storage.getString('username');
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [fromModalVisible, setFromModalVisible] = useState(false);
   const [toModalVisible, setToModalVisible] = useState(false);
   const [selectedToTime, setSelectedToTime] = useState(null);
@@ -122,10 +123,16 @@ const ScheduleTestActivationBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               {
                 backgroundColor: colors.bottomSheetBackgroundColor,
                 height: showCalendar ? 550 : 350,
@@ -160,7 +167,7 @@ const ScheduleTestActivationBottomSheet = ({
                   style={[
                     fonts.size_14,
                     fonts.fontWeight_small,
-                    { color: '#E2E2E2', marginVertical: '4%' },
+                    { color: '#E2E2E2', marginVertical: isTablet ? '1%' : '4%' },
                   ]}
                 >
                   Test timing : {totalTime} Min
@@ -367,6 +374,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

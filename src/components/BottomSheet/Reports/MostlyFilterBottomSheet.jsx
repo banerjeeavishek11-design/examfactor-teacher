@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'rea
 
 import React from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
 
@@ -12,14 +13,21 @@ const options = [
 
 const MostlyFilterBottomSheet = ({ visible, closeModal, setSelectedFilter }) => {
   const { fonts, colors, layout } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -79,6 +87,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

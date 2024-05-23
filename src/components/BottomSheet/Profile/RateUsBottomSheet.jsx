@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import RateUsStart from '@/theme/assets/images/rateusstar.png';
 import Cross from '@/theme/assets/images/cross.png';
 import { ImageVariant } from '../../atoms';
+import { useSelector } from 'react-redux';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
 
@@ -42,6 +43,7 @@ const moreThanThreeStarOptions = [
 const RateUsBottomSheet = (props) => {
   const { visible, setRateUsModalVisible } = props;
   const { layout, fonts, colors } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [selectedRating, setSelectedRating] = useState(0);
   const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
   const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
@@ -88,11 +90,17 @@ const RateUsBottomSheet = (props) => {
   return (
     <View>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={[styles.modalContainer]}>
+        <View style={[isTablet ? styles.modalTabContainer : styles.modalContainer]}>
           <View
             style={[
               styles.bottomSheetContent,
-              layout.paddingForFullScreen,
+              isTablet && {
+                width: '60%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
+              isTablet ? { padding: 20 } : layout.paddingForFullScreen,
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -110,25 +118,35 @@ const RateUsBottomSheet = (props) => {
             <View
             //   style={styles.center}
             >
-              <TouchableOpacity style={styles.slideIndicator} onPress={handleSlideDown}>
-                <Text>-</Text>
-              </TouchableOpacity>
+              {!isTablet && (
+                <TouchableOpacity style={styles.slideIndicator} onPress={handleSlideDown}>
+                  <Text>-</Text>
+                </TouchableOpacity>
+              )}
 
               <View>
-                <View style={{ marginTop: '5%' }}>
-                  <Text style={[fonts.size_18, fonts.fontWeignt_600, { color: colors.white }]}>
+                <View style={{ marginTop: !isTablet && '5%' }}>
+                  <Text
+                    style={[
+                      fonts.size_18,
+                      fonts.fontWeignt_600,
+                      isTablet && { alignSelf: 'center' },
+                      { color: colors.white },
+                    ]}
+                  >
                     How is your experience so far?
                   </Text>
                 </View>
                 <ScrollView
-                  contentContainerStyle={{ paddingBottom: '0%' }}
+                  contentContainerStyle={[{ paddingBottom: '0%' }]}
                   showsVerticalScrollIndicator={false}
                 >
                   <View
                     style={[
                       layout.display,
                       layout.rowHCenter,
-                      layout.justifyBetween,
+                      !isTablet && layout.justifyBetween,
+                      isTablet && [layout.justifyCenter, { gap: 15 }],
                       { marginTop: '3%' },
                     ]}
                   >
@@ -150,7 +168,8 @@ const RateUsBottomSheet = (props) => {
                     style={[
                       layout.display,
                       layout.rowHCenter,
-                      layout.justifyBetween,
+                      !isTablet && layout.justifyBetween,
+                      isTablet && { justifyContent: 'space-around', gap: -100 },
                       { marginTop: '3%' },
                     ]}
                   >
@@ -256,6 +275,7 @@ const RateUsBottomSheet = (props) => {
                           handleSlideDown();
                           openThanksForFeedbackModal();
                         }}
+                        style={isTablet && { width: '30%', alignSelf: 'center' }}
                       >
                         <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                           <View style={[layout.display, layout.rowHCenter]}>
@@ -298,6 +318,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

@@ -2,11 +2,12 @@ import { useTheme } from '@/theme';
 import React, { useEffect, useState } from 'react';
 import { View, Modal, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import Cross from '@/theme/assets/images/cross.png';
+import { useFocusEffect } from '@react-navigation/native';
 import { ImageVariant } from '../../atoms';
 import RadioButton from '../../RadioButton/RadioButton';
 import ClassSuccessfullySelectedBottomSheet from './ClassSuccessfullySelectedBottomSheet';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MMKV } from 'react-native-mmkv';
 import { selectSectionName } from '../../../store/redux-slice/SelectedSubjectSlice';
 
@@ -20,12 +21,20 @@ const ReferandearnBottomsheet = (props) => {
     showSelecTedClass,
   } = props;
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const currentSection = useSelector((state) => state.selectedSubject.sectionName);
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
   // const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
   const [option, setOption] = useState('first');
   const [classes, setClasses] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setOption(currentSection);
+    }, [currentSection])
+  );
 
   useEffect(() => {
     const resFromMMKV = storage.getString('teacherDetails');
@@ -42,6 +51,7 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);
+    setOption((prev) => prev);
   };
 
   const handleOptionChange = (op) => {
@@ -58,11 +68,16 @@ const ReferandearnBottomsheet = (props) => {
   return (
     <View style={styles.container}>
       <Modal visible={openSelectClassBottmSheet} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -181,6 +196,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

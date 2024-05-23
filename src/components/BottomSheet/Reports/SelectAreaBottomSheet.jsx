@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'rea
 
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import RadioButton from '../../RadioButton/RadioButton';
 import Cross from '@/theme/assets/images/cross.png';
@@ -20,6 +21,8 @@ const SelectAreaBottomSheet = ({
   setChapterSelectionType,
 }) => {
   const { fonts, layout, colors } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   const [option, setOption] = useState('first');
   const [areaId, setAreaId] = useState();
 
@@ -35,11 +38,16 @@ const SelectAreaBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -64,7 +72,7 @@ const SelectAreaBottomSheet = ({
               <Text
                 style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}
               >
-                Select Chapter
+                Select Area
               </Text>
               <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -153,6 +161,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

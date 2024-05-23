@@ -1,4 +1,5 @@
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { View, Modal, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Cross from '@/theme/assets/images/cross.png';
@@ -15,6 +16,8 @@ const RemindStudentBottomSheet = (props) => {
     getStudentHomeworks,
   } = props;
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   const [openRemindStudentSuccessfully, setOpenRemindStudentSuccessfully] = useState(false);
 
   const handleSlideDown = () => {
@@ -45,10 +48,16 @@ const RemindStudentBottomSheet = (props) => {
   return (
     <View style={styles.container}>
       <Modal visible={openRemindStudentBottomSheet} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -63,12 +72,14 @@ const RemindStudentBottomSheet = (props) => {
                 resizeMode="contain"
               />
             </TouchableOpacity>
-            <View style={styles.center}>
-              <TouchableOpacity
-                style={styles.slideIndicator}
-                onPress={handleSlideDown}
-              ></TouchableOpacity>
-            </View>
+            {!isTablet && (
+              <View style={styles.center}>
+                <TouchableOpacity
+                  style={styles.slideIndicator}
+                  onPress={handleSlideDown}
+                ></TouchableOpacity>
+              </View>
+            )}
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
               <Text
                 style={[fonts.size_20, fonts.bold, { color: colors.white, paddingBottom: '2%' }]}
@@ -156,8 +167,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
   bottomSheetContent: {
-    height: 350,
+    height: 260,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderTopWidth: 2,

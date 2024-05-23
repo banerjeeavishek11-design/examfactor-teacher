@@ -6,8 +6,7 @@ import Cross from '@/theme/assets/images/cross.png';
 import Success from '@/theme/assets/images/forgotsuccess.png';
 
 const ClassSuccessfullySelectedBottomSheet = (props) => {
-  const { colors, variant, changeTheme, layout, gutters, fonts, components, backgrounds } =
-    useTheme();
+  const { colors, layout, fonts } = useTheme();
   const {
     setOpenClassSuccessfullySelectedBottomSheet,
     openClassSuccessfullySelectedBottomSheet,

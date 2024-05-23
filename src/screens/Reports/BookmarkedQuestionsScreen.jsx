@@ -165,21 +165,11 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
                 source={LeftArrow}
                 resizeMode="contain"
               />
-              <Image
-                style={{ width: 7, height: 11, top: -1 }}
-                source={LeftArrow}
-                resizeMode="contain"
-              />
               <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
                 Bookmarked Questions
               </Text>
             </View>
           </TouchableOpacity>
-          {allBookmarkedQuestionsDetails?.length === 0 ? null : (
-            <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
-              <Image source={Filter} />
-            </TouchableOpacity>
-          )}
           {allBookmarkedQuestionsDetails?.length === 0 ? null : (
             <TouchableOpacity onPress={() => setBookmarkFilterVisible(true)}>
               <Image source={Filter} />

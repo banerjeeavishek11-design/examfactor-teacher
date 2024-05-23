@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { ImageVariant } from '../../atoms';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
@@ -33,6 +34,7 @@ const SetNewPasswordBottomSheet = ({
 }) => {
   const navigation = useNavigation();
   const { layout, colors, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const {
     control,
     handleSubmit,
@@ -98,7 +100,16 @@ const SetNewPasswordBottomSheet = ({
         <View style={styles.modalContainer}>
           <TouchableWithoutFeedback onPress={handleOutsideTap}>
             <View
-              style={[styles.bottomSheetContent, { backgroundColor: '#1C1827', padding: '4%' }]}
+              style={[
+                styles.bottomSheetContent,
+                isTablet && {
+                  width: '50%',
+                  alignSelf: 'center',
+                  borderBottomEndRadius: 10,
+                  borderBottomStartRadius: 10,
+                },
+                { backgroundColor: '#1C1827', padding: '4%' },
+              ]}
             >
               <View style={styles.center}>
                 <TouchableOpacity
