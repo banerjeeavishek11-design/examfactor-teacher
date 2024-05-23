@@ -5,6 +5,7 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import User from '@/theme/assets/images/user.png';
 import TabUser from '@/theme/assets/images/tabuser.png';
 import { useTheme } from '@/theme';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
@@ -22,6 +23,7 @@ const Header = () => {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const currentSub = useSelector((state) => state.selectedSubject.subject);
   const dispatch = useDispatch();
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -29,6 +31,12 @@ const Header = () => {
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSelectedSubject(currentSub);
+    })
+  );
 
   useEffect(() => {
     const resFromMMKV = storage.getString('teacherDetails');
@@ -61,7 +69,7 @@ const Header = () => {
 
   const handleOpenDrawer = () => {
     if (isTablet) {
-      navigation.navigate('SideBarAuthedScreen');
+      navigation.navigate('TabProfileScreen');
     } else {
       navigation.navigate('SideBarAuthedScreen');
     }
@@ -82,14 +90,23 @@ const Header = () => {
     <View
       style={{
         backgroundColor: isTablet ? '#191924' : colors.headerBackgroundColor,
-        height: isTablet ? 60 : 'auto',
+        // height: isTablet ? 120 : 135,
       }}
     >
-      <View style={[layout.paddingForFullScreen, { paddingTop: isTablet ? '.5%' : '4%' }]}>
-        <View style={[layout.rowHCenter, layout.justifyBetween, layout.display, { width: '100%' }]}>
+      <View
+        style={[!isTablet && layout.paddingForFullScreen, { paddingTop: isTablet ? '2%' : '4%' }]}
+      >
+        <View
+          style={[
+            layout.rowHCenter,
+            layout.justifyBetween,
+            layout.display,
+            { paddingHorizontal: '4%' },
+          ]}
+        >
           <View>
             <TouchableOpacity onPress={() => setOpenSelectClassBottomSheet(true)}>
-              <View style={[layout.rowHCenter, { gap: 5 }]}>
+              <View style={[layout.rowHCenter, { gap: 5, marginBottom: isTablet && '5%' }]}>
                 <Text
                   style={[
                     fonts.size_18,
@@ -117,12 +134,21 @@ const Header = () => {
           </View>
           {isTablet ? (
             <TouchableOpacity onPress={() => handleOpenDrawer()}>
-              <ImageVariant
-                testID="brand-img"
-                style={{ width: 44, height: 44, left: 5, tintColor: '#B6B6BB' }}
-                source={TabUser}
-                resizeMode="contain"
-              />
+              {teacherDetails[0]?.profileImageUrl ? (
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 44, height: 44, left: 5, borderRadius: 100, marginBottom: '8%' }}
+                  source={{ uri: teacherDetails[0]?.profileImageUrl }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 44, height: 44, left: 5, tintColor: '#B6B6BB' }}
+                  source={TabUser}
+                  resizeMode="contain"
+                />
+              )}
             </TouchableOpacity>
           ) : (
             <View>
@@ -154,14 +180,19 @@ const Header = () => {
             </View>
           )}
         </View>
-        <View style={{ backgroundColor: isTablet ? '' : colors.headerBackgroundColor }}>
+        <View
+          style={{
+            backgroundColor: isTablet ? 'black' : colors.headerBackgroundColor,
+            width: '100%',
+          }}
+        >
           <ScrollView
             ref={scrollViewRef}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={[
               layout.paddingForFullScreen,
-              { paddingTop: '0%', paddingBottom: '2%', marginTop: '2%' },
+              { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
             ]}
           >
             <View style={[layout.display, layout.rowHCenter]}>
@@ -210,7 +241,7 @@ const Header = () => {
 const styles = StyleSheet.create({
   button: {
     left: -12,
-    height: 45,
+    height: 49,
     borderRadius: 12,
     backgroundColor: '#22222F',
     paddingLeft: 20,

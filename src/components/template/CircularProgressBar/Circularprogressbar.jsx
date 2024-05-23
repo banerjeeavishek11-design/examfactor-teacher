@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const SuffixText = ({ total }) => {
   const { fonts, colors } = useTheme();
-  return <Text style={[fonts.size_10, { color: colors.gray200 }]}>/ {total ? total : '0'}</Text>;
+  return <Text style={[fonts.size_10, { color: colors.gray200 }]}>/ {total || '100'}</Text>;
 };
 
 const Circularprogressbar = (props) => {

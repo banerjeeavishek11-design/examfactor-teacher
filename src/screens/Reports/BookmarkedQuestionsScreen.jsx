@@ -1,4 +1,12 @@
-import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 import { useTheme } from '@/theme';
@@ -11,6 +19,7 @@ import BookmarkedQuestionFilterBottomSheet from '@/components/BottomSheet/Report
 import { bookMarkedQuestionsList } from '../../services/ReportsServices/reportsServices';
 import { useSelector } from 'react-redux';
 import { notifyMessage } from '../../utils/error-toast-API';
+import MathJax from '../../components/mathjax/Mathjax';
 
 const BookmarkedQuestions = [
   {
@@ -70,8 +79,9 @@ const questionsPerPage = 4;
 const BookmarkedQuestionsScreen = ({ navigation }) => {
   const { layout, colors, fonts } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const route = useRoute();
   const { studentDetails } = route.params || {};
@@ -93,19 +103,37 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     getBookmarkQuestions();
   }, [selectedSubjectId]);
 
+  const mmlOptions = {
+    styles: {
+      '#formula': {
+        color: 'white',
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 14,
+      },
+    },
+    jax: ['input/MathML'],
+  };
+  const mathjaxStyles = {
+    mathjaxContainer: {
+      backgroundColor: 'transparent',
+      fontFamily: 'Poppins-SemiBold',
+    },
+  };
+
   const getBookmarkQuestions = () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     let params = {
       subjectCode: selectedSubjectId,
       active: true,
+      studentId: studentDetails?.userName,
     };
     bookMarkedQuestionsList(params)
       .then((res) => {
-        setAllBookmarkedQuestionsDetails(res?.data);
-        // setIsLoading(false);
+        setAllBookmarkedQuestionsDetails(res?.data?.content);
+        setIsLoading(false);
       })
       .catch((error) => {
-        // setIsLoading(false);
+        setIsLoading(false);
         if (
           error?.response?.status === 400 ||
           error.code === 'ERR-10' ||
@@ -116,6 +144,9 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
           notifyMessage('Data not found');
         }
       });
+  };
+  const goToSolutionScreen = (questions) => {
+    navigation.navigate('QuestionSolutionScreen', { questions: questions });
   };
 
   return (
@@ -147,96 +178,113 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
 
         <View>
           <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
-            {allBookmarkedQuestionsDetails?.length > 0 ? (
-              <>
-                {allBookmarkedQuestionsDetails?.map((ques) => {
-                  return (
-                    <View key={ques.id}>
-                      <View
-                        style={[
-                          layout.fullWidth,
-                          layout.paddingForCard,
-                          {
-                            height: 'auto',
-                            backgroundColor: colors.cardBackgroundColor,
-                            borderRadius: 16,
-                            marginTop: '3%',
-                            gap: 10,
-                          },
-                        ]}
-                      >
-                        <View style={[layout.row]}>
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeight_small,
-                              { color: colors.white, width: '5%' },
-                            ]}
-                          >
-                            {ques.id}.
-                          </Text>
-
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeight_small,
-                              { color: colors.white, width: '90%', textAlign: 'justify', top: -2 },
-                            ]}
-                          >
-                            {ques?.subTopic}
-                          </Text>
-                        </View>
-
-                        <TouchableOpacity
-                          // onPress={() =>
-                          //   navigation.navigate('QuestionSolutionScreen', {
-                          //     AllQuestions: BookmarkedQuestions,
-                          //     currentQuestionId: ques.id,
-                          //     currentQuestion: ques.question,
-                          //     studentDetails: studentDetails,
-                          //   })
-                          // }
-                          style={[
-                            layout.row,
-                            layout.itemsCenter,
-                            { marginTop: '3%', marginLeft: '5%' },
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              fonts.size_12,
-                              fonts.fontWeight_small,
-                              { color: colors.termsLinkColor },
-                            ]}
-                          >
-                            View Solution
-                          </Text>
-                          <Image
-                            style={{
-                              width: 6,
-                              height: 8,
-                              left: 3,
-                              tintColor: colors.termsLinkColor,
-                            }}
-                            source={RightArrow}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  );
-                })}
-              </>
+            {isLoading ? (
+              <View style={styles.loader}>
+                <ActivityIndicator size="large" color={colors.termsLinkColor} />
+              </View>
             ) : (
-              <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  fonts.alignCenter,
-                  { color: colors.white, marginTop: '90%' },
-                ]}
-              >
-                No Bookmarked Questions Found
-              </Text>
+              <>
+                {allBookmarkedQuestionsDetails?.length > 0 ? (
+                  <>
+                    {allBookmarkedQuestionsDetails?.map((ques, i) => {
+                      const concatenatedData = ques?.question?.questionContents
+                        .filter((ele) => ele.contentType === 'TEXT')
+                        .map((ele) => ele.data)
+                        .join(' ');
+                      return (
+                        <View key={ques.questionId}>
+                          <View
+                            style={[
+                              layout.fullWidth,
+                              isTablet ? { padding: 20 } : layout.paddingForCard,
+                              {
+                                height: 'auto',
+                                backgroundColor: colors.cardBackgroundColor,
+                                borderRadius: 16,
+                                marginTop: '3%',
+                                gap: 10,
+                              },
+                            ]}
+                          >
+                            <View style={[layout.row]}>
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.white, width: '5%' },
+                                ]}
+                              >
+                                {i + 1}.
+                              </Text>
+
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  {
+                                    color: colors.white,
+                                    width: '90%',
+                                    textAlign: 'justify',
+                                    top: -2,
+                                  },
+                                ]}
+                              >
+                                {ques?.question?.subTopic}
+                              </Text>
+                            </View>
+                            <View style={isTablet && { marginLeft: '4%' }} pointerEvents="none">
+                              <MathJax
+                                mathJaxOptions={mmlOptions}
+                                html={`<div>${concatenatedData}</div>`}
+                                style={[mathjaxStyles.mathjaxContainer]}
+                              />
+                            </View>
+
+                            <TouchableOpacity
+                              onPress={() => goToSolutionScreen(ques?.question)}
+                              style={[
+                                layout.row,
+                                layout.itemsCenter,
+                                { marginTop: isTablet ? '1%' : '3%', marginLeft: '5%' },
+                              ]}
+                            >
+                              <Text
+                                style={[
+                                  fonts.size_12,
+                                  fonts.fontWeight_small,
+                                  { color: colors.termsLinkColor },
+                                ]}
+                              >
+                                View Solution
+                              </Text>
+                              <Image
+                                style={{
+                                  width: 6,
+                                  height: 8,
+                                  left: 3,
+                                  tintColor: colors.termsLinkColor,
+                                }}
+                                source={RightArrow}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: isTablet ? '20%' : '90%' },
+                    ]}
+                  >
+                    No Bookmarked Questions Found
+                  </Text>
+                )}
+              </>
             )}
           </ScrollView>
         </View>
@@ -249,4 +297,12 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
   );
 };
 
+const styles = StyleSheet.create({
+  loader: {
+    marginTop: '90%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default BookmarkedQuestionsScreen;

@@ -1,8 +1,9 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { SafeScreen } from '@/components/template';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
 
@@ -10,7 +11,8 @@ const ClassWorkdetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { classworkInsightDetails } = route.params || {};
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const { classworkInsightDetails, studentDetails } = route.params || {};
   const assessmentType = classworkInsightDetails?.map((val) => val.productName);
   const uniqueAssessmentType = Array.from(new Set(assessmentType));
 
@@ -45,6 +47,7 @@ const ClassWorkdetailsScreen = () => {
           onPress={() =>
             navigation.navigate('StudentWiseReportScreen', {
               classworkInsightDetails: classworkInsightDetails,
+              studentDetails: studentDetails,
             })
           }
         >
@@ -66,18 +69,15 @@ const ClassWorkdetailsScreen = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: '10%' }}>
           {newData?.length > 0 ? (
             <>
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.6 }]}>
+              {/* <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.6 }]}>
                 PHYSICS DIAGNOSTIC KIT
-              </Text>
+              </Text> */}
               {newData?.map((ele, i) => {
                 return (
                   <View key={i}>
                     {ele.assessmentData?.map((item) => {
-                      // Given millisecond timestamp
                       const timestamp = item?.testEndTimeStamp;
-                      // Create a Date object using the timestamp
                       const date = new Date(timestamp);
-                      // Format the date string
                       const formattedDate = new Intl.DateTimeFormat('en-US', {
                         month: 'long',
                         day: 'numeric',
@@ -91,9 +91,9 @@ const ClassWorkdetailsScreen = () => {
                           key={item.id}
                           style={[
                             layout.fullWidth,
-                            layout.paddingForCard,
+                            isTablet ? { padding: 20 } : layout.paddingForCard,
                             {
-                              height: 200,
+                              height: 'auto',
                               backgroundColor: colors.cardBackgroundColor,
                               borderRadius: 12,
                               marginTop: '4%',
@@ -119,13 +119,19 @@ const ClassWorkdetailsScreen = () => {
                             Completed on {formattedDate || '-'}
                           </Text>
 
-                          <View style={styles.box}>
+                          <View style={{ marginTop: '3%' }}>
                             <View
                               style={[
                                 layout.display,
                                 layout.row,
                                 layout.justifyBetween,
-                                { paddingHorizontal: 10, top: '4%' },
+                                {
+                                  padding: 15,
+                                  borderColor: colors.gray200,
+                                  borderWidth: 0.8,
+                                  borderTopEndRadius: 10,
+                                  borderTopStartRadius: 10,
+                                },
                               ]}
                             >
                               <Text
@@ -147,13 +153,18 @@ const ClassWorkdetailsScreen = () => {
                                 {Math.round(item?.accuracy * 100) / 100 || '0.00'}%
                               </Text>
                             </View>
-                            <View style={styles.line} />
                             <View
                               style={[
                                 layout.display,
                                 layout.row,
                                 layout.justifyBetween,
-                                { paddingHorizontal: 10, top: '13%' },
+                                {
+                                  padding: 15,
+                                  borderColor: colors.gray200,
+                                  borderWidth: 0.8,
+                                  borderBottomEndRadius: 10,
+                                  borderBottomStartRadius: 10,
+                                },
                               ]}
                             >
                               <Text
@@ -193,7 +204,7 @@ const ClassWorkdetailsScreen = () => {
                   { color: colors.white, marginTop: '90%' },
                 ]}
               >
-                No Data Available
+                No Classwork Found
               </Text>
             </>
           )}
@@ -204,24 +215,3 @@ const ClassWorkdetailsScreen = () => {
 };
 
 export default ClassWorkdetailsScreen;
-
-const styles = StyleSheet.create({
-  box: {
-    width: '100%',
-    height: 100,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 10,
-    position: 'relative',
-    marginTop: '5%',
-  },
-  line: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    right: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: 'white',
-    marginHorizontal: -1,
-  },
-});

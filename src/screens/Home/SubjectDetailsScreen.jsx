@@ -2,6 +2,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { SafeScreen } from '@/components/template';
 import { ImageVariant } from '@/components/atoms';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
@@ -17,28 +18,24 @@ const SubjectDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
-  const { chapters, subjectName, chapList } = route.params || {};
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const { chapters, subjectName, chapList, avgAchivableScore } = route.params || {};
   const [searchChapterName, setSearchChapterName] = useState([]);
-
-  // const goToTopicWiseDetailsScreen = (chapterName, progress) => {
-  //   navigation.navigate('TopicWiseDetailsScreen', {
-  //     topicName: chapterName,
-  //     progress: progress,
-  //   });
-  // };
-  // console.log('chaps', chapters);
 
   useEffect(() => {
     setSearchChapterName(chapters);
   }, []);
 
   const onSearchChapters = (search) => {
-    const searchItem = chapters.filter((ele) =>
-      ele.chapterName.toLowerCase().includes(search.toLowerCase())
-    );
+    const searchItem = chapters?.filter((ele) => {
+      const chapName = getChapterDescById(chapList, ele.chapterId);
+      chapName.toLowerCase().includes(search.toLowerCase());
+    });
     setSearchChapterName(searchItem);
   };
   // console.log('searchChapterName', searchChapterName);
+
+  console.log('chapters', chapters);
 
   return (
     <SafeScreen>
@@ -47,7 +44,7 @@ const SubjectDetailsScreen = () => {
           layout.fullWidth,
           layout.paddingForFullScreen,
           {
-            height: 127,
+            height: isTablet ? 180 : 'auto',
             backgroundColor: colors.headerBackgroundColor,
           },
         ]}
@@ -66,7 +63,12 @@ const SubjectDetailsScreen = () => {
             {subjectName}
           </Text>
         </TouchableOpacity>
-        <View style={{ width: '100%', marginTop: '4%' }}>
+        <View
+          style={{
+            width: '100%',
+            marginTop: isTablet ? '2%' : '4%',
+          }}
+        >
           <Searchbar
             placeholder="Search Chapters"
             placeholderTextColor="rgba(275, 275, 275, 0.5)"
@@ -98,7 +100,7 @@ const SubjectDetailsScreen = () => {
             layout.display,
             layout.rowHCenter,
             layout.justifyBetween,
-            layout.paddingForCard,
+            isTablet ? { padding: 20 } : layout.paddingForCard,
             {
               height: 'auto',
               borderRadius: 14,
@@ -121,7 +123,7 @@ const SubjectDetailsScreen = () => {
           </View>
 
           <View>
-            <Circularprogressbar progress={60} />
+            <Circularprogressbar progress={avgAchivableScore || 0} />
           </View>
         </LinearGradient>
         {!searchChapterName && (
@@ -137,12 +139,12 @@ const SubjectDetailsScreen = () => {
               key={ele.chapterId}
               style={[
                 layout.fullWidth,
-                layout.paddingForCard,
+                isTablet ? { padding: 20 } : layout.paddingForCard,
                 {
                   height: 'auto',
                   backgroundColor: colors.cardBackgroundColor,
                   borderRadius: 16,
-                  marginTop: '5%',
+                  marginTop: isTablet ? '2%' : '5%',
                 },
               ]}
             >
@@ -157,7 +159,7 @@ const SubjectDetailsScreen = () => {
                       fonts.fontWeight_small,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,
-                        marginTop: '5%',
+                        marginTop: isTablet ? '2%' : '5%',
                       },
                     ]}
                   >
@@ -197,49 +199,80 @@ const SubjectDetailsScreen = () => {
                   />
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: '4%' }}>
+              <View style={{ marginTop: isTablet ? '1%' : '4%' }}>
                 <Progressbar
                   progress={ele.homeworkProgress / 100}
                   color={ele.homeworkProgress >= 60 ? '#3DD598' : '#FFAB48'}
                 />
               </View>
               <View>
-                <View style={[layout.row, layout.itemsCenter, { marginTop: '4%', gap: 5 }]}>
+                <View
+                  style={[
+                    layout.row,
+                    layout.itemsCenter,
+                    layout.justifyBetween,
+                    { marginTop: isTablet ? '1%' : '4%', gap: 5 },
+                  ]}
+                >
+                  <View
+                    style={[
+                      layout.row,
+                      layout.itemsCenter,
+                      { marginTop: isTablet ? '1%' : '4%', gap: 5 },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_12,
+                        fonts.fontWeight_small,
+                        {
+                          color: colors.subjectDetailsAcheivableScoreColor,
+                        },
+                      ]}
+                    >
+                      Activated Topic :
+                    </Text>
+                    <Text
+                      style={[
+                        fonts.size_12,
+                        fonts.bold,
+                        {
+                          color: colors.subjectDetailsAcheivableScoreColor,
+                        },
+                      ]}
+                    >
+                      {`${ele.activatedTopicCount}/${ele.topicCount}`}
+                    </Text>
+                  </View>
+                  {isTablet && (
+                    <Text
+                      style={[
+                        fonts.size_12,
+                        fonts.fontWeight_small,
+                        {
+                          color: colors.subjectDetailsAcheivableScoreColor,
+                          marginTop: '2%',
+                        },
+                      ]}
+                    >
+                      Progress is calculated based on the activated topics.
+                    </Text>
+                  )}
+                </View>
+                {!isTablet && (
                   <Text
                     style={[
                       fonts.size_12,
                       fonts.fontWeight_small,
                       {
                         color: colors.subjectDetailsAcheivableScoreColor,
+                        marginTop: '2%',
                       },
                     ]}
                   >
-                    Activated Topic :
+                    Progress is calculated based on the activated topics.
                   </Text>
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      fonts.bold,
-                      {
-                        color: colors.subjectDetailsAcheivableScoreColor,
-                      },
-                    ]}
-                  >
-                    {`${ele.activatedTopicCount}/${ele.topicCount}`}
-                  </Text>
-                </View>
-                <Text
-                  style={[
-                    fonts.size_12,
-                    fonts.fontWeight_small,
-                    {
-                      color: colors.subjectDetailsAcheivableScoreColor,
-                      marginTop: '2%',
-                    },
-                  ]}
-                >
-                  Progress is calculated based on the activated topics.
-                </Text>
+                )}
               </View>
             </View>
           );

@@ -183,8 +183,6 @@ const GradientBarChart = ({
 
         {/* Draw bars */}
         {actualData[0].map((value, index) => {
-          // console.log('Actual DAta', actualData);
-          // console.log('height', height);
           return (
             <Rect
               key={index}

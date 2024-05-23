@@ -9,6 +9,7 @@ export { default as ActivateScreen } from './Activate/ActivateScreen';
 export { default as ForgotPasswordScreen } from './Login/ForgotPasswordScreen';
 export { default as ForgotPasswordSuccessfulScreen } from './Login/ForgotPasswordSuccessfulScreen';
 export { default as SideBarAuthedScreen } from './Profile/SideBarAuthedScreen';
+export { default as TabProfileScreen } from './Profile/TabProfileScreen';
 export { default as ProfileDetailsScreen } from './Profile/ProfileDetailsScreen';
 export { default as AppGuideScreen } from './Profile/AppGuideScreen';
 export { default as SupportScreen } from './Profile/SupportScreen';

@@ -31,6 +31,7 @@ import { getClasswoksByTeacher } from '../../services/ActivateServices/activeCla
 import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticService';
 import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
 import Caraosal from './Caraosal';
+import Header from '../../components/template/Header/Header';
 
 const configForScore = [
   { groupName: '<60', from: 0, to: 60 },
@@ -53,9 +54,8 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const userName = storage.getString('username');
   const dispatch = useDispatch();
-  // const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
-  const [showContent, setShowContent] = useState(false);
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
@@ -86,6 +86,8 @@ const HomeScreen = () => {
   const [consolidatedReportData, setConsolidatedReportData] = useState();
 
   const [studentProgressData, setStudentProgressData] = useState([]);
+
+  const [expandedCards, setExpandedCards] = useState({});
 
   const [chapList, setChapList] = useState([]);
 
@@ -216,14 +218,11 @@ const HomeScreen = () => {
     };
     getSubjectWiseReport(params)
       .then((res) => {
-        // console.log('responst subwise report -- .', JSON.stringify(res.data));
         setConsolidatedReportData(res.data);
-        // setDataOfConsolidatedReport(res.data);
       })
       .catch((error) => {
         if (error?.response?.status === 404 && error?.response?.status !== 401)
-          notifyMessage('Consolidated report not found', error);
-        console.log('subwise', error);
+          setConsolidatedReportData({});
       });
   };
 
@@ -232,6 +231,7 @@ const HomeScreen = () => {
       .then((res) => {
         if (res.data) {
           dispatch(updateUserRole(res.data.teacherRole));
+          storage.set('oldPassword', res.data.password);
         }
       })
       .catch((error) => {
@@ -287,8 +287,11 @@ const HomeScreen = () => {
       });
   };
 
-  const toggleContent = () => {
-    setShowContent(!showContent);
+  const toggleContent = (id) => {
+    // setShowContent(!showContent);
+    setExpandedCards((prevState) => ({
+      [id]: !prevState[id],
+    }));
   };
 
   function categorizeData(data, conf) {
@@ -325,6 +328,7 @@ const HomeScreen = () => {
 
   return (
     <SafeScreen>
+      {isTablet && <Header />}
       <ScrollView
         nestedScrollEnabled={true}
         contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}
@@ -340,6 +344,7 @@ const HomeScreen = () => {
                 chapters: consolidatedReportData?.chapters,
                 subjectName: subjectName,
                 chapList: chapList,
+                avgAchivableScore: consolidatedReportData?.score,
               })
             }
           >
@@ -362,12 +367,13 @@ const HomeScreen = () => {
         <View
           style={[
             layout.fullWidth,
-            layout.paddingForCard,
+            isTablet ? { padding: 20 } : layout.paddingForCard,
             {
               backgroundColor: colors.cardBackgroundColor,
               height: 'auto',
               borderRadius: 12,
               marginTop: '4%',
+              marginBottom: '-1%',
             },
           ]}
         >
@@ -381,72 +387,90 @@ const HomeScreen = () => {
           >
             {subjectName}
           </Text>
-          <View style={{ marginTop: '1%', alignItems: 'center' }}>
+          <View
+            style={{
+              marginTop: '1%',
+              alignItems: 'center',
+              marginBottom: isTablet && '5%',
+            }}
+          >
             <Concentrix scorePercentage={consolidatedReportData?.score || 0} />
           </View>
-          <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
-            <Divider
-              style={{
-                width: '100%',
-                backgroundColor: colors.lineBackgroundColor,
-              }}
-            />
-          </View>
-          <Text
-            style={[
-              fonts.size_14,
-              fonts.fontWeignt_600,
-              { color: colors.white, opacity: 0.3, top: 10 },
-            ]}
-          >
-            PRACTICE
-          </Text>
-          <View
-            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
-          >
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              Home work
+          <View style={isTablet && { width: '55%', alignSelf: 'center' }}>
+            <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
+              <Divider
+                style={{
+                  width: '100%',
+                  backgroundColor: colors.lineBackgroundColor,
+                }}
+              />
+            </View>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.fontWeignt_600,
+                { color: colors.white, opacity: 0.3, top: 10 },
+              ]}
+            >
+              PRACTICE
             </Text>
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
-            </Text>
-          </View>
-          <View style={{ marginTop: '3%' }}>
-            <Progressbar
-              progress={
-                consolidatedReportData?.homeworkProgress === undefined
-                  ? 0
-                  : consolidatedReportData?.homeworkProgress / 100
-              }
-              color={'#3DD598'}
-            />
-          </View>
-          <View
-            style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '5%' }]}
-          >
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              Diagnostic
-            </Text>
-            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
-            </Text>
-          </View>
-          <View style={{ marginTop: '3%' }}>
-            <Progressbar
-              progress={
-                consolidatedReportData?.homeworkProgress === undefined
-                  ? 0
-                  : consolidatedReportData?.homeworkProgress / 100
-              }
-              color={'#BBA041'}
-            />
+            <View
+              style={[
+                layout.display,
+                layout.rowHCenter,
+                layout.justifyBetween,
+                { marginTop: '5%' },
+              ]}
+            >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                Home work
+              </Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
+              </Text>
+            </View>
+            <View style={{ marginTop: '3%' }}>
+              <Progressbar
+                progress={
+                  consolidatedReportData?.homeworkProgress === undefined
+                    ? 0
+                    : consolidatedReportData?.homeworkProgress / 100
+                }
+                color={'#3DD598'}
+              />
+            </View>
+            <View
+              style={[
+                layout.display,
+                layout.rowHCenter,
+                layout.justifyBetween,
+                { marginTop: '5%' },
+              ]}
+            >
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                Diagnostic
+              </Text>
+              <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+                {`${consolidatedReportData?.diagnosisProgress || 0}% Complete`}
+              </Text>
+            </View>
+            <View style={{ marginTop: '3%' }}>
+              <Progressbar
+                progress={
+                  consolidatedReportData?.diagnosisProgress === undefined
+                    ? 0
+                    : consolidatedReportData?.diagnosisProgress / 100
+                }
+                color={'#BBA041'}
+              />
+            </View>
           </View>
         </View>
 
         <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 
         <View
-          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '10%' }]}
+          style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '6%' }]}
         >
           <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
             STUDENT PROGRESS
@@ -591,38 +615,39 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* <View
-          style={[
-            layout.fullWidth,
-            {
-              backgroundColor: colors.cardBackgroundColor,
-              height: 200,
-              marginTop: "3%",
-              borderRadius: 13,
-              justifyContent: "center",
-            },
-          ]}
-        >
-          <Text
+        {studentProgressData?.length === 0 && (
+          <View
             style={[
-              fonts.size_20,
-              fonts.fontWeignt_600,
-               fonts.alignCenter,
-              { color: colors.white,},
+              layout.fullWidth,
+              {
+                backgroundColor: colors.cardBackgroundColor,
+                height: 400,
+                marginTop: '3%',
+                borderRadius: 13,
+                justifyContent: 'center',
+              },
             ]}
           >
-            Students data not available
-          </Text>
-        </View> */}
+            <Text
+              style={[
+                fonts.size_20,
+                fonts.fontWeignt_600,
+                fonts.alignCenter,
+                { color: colors.white },
+              ]}
+            >
+              Students data not available
+            </Text>
+          </View>
+        )}
 
         {studentProgressData.map((ele) => (
           <TouchableOpacity
             key={ele.studentId}
-            onPress={toggleContent}
+            onPress={() => toggleContent(ele.studentId)}
             style={[
               layout.fullWidth,
-              layout.paddingForCard,
-
+              isTablet ? { padding: 20 } : layout.paddingForCard,
               {
                 backgroundColor: colors.cardBackgroundColor,
                 height: 'auto',
@@ -719,7 +744,7 @@ const HomeScreen = () => {
               </View>
               <View style={{ width: '10%' }}>
                 <TouchableOpacity>
-                  {showContent ? (
+                  {expandedCards[ele.studentId] ? (
                     <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
                   ) : (
                     <Image
@@ -731,7 +756,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            {showContent && (
+            {expandedCards[ele.studentId] && (
               <>
                 <Divider
                   style={{
@@ -749,18 +774,37 @@ const HomeScreen = () => {
                   ]}
                 >
                   <View style={{ width: '35%' }}>
-                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele.lastPracticeDate != null ? ele.lastPracticeDate : '0'} days ago
-                    </Text>
-                    <Text
-                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
-                    >
-                      Last practice
-                    </Text>
+                    {ele?.lastPracticeDateSince !== -1 ? (
+                      <>
+                        <Text
+                          style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
+                        >
+                          {ele.lastPracticeDateSince != null ? ele.lastPracticeDateSince : '0'} days
+                          ago
+                        </Text>
+                        <Text
+                          style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
+                        >
+                          Last practice
+                        </Text>
+                      </>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_13,
+                          fonts.fontWeignt_600,
+                          { color: colors.white, width: '90%' },
+                        ]}
+                      >
+                        Not Yet Practiced
+                      </Text>
+                    )}
                   </View>
                   <View style={{ width: '45%' }}>
                     <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.avgStudyTime} Min
+                      {ele?.avgStudyTime < 60
+                        ? ele?.avgStudyTime + ' Sec'
+                        : Math.floor(ele?.avgStudyTime / 60) + ' Min'}
                     </Text>
                     <View style={[layout.display, layout.rowHCenter]}>
                       <Text
@@ -783,7 +827,7 @@ const HomeScreen = () => {
                   </View>
                   <View style={{ width: '25%' }}>
                     <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.lastTestScore}
+                      {ele?.lastTestScore}%
                     </Text>
                     <Text
                       style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}

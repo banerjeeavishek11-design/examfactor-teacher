@@ -23,7 +23,7 @@ const colorsLight = {
   bottomTabBackground: '#22222E',
   headerBackgroundColor: '#0D0D1B',
   backButtonColor: '#96A7AF',
-  cardBackgroundColor: '#222230',
+  cardBackgroundColor: '#22222D',
   bottomSheetBackgroundColor: '#1C1827',
   lineBackgroundColor: '#474752',
   subjectDetailsAcheivableScoreColor: '#BDBDC0',
