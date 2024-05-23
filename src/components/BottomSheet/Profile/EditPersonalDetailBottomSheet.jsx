@@ -38,6 +38,7 @@ const EditPersonalDetailBottomSheet = ({
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [openCalender, setOpenCalender] = useState(false);
   const [selectedDob, setSelectedDob] = useState('');
   const [sectionId, setSectionId] = useState(null);
@@ -124,10 +125,16 @@ const EditPersonalDetailBottomSheet = ({
   return (
     <Modal visible={personalDetailBottomSheetVisible} animationType="slide" transparent={true}>
       <TouchableWithoutFeedback onPress={handleOutsideTap}>
-        <View style={[styles.modalContainer, { marginBottom: '8%' }]}>
+        <View style={[isTablet ? styles.modalTabContainer : styles.modalContainer]}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '60%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               {
                 padding: '4%',
                 backgroundColor: colors.bottomSheetBackgroundColor,
@@ -137,7 +144,7 @@ const EditPersonalDetailBottomSheet = ({
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: 'absolute', top: -35, left: '98%' }}
+              style={{ position: 'absolute', top: -35, left: isTablet ? '110%' : '98%' }}
             >
               <ImageVariant
                 style={{ width: 18, height: 18, tintColor: colors.gray200 }}
@@ -151,80 +158,87 @@ const EditPersonalDetailBottomSheet = ({
               {({ handleChange, handleSubmit, values }) => {
                 return (
                   <View style={{ marginTop: '8%' }}>
-                    <ScrollView showsVerticalScrollIndicator={false} style={{ height: '90%' }}>
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Full Name
-                        </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: 'left',
-                              paddingLeft: '3%',
-                              backgroundColor: colors.bottomTabBackground,
-                            },
-                          ]}
-                          editable={false}
-                          placeholder={profileData.firstName}
-                          placeholderTextColor={colors.gray200}
-                          value={values?.firstName}
-                        />
-                      </View>
-
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          DOB
-                        </Text>
-                        <View
-                          style={[
-                            layout.row,
-                            layout.itemsCenter,
-                            layout.justifyBetween,
-                            styles.inputField,
-                          ]}
-                        >
+                    <ScrollView
+                      showsVerticalScrollIndicator={false}
+                      style={{ height: '90%' }}
+                      contentContainerStyle={
+                        isTablet && [layout.row, layout.justifyBetween, { gap: 10 }]
+                      }
+                    >
+                      <View style={isTablet && { width: '47%' }}>
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            Full Name
+                          </Text>
                           <TextInput
                             style={[
+                              styles.inputField,
+                              layout.fullWidth,
                               layout.justifyCenter,
+                              // Fonts.textCenter,
                               fonts.size_16,
                               {
                                 color: colors.gray200,
                                 textAlign: 'left',
                                 paddingLeft: '3%',
-                                width: '90%',
+                                backgroundColor: colors.bottomTabBackground,
                               },
                             ]}
                             editable={false}
-                            placeholder={profileData.dob}
-                            placeholderTextColor={colors.gray400}
-                            value={selectedDob}
-                            // onChangeText={handleChange('dob')}
+                            placeholder={profileData.firstName}
+                            placeholderTextColor={colors.gray200}
+                            value={values?.firstName}
                           />
-                          {/* <TouchableOpacity
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            DOB
+                          </Text>
+                          <View
+                            style={[
+                              layout.row,
+                              layout.itemsCenter,
+                              layout.justifyBetween,
+                              styles.inputField,
+                            ]}
+                          >
+                            <TextInput
+                              style={[
+                                layout.justifyCenter,
+                                fonts.size_16,
+                                {
+                                  color: colors.gray200,
+                                  textAlign: 'left',
+                                  paddingLeft: '3%',
+                                  width: '90%',
+                                },
+                              ]}
+                              editable={false}
+                              placeholder={profileData.dob}
+                              placeholderTextColor={colors.gray400}
+                              value={selectedDob}
+                              // onChangeText={handleChange('dob')}
+                            />
+                            {/* <TouchableOpacity
                             onPress={() => {
                               setOpenCalender(true);
                             }}
@@ -238,248 +252,255 @@ const EditPersonalDetailBottomSheet = ({
                               }}
                             />
                           </TouchableOpacity> */}
-                          <DateTimePicker
-                            mode="date"
-                            onConfirm={(date) => {
-                              setSelectedDob(moment(date).format('DD/MM/YYYY'));
-                              setOpenCalender(false);
-                            }}
-                            isVisible={openCalender}
-                            onCancel={() => {
-                              setOpenCalender(false);
-                            }}
+                            <DateTimePicker
+                              mode="date"
+                              onConfirm={(date) => {
+                                setSelectedDob(moment(date).format('DD/MM/YYYY'));
+                                setOpenCalender(false);
+                              }}
+                              isVisible={openCalender}
+                              onCancel={() => {
+                                setOpenCalender(false);
+                              }}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            Gender
+                          </Text>
+                          <View style={[layout.row, layout.justifyBetween, { marginTop: '2%' }]}>
+                            <TouchableOpacity
+                              style={[
+                                layout.justifyCenter,
+                                layout.itemsCenter,
+                                {
+                                  backgroundColor:
+                                    profileData.gender === 'Male'
+                                      ? '#2F2B39'
+                                      : colors.bottomTabBackground,
+                                  width: '45%',
+                                  paddingVertical: 12,
+                                  paddingHorizontal: 12,
+                                  borderRadius: 14,
+                                  borderWidth: 1,
+                                  borderColor:
+                                    profileData.gender === 'Male' ? colors.gray400 : 'transparent',
+                                },
+                              ]}
+                              onPress={() => {}}
+                            >
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.bold,
+                                  layout.textCenter,
+                                  {
+                                    color: profileData.gender === 'Male' ? '#7AF4FC' : '#7A7A82',
+                                  },
+                                ]}
+                              >
+                                Male
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={[
+                                layout.justifyCenter,
+                                layout.itemsCenter,
+                                {
+                                  backgroundColor:
+                                    profileData.gender !== 'Male'
+                                      ? '#2F2B39'
+                                      : colors.bottomTabBackground,
+                                  width: '45%',
+                                  paddingHorizontal: 12,
+                                  borderRadius: 14,
+                                  borderWidth: 1,
+                                  borderColor:
+                                    profileData.gender !== 'Male' ? colors.gray400 : 'transparent',
+                                },
+                              ]}
+                              onPress={() => {}}
+                            >
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.bold,
+                                  layout.textCenter,
+                                  {
+                                    color: profileData.gender !== 'Male' ? '#7AF4FC' : '#7A7A82',
+                                  },
+                                ]}
+                              >
+                                Female
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            Email
+                          </Text>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: 'left',
+                                paddingLeft: '3%',
+                                backgroundColor: colors.bottomTabBackground,
+                              },
+                            ]}
+                            editable={false}
+                            placeholder={profileData.emailId}
+                            placeholderTextColor={colors.gray200}
+                            value={values?.emailId}
                           />
                         </View>
                       </View>
 
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Gender
-                        </Text>
-                        <View style={[layout.row, layout.justifyBetween, { marginTop: '2%' }]}>
-                          <TouchableOpacity
+                      <View style={isTablet && { width: '47%' }}>
+                        <View style={styles.inputContainer}>
+                          <Text
                             style={[
-                              layout.justifyCenter,
-                              layout.itemsCenter,
+                              fonts.size_18,
                               {
-                                backgroundColor:
-                                  profileData.gender === 'Male'
-                                    ? '#2F2B39'
-                                    : colors.bottomTabBackground,
-                                width: '45%',
-                                paddingVertical: 12,
-                                paddingHorizontal: 12,
-                                borderRadius: 14,
-                                borderWidth: 1,
-                                borderColor:
-                                  profileData.gender === 'Male' ? colors.gray400 : 'transparent',
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
                               },
                             ]}
-                            onPress={() => {}}
                           >
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                layout.textCenter,
-                                {
-                                  color: profileData.gender === 'Male' ? '#7AF4FC' : '#7A7A82',
-                                },
-                              ]}
-                            >
-                              Male
-                            </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
+                            Mobile Number
+                          </Text>
+                          <TextInput
                             style={[
+                              styles.inputField,
+                              layout.fullWidth,
                               layout.justifyCenter,
-                              layout.itemsCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
                               {
-                                backgroundColor:
-                                  profileData.gender !== 'Male'
-                                    ? '#2F2B39'
-                                    : colors.bottomTabBackground,
-                                width: '45%',
-                                paddingHorizontal: 12,
-                                borderRadius: 14,
-                                borderWidth: 1,
-                                borderColor:
-                                  profileData.gender !== 'Male' ? colors.gray400 : 'transparent',
+                                color: colors.gray200,
+                                textAlign: 'left',
+                                paddingLeft: '3%',
                               },
                             ]}
-                            onPress={() => {}}
-                          >
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.bold,
-                                layout.textCenter,
-                                {
-                                  color: profileData.gender !== 'Male' ? '#7AF4FC' : '#7A7A82',
-                                },
-                              ]}
-                            >
-                              Female
-                            </Text>
-                          </TouchableOpacity>
+                            keyboardType="phone-pad"
+                            placeholder={profileData.mobileNumber}
+                            placeholderTextColor={colors.gray400}
+                            onChangeText={(text) => {
+                              const cleanedText = text.replace(/[^0-9]/g, '');
+                              if (cleanedText.length <= 10) {
+                                handleChange('mobileNumber')(cleanedText);
+                              }
+                            }}
+                            value={values.mobileNumber}
+                          />
                         </View>
-                      </View>
 
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Email
-                        </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: 'left',
-                              paddingLeft: '3%',
-                              backgroundColor: colors.bottomTabBackground,
-                            },
-                          ]}
-                          editable={false}
-                          placeholder={profileData.emailId}
-                          placeholderTextColor={colors.gray200}
-                          value={values?.emailId}
-                        />
-                      </View>
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Mobile Number
-                        </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: 'left',
-                              paddingLeft: '3%',
-                            },
-                          ]}
-                          keyboardType="phone-pad"
-                          placeholder={profileData.mobileNumber}
-                          placeholderTextColor={colors.gray400}
-                          onChangeText={(text) => {
-                            const cleanedText = text.replace(/[^0-9]/g, '');
-                            if (cleanedText.length <= 10) {
-                              handleChange('mobileNumber')(cleanedText);
-                            }
-                          }}
-                          value={values.mobileNumber}
-                        />
-                      </View>
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            Emergency Contact Number
+                          </Text>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: 'left',
+                                paddingLeft: '3%',
+                              },
+                            ]}
+                            keyboardType="phone-pad"
+                            placeholder={profileData.emergencyContactNumber}
+                            placeholderTextColor={colors.gray400}
+                            onChangeText={(text) => {
+                              const cleanedText = text.replace(/[^0-9]/g, '');
+                              if (cleanedText.length <= 10) {
+                                handleChange('emergencyContactNumber')(cleanedText);
+                              }
+                            }}
+                            value={values.emergencyContactNumber}
+                          />
+                        </View>
 
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Emergency Contact Number
-                        </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: 'left',
-                              paddingLeft: '3%',
-                            },
-                          ]}
-                          keyboardType="phone-pad"
-                          placeholder={profileData.emergencyContactNumber}
-                          placeholderTextColor={colors.gray400}
-                          onChangeText={(text) => {
-                            const cleanedText = text.replace(/[^0-9]/g, '');
-                            if (cleanedText.length <= 10) {
-                              handleChange('emergencyContactNumber')(cleanedText);
-                            }
-                          }}
-                          value={values.emergencyContactNumber}
-                        />
-                      </View>
-
-                      <View style={styles.inputContainer}>
-                        <Text
-                          style={[
-                            fonts.size_18,
-                            {
-                              color: colors.white,
-                              marginBottom: '2%',
-                              opacity: 0.8,
-                            },
-                          ]}
-                        >
-                          Address
-                        </Text>
-                        <TextInput
-                          style={[
-                            styles.inputField,
-                            layout.fullWidth,
-                            layout.justifyCenter,
-                            // Fonts.textCenter,
-                            fonts.size_16,
-                            {
-                              color: colors.gray200,
-                              textAlign: 'left',
-                              paddingLeft: '3%',
-                            },
-                          ]}
-                          placeholder={profileData?.address}
-                          placeholderTextColor={colors.gray400}
-                          onChangeText={handleChange('address')}
-                          value={values?.address}
-                        />
+                        <View style={styles.inputContainer}>
+                          <Text
+                            style={[
+                              fonts.size_18,
+                              {
+                                color: colors.white,
+                                marginBottom: '2%',
+                                opacity: 0.8,
+                              },
+                            ]}
+                          >
+                            Address
+                          </Text>
+                          <TextInput
+                            style={[
+                              styles.inputField,
+                              layout.fullWidth,
+                              layout.justifyCenter,
+                              // Fonts.textCenter,
+                              fonts.size_16,
+                              {
+                                color: colors.gray200,
+                                textAlign: 'left',
+                                paddingLeft: '3%',
+                              },
+                            ]}
+                            placeholder={profileData?.address}
+                            placeholderTextColor={colors.gray400}
+                            onChangeText={handleChange('address')}
+                            value={values?.address}
+                          />
+                        </View>
                       </View>
                     </ScrollView>
 
-                    <TouchableOpacity onPress={handleSubmit}>
+                    <TouchableOpacity
+                      style={isTablet && { marginTop: '-10%', width: '30%', alignSelf: 'flex-end' }}
+                      onPress={handleSubmit}
+                    >
                       <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
                         <View style={[layout.display, layout.rowHCenter]}>
                           <Text
@@ -513,6 +534,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   inputContainer: {
