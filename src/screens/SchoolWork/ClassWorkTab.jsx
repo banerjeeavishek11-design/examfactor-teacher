@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
 import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Classwork from '@/theme/assets/images/classwork.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
@@ -41,6 +42,7 @@ const leaderboardData = [
 
 const ClassWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
+  const navigation = useNavigation();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
@@ -124,7 +126,10 @@ const ClassWorkTab = () => {
   };
 
   const handleActiveChapter = () => {
-    // setActivatedTest(true);
+    // navigation.navigate('ActivateClassWorkTab');
+    navigation.navigate('ActivateTab', {
+      screen: 'ActivateClassWorkTab',
+    });
   };
 
   const toggleContent = (id) => {

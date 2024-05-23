@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import HomeWorkTab from '@/screens/SchoolWork/HomeWorkTab';
 import DiagnosticTab from '@/screens/SchoolWork/DiagnosticTab';
 import ClassWorkTab from '@/screens/SchoolWork/ClassWorkTab';
+import Header from '../components/template/Header/Header';
 
 const Tab = createMaterialTopTabNavigator();
 const S = StyleSheet.create({
@@ -19,114 +21,119 @@ const S = StyleSheet.create({
 
 const TabBar = (props) => {
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   return (
-    <View
-      style={{
-        padding: '4%',
-        paddingTop: '0%',
-        paddingBottom: '0%',
-        alignItems: 'center',
-      }}
-    >
-      <View style={[S.container]}>
-        <Pressable
-          style={[
-            layout.justifyCenter,
-            layout.itemsCenter,
-            { width: '28%' },
-            props.state.index !== 0 && {
-              borderBottomWidth: 4,
-              borderBottomColor: colors.lineBackgroundColor,
-            },
-          ]}
-          onPress={() => {
-            props.navigation.jumpTo('HomeWorkTab');
-          }}
-        >
-          <Text
+    <>
+      {isTablet && <Header />}
+      <View
+        style={{
+          padding: '4%',
+          paddingTop: '0%',
+          paddingBottom: '0%',
+          alignItems: 'center',
+        }}
+      >
+        <View style={[S.container]}>
+          <Pressable
             style={[
-              fonts.size_14,
-              fonts.alignCenter,
-              {
-                fontWeight: props.state.index === 0 ? '700' : '500',
-                color: props.state.index === 0 ? colors.linearGradientColor : colors.white,
-                lineHeight: 18,
-                borderBottomWidth: props.state.index === 0 ? 4 : 0,
-                borderBottomColor: colors.linearGradientColor,
-                width: '100%',
-                paddingBottom: 5,
+              layout.justifyCenter,
+              layout.itemsCenter,
+              { width: '28%' },
+              props.state.index !== 0 && {
+                borderBottomWidth: 4,
+                borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
+            onPress={() => {
+              props.navigation.jumpTo('HomeWorkTab');
+            }}
           >
-            Home work
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            layout.justifyCenter,
-            layout.itemsCenter,
-            { width: '40%' },
-            props.state.index !== 1 && {
-              borderBottomWidth: 4,
-              borderBottomColor: colors.lineBackgroundColor,
-            },
-          ]}
-          onPress={() => {
-            props.navigation.jumpTo('DiagnosticTab');
-          }}
-        >
-          <Text
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.alignCenter,
+                {
+                  fontWeight: props.state.index === 0 ? '700' : '500',
+                  color: props.state.index === 0 ? colors.linearGradientColor : colors.white,
+                  lineHeight: 18,
+                  borderBottomWidth: props.state.index === 0 ? 4 : 0,
+                  borderBottomColor: colors.linearGradientColor,
+                  width: '100%',
+                  paddingBottom: 5,
+                },
+              ]}
+            >
+              Home work
+            </Text>
+          </Pressable>
+          <Pressable
             style={[
-              fonts.size_14,
-              fonts.alignCenter,
-              {
-                fontWeight: props.state.index === 1 ? '700' : '500',
-                color: props.state.index === 1 ? colors.linearGradientColor : colors.white,
-                lineHeight: 18,
-                borderBottomWidth: props.state.index === 1 ? 4 : 0,
-                borderBottomColor: colors.linearGradientColor,
-                width: '100%',
-                paddingBottom: 5,
+              layout.justifyCenter,
+              layout.itemsCenter,
+              { width: '40%' },
+              props.state.index !== 1 && {
+                borderBottomWidth: 4,
+                borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
+            onPress={() => {
+              props.navigation.jumpTo('DiagnosticTab');
+            }}
           >
-            Diagnostic
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[
-            layout.justifyCenter,
-            layout.itemsCenter,
-            { width: '32%' },
-            props.state.index !== 2 && {
-              borderBottomWidth: 4,
-              borderBottomColor: colors.lineBackgroundColor,
-            },
-          ]}
-          onPress={() => {
-            props.navigation.jumpTo('ClassWorkTab');
-          }}
-        >
-          <Text
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.alignCenter,
+                {
+                  fontWeight: props.state.index === 1 ? '700' : '500',
+                  color: props.state.index === 1 ? colors.linearGradientColor : colors.white,
+                  lineHeight: 18,
+                  borderBottomWidth: props.state.index === 1 ? 4 : 0,
+                  borderBottomColor: colors.linearGradientColor,
+                  width: '100%',
+                  paddingBottom: 5,
+                },
+              ]}
+            >
+              Diagnostic
+            </Text>
+          </Pressable>
+          <Pressable
             style={[
-              fonts.size_14,
-              fonts.alignCenter,
-              {
-                fontWeight: props.state.index === 2 ? '700' : '500',
-                color: props.state.index === 2 ? colors.linearGradientColor : colors.white,
-                lineHeight: 18,
-                borderBottomWidth: props.state.index === 2 ? 4 : 0,
-                borderBottomColor: colors.linearGradientColor,
-                width: '100%',
-                paddingBottom: 5,
+              layout.justifyCenter,
+              layout.itemsCenter,
+              { width: '32%' },
+              props.state.index !== 2 && {
+                borderBottomWidth: 4,
+                borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
+            onPress={() => {
+              props.navigation.jumpTo('ClassWorkTab');
+            }}
           >
-            Class work
-          </Text>
-        </Pressable>
+            <Text
+              style={[
+                fonts.size_14,
+                fonts.alignCenter,
+                {
+                  fontWeight: props.state.index === 2 ? '700' : '500',
+                  color: props.state.index === 2 ? colors.linearGradientColor : colors.white,
+                  lineHeight: 18,
+                  borderBottomWidth: props.state.index === 2 ? 4 : 0,
+                  borderBottomColor: colors.linearGradientColor,
+                  width: '100%',
+                  paddingBottom: 5,
+                },
+              ]}
+            >
+              Class work
+            </Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

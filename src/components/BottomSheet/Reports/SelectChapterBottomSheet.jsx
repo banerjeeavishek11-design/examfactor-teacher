@@ -9,17 +9,6 @@ import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { getChaptersBySubjectId } from '../../../services/chapterListService';
 
-// const chapters = [
-//   { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
-//   { id: 2, chapterId: 'C2', chapterName: 'Force and Laws of Motion', strong: true },
-//   { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
-//   { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
-//   { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
-//   { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
-//   { id: 5, chapterId: 'C7', chapterName: 'Electricity and Magnetism', strong: true },
-//   { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
-// ];
-
 const SelectChapterBottomSheet = ({
   visible,
   closeModal,

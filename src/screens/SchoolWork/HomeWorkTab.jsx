@@ -264,7 +264,7 @@ const HomeWorkTab = () => {
                         layout.fullWidth,
                         {
                           backgroundColor: colors.cardBackgroundColor,
-                          height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 110 : 110,
+                          height: expandedCards[ele.topicId] ? 'auto' : isTablet ? 125 : 110,
                           borderRadius: 14,
                           marginTop: '3%',
                         },
@@ -374,17 +374,37 @@ const HomeWorkTab = () => {
                             </View>
                           </View>
                           <View>
-                            <View style={styles.header}>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Name
-                              </Text>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Home Work Time
-                              </Text>
-                              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                Progress
-                              </Text>
-                            </View>
+                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length === 0 ? (
+                              <View
+                                style={[
+                                  layout.justifyCenter,
+                                  layout.itemsCenter,
+                                  { marginVertical: '3%' },
+                                ]}
+                              >
+                                <Text
+                                  style={[
+                                    fonts.fontWeight_small,
+                                    fonts.size_14,
+                                    { color: colors.gray100 },
+                                  ]}
+                                >
+                                  No Data Found
+                                </Text>
+                              </View>
+                            ) : (
+                              <View style={styles.header}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Name
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Home Work Time
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Progress
+                                </Text>
+                              </View>
+                            )}
                             {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
                               (item, index) => (
                                 <>
@@ -444,25 +464,25 @@ const HomeWorkTab = () => {
                           </View>
                         </View>
                       ) : null}
-                      {/* {expandedCards[ele.id] && ( */}
-                      <TouchableOpacity
-                        onPress={() => {
-                          setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
-                        }}
-                        style={{ marginTop: '4%', marginBottom: '4%' }}
-                      >
-                        <Text
-                          style={[
-                            fonts.size_14,
-                            fonts.fontWeignt_600,
-                            fonts.alignCenter,
-                            { color: colors.termsLinkColor },
-                          ]}
+                      {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length > 5 && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                          }}
+                          style={{ marginVertical: isTablet ? '2%' : '4%' }}
                         >
-                          {seeMaxStudent === 5 ? 'See More' : 'See Less'}
-                        </Text>
-                      </TouchableOpacity>
-                      {/* )} */}
+                          <Text
+                            style={[
+                              fonts.size_14,
+                              fonts.fontWeignt_600,
+                              fonts.alignCenter,
+                              { color: colors.termsLinkColor },
+                            ]}
+                          >
+                            {seeMaxStudent === 5 ? 'See More' : 'See Less'}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </TouchableOpacity>
                   );
                 })}

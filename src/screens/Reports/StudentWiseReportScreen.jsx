@@ -35,6 +35,7 @@ import ChapterInsightCarousel from '../../components/carousel/ChapterInsightCaro
 const StudentWiseReportScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const { studentDetails } = route.params || {};
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
   const { colors, layout, fonts } = useTheme();
@@ -42,7 +43,6 @@ const StudentWiseReportScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [timeSpentData, setTimespentData] = useState();
   const [classworkData, setClassworkData] = useState();
-  const [classworkInsightDetails, setClassworkInsightDetails] = useState();
   const [allBookmarkedQuestionsDetails, setAllBookmarkedQuestionsDetails] = useState();
   const [chapterScoreMap, setChapterScoreMap] = useState({});
   const overallProgress = specificStudentDetails
@@ -72,8 +72,6 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch chapter details');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -92,8 +90,6 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch chapter details');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -116,17 +112,15 @@ const StudentWiseReportScreen = () => {
     };
     mySubjectInsightAssessmentDetails(selectedSubjectId, params)
       .then((res) => {
-        setClassworkInsightDetails(res.data);
         setIsLoading(false);
         navigation.navigate('ClassWorkdetailsScreen', {
-          classworkInsightDetails: classworkInsightDetails,
+          classworkInsightDetails: res.data,
+          studentDetails: studentDetails,
         });
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unable to fetch assessmentDetails');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -137,6 +131,7 @@ const StudentWiseReportScreen = () => {
     let params = {
       subjectCode: selectedSubjectId,
       active: true,
+      studentId: studentDetails?.userName,
     };
     bookMarkedQuestionsList(params)
       .then((res) => {
@@ -151,8 +146,6 @@ const StudentWiseReportScreen = () => {
           error?.response?.status === 401
         ) {
           notifyMessage('unable to fetch bookmarkdetails');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
       });
   };
@@ -160,7 +153,6 @@ const StudentWiseReportScreen = () => {
   const getMySubjectInsightData = () => {
     mySubjectInsightScores(selectedSubjectId)
       .then((res) => {
-        console.log('res from score', res.data);
         const chapterScoreMap = res.data.reduce((ac, ch) => ({ ...ac, [ch.chapterId]: ch }), {});
         setChapterScoreMap(chapterScoreMap);
       })
@@ -168,8 +160,6 @@ const StudentWiseReportScreen = () => {
         console.log('error from chapter', error);
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to fetch score and study time');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
         }
         setIsLoading(false);
       });
@@ -200,7 +190,7 @@ const StudentWiseReportScreen = () => {
         ]}
       >
         <TouchableOpacity
-          style={[layout.display, layout.rowHCenter]}
+          style={[layout.display, layout.rowHCenter, isTablet && { height: 20 }]}
           onPress={() => navigation.navigate('StudentLevelTab')}
         >
           <ImageVariant
@@ -214,7 +204,13 @@ const StudentWiseReportScreen = () => {
             source={LeftArrow}
             resizeMode="contain"
           />
-          <Text style={[fonts.size_16, fonts.bold, { color: colors.backButtonColor, left: 5 }]}>
+          <Text
+            style={[
+              isTablet ? fonts.size_18 : fonts.size_16,
+              fonts.bold,
+              { color: colors.backButtonColor, left: 5 },
+            ]}
+          >
             Back
           </Text>
         </TouchableOpacity>
@@ -226,13 +222,19 @@ const StudentWiseReportScreen = () => {
           </View>
         ) : (
           <View style={[layout.paddingForFullScreen, { paddingTop: '0%' }]}>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.5 }]}>
+            <Text
+              style={[
+                isTablet ? fonts.size_18 : fonts.size_14,
+                fonts.bold,
+                { color: colors.white, opacity: 0.5 },
+              ]}
+            >
               {`${studentDetails?.firstName}'S REPORT`}
             </Text>
             <View
               style={[
                 layout.fullWidth,
-                layout.paddingForCard,
+                isTablet ? { padding: 20 } : layout.paddingForCard,
                 {
                   backgroundColor: colors.cardBackgroundColor,
                   height: 'auto',
@@ -250,20 +252,29 @@ const StudentWiseReportScreen = () => {
                   }
                 />
               </View>
-              <View style={[layout.itemsCenter, { marginTop: '-20%' }]}>
-                <Divider
-                  style={{
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
-                  }}
-                />
-              </View>
+              {!isTablet && (
+                <View
+                  style={[
+                    layout.itemsCenter,
+                    // isTablet && { width: '55%', alignSelf: 'center' },
+                    { marginTop: '-20%' },
+                  ]}
+                >
+                  <Divider
+                    style={{
+                      width: '100%',
+                      backgroundColor: colors.lineBackgroundColor,
+                    }}
+                  />
+                </View>
+              )}
               <View
                 style={[
                   layout.display,
                   layout.rowHCenter,
                   layout.justifyBetween,
-                  { marginTop: '5%' },
+                  isTablet && { width: '55%', alignSelf: 'center' },
+                  { marginTop: isTablet ? '-6%' : '5%' },
                 ]}
               >
                 <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
@@ -273,7 +284,9 @@ const StudentWiseReportScreen = () => {
                   {`${specificStudentDetails?.completionPercentage || 0}% complete`}
                 </Text>
               </View>
-              <View style={{ marginTop: '3%' }}>
+              <View
+                style={[isTablet && { width: '55%', alignSelf: 'center' }, { marginTop: '3%' }]}
+              >
                 <Progressbar progress={overallProgress} color={'#3DD598'} />
               </View>
             </View>
@@ -304,274 +317,565 @@ const StudentWiseReportScreen = () => {
               style={[
                 layout.display,
                 layout.rowHCenter,
-                layout.justifyBetween,
-                { marginTop: '8%' },
+                isTablet ? { gap: 18 } : layout.justifyBetween,
+                isTablet && { marginVertical: '-4%' },
+                { marginTop: !isTablet && '8%' },
               ]}
             >
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
+              <Text
+                style={[
+                  isTablet ? fonts.size_18 : fonts.size_14,
+                  fonts.bold,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
                 HOME WORK INSIGHTS
               </Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('HomeWorkDetailsScreen', {
                     chapterDetails: specificStudentDetails?.chaptersStatusInfo,
+                    studentDetails: studentDetails,
                   })
                 }
               >
-                <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
+                <Text
+                  style={[
+                    isTablet ? fonts.size_18 : fonts.size_14,
+                    fonts.bold,
+                    { color: colors.termsLinkColor },
+                  ]}
+                >
                   SEE DETAILS
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={[
-                layout.fullWidth,
-                layout.paddingForCard,
-                {
-                  backgroundColor: colors.cardBackgroundColor,
-                  borderRadius: 14,
-                  height: 'auto',
-                  marginTop: '4%',
-                },
-              ]}
-            >
-              <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    { color: colors.white, opacity: 0.7 },
-                  ]}
-                >
-                  Number of chapters covered
-                </Text>
-                <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                  {specificStudentDetails?.chapterCompletedCount}/
-                  {specificStudentDetails?.noOfChapters}
-                </Text>
-              </View>
-              <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
-                <Divider
-                  style={{
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
-                  }}
-                />
-              </View>
+            {isTablet ? (
               <View
                 style={[
-                  layout.display,
                   layout.rowHCenter,
+                  layout.itemsCenter,
                   layout.justifyBetween,
-                  { marginTop: '2%' },
+                  { gap: 10, marginBottom: '-7%' },
                 ]}
               >
-                <Text
+                <View
                   style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    { color: colors.white, opacity: 0.7 },
-                  ]}
-                >
-                  Strong areas
-                </Text>
-                <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                  {specificStudentDetails?.strongAreaCount || '--'}
-                </Text>
-              </View>
-              <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
-                <Divider
-                  style={{
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
-                  }}
-                />
-              </View>
-              <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  { marginTop: '2%' },
-                ]}
-              >
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    { color: colors.white, opacity: 0.7 },
-                  ]}
-                >
-                  Weak areas
-                </Text>
-                <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                  {specificStudentDetails?.weakAreaCount || '--'}
-                </Text>
-              </View>
-              <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
-                <Divider
-                  style={{
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={[
-                layout.fullWidth,
-                layout.autoHeight,
-                layout.paddingForCard,
-                {
-                  backgroundColor: colors.cardBackgroundColor,
-                  marginTop: '4%',
-                  borderRadius: 14,
-                },
-              ]}
-            >
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>Time spent</Text>
-
-              <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
-                <ImageVariant
-                  testID="brand-img"
-                  style={{
-                    width: 15,
-                    height: 12,
-                    tintColor: '#3DD598',
-                  }}
-                  source={UpFullArrow}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={[
-                    fonts.size_12,
-                    fonts.fontWeight_small,
+                    layout.fullWidth,
+                    layout.paddingForCard,
                     {
-                      color: '#3DD598',
-                      top: 2,
-                      marginLeft: '1%',
+                      backgroundColor: colors.cardBackgroundColor,
+                      borderRadius: 14,
+                      height: 'auto',
+                      marginTop: '4%',
+                      width: '50%',
                     },
                   ]}
                 >
-                  44% down from previous week
-                </Text>
-              </View>
-              <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
-                <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                  This week
-                </Text>
+                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Number of chapters covered
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.chapterCompletedCount || '--'}/
+                      {specificStudentDetails?.noOfChapters || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '2%' },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Strong areas
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.strongAreaCount || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '2%' },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Weak areas
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.weakAreaCount || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
+                </View>
                 <View
                   style={[
-                    layout.row,
-                    layout.itemsCenter,
+                    layout.fullWidth,
+                    layout.autoHeight,
+                    layout.paddingForCard,
                     {
-                      marginLeft: '4%',
-                      width: '60%',
+                      backgroundColor: colors.cardBackgroundColor,
+                      marginTop: '4%',
+                      borderRadius: 14,
+                      height: '75%',
+                      width: '50%',
                     },
                   ]}
                 >
-                  <View
-                    style={[styles.timeLine1, { width: `${findTimePercent(thisWeek, maxTime)}%` }]}
-                  />
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      fonts.fontWeight_small,
-                      { color: colors.white, marginLeft: '3%' },
-                    ]}
-                  >
-                    {formatSecond2(thisWeek || 0)}
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                    Time spent
                   </Text>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginVertical: '2%' }]}>
+                    <ImageVariant
+                      testID="brand-img"
+                      style={{
+                        width: 15,
+                        height: 12,
+                        tintColor: '#3DD598',
+                      }}
+                      source={UpFullArrow}
+                      resizeMode="contain"
+                    />
+                    <Text
+                      style={[
+                        fonts.size_12,
+                        fonts.fontWeight_small,
+                        {
+                          color: '#3DD598',
+                          top: 2,
+                          marginLeft: '1%',
+                        },
+                      ]}
+                    >
+                      44% down from previous week
+                    </Text>
+                  </View>
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '1%' }]}>
+                    <Text
+                      style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
+                    >
+                      This week
+                    </Text>
+                    <View
+                      style={[
+                        layout.row,
+                        layout.itemsCenter,
+                        {
+                          marginLeft: '4%',
+                          width: '60%',
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.timeLine1,
+                          { width: `${findTimePercent(thisWeek, maxTime)}%` },
+                        ]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          { color: colors.white, marginLeft: '3%' },
+                        ]}
+                      >
+                        {formatSecond2(thisWeek || 0)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '1%' }]}>
+                    <Text
+                      style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
+                    >
+                      Last week
+                    </Text>
+                    <View
+                      style={{
+                        marginLeft: '4%',
+                        width: '60%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View
+                        style={[
+                          styles.timeLine2,
+                          { width: `${findTimePercent(lastWeek, maxTime)}%` },
+                        ]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          { color: colors.white, marginLeft: '3%' },
+                        ]}
+                      >
+                        {formatSecond2(lastWeek || 0)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '1%' }]}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.gray200, width: 40 },
+                      ]}
+                    >
+                      Peers
+                    </Text>
+                    <View
+                      style={{
+                        marginLeft: '13%',
+                        width: '60%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View
+                        style={[styles.timeLine3, { width: `${findTimePercent(peers, maxTime)}%` }]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          {
+                            color: colors.white,
+                            marginLeft: '3%',
+                          },
+                        ]}
+                      >
+                        {formatSecond2(peers || 0)}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
-
-              <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
-                <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                  Last week
-                </Text>
+            ) : (
+              <>
                 <View
-                  style={{
-                    marginLeft: '4%',
-                    width: '60%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  <View
-                    style={[styles.timeLine2, { width: `${findTimePercent(lastWeek, maxTime)}%` }]}
-                  />
-                  <Text
-                    style={[
-                      fonts.size_12,
-                      fonts.fontWeight_small,
-                      { color: colors.white, marginLeft: '3%' },
-                    ]}
-                  >
-                    {formatSecond2(lastWeek || 0)}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
-                <Text
                   style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    { color: colors.gray200, width: 40 },
+                    layout.fullWidth,
+                    layout.paddingForCard,
+                    {
+                      backgroundColor: colors.cardBackgroundColor,
+                      borderRadius: 14,
+                      height: 'auto',
+                      marginTop: '4%',
+                    },
                   ]}
                 >
-                  Peers
-                </Text>
-                <View
-                  style={{
-                    marginLeft: '13%',
-                    width: '60%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
+                  <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Number of chapters covered
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.chapterCompletedCount || '--'}/
+                      {specificStudentDetails?.noOfChapters || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
                   <View
-                    style={[styles.timeLine3, { width: `${findTimePercent(peers, maxTime)}%` }]}
-                  />
-                  <Text
                     style={[
-                      fonts.size_12,
-                      fonts.fontWeight_small,
-                      {
-                        color: colors.white,
-                        marginLeft: '3%',
-                      },
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '2%' },
                     ]}
                   >
-                    {formatSecond2(peers || 0)}
-                  </Text>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Strong areas
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.strongAreaCount || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '2%' },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.white, opacity: 0.7 },
+                      ]}
+                    >
+                      Weak areas
+                    </Text>
+                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
+                      {specificStudentDetails?.weakAreaCount || '--'}
+                    </Text>
+                  </View>
+                  <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
+                    <Divider
+                      style={{
+                        width: '100%',
+                        backgroundColor: colors.lineBackgroundColor,
+                      }}
+                    />
+                  </View>
                 </View>
-              </View>
-            </View>
+                <View
+                  style={[
+                    layout.fullWidth,
+                    layout.autoHeight,
+                    layout.paddingForCard,
+                    {
+                      backgroundColor: colors.cardBackgroundColor,
+                      marginTop: '4%',
+                      borderRadius: 14,
+                    },
+                  ]}
+                >
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                    Time spent
+                  </Text>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+                    <ImageVariant
+                      testID="brand-img"
+                      style={{
+                        width: 15,
+                        height: 12,
+                        tintColor: '#3DD598',
+                      }}
+                      source={UpFullArrow}
+                      resizeMode="contain"
+                    />
+                    <Text
+                      style={[
+                        fonts.size_12,
+                        fonts.fontWeight_small,
+                        {
+                          color: '#3DD598',
+                          top: 2,
+                          marginLeft: '1%',
+                        },
+                      ]}
+                    >
+                      44% down from previous week
+                    </Text>
+                  </View>
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+                    <Text
+                      style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
+                    >
+                      This week
+                    </Text>
+                    <View
+                      style={[
+                        layout.row,
+                        layout.itemsCenter,
+                        {
+                          marginLeft: '4%',
+                          width: '60%',
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.timeLine1,
+                          { width: `${findTimePercent(thisWeek, maxTime)}%` },
+                        ]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          { color: colors.white, marginLeft: '3%' },
+                        ]}
+                      >
+                        {formatSecond2(thisWeek || 0)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+                    <Text
+                      style={[fonts.size_14, fonts.fontWeight_small, { color: colors.gray200 }]}
+                    >
+                      Last week
+                    </Text>
+                    <View
+                      style={{
+                        marginLeft: '4%',
+                        width: '60%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View
+                        style={[
+                          styles.timeLine2,
+                          { width: `${findTimePercent(lastWeek, maxTime)}%` },
+                        ]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          { color: colors.white, marginLeft: '3%' },
+                        ]}
+                      >
+                        {formatSecond2(lastWeek || 0)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={[layout.display, layout.rowHCenter, { marginTop: '3%' }]}>
+                    <Text
+                      style={[
+                        fonts.size_14,
+                        fonts.fontWeight_small,
+                        { color: colors.gray200, width: 40 },
+                      ]}
+                    >
+                      Peers
+                    </Text>
+                    <View
+                      style={{
+                        marginLeft: '13%',
+                        width: '60%',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <View
+                        style={[styles.timeLine3, { width: `${findTimePercent(peers, maxTime)}%` }]}
+                      />
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeight_small,
+                          {
+                            color: colors.white,
+                            marginLeft: '3%',
+                          },
+                        ]}
+                      >
+                        {formatSecond2(peers || 0)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </>
+            )}
 
             <View
               style={[
                 layout.display,
                 layout.rowHCenter,
-                layout.justifyBetween,
+                isTablet ? { gap: 15 } : layout.justifyBetween,
+                isTablet && { marginVertical: '-3%' },
                 { marginTop: '8%' },
               ]}
             >
-              <Text style={[fonts.size_14, fonts.bold, { color: colors.white, opacity: 0.4 }]}>
+              <Text
+                style={[
+                  isTablet ? fonts.size_18 : fonts.size_14,
+                  fonts.bold,
+                  { color: colors.white, opacity: 0.4 },
+                ]}
+              >
                 CLASS WORK INSIGHTS
               </Text>
               <TouchableOpacity onPress={goToClassWorkInsightScreen}>
-                <Text style={[fonts.size_14, fonts.bold, { color: colors.termsLinkColor }]}>
+                <Text
+                  style={[
+                    isTablet ? fonts.size_18 : fonts.size_14,
+                    fonts.bold,
+                    { color: colors.termsLinkColor },
+                  ]}
+                >
                   SEE DETAILS
                 </Text>
               </TouchableOpacity>
             </View>
-
             <View
               style={[
                 layout.fullWidth,
-                layout.paddingForCard,
+                !isTablet ? layout.paddingForCard : { padding: isTablet && 20 },
                 {
                   backgroundColor: colors.cardBackgroundColor,
                   borderRadius: 14,
@@ -623,23 +927,14 @@ const StudentWiseReportScreen = () => {
                   {classworkData?.accuracyPercentage || '--'}
                 </Text>
               </View>
-              <View style={[layout.itemsCenter, { marginTop: '2%' }]}>
-                <Divider
-                  style={{
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
-                  }}
-                />
-              </View>
             </View>
-
             <Pressable
               style={[
                 layout.fullWidth,
-                layout.paddingForCard,
+                !isTablet ? layout.paddingForCard : { padding: isTablet && 20 },
                 {
                   backgroundColor: colors.cardBackgroundColor,
-                  height: 53,
+                  height: 'auto',
                   borderRadius: 8,
                   marginTop: '3%',
                 },
@@ -656,7 +951,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, opacity: 0.7 },
                   ]}
                 >
-                  See bookmarked questions {allBookmarkedQuestionsDetails?.totalElements ?? 0}
+                  {`See bookmarked questions (${allBookmarkedQuestionsDetails?.totalElements ?? 0})`}
                 </Text>
                 <TouchableOpacity>
                   <Image

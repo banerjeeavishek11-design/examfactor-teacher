@@ -8,28 +8,29 @@ import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 
 const questionType = [
-  { id: 1, questionType: 'Diagnostic' },
-  { id: 2, questionType: 'Practice' },
-  { id: 3, questionType: 'Test' },
+  { id: 'DIAGNOSTIC', questionType: 'Diagnostic' },
+  { id: 'PRACTICE', questionType: 'Practice' },
+  { id: 'TEST', questionType: 'Test' },
 ];
 
 const SelectQuestionTypeBottomSheet = ({
   visible,
   closeModal,
-  selectedValue,
-  setSelectedChapter,
+  // selectedValue,
+  // setSelectedChapter,
   changeQuestionType,
+  setQuestionActivityType,
 }) => {
   const { fonts, layout, colors } = useTheme();
   const [option, setOption] = useState('first');
-  const handleOptionChange = (op) => {
+  const [selectedType, setSelectedType] = useState('DIAGNOSTIC');
+  const handleOptionChange = (op, type) => {
     setOption(op);
+    setSelectedType(type);
   };
   const handleApply = () => {
-    setSelectedChapter({
-      ...selectedValue,
-      option,
-    });
+    // setSelectedChapter(option);
+    setQuestionActivityType(selectedType);
     changeQuestionType(option);
     closeModal();
   };
@@ -76,7 +77,7 @@ const SelectQuestionTypeBottomSheet = ({
                   <TouchableOpacity
                     key={ele.id}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.questionType)}
+                    onPress={() => handleOptionChange(ele.questionType, ele.id)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>

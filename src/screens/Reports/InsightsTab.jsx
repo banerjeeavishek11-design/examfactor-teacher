@@ -95,7 +95,6 @@ const InsightsScreen = () => {
     getReportInsights(params)
       .then((res) => {
         setInsightReportsData(res.data);
-        console.log('reports ressult', res.data);
       })
       .catch((error) => {
         console.log('error', error);
@@ -140,7 +139,9 @@ const InsightsScreen = () => {
                   width:
                     selectedChapter !== null
                       ? Math.min(210, Math.max(90, selectedChapterName.length * 8))
-                      : 72,
+                      : isTablet
+                        ? 90
+                        : 72,
                   height: isTablet ? 40 : 28,
                   borderRadius: 4,
                   paddingHorizontal: 6,
@@ -150,7 +151,7 @@ const InsightsScreen = () => {
             >
               <Text
                 style={[
-                  fonts.size_12,
+                  isTablet ? fonts.size_14 : fonts.size_12,
                   fonts.fontWeight_extraSmall,
                   fonts.alignCenter,
                   {
@@ -187,8 +188,10 @@ const InsightsScreen = () => {
                   borderColor: selectedArea !== null ? colors.termsLinkColor : null,
                   width:
                     selectedArea !== null
-                      ? Math.min(145, Math.max(45, selectedArea.length * 10.2))
-                      : 65,
+                      ? Math.min(isTablet ? 160 : 145, Math.max(45, selectedArea.length * 10.2))
+                      : isTablet
+                        ? 72
+                        : 65,
                   height: isTablet ? 40 : 28,
                   borderRadius: 4,
                   paddingHorizontal: 6,
@@ -198,7 +201,7 @@ const InsightsScreen = () => {
             >
               <Text
                 style={[
-                  fonts.size_12,
+                  isTablet ? fonts.size_14 : fonts.size_12,
                   fonts.fontWeight_small,
                   {
                     color: selectedArea !== null ? colors.termsLinkColor : colors.white,
@@ -230,7 +233,12 @@ const InsightsScreen = () => {
                     style={[
                       fonts.size_20,
                       fonts.bold,
-                      { color: colors.white, opacity: 0.4, marginTop: '5%', marginBottom: '-2%' },
+                      {
+                        color: colors.white,
+                        opacity: 0.4,
+                        marginTop: '5%',
+                        marginBottom: isTablet ? '0%' : '-2%',
+                      },
                     ]}
                   >
                     {getTopicDescById(chapList.chapters, topicId)}
@@ -242,9 +250,14 @@ const InsightsScreen = () => {
                           <View
                             key={ele.id}
                             style={[
-                              fonts.size_12,
-                              fonts.fontWeight_small,
-                              { color: colors.gray100 },
+                              layout.fullWidth,
+                              isTablet ? { padding: '2%' } : layout.paddingForCard,
+                              {
+                                height: 'auto',
+                                backgroundColor: colors.cardBackgroundColor,
+                                borderRadius: 16,
+                                marginTop: isTablet ? '2%' : '5%',
+                              },
                             ]}
                           >
                             <View style={[layout.display, layout.justifyBetween]}>

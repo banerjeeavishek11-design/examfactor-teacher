@@ -32,6 +32,7 @@ const DiagnosticTab = () => {
   const { layout, fonts, colors } = useTheme();
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [activateConfirmationModalVisible, setActivateConfirmationModalVisible] = useState(false);
   const [searchChapterName, setSearchChapterName] = useState([]);
   const [chapListIndex, setChapListIndex] = useState(0);
@@ -252,7 +253,7 @@ const DiagnosticTab = () => {
                   <View
                     style={[
                       layout.fullWidth,
-                      layout.paddingForCard,
+                      isTablet ? { padding: 25 } : layout.paddingForCard,
                       {
                         backgroundColor: colors.cardBackgroundColor,
                         borderRadius: 14,
@@ -269,7 +270,7 @@ const DiagnosticTab = () => {
                             borderBottomWidth: index + 1 != selectedTopic.length ? 1 : 0,
                             borderBottomColor:
                               index + 1 != selectedTopic.length ? colors.gray400 : null,
-                            marginVertical: '3%',
+                            marginVertical: isTablet ? '1%' : '3%',
                           }}
                           key={ele.chapterId}
                         >
@@ -305,7 +306,7 @@ const DiagnosticTab = () => {
                               style={[
                                 fonts.size_12,
                                 fonts.fontWeight_small,
-                                { color: colors.gray200, marginTop: -10 },
+                                { color: colors.gray200, marginTop: -10, marginBottom: '1%' },
                               ]}
                             >
                               Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}

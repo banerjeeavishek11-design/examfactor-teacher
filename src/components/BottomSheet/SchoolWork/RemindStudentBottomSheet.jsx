@@ -23,8 +23,7 @@ const RemindStudentBottomSheet = (props) => {
 
   const handleYes = () => {
     setReminderForHomework(payloadForReminder)
-      .then((res) => {
-        console.log('res remind', res.data);
+      .then(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
             getStudentHomeworks();

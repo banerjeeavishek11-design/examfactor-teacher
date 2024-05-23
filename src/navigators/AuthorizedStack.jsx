@@ -17,6 +17,7 @@ import {
   BookmarkedQuestionsScreen,
   ForgotPasswordScreen,
   ForgotPasswordSuccessfulScreen,
+  TabProfileScreen,
 } from '@/screens';
 import TopTabNavigator from './ReportsTopTabNavigator';
 import TabSideBarNavigator from './TabSideBarNavigator';
@@ -89,6 +90,7 @@ const AuthorizedStack = () => {
         component={ForgotPasswordSuccessfulScreen}
       />
       <Stack.Screen name="SideBarAuthedScreen" component={SideBarAuthedScreen} />
+      <Stack.Screen name="TabProfileScreen" component={TabProfileScreen} />
       <Stack.Screen
         name="AppGuideScreen"
         component={AppGuideScreen}
