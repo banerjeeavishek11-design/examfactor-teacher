@@ -30,6 +30,7 @@ const SelectChapterQABottomSheet = ({
     setOpenQuestionTypeModal(false);
   };
   const [option, setOption] = useState(null);
+  const [chapIndex, setChapIndex] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -42,15 +43,17 @@ const SelectChapterQABottomSheet = ({
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapters(res.data.chapters);
+        setSelectedChapter(res.data.chapters[chapIndex].chapterDesc);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleOptionChange = (op, chapName) => {
+  const handleOptionChange = (op, chapName, i) => {
     setOption(op);
     setSelectedChapter(chapName);
+    setChapIndex(i);
   };
   const handleApply = () => {
     setSelectedValue(option);
@@ -104,11 +107,11 @@ const SelectChapterQABottomSheet = ({
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: '5%' }}
               >
-                {chapters?.map((ele) => (
+                {chapters?.map((ele, i) => (
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc)}
+                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc, i)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>

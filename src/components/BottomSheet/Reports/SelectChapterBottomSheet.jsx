@@ -23,10 +23,12 @@ const SelectChapterBottomSheet = ({
   const [chapOption, setChapOption] = useState(null);
   const [unitOption, setUnitOption] = useState(null);
   const [chapters, setChapters] = useState([]);
-  const handleOptionChange = (chap, unit, chapName) => {
+  const [chapIndex, setChapIndex] = useState();
+  const handleOptionChange = (chap, unit, chapName, i) => {
     setChapOption(chap);
     setUnitOption(unit);
     setSelectedChapterName(chapName);
+    setChapIndex(i);
   };
   const handleApply = () => {
     setSelectedChapter(chapOption);
@@ -46,6 +48,7 @@ const SelectChapterBottomSheet = ({
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapters(res.data.chapters);
+        setSelectedChapterName(res.data.chapters[chapIndex]?.chapterDesc);
       })
       .catch((error) => {
         console.log(error);
@@ -99,7 +102,9 @@ const SelectChapterBottomSheet = ({
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc)}
+                    onPress={() =>
+                      handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc, index)
+                    }
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
