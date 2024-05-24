@@ -434,7 +434,13 @@ const HomeScreen = () => {
                     ? 0
                     : consolidatedReportData?.homeworkProgress / 100
                 }
-                color={'#3DD598'}
+                color={
+                  consolidatedReportData?.homeworkProgress <= 25
+                    ? '#FF575F'
+                    : consolidatedReportData?.homeworkProgress <= 60
+                      ? '#BBA041'
+                      : '#3DD598'
+                }
               />
             </View>
             <View
@@ -459,7 +465,13 @@ const HomeScreen = () => {
                     ? 0
                     : consolidatedReportData?.diagnosisProgress / 100
                 }
-                color={'#BBA041'}
+                color={
+                  consolidatedReportData?.diagnosisProgress <= 25
+                    ? '#FF575F'
+                    : consolidatedReportData?.diagnosisProgress <= 60
+                      ? '#BBA041'
+                      : '#3DD598'
+                }
               />
             </View>
           </View>
@@ -482,17 +494,23 @@ const HomeScreen = () => {
               Class Work
             </Text>
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
-              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
+              {`${consolidatedReportData?.classworkProgress || 0}% Complete`}
             </Text>
           </View>
           <View style={{ marginTop: '3%' }}>
             <Progressbar
               progress={
-                consolidatedReportData?.homeworkProgress === undefined
+                consolidatedReportData?.classworkProgress === undefined
                   ? 0
-                  : consolidatedReportData?.homeworkProgress / 100
+                  : consolidatedReportData?.classworkProgress / 100
               }
-              color={'#FF575F'}
+              color={
+                consolidatedReportData?.classworkProgress <= 25
+                  ? '#FF575F'
+                  : consolidatedReportData?.classworkProgress <= 60
+                    ? '#BBA041'
+                    : '#3DD598'
+              }
             />
           </View>
         </View>
