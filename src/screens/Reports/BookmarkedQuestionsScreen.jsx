@@ -176,7 +176,11 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
         </View>
 
         <View>
-          <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            overScrollMode="never"
+            contentContainerStyle={{ paddingBottom: '30%' }}
+          >
             {isLoading ? (
               <View style={styles.loader}>
                 <ActivityIndicator size="large" color={colors.termsLinkColor} />

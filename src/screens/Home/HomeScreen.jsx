@@ -464,6 +464,38 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
+        <View
+          style={[
+            layout.fullWidth,
+            layout.paddingForCard,
+            {
+              backgroundColor: colors.cardBackgroundColor,
+              height: 'auto',
+              borderRadius: 12,
+              marginTop: '4%',
+              marginBottom: '-1%',
+            },
+          ]}
+        >
+          <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+              Class Work
+            </Text>
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+              {`${consolidatedReportData?.homeworkProgress || 0}% Complete`}
+            </Text>
+          </View>
+          <View style={{ marginTop: '3%' }}>
+            <Progressbar
+              progress={
+                consolidatedReportData?.homeworkProgress === undefined
+                  ? 0
+                  : consolidatedReportData?.homeworkProgress / 100
+              }
+              color={'#FF575F'}
+            />
+          </View>
+        </View>
 
         <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
 

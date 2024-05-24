@@ -17,6 +17,7 @@ import Cross from '@/theme/assets/images/cross.png';
 import { useNavigation } from '@react-navigation/native';
 import { getQuestionAnalysis } from '../../services/ReportsServices/reportsServices';
 import { MMKV } from 'react-native-mmkv';
+import SelectQuestionTypeBottomSheet from '../../components/BottomSheet/Reports/SelectQuestionTypeBottomSheet';
 
 const storage = new MMKV();
 
@@ -35,11 +36,17 @@ const QuestionAnalysisScreen = () => {
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [questionActivityType, setQuestionActivityType] = useState();
   const [gradeId, setGradeId] = useState(null);
+  const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(null);
+
   const closeFilterModal = () => {
     setFilterModalVisible(false);
   };
   const closeSelectChapterQAModal = () => {
     setSelectChapterQAModalVisible(false);
+  };
+  const closeQuestionTypeModal = () => {
+    setOpenQuestionTypeModal(false);
   };
   const [selectedQuestionType, setSelectedQuestionType] = useState(null);
 
@@ -77,10 +84,10 @@ const QuestionAnalysisScreen = () => {
 
   const getQuestions = () => {
     let params = {
-      // page: 0,
-      // size: 1,
+      page: 1,
+      size: 5,
       // summary: true,
-      active: true,
+      // active: true,
       // sort: ['string']
       // searchKey: 'string',
       // countOnly: true,
@@ -165,7 +172,7 @@ const QuestionAnalysisScreen = () => {
 
               <TouchableOpacity
                 onPress={() => {
-                  setSelectChapterQAModalVisible(true);
+                  setOpenQuestionTypeModal(true);
                 }}
                 style={[
                   layout.justifyCenter,
@@ -415,11 +422,20 @@ const QuestionAnalysisScreen = () => {
         closeModal={closeSelectChapterQAModal}
         changeQuestionType={changeQuestionType}
         setQuestionActivityType={setQuestionActivityType}
+        setOpenQuestionTypeModal={setOpenQuestionTypeModal}
       />
       <MostlyFilterBottomSheet
         setSelectedFilter={setSelectedFilter}
         visible={filterModalVisible}
         closeModal={closeFilterModal}
+      />
+      <SelectQuestionTypeBottomSheet
+        changeQuestionType={changeQuestionType}
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+        visible={openQuestionTypeModal}
+        closeModal={closeQuestionTypeModal}
+        setQuestionActivityType={setQuestionActivityType}
       />
     </SafeScreen>
   );
