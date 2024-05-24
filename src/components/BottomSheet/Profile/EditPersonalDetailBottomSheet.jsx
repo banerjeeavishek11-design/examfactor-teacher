@@ -24,8 +24,20 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { editTeacherDetails, getUserDetailsByUserId } from '../../../services/teacherService';
 import { notifyWarningMessage } from '../../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
+import * as yup from 'yup';
 
 const storage = new MMKV();
+
+const validationSchema = yup.object().shape({
+  mobileNumber: yup
+    .string()
+    .matches(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('Mobile number is required'),
+  emergencyContactNumber: yup
+    .string()
+    .matches(/^\d{10}$/, 'Emergency contact number must be exactly 10 digits')
+    .required('Emergency contact number is required'),
+});
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -147,8 +159,12 @@ const EditPersonalDetailBottomSheet = ({
             <Text style={[fonts.size_18, fonts.bold, { color: colors.white }]}>
               Edit personal details
             </Text>
-            <Formik initialValues={formValues} onSubmit={handleSubmit}>
-              {({ handleChange, handleSubmit, values }) => {
+            <Formik
+              initialValues={formValues}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              {({ handleChange, handleSubmit, values, errors, touched }) => {
                 return (
                   <View style={{ marginTop: '8%' }}>
                     <ScrollView showsVerticalScrollIndicator={false} style={{ height: '90%' }}>
@@ -404,6 +420,9 @@ const EditPersonalDetailBottomSheet = ({
                           }}
                           value={values.mobileNumber}
                         />
+                        {errors.mobileNumber && touched.mobileNumber && (
+                          <Text style={{ color: 'red' }}>{errors.mobileNumber}</Text>
+                        )}
                       </View>
 
                       <View style={styles.inputContainer}>
@@ -443,6 +462,9 @@ const EditPersonalDetailBottomSheet = ({
                           }}
                           value={values.emergencyContactNumber}
                         />
+                        {errors.emergencyContactNumber && touched.emergencyContactNumber && (
+                          <Text style={{ color: 'red' }}>{errors.emergencyContactNumber}</Text>
+                        )}
                       </View>
 
                       <View style={styles.inputContainer}>
