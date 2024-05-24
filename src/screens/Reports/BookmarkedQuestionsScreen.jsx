@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { notifyMessage } from '../../utils/error-toast-API';
 import MathJax from '../../components/mathjax/Mathjax';
 
-const questionsPerPage = 4;
+const questionsPerPage = 5;
 
 const BookmarkedQuestionsScreen = ({ navigation }) => {
   const { layout, colors, fonts } = useTheme();
@@ -90,9 +90,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
           error.code === 'ERR-10' ||
           error?.response?.status === 401
         ) {
-          notifyMessage('unable to fetch bookmarkdetails');
-        } else if (error?.response?.status === 404) {
-          notifyMessage('Data not found');
+          notifyMessage('unable to fetch bookmarkquestionlist');
         }
       });
   };
