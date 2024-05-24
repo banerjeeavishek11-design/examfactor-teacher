@@ -484,17 +484,24 @@ const HomeScreen = () => {
         <View
           style={[
             layout.fullWidth,
-            layout.paddingForCard,
+            isTablet ? { padding: 20 } : layout.paddingForCard,
             {
               backgroundColor: colors.cardBackgroundColor,
               height: 'auto',
               borderRadius: 12,
-              marginTop: '4%',
+              marginTop: isTablet ? '2%' : '4%',
               marginBottom: '-1%',
             },
           ]}
         >
-          <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
+          <View
+            style={[
+              layout.display,
+              layout.rowHCenter,
+              layout.justifyBetween,
+              isTablet && { width: '55%', alignSelf: 'center' },
+            ]}
+          >
             <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
               Class Work
             </Text>
@@ -502,7 +509,7 @@ const HomeScreen = () => {
               {`${consolidatedReportData?.classworkProgress || 0}% Complete`}
             </Text>
           </View>
-          <View style={{ marginTop: '3%' }}>
+          <View style={[isTablet && { width: '55%', alignSelf: 'center' }, { marginTop: '3%' }]}>
             <Progressbar
               progress={
                 consolidatedReportData?.classworkProgress === undefined

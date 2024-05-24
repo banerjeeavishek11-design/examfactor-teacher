@@ -172,7 +172,7 @@ const EditPersonalDetailBottomSheet = ({
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {({ handleChange, handleSubmit, values }) => {
+              {({ handleChange, handleSubmit, values, errors, touched }) => {
                 return (
                   <View style={{ marginTop: '8%' }}>
                     <ScrollView
@@ -438,6 +438,9 @@ const EditPersonalDetailBottomSheet = ({
                             }}
                             value={values.mobileNumber}
                           />
+                          {errors.mobileNumber && touched.mobileNumber && (
+                            <Text style={{ color: 'red' }}>{errors.mobileNumber}</Text>
+                          )}
                         </View>
 
                         <View style={styles.inputContainer}>
@@ -477,6 +480,9 @@ const EditPersonalDetailBottomSheet = ({
                             }}
                             value={values.emergencyContactNumber}
                           />
+                          {errors.emergencyContactNumber && touched.emergencyContactNumber && (
+                            <Text style={{ color: 'red' }}>{errors.emergencyContactNumber}</Text>
+                          )}
                         </View>
 
                         <View style={styles.inputContainer}>
