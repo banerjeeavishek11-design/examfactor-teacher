@@ -17,10 +17,9 @@ const questionType = [
 const SelectQuestionTypeBottomSheet = ({
   visible,
   closeModal,
-  // selectedValue,
-  // setSelectedChapter,
   changeQuestionType,
   setQuestionActivityType,
+  setSelectedValue,
 }) => {
   const { fonts, layout, colors } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
@@ -31,7 +30,7 @@ const SelectQuestionTypeBottomSheet = ({
     setSelectedType(type);
   };
   const handleApply = () => {
-    // setSelectedChapter(option);
+    setSelectedValue(option);
     setQuestionActivityType(selectedType);
     changeQuestionType(option);
     closeModal();

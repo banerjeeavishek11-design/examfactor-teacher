@@ -7,28 +7,21 @@ import { useFocusEffect } from '@react-navigation/native';
 import RadioButton from '../../RadioButton/RadioButton';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-import SelectQuestionTypeBottomSheet from './SelectQuestionTypeBottomSheet';
 import { getChaptersBySubjectId } from '../../../services/chapterListService';
 
 const SelectChapterQABottomSheet = ({
   visible,
   closeModal,
   setSelectedChapter,
-  changeQuestionType,
-  setQuestionActivityType,
   setChapterOption,
+  setOpenQuestionTypeModal,
 }) => {
   const { fonts, layout, colors } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const [chapters, setChapters] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(null);
   // const [selectedChap, setSelectedChap] = useState();
-  const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
-  const closeQuestionTypeModal = () => {
-    setOpenQuestionTypeModal(false);
-  };
   const [option, setOption] = useState(null);
   const [chapIndex, setChapIndex] = useState();
 
@@ -56,7 +49,6 @@ const SelectChapterQABottomSheet = ({
     setChapIndex(i);
   };
   const handleApply = () => {
-    setSelectedValue(option);
     setChapterOption(option);
     closeModal();
     setOpenQuestionTypeModal(true);
@@ -178,14 +170,6 @@ const SelectChapterQABottomSheet = ({
           </View>
         </View>
       </Modal>
-      <SelectQuestionTypeBottomSheet
-        changeQuestionType={changeQuestionType}
-        // setSelectedChapter={setSelectedChapter}
-        selectedValue={selectedValue}
-        visible={openQuestionTypeModal}
-        closeModal={closeQuestionTypeModal}
-        setQuestionActivityType={setQuestionActivityType}
-      />
     </View>
   );
 };
