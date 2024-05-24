@@ -24,8 +24,20 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { editTeacherDetails, getUserDetailsByUserId } from '../../../services/teacherService';
 import { notifyWarningMessage } from '../../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
+import * as yup from 'yup';
 
 const storage = new MMKV();
+
+const validationSchema = yup.object().shape({
+  mobileNumber: yup
+    .string()
+    .matches(/^\d{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('Mobile number is required'),
+  emergencyContactNumber: yup
+    .string()
+    .matches(/^\d{10}$/, 'Emergency contact number must be exactly 10 digits')
+    .required('Emergency contact number is required'),
+});
 
 const EditPersonalDetailBottomSheet = ({
   personalDetailBottomSheetVisible,
@@ -155,7 +167,11 @@ const EditPersonalDetailBottomSheet = ({
             <Text style={[fonts.size_18, fonts.bold, { color: colors.white }]}>
               Edit personal details
             </Text>
-            <Formik initialValues={formValues} onSubmit={handleSubmit}>
+            <Formik
+              initialValues={formValues}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
               {({ handleChange, handleSubmit, values }) => {
                 return (
                   <View style={{ marginTop: '8%' }}>
