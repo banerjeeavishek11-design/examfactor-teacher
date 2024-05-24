@@ -74,6 +74,7 @@ const EditPersonalDetailBottomSheet = ({
       setSelectedDob(formattedDate);
       setFormValues({
         firstName: profileData.firstName || '',
+        lastName: profileData.lastName || '',
         dob: formattedDate,
         gender: profileData.gender || '',
         emailId: profileData.emailId || '',
@@ -196,7 +197,7 @@ const EditPersonalDetailBottomSheet = ({
                             editable={false}
                             placeholder={profileData.firstName}
                             placeholderTextColor={colors.gray200}
-                            value={values?.firstName}
+                            value={values?.firstName + ' ' + values?.lastName}
                           />
                         </View>
 
