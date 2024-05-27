@@ -1,6 +1,7 @@
 import { Modal, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 
 const fromTimeData = [
   { id: 1, time: '10:00 am' },
@@ -65,6 +66,7 @@ const ScheduleTimeBottomSheet = (props) => {
     setToModalVisible,
   } = props;
   const { fonts, colors } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const handleFromTimeSelection = (time) => {
     setSelectedFromTime(time);
@@ -79,7 +81,7 @@ const ScheduleTimeBottomSheet = (props) => {
   return (
     <View>
       <Modal animationType="slide" transparent={true} visible={fromModalVisible}>
-        <View style={styles.fromModalView}>
+        <View style={isTablet ? styles.fromTabModalView : styles.fromModalView}>
           <ScrollView showsVerticalScrollIndicator={false}>
             {fromTimeData?.map((ele) => {
               return (
@@ -112,7 +114,7 @@ const ScheduleTimeBottomSheet = (props) => {
         </View>
       </Modal>
       <Modal animationType="slide" transparent={true} visible={toModalVisible}>
-        <View style={styles.toModalView}>
+        <View style={isTablet ? styles.toTabModalView : styles.toModalView}>
           <ScrollView showsVerticalScrollIndicator={false}>
             {toTimeData?.map((ele) => {
               return (
@@ -169,11 +171,21 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: '98%',
   },
+  fromTabModalView: {
+    margin: '12%',
+    width: 210,
+    height: 280,
+    backgroundColor: '#000000',
+    borderRadius: 20,
+    padding: '2%',
+    alignItems: 'center',
+    left: '25%',
+    marginTop: '30.5%',
+  },
   toModalView: {
     margin: '48%',
     width: 194,
     height: 300,
-    // backgroundColor: "#000000",
     backgroundColor: '#000000',
     borderRadius: 20,
     padding: '4%',
@@ -187,6 +199,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     marginTop: '98%',
+  },
+  toTabModalView: {
+    margin: '28%',
+    width: 210,
+    height: 280,
+    backgroundColor: '#000000',
+    borderRadius: 20,
+    padding: '2%',
+    alignItems: 'center',
+    left: '25%',
+    marginTop: '30.5%',
   },
   button: {
     borderRadius: 20,

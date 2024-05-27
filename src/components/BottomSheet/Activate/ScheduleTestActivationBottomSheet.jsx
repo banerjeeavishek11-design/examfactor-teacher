@@ -128,7 +128,7 @@ const ScheduleTestActivationBottomSheet = ({
             style={[
               styles.bottomSheetContent,
               isTablet && {
-                width: '50%',
+                width: '55%',
                 alignSelf: 'center',
                 borderBottomEndRadius: 10,
                 borderBottomStartRadius: 10,
@@ -173,123 +173,128 @@ const ScheduleTestActivationBottomSheet = ({
                   Test timing : {totalTime} Min
                 </Text>
               </View>
-              <View>
-                {!showCalendar && (
-                  <View
+              <View style={isTablet && [layout.row, { gap: 20 }]}>
+                <View style={isTablet && { marginTop: '5%' }}>
+                  {!showCalendar && (
+                    <View
+                      style={[
+                        !isTablet && layout.fullWidth,
+                        layout.paddingForCard,
+                        layout.display,
+                        layout.rowHCenter,
+                        layout.justifyBetween,
+                        {
+                          backgroundColor: colors.screenBackgroundColor,
+                          height: !isTablet && 50,
+                          padding: isTablet && 12,
+                          gap: isTablet && 10,
+                          borderRadius: 12,
+                        },
+                      ]}
+                    >
+                      <Text style={[fonts.size_12, fonts.fontWeignt_600, { color: colors.white }]}>
+                        {selectedDate ? selectedDate : 'Select Date'}
+                      </Text>
+
+                      <TouchableOpacity onPress={handleCalendarToggle}>
+                        <ImageVariant
+                          testID="brand-img"
+                          style={{ width: 16, height: 16, tintColor: 'white' }}
+                          source={Calender}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  {showCalendar && (
+                    <Calendar
+                      style={{
+                        height: 'auto',
+                        borderRadius: 12,
+                      }}
+                      onDayPress={(day) => handleDateSelect(day.dateString)}
+                      // theme={customTheme}
+                      theme={{
+                        backgroundColor: 'black',
+                        calendarBackground: 'black',
+                        textSectionTitleColor: 'gray',
+                        selectedDayBackgroundColor: '#00adf5',
+                        selectedDayTextColor: '#ffffff',
+                        todayTextColor: 'white',
+                        dayTextColor: 'white',
+                        textDisabledColor: '#d9e1e8',
+                        dotColor: '#00adf5',
+                        selectedDotColor: '#ffffff',
+                        arrowColor: '#0084FF',
+                        monthTextColor: 'white',
+                        indicatorColor: 'blue',
+                        textDayFontFamily: 'monospace',
+                        textMonthFontFamily: 'monospace',
+                        textDayHeaderFontFamily: 'monospace',
+                        textDayFontWeight: '300',
+                        textMonthFontWeight: 'bold',
+                        textDayHeaderFontWeight: '300',
+                        textDayFontSize: 16,
+                        textMonthFontSize: 16,
+                        textDayHeaderFontSize: 16,
+                        todayBackgroundColor: '#0084FF',
+                      }}
+                      // minDate={new Date().toISOString().split('T')[0]}
+                      minDate={today.toISOString().split('T')[0]}
+                    />
+                  )}
+                </View>
+
+                <View
+                  style={[
+                    layout.display,
+                    layout.rowHCenter,
+                    layout.justifyBetween,
+                    isTablet && { gap: 20 },
+                    { marginTop: '5%' },
+                  ]}
+                >
+                  <Pressable
                     style={[
-                      layout.fullWidth,
-                      layout.paddingForCard,
-                      layout.display,
-                      layout.rowHCenter,
-                      layout.justifyBetween,
+                      layout.justifyCenter,
                       {
                         backgroundColor: colors.screenBackgroundColor,
-                        height: 50,
                         borderRadius: 12,
+                        height: 42,
+                        width: 130,
                       },
                     ]}
+                    onPress={() => setFromModalVisible(true)}
                   >
-                    <Text style={[fonts.size_12, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {selectedDate ? selectedDate : 'Select Date'}
+                    <Text style={[fonts.alignCenter, { color: 'white' }]}>
+                      {selectedFromTime ? selectedFromTime : 'Select from Time'}
                     </Text>
-
-                    <TouchableOpacity onPress={handleCalendarToggle}>
-                      <ImageVariant
-                        testID="brand-img"
-                        style={{ width: 16, height: 16, tintColor: 'white' }}
-                        source={Calender}
-                        resizeMode="contain"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-
-                {showCalendar && (
-                  <Calendar
+                  </Pressable>
+                  <View
                     style={{
-                      height: 'auto',
-                      borderRadius: 12,
+                      width: 10,
+                      height: 2,
+                      backgroundColor: colors.white,
                     }}
-                    onDayPress={(day) => handleDateSelect(day.dateString)}
-                    // theme={customTheme}
-                    theme={{
-                      backgroundColor: 'black',
-                      calendarBackground: 'black',
-                      textSectionTitleColor: 'gray',
-                      selectedDayBackgroundColor: '#00adf5',
-                      selectedDayTextColor: '#ffffff',
-                      todayTextColor: 'white',
-                      dayTextColor: 'white',
-                      textDisabledColor: '#d9e1e8',
-                      dotColor: '#00adf5',
-                      selectedDotColor: '#ffffff',
-                      arrowColor: '#0084FF',
-                      monthTextColor: 'white',
-                      indicatorColor: 'blue',
-                      textDayFontFamily: 'monospace',
-                      textMonthFontFamily: 'monospace',
-                      textDayHeaderFontFamily: 'monospace',
-                      textDayFontWeight: '300',
-                      textMonthFontWeight: 'bold',
-                      textDayHeaderFontWeight: '300',
-                      textDayFontSize: 16,
-                      textMonthFontSize: 16,
-                      textDayHeaderFontSize: 16,
-                      todayBackgroundColor: '#0084FF',
-                    }}
-                    // minDate={new Date().toISOString().split('T')[0]}
-                    minDate={today.toISOString().split('T')[0]}
                   />
-                )}
-              </View>
-
-              <View
-                style={[
-                  layout.display,
-                  layout.rowHCenter,
-                  layout.justifyBetween,
-                  { marginTop: '5%' },
-                ]}
-              >
-                <Pressable
-                  style={[
-                    layout.justifyCenter,
-                    {
-                      backgroundColor: colors.screenBackgroundColor,
-                      borderRadius: 12,
-                      height: 42,
-                      width: 130,
-                    },
-                  ]}
-                  onPress={() => setFromModalVisible(true)}
-                >
-                  <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                    {selectedFromTime ? selectedFromTime : 'Select from Time'}
-                  </Text>
-                </Pressable>
-                <View
-                  style={{
-                    width: 10,
-                    height: 2,
-                    backgroundColor: colors.white,
-                  }}
-                />
-                <Pressable
-                  style={[
-                    layout.justifyCenter,
-                    {
-                      backgroundColor: colors.screenBackgroundColor,
-                      borderRadius: 12,
-                      height: 42,
-                      width: 130,
-                    },
-                  ]}
-                  onPress={() => setToModalVisible(true)}
-                >
-                  <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                    {selectedToTime ? selectedToTime : 'Select to Time'}
-                  </Text>
-                </Pressable>
+                  <Pressable
+                    style={[
+                      layout.justifyCenter,
+                      {
+                        backgroundColor: colors.screenBackgroundColor,
+                        borderRadius: 12,
+                        height: 42,
+                        width: 130,
+                      },
+                    ]}
+                    onPress={() => setToModalVisible(true)}
+                  >
+                    <Text style={[fonts.alignCenter, { color: 'white' }]}>
+                      {selectedToTime ? selectedToTime : 'Select to Time'}
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
 
               <View style={styles.footer}>
