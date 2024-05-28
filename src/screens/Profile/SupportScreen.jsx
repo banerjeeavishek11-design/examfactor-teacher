@@ -1,4 +1,12 @@
-import { StatusBar, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
 import LeftArrow from '@/theme/assets/images/leftarrow.png';
@@ -6,65 +14,45 @@ import { ImageVariant } from '@/components/atoms';
 import { SafeScreen } from '@/components/template';
 import UpArrow from '@/theme/assets/images/supportUpArrow.png';
 import DownArrow from '@/theme/assets/images/supportDownArrow.png';
-import { DrawerActions } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+import { getSupportFAQDetails } from '../../services/FAQ/FaqService';
+import { notifyMessage } from '../../utils/error-toast-API';
 
 const SupportScreen = ({ navigation }) => {
-  const [allAccordian, setAllAccordian] = useState({
-    name: 'FREQUENTLY ASKED QUESTIONS',
-    buttonDetails: [
-      {
-        id: 1,
-        title: 'What kind of question will be there?',
-        subTitle:
-          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock & 1 Diagnostic is already Live',
-        isExpand: true,
-      },
-      {
-        id: 2,
-        title: 'How long is this course?',
-        subTitle:
-          'Registration for the CUET 2024 is expected to begin in the first week of February 2024.',
-        isExpand: false,
-      },
-      {
-        id: 3,
-        title: 'Will there be a report after completion?',
-        subTitle:
-          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
-        isExpand: false,
-      },
-      {
-        id: 4,
-        title: 'How long is this course?',
-        subTitle:
-          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
-        isExpand: false,
-      },
-      {
-        id: 5,
-        title: 'Will there be a report after completion?',
-        subTitle:
-          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
-        isExpand: false,
-      },
-      {
-        id: 6,
-        title: 'How long is this course?',
-        subTitle:
-          'The test has questions varying in levels from Easy to moderate to difficult. Live test will be scheduled online. These tests will be available till 3 months from unlocking the test. 1 Mock &amp; 1 Diagnostic is already Live',
-        isExpand: false,
-      },
-    ],
-  });
-  const toggleExpanded = (id, isExpand) => {
-    let obj = {
-      ...allAccordian,
-    };
-    let selectedAccordianIndex = obj.buttonDetails.findIndex((ele) => ele.id == id);
-    obj.buttonDetails[selectedAccordianIndex].isExpand = !isExpand;
-    setAllAccordian(obj);
-  };
   const { layout, fonts, colors } = useTheme();
+  const [allAccordian, setAllAccordian] = useState();
+  const [expandCardId, setExpandedCardId] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getSupportFAQ();
+    }, [])
+  );
+
+  const getSupportFAQ = () => {
+    setIsLoading(true);
+    let params = {
+      active: true,
+      status: 'ACTIVE',
+      originType: 'B2B',
+      questionType: 'SUPPORT',
+    };
+    getSupportFAQDetails(params)
+      .then((res) => {
+        setAllAccordian(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        notifyMessage('Something went wrong while fetching Support FAQ', error);
+        setIsLoading(false);
+      });
+  };
+
+  const toggleExpanded = (id) => {
+    setExpandedCardId(id);
+  };
+
   return (
     <SafeScreen>
       <View style={[layout.paddingForFullScreen]}>
@@ -95,55 +83,63 @@ const SupportScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ marginTop: '10%' }}>
-          <View>
-            <Text
-              style={[
-                fonts.size_14,
-                fonts.fontWeignt_600,
-                { color: colors.white, opacity: 0.4, marginBottom: '2%' },
-              ]}
-            >
-              {allAccordian.name}
-            </Text>
+        {isLoading ? (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color={colors.termsLinkColor} />
           </View>
-          {allAccordian.buttonDetails.map((ele) => (
-            <View
-              style={[styles.arrowView, { backgroundColor: colors.cardBackgroundColor }]}
-              key={ele.id}
-            >
-              <TouchableOpacity onPress={() => toggleExpanded(ele.id, ele.isExpand)}>
-                <View style={[layout.row, layout.justifyBetween]}>
-                  <View style={{ width: '95%' }}>
-                    <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                      {ele.title}
-                    </Text>
-                  </View>
-                  {ele.isExpand ? (
-                    <ImageVariant source={UpArrow} resizeMode="contain" />
-                  ) : (
-                    <ImageVariant source={DownArrow} resizeMode="contain" />
-                  )}
-                </View>
-                <View>
-                  {ele.isExpand ? (
-                    <View style={{ marginTop: 12 }}>
+        ) : (
+          <View style={{ marginTop: '5%' }}>
+            <View>
+              <Text
+                style={[
+                  fonts.size_14,
+                  fonts.fontWeignt_600,
+                  { color: colors.white, opacity: 0.4, marginBottom: '2%' },
+                ]}
+              >
+                FREQUENTLY ASKED QUESTION
+              </Text>
+            </View>
+            {allAccordian?.map((ele) => (
+              <View
+                style={[styles.arrowView, { backgroundColor: colors.cardBackgroundColor }]}
+                key={ele.id}
+              >
+                <TouchableOpacity onPress={() => toggleExpanded(ele.id)}>
+                  <View style={[layout.row, layout.justifyBetween]}>
+                    <View style={{ width: '95%' }}>
                       <Text
-                        style={[
-                          fonts.size_14,
-                          fonts.fontWeight_small,
-                          { color: colors.white, opacity: 0.7 },
-                        ]}
+                        style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                       >
-                        {ele.subTitle}
+                        {ele?.question}
                       </Text>
                     </View>
-                  ) : null}
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
+                    {expandCardId === ele?.id ? (
+                      <Image source={UpArrow} resizeMode="contain" />
+                    ) : (
+                      <Image source={DownArrow} resizeMode="contain" />
+                    )}
+                  </View>
+                  <View>
+                    {expandCardId === ele?.id ? (
+                      <View style={{ marginTop: 12 }}>
+                        <Text
+                          style={[
+                            fonts.size_14,
+                            fonts.fontWeight_small,
+                            { color: colors.white, opacity: 0.7 },
+                          ]}
+                        >
+                          {ele?.answer}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </SafeScreen>
   );
@@ -160,5 +156,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: '4%',
     marginTop: '3%',
+  },
+  loader: {
+    marginTop: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: '5%',
   },
 });
