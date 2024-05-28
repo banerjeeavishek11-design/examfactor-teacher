@@ -334,18 +334,13 @@ const ScheduleTestActivationBottomSheet = ({
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  disabled={
-                    selectedFromTime == null || selectedToTime == null || selectedDate == null
-                  }
+                  disabled={!selectedFromTime || !selectedToTime || !selectedDate}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
                     {
                       backgroundColor: colors.termsLinkColor,
-                      opacity:
-                        selectedFromTime == null || selectedToTime == null || selectedDate == null
-                          ? 0.4
-                          : 1,
+                      opacity: !selectedFromTime || !selectedToTime || !selectedDate ? 0.4 : 1,
                     },
                   ]}
                   onPress={topicActivated}
