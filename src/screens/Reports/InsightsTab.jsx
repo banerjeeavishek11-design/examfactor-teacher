@@ -110,7 +110,6 @@ const InsightsScreen = () => {
     return acc;
   }, {});
 
-  console.log('gdt', groupedData);
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
