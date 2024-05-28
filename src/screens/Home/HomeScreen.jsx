@@ -44,6 +44,9 @@ const configForStudyTime = [
   { groupName: '0-10', from: 0, to: 10 },
   { groupName: '11-30', from: 11, to: 30 },
   { groupName: '31-60', from: 31, to: 60 },
+  { groupName: '0-10', from: 0, to: 10 },
+  { groupName: '11-30', from: 11, to: 30 },
+  { groupName: '31-60', from: 31, to: 60 },
   { groupName: '60+', from: 61, to: 180 },
 ];
 
@@ -110,19 +113,21 @@ const HomeScreen = () => {
     getHomeworks();
   }, [selectedSubjectId]);
 
-  useEffect(() => {
-    getAllChaptersDetails();
-    getClassworks();
-    getDiagnostics();
-    getHomeworks();
-  }, []);
+  // useEffect(() => {
+  //   getAllChaptersDetails();
+  //   getClassworks();
+  //   getDiagnostics();
+  //   getHomeworks();
+  // }, []);
 
   useEffect(() => {
     getTeacheDetails();
   }, []);
 
   useEffect(() => {
-    getProgressForStudents();
+    if (selectedSubjectId && sectionId) {
+      getProgressForStudents();
+    }
   }, [sortByBody, practiceDurationBody, selectedSubjectId, sectionId]);
 
   useFocusEffect(
@@ -436,7 +441,13 @@ const HomeScreen = () => {
                     ? 0
                     : consolidatedReportData?.homeworkProgress / 100
                 }
-                color={'#3DD598'}
+                color={
+                  consolidatedReportData?.homeworkProgress <= 25
+                    ? '#FF575F'
+                    : consolidatedReportData?.homeworkProgress <= 60
+                      ? '#BBA041'
+                      : '#3DD598'
+                }
               />
             </View>
             <View
@@ -461,9 +472,60 @@ const HomeScreen = () => {
                     ? 0
                     : consolidatedReportData?.diagnosisProgress / 100
                 }
-                color={'#BBA041'}
+                color={
+                  consolidatedReportData?.diagnosisProgress <= 25
+                    ? '#FF575F'
+                    : consolidatedReportData?.diagnosisProgress <= 60
+                      ? '#BBA041'
+                      : '#3DD598'
+                }
               />
             </View>
+          </View>
+        </View>
+        <View
+          style={[
+            layout.fullWidth,
+            isTablet ? { padding: 20 } : layout.paddingForCard,
+            {
+              backgroundColor: colors.cardBackgroundColor,
+              height: 'auto',
+              borderRadius: 12,
+              marginTop: isTablet ? '2%' : '4%',
+              marginBottom: '-1%',
+            },
+          ]}
+        >
+          <View
+            style={[
+              layout.display,
+              layout.rowHCenter,
+              layout.justifyBetween,
+              isTablet && { width: '55%', alignSelf: 'center' },
+            ]}
+          >
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+              Class Work
+            </Text>
+            <Text style={[fonts.size_12, fonts.fontWeight_small, { color: colors.white }]}>
+              {`${consolidatedReportData?.classworkProgress || 0}% Complete`}
+            </Text>
+          </View>
+          <View style={[isTablet && { width: '55%', alignSelf: 'center' }, { marginTop: '3%' }]}>
+            <Progressbar
+              progress={
+                consolidatedReportData?.classworkProgress === undefined
+                  ? 0
+                  : consolidatedReportData?.classworkProgress / 100
+              }
+              color={
+                consolidatedReportData?.classworkProgress <= 25
+                  ? '#FF575F'
+                  : consolidatedReportData?.classworkProgress <= 60
+                    ? '#BBA041'
+                    : '#3DD598'
+              }
+            />
           </View>
         </View>
 

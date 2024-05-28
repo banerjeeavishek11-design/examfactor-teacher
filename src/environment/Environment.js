@@ -9,3 +9,4 @@ export const teacherService = `${rootApiUrl}/teacher-service`;
 export const masterDataService = `${rootApiUrl}/master-data-service`;
 export const b2bStudentService = `${rootApiUrl}/b2b-student-service`;
 export const assessmentService = `${rootApiUrl}/assessment-service`;
+export const faqService = `${rootApiUrl}/faq-service`;

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import Feedback from '@/theme/assets/images/feedback.png';
 import { ImageVariant } from '../../atoms';
 import rightArrow from '@/theme/assets/images/rightarrow.png';
@@ -9,20 +10,28 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
 const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
   const { fonts, colors, layout } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   return (
     <View>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-              layout.paddingForCard,
+              isTablet && {
+                width: '60%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
+              isTablet ? { padding: '3%' } : layout.paddingForCard,
               { backgroundColor: colors.bottomTabBackground },
             ]}
           >
             <TouchableOpacity
               onPress={closeModal}
-              style={{ position: 'absolute', top: -35, left: '98%' }}
+              style={{ position: 'absolute', top: -35, left: isTablet ? '107%' : '98%' }}
             >
               <ImageVariant
                 testID="brand-img"
@@ -31,12 +40,14 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
                 resizeMode="contain"
               />
             </TouchableOpacity>
-            <View>
-              <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>
-                <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ marginTop: '8%' }}>
+            {!isTablet && (
+              <View>
+                <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>
+                  <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={{ marginTop: !isTablet && '8%' }}>
               <View style={[layout.justifyCenter, layout.itemsCenter]}>
                 <Image style={{ width: 80, height: 80 }} source={Feedback} resizeMode={'contain'} />
               </View>
@@ -112,6 +123,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 1)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,

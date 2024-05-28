@@ -138,7 +138,7 @@ const InsightsScreen = () => {
                   borderColor: selectedChapter !== null ? colors.termsLinkColor : null,
                   width:
                     selectedChapter !== null
-                      ? Math.min(210, Math.max(90, selectedChapterName.length * 8))
+                      ? Math.min(210, Math.max(90, selectedChapterName?.length * 8))
                       : isTablet
                         ? 90
                         : 72,
@@ -225,6 +225,20 @@ const InsightsScreen = () => {
               />
             </TouchableOpacity>
           </ScrollView>
+          {Object.keys(groupedData).length === 0 && selectedChapter !== null && (
+            <View style={(styles.loader, { marginTop: isTablet ? '20%' : '50%' })}>
+              <Text
+                style={[
+                  fonts.size_20,
+                  fonts.fontWeight_small,
+                  fonts.alignCenter,
+                  { color: colors.white },
+                ]}
+              >
+                No Data Available
+              </Text>
+            </View>
+          )}
           {selectedChapter !== null ? (
             <View>
               {Object.keys(groupedData).map((topicId) => (

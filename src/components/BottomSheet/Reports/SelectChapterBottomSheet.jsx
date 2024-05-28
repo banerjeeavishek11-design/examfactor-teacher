@@ -19,13 +19,16 @@ const SelectChapterBottomSheet = ({
 }) => {
   const { fonts, layout, colors } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [chapOption, setChapOption] = useState(null);
   const [unitOption, setUnitOption] = useState(null);
   const [chapters, setChapters] = useState([]);
-  const handleOptionChange = (chap, unit, chapName) => {
+  const [chapIndex, setChapIndex] = useState();
+  const handleOptionChange = (chap, unit, chapName, i) => {
     setChapOption(chap);
     setUnitOption(unit);
     setSelectedChapterName(chapName);
+    setChapIndex(i);
   };
   const handleApply = () => {
     setSelectedChapter(chapOption);
@@ -45,6 +48,7 @@ const SelectChapterBottomSheet = ({
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapters(res.data.chapters);
+        setSelectedChapterName(res.data.chapters[chapIndex]?.chapterDesc);
       })
       .catch((error) => {
         console.log(error);
@@ -54,11 +58,16 @@ const SelectChapterBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-
+              isTablet && {
+                width: '60%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -93,7 +102,9 @@ const SelectChapterBottomSheet = ({
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc)}
+                    onPress={() =>
+                      handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc, index)
+                    }
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
@@ -175,6 +186,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

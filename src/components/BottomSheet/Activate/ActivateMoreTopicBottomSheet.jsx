@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
 import tick from '../../../theme/assets/images/tickMark.png';
@@ -30,6 +31,7 @@ const ActivateMoreTopicBottomSheet = ({
   selectedTopicId,
 }) => {
   const { layout, fonts, colors } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [searchTopicName, setSearchTopicName] = useState([]);
@@ -88,10 +90,16 @@ const ActivateMoreTopicBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -282,6 +290,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import { ImageVariant } from '../../atoms';
 import RightArrow from '@/theme/assets/images/rightarrow.png';
@@ -30,6 +31,7 @@ const handleOutsideTap = () => {
 const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
   const navigation = useNavigation();
   const { layout, colors, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   const [currentPassWrong, setCurrentPassWrong] = useState();
   const [passMatch, setPassMatch] = useState(false);
@@ -86,11 +88,18 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
         <View style={styles.modalContainer}>
           <TouchableWithoutFeedback onPress={handleOutsideTap}>
             <View
-              style={[styles.bottomSheetContent, { backgroundColor: '#1C1827', padding: '4%' }]}
+              style={[
+                styles.bottomSheetContent,
+                isTablet && {
+                  width: '50%',
+                  alignSelf: 'center',
+                },
+                { backgroundColor: '#1C1827', padding: '4%' },
+              ]}
             >
               <TouchableOpacity
                 onPress={closeModal}
-                style={{ position: 'absolute', top: -35, left: '98%' }}
+                style={{ position: 'absolute', top: -35, left: isTablet ? '114%' : '98%' }}
               >
                 <ImageVariant
                   style={{ width: 18, height: 18, tintColor: colors.gray200 }}

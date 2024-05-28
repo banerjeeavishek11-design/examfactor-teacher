@@ -7,48 +7,23 @@ import { useFocusEffect } from '@react-navigation/native';
 import RadioButton from '../../RadioButton/RadioButton';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-import SelectQuestionTypeBottomSheet from './SelectQuestionTypeBottomSheet';
 import { getChaptersBySubjectId } from '../../../services/chapterListService';
-
-// const chaptersDummy = [
-//   { id: 1, chapterId: 'C1', chapterName: 'Motion', strong: true },
-//   {
-//     id: 2,
-//     chapterId: 'C2',
-//     chapterName: 'Force and Laws of Motion',
-//     strong: true,
-//   },
-//   { id: 3, chapterId: 'C3', chapterName: 'Gravitation', strong: false },
-//   { id: 4, chapterId: 'C4', chapterName: 'Work and Energy', strong: true },
-//   { id: 5, chapterId: 'C5', chapterName: 'Sound', strong: false },
-//   { id: 5, chapterId: 'C6', chapterName: 'Heat', strong: false },
-//   {
-//     id: 5,
-//     chapterId: 'C7',
-//     chapterName: 'Electricity and Magnetism',
-//     strong: true,
-//   },
-//   { id: 5, chapterId: 'C8', chapterName: 'Refraction', strong: false },
-// ];
 
 const SelectChapterQABottomSheet = ({
   visible,
   closeModal,
   setSelectedChapter,
-  changeQuestionType,
-  setQuestionActivityType,
   setChapterOption,
+  setOpenQuestionTypeModal,
 }) => {
   const { fonts, layout, colors } = useTheme();
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   const [chapters, setChapters] = useState([]);
-  const [selectedValue, setSelectedValue] = useState(null);
   // const [selectedChap, setSelectedChap] = useState();
-  const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
-  const closeQuestionTypeModal = () => {
-    setOpenQuestionTypeModal(false);
-  };
   const [option, setOption] = useState(null);
+  const [chapIndex, setChapIndex] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -61,18 +36,19 @@ const SelectChapterQABottomSheet = ({
       .then((res) => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapters(res.data.chapters);
+        setSelectedChapter(res.data.chapters[chapIndex].chapterDesc);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleOptionChange = (op, chapName) => {
+  const handleOptionChange = (op, chapName, i) => {
     setOption(op);
     setSelectedChapter(chapName);
+    setChapIndex(i);
   };
   const handleApply = () => {
-    setSelectedValue(option);
     setChapterOption(option);
     closeModal();
     setOpenQuestionTypeModal(true);
@@ -83,11 +59,16 @@ const SelectChapterQABottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
-
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -118,11 +99,11 @@ const SelectChapterQABottomSheet = ({
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: '5%' }}
               >
-                {chapters?.map((ele) => (
+                {chapters?.map((ele, i) => (
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc)}
+                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc, i)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
@@ -189,14 +170,6 @@ const SelectChapterQABottomSheet = ({
           </View>
         </View>
       </Modal>
-      <SelectQuestionTypeBottomSheet
-        changeQuestionType={changeQuestionType}
-        // setSelectedChapter={setSelectedChapter}
-        selectedValue={selectedValue}
-        visible={openQuestionTypeModal}
-        closeModal={closeQuestionTypeModal}
-        setQuestionActivityType={setQuestionActivityType}
-      />
     </View>
   );
 };
@@ -212,6 +185,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import { useTheme } from '@/theme';
+import { useSelector } from 'react-redux';
 import Feedback from '@/theme/assets/images/forgotsuccess.png';
 import { ImageVariant } from '../../atoms';
 import Cross from '@/theme/assets/images/cross.png';
@@ -8,6 +9,7 @@ import Cross from '@/theme/assets/images/cross.png';
 const RemindStudentSuccessfullyBottomSheet = (props) => {
   const { setOpenRemindStudentSuccessfully, openRemindStudentSuccessfully } = props;
   const { fonts, colors, layout } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,10 +20,16 @@ const RemindStudentSuccessfullyBottomSheet = (props) => {
   return (
     <View>
       <Modal visible={openRemindStudentSuccessfully} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               layout.paddingForCard,
               { backgroundColor: colors.bottomTabBackground },
             ]}
@@ -102,6 +110,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 1)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
     borderTopLeftRadius: 10,

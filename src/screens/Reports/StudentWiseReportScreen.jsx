@@ -951,7 +951,7 @@ const StudentWiseReportScreen = () => {
                     { color: colors.white, opacity: 0.7 },
                   ]}
                 >
-                  {`See bookmarked questions (${allBookmarkedQuestionsDetails?.totalElements ?? 0})`}
+                  {`See bookmarked questions (${allBookmarkedQuestionsDetails?.numberOfElements ?? 0})`}
                 </Text>
                 <TouchableOpacity>
                   <Image

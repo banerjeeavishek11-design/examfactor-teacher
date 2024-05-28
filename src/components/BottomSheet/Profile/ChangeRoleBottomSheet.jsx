@@ -14,6 +14,7 @@ import { updateUserRole } from '../../../store/redux-slice/LoginSlice';
 const ChangeRoleBottomSheet = (props) => {
   const { setChangeRoleBottomSheetVisible, changeRoleBottomSheetVisible, setUserRole } = props;
   const { colors, layout, fonts } = useTheme();
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const dispatch = useDispatch();
   const initialUserRole = useSelector((state) => state.login.userRole);
   const [option, setOption] = useState('TEACHER');
@@ -44,6 +45,10 @@ const ChangeRoleBottomSheet = (props) => {
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >

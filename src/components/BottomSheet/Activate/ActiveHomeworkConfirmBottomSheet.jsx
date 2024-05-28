@@ -27,6 +27,8 @@ const ActiveHomeworkConfirmBottomSheet = ({
   const subjectId = useSelector((state) => state.selectedSubject.subject);
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
   const [moreTopicModalVisible, setMoreTopicModalVisible] = useState(false);
   const closeMoreTopicModal = () => {
     setMoreTopicModalVisible(false);
@@ -84,10 +86,16 @@ const ActiveHomeworkConfirmBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -235,6 +243,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {

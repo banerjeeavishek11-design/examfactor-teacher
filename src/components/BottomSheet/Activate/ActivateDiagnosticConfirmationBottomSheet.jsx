@@ -32,6 +32,7 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const subjectId = useSelector((state) => state.selectedSubject.subject);
+  const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
   useEffect(() => {
     for (let item of teacherDetails) {
@@ -79,10 +80,16 @@ const ActivateDiagnosticConfirmationBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
+        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
           <View
             style={[
               styles.bottomSheetContent,
+              isTablet && {
+                width: '50%',
+                alignSelf: 'center',
+                borderBottomEndRadius: 10,
+                borderBottomStartRadius: 10,
+              },
               { backgroundColor: colors.bottomSheetBackgroundColor },
             ]}
           >
@@ -198,6 +205,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalTabContainer: {
+    flex: 1,
+    justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   bottomSheetContent: {
