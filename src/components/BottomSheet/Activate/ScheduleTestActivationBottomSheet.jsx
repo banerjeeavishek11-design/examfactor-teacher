@@ -335,7 +335,7 @@ const ScheduleTestActivationBottomSheet = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   disabled={
-                    selectedFromTime == null && selectedToTime == null && selectedDate == null
+                    selectedFromTime == null || selectedToTime == null || selectedDate == null
                   }
                   style={[
                     layout.justifyCenter,
@@ -343,7 +343,7 @@ const ScheduleTestActivationBottomSheet = ({
                     {
                       backgroundColor: colors.termsLinkColor,
                       opacity:
-                        selectedFromTime == null && selectedToTime == null && selectedDate == null
+                        selectedFromTime == null || selectedToTime == null || selectedDate == null
                           ? 0.4
                           : 1,
                     },
