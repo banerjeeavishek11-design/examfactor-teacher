@@ -64,12 +64,53 @@ const ScheduleTimeBottomSheet = (props) => {
     toModalVisible,
     setSelectedFromTime,
     setToModalVisible,
+    totalTime,
   } = props;
   const { fonts, colors } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
+  function addMinutesToTime(timeStr, minutes) {
+    // Parse the time string
+    const matchResult = timeStr.match(/(\d{1,2}):(\d{2}) (am|pm)/);
+    if (!matchResult) {
+      // Handle invalid time format
+      console.error('Invalid time format:', timeStr);
+      return null;
+    }
+
+    const [hoursStr, minutesStr, period] = matchResult.slice(1);
+
+    // Convert hours and minutes to integers
+    let hours = parseInt(hoursStr, 10);
+    let newMinutes = parseInt(minutesStr, 10);
+
+    // Convert 'pm' hours to 24-hour format
+    if (period === 'pm' && hours < 12) {
+      hours += 12;
+    }
+
+    // Add the minutes
+    newMinutes += minutes;
+
+    // Calculate new hours and minutes
+    hours += Math.floor(newMinutes / 60);
+    newMinutes %= 60;
+    hours %= 24;
+
+    // Convert back to 12-hour format
+    const newPeriod = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12 || 12;
+
+    // Format the result
+    const newTime = `${hours}:${newMinutes.toString().padStart(2, '0')} ${newPeriod}`;
+
+    return newTime;
+  }
+
   const handleFromTimeSelection = (time) => {
     setSelectedFromTime(time);
+    const newTime = addMinutesToTime(time, totalTime);
+    setSelectedToTime(newTime);
     setFromModalVisible(false);
   };
 
@@ -169,7 +210,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: '98%',
+    marginTop: '92%',
   },
   fromTabModalView: {
     margin: '12%',
@@ -198,7 +239,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: '98%',
+    marginTop: '92%',
   },
   toTabModalView: {
     margin: '28%',

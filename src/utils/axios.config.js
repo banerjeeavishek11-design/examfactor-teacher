@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { MMKV } from 'react-native-mmkv';
-import { notifyMessage } from './error-toast-API';
+// import { notifyMessage } from './error-toast-API';
 import { refreshToken } from '../services/authService';
 
 const storage = new MMKV();
@@ -55,10 +55,12 @@ api.interceptors.response.use(
           })
           .catch((error) => {
             if (error?.response.status === 400 || error?.response.code === 'ERR-03') {
-              notifyMessage('Token Expired, Login Required');
-              setTimeout(() => {
-                navigationRef.navigate('LoginScreen');
-              }, 800);
+              // notifyMessage('Token Expired, Login Required');
+              navigationRef.navigate('LoginScreen', {
+                sessionExpire: 'Current session has been Expired',
+              });
+              // setTimeout(() => {
+              // }, 800);
             }
           });
       } catch (error) {

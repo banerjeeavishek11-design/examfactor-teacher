@@ -166,6 +166,7 @@ const ActivateMoreTopicBottomSheet = ({
                 {searchTopicName?.map((topic) => {
                   return (
                     <TouchableOpacity
+                      onPress={() => toggleTopicSelection(topic.topicId)}
                       key={topic.topicId}
                       style={[
                         layout.fullWidth,
@@ -179,8 +180,8 @@ const ActivateMoreTopicBottomSheet = ({
                       ]}
                     >
                       <View style={[layout.row, layout.itemsCenter, { gap: 8 }]}>
-                        <TouchableOpacity
-                          onPress={() => toggleTopicSelection(topic.topicId)}
+                        <View
+                          // onPress={() => toggleTopicSelection(topic.topicId)}
                           activeOpacity={0.8}
                         >
                           {selectedTopics.includes(topic.topicId) ? (
@@ -195,7 +196,7 @@ const ActivateMoreTopicBottomSheet = ({
                               ]}
                             ></View>
                           )}
-                        </TouchableOpacity>
+                        </View>
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                         >
@@ -235,6 +236,7 @@ const ActivateMoreTopicBottomSheet = ({
                     styles.footerButton,
                     {
                       backgroundColor: colors.termsLinkColor,
+                      opacity: selectedTopics.length == 0 ? 0.5 : 1,
                     },
                   ]}
                   onPress={handleActivateMoreTopics}
@@ -255,7 +257,7 @@ const ActivateMoreTopicBottomSheet = ({
                           {
                             color:
                               selectedTopics.length == 0
-                                ? colors.gray200
+                                ? colors.gray400
                                 : colors.loginBtnTextColor,
                           },
                         ]}

@@ -152,7 +152,12 @@ const ScheduleTestActivationBottomSheet = ({
             ]}
           >
             <TouchableOpacity
-              onPress={() => setActivateConfirmationModalVisible(false)}
+              onPress={() => {
+                setActivateConfirmationModalVisible(false);
+                setSelectedDate(null);
+                setSelectedFromTime(null);
+                setSelectedToTime(null);
+              }}
               style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
@@ -165,7 +170,9 @@ const ScheduleTestActivationBottomSheet = ({
             <View style={styles.center}>
               <TouchableOpacity
                 style={styles.slideIndicator}
-                onPress={() => setActivateConfirmationModalVisible(false)}
+                onPress={() => {
+                  setActivateConfirmationModalVisible(false);
+                }}
               ></TouchableOpacity>
             </View>
             <View style={[layout.paddingForCard, styles.scrollContainer]}>
@@ -313,7 +320,12 @@ const ScheduleTestActivationBottomSheet = ({
 
               <View style={styles.footer}>
                 <TouchableOpacity
-                  onPress={() => setActivateConfirmationModalVisible(false)}
+                  onPress={() => {
+                    setActivateConfirmationModalVisible(false);
+                    setSelectedDate(null);
+                    setSelectedFromTime(null);
+                    setSelectedToTime(null);
+                  }}
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
@@ -378,6 +390,7 @@ const ScheduleTestActivationBottomSheet = ({
         toModalVisible={toModalVisible}
         setToModalVisible={setToModalVisible}
         setSelectedFromTime={setSelectedFromTime}
+        totalTime={totalTime}
       />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}

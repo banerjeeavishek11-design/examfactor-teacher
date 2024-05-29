@@ -117,6 +117,7 @@ const HomeWorkTab = () => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
         setSearchChapterName(res.data.chapters);
+        console.log('chapter list', res.data.chapters);
         setIsLoading(false);
         setExpandedCards(() => ({
           [res.data.chapters[0].chapterId]: [res.data.chapters[0].chapterId],
