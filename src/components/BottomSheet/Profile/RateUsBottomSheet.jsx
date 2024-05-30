@@ -291,6 +291,7 @@ const RateUsBottomSheet = (props) => {
                       </View>
 
                       <TouchableOpacity
+                        disabled={selectedIssues.length === 0}
                         onPress={() =>
                           submitRating({
                             rating: selectedRating,
