@@ -144,6 +144,7 @@ const ActivateTopTabNavigator = () => {
         lazy: false,
       }}
       tabBar={(props) => <TabBar {...props} />}
+      initialRouteName="ActivateHomeWorkTab"
     >
       <Tab.Screen name="ActivateHomeWorkTab" component={HomeWorkTab} />
       <Tab.Screen name="ActivateDiagnosticTab" component={DiagnosticTab} />

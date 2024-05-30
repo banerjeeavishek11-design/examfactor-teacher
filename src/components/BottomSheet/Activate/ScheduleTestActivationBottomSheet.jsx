@@ -244,7 +244,7 @@ const ScheduleTestActivationBottomSheet = ({
                         selectedDayTextColor: '#ffffff',
                         todayTextColor: 'white',
                         dayTextColor: 'white',
-                        textDisabledColor: '#d9e1e8',
+                        textDisabledColor: 'gray',
                         dotColor: '#00adf5',
                         selectedDotColor: '#ffffff',
                         arrowColor: '#0084FF',
