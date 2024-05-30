@@ -208,7 +208,7 @@ const LoginScreen = () => {
                                 userName: value,
                               }));
                             }}
-                            value={textInputValues.username}
+                            value={textInputValues.userName}
                           />
                         </View>
                       )}
@@ -241,7 +241,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.password ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >

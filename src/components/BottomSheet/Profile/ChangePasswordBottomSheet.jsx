@@ -21,6 +21,7 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
 import { resetPassword } from '../../../services/authService';
 import { getUserDetailsByUserId } from '../../../services/teacherService';
+import * as Yup from 'yup';
 
 const storage = new MMKV();
 
@@ -37,6 +38,24 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
   const [passMatch, setPassMatch] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    currentPassword: Yup.string()
+      .matches(
+        /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,24}$/,
+        'Password must be 6 to 24 characters and contain at least one numeric digit'
+      )
+      .required('Current Password is required'),
+    newPassword: Yup.string()
+      .matches(
+        /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,24}$/,
+        'Password must be 6 to 24 characters and contain at least one numeric digit'
+      )
+      .required('New Password is required'),
+    retypePassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+      .required('Retype Password is required'),
+  });
 
   const handleSubmit = (values) => {
     setIsLoading(true);
@@ -120,9 +139,10 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                   newPassword: '',
                   retypePassword: '',
                 }}
+                validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
-                {({ handleChange, handleSubmit, values }) => {
+                {({ handleChange, handleSubmit, values, errors, touched }) => {
                   return (
                     <View>
                       <View style={{ marginTop: '4%' }}>
@@ -146,6 +166,13 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             onChangeText={handleChange('currentPassword')}
                             value={values.currentPassword}
                           />
+                          {touched.currentPassword && errors.currentPassword && (
+                            <View>
+                              <Text style={{ color: '#FF575F', marginTop: '2%' }}>
+                                {errors.currentPassword}
+                              </Text>
+                            </View>
+                          )}
                           {currentPassWrong && (
                             <View>
                               <Text
@@ -179,6 +206,13 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             onChangeText={handleChange('newPassword')}
                             value={values.newPassword}
                           />
+                          {touched.newPassword && errors.newPassword && (
+                            <View>
+                              <Text style={{ color: '#FF575F', marginTop: '2%' }}>
+                                {errors.newPassword}
+                              </Text>
+                            </View>
+                          )}
                         </View>
                         <View style={styles.inputContainer}>
                           <TextInput
@@ -200,6 +234,13 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                             onChangeText={handleChange('retypePassword')}
                             value={values.retypePassword}
                           />
+                          {touched.retypePassword && errors.retypePassword && (
+                            <View>
+                              <Text style={{ color: '#FF575F', marginTop: '2%' }}>
+                                {errors.retypePassword}
+                              </Text>
+                            </View>
+                          )}
                           {passMatch && (
                             <View>
                               <Text
