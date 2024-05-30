@@ -271,13 +271,20 @@ const RateUsBottomSheet = (props) => {
                       </View>
 
                       <TouchableOpacity
+                        disabled={selectedIssues.length === 0}
                         onPress={() => {
                           handleSlideDown();
                           openThanksForFeedbackModal();
                         }}
                         style={isTablet && { width: '30%', alignSelf: 'center' }}
                       >
-                        <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
+                        <PrimaryGradient
+                          styleProp={[
+                            styles.loginButton,
+                            layout.justifyCenter,
+                            selectedIssues.length === 0 && { opacity: 0.5 },
+                          ]}
+                        >
                           <View style={[layout.display, layout.rowHCenter]}>
                             <Text
                               style={[

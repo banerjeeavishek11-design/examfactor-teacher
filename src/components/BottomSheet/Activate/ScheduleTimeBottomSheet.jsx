@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: '92%',
+    marginTop: '98%',
   },
   fromTabModalView: {
     margin: '12%',
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: '92%',
+    marginTop: '98%',
   },
   toTabModalView: {
     margin: '28%',

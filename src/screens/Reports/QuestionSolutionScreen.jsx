@@ -76,7 +76,13 @@ const QuestionSolutionScreen = () => {
         <View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('BookmarkedQuestionsScreen', { studentDetails: studentDetails });
+              if (studentDetails) {
+                navigation.navigate('BookmarkedQuestionsScreen', {
+                  studentDetails: studentDetails,
+                });
+              } else {
+                navigation.goBack();
+              }
             }}
           >
             <View style={[layout.rowHCenter, layout.display]}>

@@ -42,7 +42,8 @@ const DiagnosticTab = () => {
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
-  const [showWeakSubtopics, setShowWeakSubtopics] = useState(false);
+  const [expandedDiagnosticCards, setExpandedDiagnosticCards] = useState({});
+  const [expandedDiagnosticId, setExpandedDiagnosticId] = useState();
   const [chapList, setChapList] = useState([]);
   const [chapListIndex, setChapListIndex] = useState(0);
   const [chapterId, setChapterId] = useState();
@@ -120,7 +121,13 @@ const DiagnosticTab = () => {
 
   const toggleContent = (id) => {
     setExpandedCards((prevState) => ({
-      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const toggleDiagnosticDetails = (id) => {
+    setExpandedDiagnosticId(id);
+    setExpandedDiagnosticCards((prevState) => ({
       [id]: !prevState[id],
     }));
   };
@@ -318,85 +325,93 @@ const DiagnosticTab = () => {
                             </View>
                             {ele.b2BStudentDiagnosticSummaryDtoList.map((item, index) => (
                               <>
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    setShowWeakSubtopics(!showWeakSubtopics);
-                                  }}
-                                  key={item.chapterId}
-                                  style={[
-                                    styles.row,
-                                    index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                    index === ele.b2BStudentDiagnosticSummaryDtoList.length - 1 &&
-                                      styles.lastRow,
-                                  ]}
-                                >
-                                  <View
-                                    style={{
-                                      width: '30%',
+                                {index < seeMaxStudent && (
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      // setShowWeakSubtopics(!showWeakSubtopics);
+                                      toggleDiagnosticDetails(item.chapterId);
                                     }}
+                                    key={item.chapterId}
+                                    style={[
+                                      styles.row,
+                                      index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                      index === ele.b2BStudentDiagnosticSummaryDtoList.length - 1 &&
+                                        styles.lastRow,
+                                    ]}
                                   >
-                                    <Text
-                                      numberOfLines={1}
-                                      style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
-                                        { color: colors.white, opacity: 0.7 },
-                                      ]}
+                                    <View
+                                      style={{
+                                        width: '30%',
+                                      }}
                                     >
-                                      {item.fullName}
-                                    </Text>
-                                  </View>
-                                  <View
-                                    style={{
-                                      width: '40%',
-                                    }}
-                                  >
-                                    <Text
-                                      numberOfLines={1}
+                                      <Text
+                                        numberOfLines={1}
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.white, opacity: 0.7 },
+                                        ]}
+                                      >
+                                        {item.fullName}
+                                      </Text>
+                                    </View>
+                                    <View
+                                      style={{
+                                        width: '40%',
+                                      }}
+                                    >
+                                      <Text
+                                        numberOfLines={1}
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          {
+                                            color: colors.white,
+                                            opacity: 0.7,
+                                          },
+                                        ]}
+                                      >
+                                        {item.diagnosticChapterCompletionPercentage === 100
+                                          ? 'YES'
+                                          : 'NO'}
+                                      </Text>
+                                    </View>
+                                    <View
                                       style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
+                                        layout.row,
+                                        layout.itemsCenter,
                                         {
-                                          color: colors.white,
-                                          opacity: 0.7,
+                                          width: '30%',
+                                          gap: 6,
                                         },
                                       ]}
                                     >
-                                      {item.diagnosticChapterCompletionPercentage === 100
-                                        ? 'YES'
-                                        : 'NO'}
-                                    </Text>
-                                  </View>
-                                  <View
-                                    style={[
-                                      layout.row,
-                                      layout.itemsCenter,
-                                      {
-                                        width: '30%',
-                                        gap: 6,
-                                      },
-                                    ]}
-                                  >
-                                    <Text
-                                      numberOfLines={1}
-                                      style={[
-                                        fonts.size_14,
-                                        fonts.fontWeight_small,
-                                        { color: colors.white, opacity: 0.7 },
-                                      ]}
-                                    >
-                                      {item.dignosticWeakTopicSummary.length}
-                                    </Text>
-                                    {showWeakSubtopics ? (
-                                      <Image style={{ width: 12, height: 6 }} source={UpArrow} />
-                                    ) : (
-                                      <Image style={{ width: 10, height: 5 }} source={DownArrow} />
-                                    )}
-                                  </View>
-                                </TouchableOpacity>
+                                      <Text
+                                        numberOfLines={1}
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.white, opacity: 0.7 },
+                                        ]}
+                                      >
+                                        {item.dignosticWeakTopicSummary.length}
+                                      </Text>
+                                      {expandedDiagnosticId === item.chapterId &&
+                                      expandedDiagnosticCards[item.chapterId] ? (
+                                        <Image style={{ width: 12, height: 6 }} source={UpArrow} />
+                                      ) : (
+                                        <Image
+                                          style={{ width: 10, height: 5 }}
+                                          source={DownArrow}
+                                        />
+                                      )}
+                                    </View>
+                                  </TouchableOpacity>
+                                )}
 
                                 <View style={{ flexDirection: 'column' }}>
-                                  {showWeakSubtopics &&
+                                  {expandedDiagnosticId === item.chapterId &&
+                                  expandedDiagnosticCards[item.chapterId] &&
                                   item.dignosticWeakTopicSummary.length > 0 ? (
                                     <View
                                       style={[
@@ -458,27 +473,7 @@ const DiagnosticTab = () => {
                               { color: colors.termsLinkColor },
                             ]}
                           >
-                            See More
-                          </Text>
-                        </TouchableOpacity>
-                      )}
-                    {expandedCards[ele.id] &&
-                      ele.b2BStudentDiagnosticSummaryDtoList.length != 0 && (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
-                          }}
-                          style={{ marginTop: '4%', marginBottom: '4%' }}
-                        >
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeignt_600,
-                              fonts.alignCenter,
-                              { color: colors.termsLinkColor },
-                            ]}
-                          >
-                            See More
+                            {seeMaxStudent === 5 ? 'See More' : 'See Less'}
                           </Text>
                         </TouchableOpacity>
                       )}

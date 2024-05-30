@@ -110,11 +110,9 @@ const QuestionAnalysisScreen = () => {
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View>
-          <View style={[layout.row, layout.itemsCenter]}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={[
+          <View style={[layout.row, layout.itemsCenter, layout.justifyBetween]}>
+            <View
+              style={[
                 layout.display,
                 layout.rowHCenter,
                 { marginTop: isTablet ? null : '3%', gap: 4 },
@@ -223,8 +221,11 @@ const QuestionAnalysisScreen = () => {
                   resizeMode="contain"
                 />
               </TouchableOpacity>
-            </ScrollView>
-            <TouchableOpacity onPress={() => setFilterModalVisible(true)}>
+            </View>
+            <TouchableOpacity
+              style={{ alignSelf: 'flex-end' }}
+              onPress={() => setFilterModalVisible(true)}
+            >
               <Image source={Filter} />
             </TouchableOpacity>
           </View>
