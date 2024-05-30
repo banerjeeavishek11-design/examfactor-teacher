@@ -16,6 +16,10 @@ import { ImageVariant } from '../../atoms';
 import { useSelector } from 'react-redux';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
+import { ratingApp } from '../../../services/FAQ/FaqService';
+import { notifyMessage } from '../../../utils/error-toast-API';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../utils/toast.config';
 
 const starRatings = [
   { id: 1, selected: false },
@@ -45,6 +49,7 @@ const RateUsBottomSheet = (props) => {
   const { layout, fonts, colors } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [setSubmittedRating] = useState(0);
   const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
   const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
     useState(false);
@@ -65,6 +70,7 @@ const RateUsBottomSheet = (props) => {
 
   const handleSlideDown = () => {
     setRateUsModalVisible(false);
+    setSubmittedRating(0);
     setSelectedRating(0);
   };
 
@@ -81,12 +87,26 @@ const RateUsBottomSheet = (props) => {
     }
   };
 
-  const openThanksForFeedbackModal = () => {
-    setThanksForYourFeedbackBottomSheetVisible(true);
+  const submitRating = (rating) => {
+    ratingApp(rating)
+      .then((res) => {
+        setSubmittedRating(res.data);
+        setRateUsModalVisible(false);
+        setSelectedIssues([]);
+        setSubmittedRating(0);
+        setSelectedRating(0);
+        setComment('');
+        setThanksForYourFeedbackBottomSheetVisible(true);
+        setTimeout(() => {
+          setThanksForYourFeedbackBottomSheetVisible(false);
+        }, 2000);
+      })
+      .catch((error) => {
+        setRateUsModalVisible(false);
+        notifyMessage('Something went wrong while rating your app', error);
+      });
   };
-  const closeThanksForFeedbackModal = () => {
-    setThanksForYourFeedbackBottomSheetVisible(false);
-  };
+
   return (
     <View>
       <Modal visible={visible} animationType="slide" transparent={true}>
@@ -218,7 +238,7 @@ const RateUsBottomSheet = (props) => {
                             >
                               <Text
                                 style={[
-                                  fonts.size_14,
+                                  fonts.size_12,
                                   fonts.fontWeight_small,
                                   layout.textCenter,
                                   {
@@ -271,10 +291,15 @@ const RateUsBottomSheet = (props) => {
                       </View>
 
                       <TouchableOpacity
-                        onPress={() => {
-                          handleSlideDown();
-                          openThanksForFeedbackModal();
-                        }}
+                        onPress={() =>
+                          submitRating({
+                            rating: selectedRating,
+                            comment: comment,
+                            feedbacks: selectedIssues,
+                            functionPoint: 'string',
+                            functionPointId: 'string',
+                          })
+                        }
                         style={isTablet && { width: '30%', alignSelf: 'center' }}
                       >
                         <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
@@ -298,9 +323,10 @@ const RateUsBottomSheet = (props) => {
             </View>
           </View>
         </View>
+        <Toast config={toastConfig} />
       </Modal>
       <ThanksForFeedbackBottomSheet
-        closeModal={closeThanksForFeedbackModal}
+        setThanksForYourFeedbackBottomSheetVisible={setThanksForYourFeedbackBottomSheetVisible}
         visible={thanksForYourFeedbackBottomSheetVisible}
       />
     </View>
