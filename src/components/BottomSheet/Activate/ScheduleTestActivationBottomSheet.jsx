@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/theme';
@@ -42,6 +50,7 @@ const ScheduleTestActivationBottomSheet = ({
   const [selectedDate, setSelectedDate] = useState(null);
   const [gradeId, setGradeId] = useState(null);
   const [partnerSectionId, setPartnerSectionId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
   const today = new Date();
@@ -84,6 +93,7 @@ const ScheduleTestActivationBottomSheet = ({
   const endTestDateTime = moment(toDateTimeString, 'dddd, MMMM D h:mm a').toISOString();
 
   const topicActivated = () => {
+    setIsLoading(true);
     const requiredBody = {
       gradeId: gradeId,
       partnerSectionId: partnerSectionId,
@@ -109,6 +119,7 @@ const ScheduleTestActivationBottomSheet = ({
           setTimeout(() => {
             getClassworks();
             setOpenClassSuccessfullySelectedBottomSheet(true);
+            setIsLoading(false);
             resolve(true);
           }, 1000);
         });
@@ -117,6 +128,7 @@ const ScheduleTestActivationBottomSheet = ({
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('error fetching classworks' + error);
         }
+        setIsLoading(false);
       });
   };
 
@@ -183,11 +195,13 @@ const ScheduleTestActivationBottomSheet = ({
                         layout.display,
                         layout.rowHCenter,
                         layout.justifyBetween,
+                        isTablet && {
+                          gap: 10,
+                          padding: 12,
+                        },
                         {
                           backgroundColor: colors.screenBackgroundColor,
                           height: !isTablet && 50,
-                          padding: isTablet && 12,
-                          gap: isTablet && 10,
                           borderRadius: 12,
                         },
                       ]}
@@ -320,30 +334,41 @@ const ScheduleTestActivationBottomSheet = ({
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  disabled={
+                    selectedFromTime == null && selectedToTime == null && selectedDate == null
+                  }
                   style={[
                     layout.justifyCenter,
                     styles.footerButton,
                     {
                       backgroundColor: colors.termsLinkColor,
+                      opacity:
+                        selectedFromTime == null && selectedToTime == null && selectedDate == null
+                          ? 0.4
+                          : 1,
                     },
                   ]}
-                  onPress={() => {
-                    topicActivated();
-                  }}
+                  onPress={topicActivated}
                 >
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
                   >
-                    <Text
-                      style={[
-                        fonts.size_16,
-                        fonts.bold,
-                        fonts.alignCenter,
-                        { color: colors.loginBtnTextColor },
-                      ]}
-                    >
-                      Yes, Schedule
-                    </Text>
+                    {isLoading ? (
+                      <View>
+                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                      </View>
+                    ) : (
+                      <Text
+                        style={[
+                          fonts.size_16,
+                          fonts.bold,
+                          fonts.alignCenter,
+                          { color: colors.loginBtnTextColor },
+                        ]}
+                      >
+                        Yes, Schedule
+                      </Text>
+                    )}
                   </PrimaryGradient>
                 </TouchableOpacity>
               </View>

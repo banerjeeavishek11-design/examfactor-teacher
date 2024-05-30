@@ -113,19 +113,21 @@ const HomeScreen = () => {
     getHomeworks();
   }, [selectedSubjectId]);
 
-  useEffect(() => {
-    getAllChaptersDetails();
-    getClassworks();
-    getDiagnostics();
-    getHomeworks();
-  }, []);
+  // useEffect(() => {
+  //   getAllChaptersDetails();
+  //   getClassworks();
+  //   getDiagnostics();
+  //   getHomeworks();
+  // }, []);
 
   useEffect(() => {
     getTeacheDetails();
   }, []);
 
   useEffect(() => {
-    getProgressForStudents();
+    if (selectedSubjectId && sectionId) {
+      getProgressForStudents();
+    }
   }, [sortByBody, practiceDurationBody, selectedSubjectId, sectionId]);
 
   useFocusEffect(
