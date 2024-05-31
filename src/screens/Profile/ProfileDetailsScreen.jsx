@@ -211,11 +211,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 Full Name
               </Text>
               <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
+                style={[fonts.size_16, fonts.fontWeight_400, { color: colors.white, opacity: 0.8 }]}
               >
                 {profileData?.firstName} {profileData?.middleName} {profileData?.lastName}
               </Text>
@@ -238,11 +234,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 DOB
               </Text>
               <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
+                style={[fonts.size_16, fonts.fontWeight_400, { color: colors.white, opacity: 0.8 }]}
               >
                 {moment(profileData?.dob).format('DD/MM/YYYY') === 'Invalid date'
                   ? '-'
@@ -267,11 +259,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 Gender
               </Text>
               <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
+                style={[fonts.size_16, fonts.fontWeight_400, { color: colors.white, opacity: 0.8 }]}
               >
                 {profileData?.gender}
               </Text>
@@ -297,8 +285,8 @@ const ProfileDetailsScreen = ({ navigation }) => {
               <Text
                 style={[
                   fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6, width: '60%', textAlign: 'right' },
+                  fonts.fontWeight_400,
+                  { color: colors.white, opacity: 0.9, width: '60%', textAlign: 'right' },
                 ]}
               >
                 {profileData?.emailId ? maskEmail(profileData.emailId) : '--'}
@@ -323,11 +311,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
                 Emergency Contact Number
               </Text>
               <Text
-                style={[
-                  fonts.size_16,
-                  fonts.fontWeight_small,
-                  { color: colors.white, opacity: 0.6 },
-                ]}
+                style={[fonts.size_16, fonts.fontWeight_400, { color: colors.white, opacity: 0.8 }]}
               >
                 {encryptNumber(profileData?.emergencyContactNumber) || '--'}
               </Text>
@@ -354,7 +338,7 @@ const ProfileDetailsScreen = ({ navigation }) => {
             Phone Number
           </Text>
           <Text
-            style={[fonts.size_16, fonts.fontWeight_small, { color: colors.white, opacity: 0.6 }]}
+            style={[fonts.size_16, fonts.fontWeight_400, { color: colors.white, opacity: 0.8 }]}
           >
             {profileData?.mobileNumber || '-'}
           </Text>
