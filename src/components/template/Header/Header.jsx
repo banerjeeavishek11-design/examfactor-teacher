@@ -9,6 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
+import { getUserDetailsByUserId } from '../../../services/teacherService';
 import { MMKV } from 'react-native-mmkv';
 import {
   selectSubjectAction,
@@ -31,6 +32,7 @@ const Header = () => {
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
+  const [userDetails, setUserDetails] = useState();
   const [selectedSubject, setSelectedSubject] = useState();
 
   useFocusEffect(
@@ -40,9 +42,13 @@ const Header = () => {
     })
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getTeacheDetails();
+    }, [])
+  );
+
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     if (teacherDetails && teacherDetails.length > 0) {
       setShowSelectedClass(teacherDetails[0]?.sectionName);
       dispatch(selectSectionName(teacherDetails[0]?.sectionName));
@@ -50,8 +56,6 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
     subject?.sort((a, b) => a.displaySeq - b.displaySeq);
@@ -86,6 +90,17 @@ const Header = () => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo({ x: scrollX, y: 0, animated: true });
     }
+  };
+
+  const getTeacheDetails = () => {
+    const userName = storage.getString('username');
+    getUserDetailsByUserId(userName)
+      .then((res) => {
+        setUserDetails(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -139,7 +154,7 @@ const Header = () => {
               {teacherDetails[0]?.profileImageUrl ? (
                 <ImageVariant
                   testID="brand-img"
-                  style={{ width: 44, height: 44, left: 5, borderRadius: 100, marginBottom: '8%' }}
+                  style={{ width: 50, height: 50, left: 5, borderRadius: 100, marginBottom: '8%' }}
                   source={{ uri: teacherDetails[0]?.profileImageUrl }}
                   resizeMode="cover"
                 />
@@ -158,10 +173,10 @@ const Header = () => {
                 onPress={() => handleOpenDrawer()}
                 style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
               >
-                {teacherDetails[0]?.profileImageUrl ? (
+                {userDetails?.profileImageUrl ? (
                   <Image
                     style={[{ width: 23, height: 23, borderRadius: 100 }]}
-                    source={{ uri: teacherDetails[0]?.profileImageUrl }}
+                    source={{ uri: userDetails?.profileImageUrl }}
                     resizeMode="cover"
                   />
                 ) : (

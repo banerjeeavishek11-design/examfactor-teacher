@@ -93,9 +93,9 @@ const SchoolWorkScreen = () => {
         style={[
           layout.row,
           layout.justifyBetween,
+          layout.itemsCenter,
           layout.paddingForFullScreen,
           {
-            marginHorizontal: '2%',
             backgroundColor: colors.headerBackgroundColor,
           },
         ]}
@@ -109,7 +109,7 @@ const SchoolWorkScreen = () => {
         </TouchableOpacity>
         <Text
           style={[
-            fonts.size_13,
+            fonts.size_14,
             fonts.bold,
             { color: colors.white, width: '80%', textAlign: 'center' },
           ]}

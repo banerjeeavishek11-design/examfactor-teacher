@@ -154,7 +154,7 @@ const ClassWorkTab = () => {
                     <View style={{ width: '55%' }}>
                       <Text
                         numberOfLines={2}
-                        style={[fonts.size_16, fonts.bold, { color: colors.white, top: -6 }]}
+                        style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
                       >
                         {ele.assessmentName}
                       </Text>

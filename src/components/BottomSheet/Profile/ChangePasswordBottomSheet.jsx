@@ -22,6 +22,7 @@ import { MMKV } from 'react-native-mmkv';
 import { resetPassword } from '../../../services/authService';
 import { getUserDetailsByUserId } from '../../../services/teacherService';
 import * as Yup from 'yup';
+import { notifyMessage } from '../../../utils/error-toast-API';
 
 const storage = new MMKV();
 
@@ -67,7 +68,6 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
     if (values.currentPassword !== oldPassword) {
       setCurrentPassWrong(true);
       setIsLoading(false);
-      console.log('old pass', oldPassword);
       return;
     }
 
@@ -96,8 +96,11 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
         closeModal();
       })
       .catch((error) => {
+        if (error.response?.status === 400 && error.response?.data.code === 'ERR-03') {
+          closeModal();
+          notifyMessage(error.response?.data.message);
+        }
         setIsLoading(false);
-        console.log('error', error);
       });
   };
 

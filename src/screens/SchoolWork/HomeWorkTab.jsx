@@ -182,7 +182,7 @@ const HomeWorkTab = () => {
                           { paddingBottom: '0%' },
                         ]}
                       >
-                        <View style={{ width: '62%', marginBottom: '4%' }}>
+                        <View style={{ width: '63%', marginBottom: '4%' }}>
                           <Text
                             numberOfLines={1}
                             style={[fonts.size_14, fonts.bold, { color: colors.white }]}

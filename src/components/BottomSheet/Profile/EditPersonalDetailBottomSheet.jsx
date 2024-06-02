@@ -108,6 +108,7 @@ const EditPersonalDetailBottomSheet = ({
       // middleName: 'string',
       // lastName: 'string',
       sectionId: sectionId,
+      address: values.address,
       dob: moment(selectedDob, 'DD-MM-YYYY')
         .set({
           hour: 15,
