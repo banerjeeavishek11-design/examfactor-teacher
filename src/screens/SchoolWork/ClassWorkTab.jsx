@@ -16,17 +16,13 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import Progressbar from '@/components/template/Progressbar/Progressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
-import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
-import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
-import { getChaptersBySubjectId } from '../../services/chapterListService';
 import {
   getStudentClassworkReports,
   getStudentWiseClassworkReports,
 } from '../../services/SchoolWorkServices/schoolWorkServices';
 import { Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
@@ -37,17 +33,14 @@ const ClassWorkTab = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const chapterId = useSelector((state) => state.selectedChapter.chapterId);
   const classFromMMKV = storage.getString('activateClasswork');
   const classwork = classFromMMKV ? JSON.parse(classFromMMKV) : [];
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
   const [expandCardId, setExpandedCardId] = useState('');
-  const [showChapterName, setShowChapterName] = useState();
-  const [chapList, setChapList] = useState([]);
-  const [chapListIndex, setChapListIndex] = useState(0);
   const [sectionId, setSectionId] = useState();
-  const [chapterId, setChapterId] = useState();
   const [assessmentWiseReport, setAssessmentWiseReport] = useState([]);
   const [data, setData] = useState([]);
   const [maxStudentNumber, setMaxStudentNumber] = useState(5);
@@ -67,36 +60,6 @@ const ClassWorkTab = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getAllChaptersDetails(selectedSubjectId);
-      setChapListIndex(0);
-    }, [selectedSubjectId])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setShowChapterName(chapList[chapListIndex]?.chapterDesc);
-    }, [chapList[chapListIndex]])
-  );
-
-  const getAllChaptersDetails = (subjectId) => {
-    setIsLoading(true);
-    getChaptersBySubjectId(subjectId)
-      .then((res) => {
-        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
-        setChapList(res.data.chapters);
-        setChapterId(res.data.chapters[0].chapterId);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error?.response?.status === 400 || error.code === 'ERR-10') {
-          notifyMessage('unabled to get chapter details');
-        }
-        setIsLoading(false);
-      });
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
       getStudentClasswork();
     }, [chapterId])
   );
@@ -107,13 +70,15 @@ const ClassWorkTab = () => {
       subjectId: selectedSubjectId,
       chapterId: chapterId,
     };
+    setIsLoading(true);
     getStudentClassworkReports(params)
       .then((res) => {
         setData(res.data);
-        // setAssessmentId(res.data[0].assessmentId);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log('error', error);
+        setIsLoading(false);
       });
   };
 
@@ -146,62 +111,9 @@ const ClassWorkTab = () => {
       });
   };
 
-  const handleChapterChangePress = (type) => {
-    const index = chapListIndex;
-    if (type === 'right') {
-      if (index + 1 >= chapList.length) {
-        setChapListIndex(0);
-        setChapterId(chapList[0].chapterId);
-      } else {
-        setChapListIndex((prev) => prev + 1);
-        setChapterId(chapList[index + 1].chapterId);
-      }
-    } else {
-      if (index - 1 < 0) {
-        setChapListIndex(chapList.length - 1);
-        setChapterId(chapList[chapList.length - 1].chapterId);
-      } else {
-        setChapListIndex((prev) => prev - 1);
-        setChapterId(chapList[index - 1].chapterId);
-      }
-    }
-  };
-
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
-        {classwork.length > 0 && (
-          <View
-            style={[layout.row, layout.justifyBetween, { marginTop: '4%', marginHorizontal: '2%' }]}
-          >
-            <TouchableOpacity
-              onPress={() => handleChapterChangePress('left')}
-              disabled={chapListIndex === 0}
-              style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
-            >
-              <Image source={leftArrow} style={{ width: 28, height: 16 }} />
-            </TouchableOpacity>
-            <Text
-              style={[
-                fonts.size_13,
-                fonts.bold,
-                { color: colors.white, width: '80%', textAlign: 'center' },
-              ]}
-            >
-              C{chapListIndex + 1} : {showChapterName}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleChapterChangePress('right')}
-              style={{
-                opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
-              }}
-              disabled={chapListIndex === chapList.length - 1}
-            >
-              <Image source={rightArrow} style={{ width: 28, height: 16 }} />
-            </TouchableOpacity>
-          </View>
-        )}
-
         {classwork.length > 0 ? (
           <>
             {data.length === 0 && (

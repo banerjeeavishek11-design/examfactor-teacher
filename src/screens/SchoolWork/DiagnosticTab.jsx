@@ -21,11 +21,11 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import { Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
-import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
-import { getChaptersBySubjectId } from '../../services/chapterListService';
+// import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
+// import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
+// import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getStudentDiagnosticReports } from '../../services/SchoolWorkServices/schoolWorkServices';
-import { notifyMessage } from '../../utils/error-toast-API';
+// import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
 import { getChapterDescById, getTopicDescById, getSubTopicDescById } from '../../utils/namesByIds';
 
@@ -35,8 +35,10 @@ const DiagnosticTab = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
-  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const chapterId = useSelector((state) => state.selectedChapter.chapterId);
+  const chapList = useSelector((state) => state.selectedChapter.chapList);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const diagFromMMKV = storage.getString('activateDiagnostic');
   const diagnostic = diagFromMMKV ? JSON.parse(diagFromMMKV) : [];
   const resFromMMKV = storage.getString('teacherDetails');
@@ -44,11 +46,7 @@ const DiagnosticTab = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [expandedDiagnosticCards, setExpandedDiagnosticCards] = useState({});
   const [expandedDiagnosticId, setExpandedDiagnosticId] = useState();
-  const [chapList, setChapList] = useState([]);
-  const [chapListIndex, setChapListIndex] = useState(0);
-  const [chapterId, setChapterId] = useState();
   const [sectionId, setSectionId] = useState();
-  const [showChapterName, setShowChapterName] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   const [data, setData] = useState([]);
@@ -66,11 +64,6 @@ const DiagnosticTab = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setShowChapterName(chapList[chapListIndex]?.chapterDesc);
-    }, [chapList[chapListIndex]])
-  );
-  useFocusEffect(
-    React.useCallback(() => {
       getStudentDiagnostics();
     }, [chapterId])
   );
@@ -81,35 +74,14 @@ const DiagnosticTab = () => {
       subjectId: selectedSubjectId,
       chapterId: chapterId,
     };
+    setIsLoading(true);
     getStudentDiagnosticReports(params)
       .then((res) => {
         setData(res.data);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getAllChaptersDetails(selectedSubjectId);
-      setChapListIndex(0);
-    }, [selectedSubjectId])
-  );
-
-  const getAllChaptersDetails = (subjectId) => {
-    setIsLoading(true);
-    getChaptersBySubjectId(subjectId)
-      .then((res) => {
-        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
-        setChapList(res.data.chapters);
-        setChapterId(res.data.chapters[0].chapterId);
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error?.response?.status === 400 || error.code === 'ERR-10') {
-          notifyMessage('unabled to get chapter details');
-        }
+        console.log('error', error);
         setIsLoading(false);
       });
   };
@@ -132,27 +104,6 @@ const DiagnosticTab = () => {
     }));
   };
 
-  const handleChapterChangePress = (type) => {
-    const index = chapListIndex;
-    if (type === 'right') {
-      if (index + 1 >= chapList.length) {
-        setChapListIndex(0);
-        setChapterId(chapList[0].chapterId);
-      } else {
-        setChapListIndex((prev) => prev + 1);
-        setChapterId(chapList[index + 1].chapterId);
-      }
-    } else {
-      if (index - 1 < 0) {
-        setChapListIndex(chapList.length - 1);
-        setChapterId(chapList[chapList.length - 1].chapterId);
-      } else {
-        setChapListIndex((prev) => prev - 1);
-        setChapterId(chapList[index - 1].chapterId);
-      }
-    }
-  };
-
   return (
     <SafeScreen>
       {isLoading ? (
@@ -161,42 +112,6 @@ const DiagnosticTab = () => {
         </View>
       ) : (
         <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
-          {diagnostic.length > 0 && (
-            <View
-              style={[
-                layout.row,
-                layout.justifyBetween,
-                { marginTop: '4%', marginHorizontal: '2%' },
-              ]}
-            >
-              <TouchableOpacity
-                onPress={() => handleChapterChangePress('left')}
-                disabled={chapListIndex === 0}
-                style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
-              >
-                <Image source={leftArrow} style={{ width: 28, height: 16 }} />
-              </TouchableOpacity>
-              <Text
-                style={[
-                  fonts.size_13,
-                  fonts.bold,
-                  { color: colors.white, width: '80%', textAlign: 'center' },
-                ]}
-              >
-                C{chapListIndex + 1} : {showChapterName}
-              </Text>
-              <TouchableOpacity
-                onPress={() => handleChapterChangePress('right')}
-                style={{
-                  opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
-                }}
-                disabled={chapListIndex === chapList.length - 1}
-              >
-                <Image source={rightArrow} style={{ width: 28, height: 16 }} />
-              </TouchableOpacity>
-            </View>
-          )}
-
           {diagnostic.length > 0 ? (
             <>
               {data.map((ele) => {
