@@ -335,8 +335,11 @@ const DiagnosticTab = () => {
                                     style={[
                                       styles.row,
                                       index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                      index === ele.b2BStudentDiagnosticSummaryDtoList.length - 1 &&
-                                        styles.lastRow,
+                                      index ===
+                                        ele.b2BStudentDiagnosticSummaryDtoList.length - 1 && {
+                                        borderBottomLeftRadius: 14,
+                                        borderBottomRightRadius: 14,
+                                      },
                                     ]}
                                   >
                                     <View
@@ -457,26 +460,25 @@ const DiagnosticTab = () => {
                         )}
                       </View>
                     ) : null}
-                    {expandedCards[ele.id] &&
-                      ele.b2BStudentDiagnosticSummaryDtoList.length != 0 && (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
-                          }}
-                          style={{ marginTop: '4%', marginBottom: '4%' }}
+                    {expandedCards[ele.id] && ele.b2BStudentDiagnosticSummaryDtoList.length > 5 && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
+                        }}
+                        style={{ marginTop: '4%', marginBottom: '4%' }}
+                      >
+                        <Text
+                          style={[
+                            fonts.size_14,
+                            fonts.fontWeignt_600,
+                            fonts.alignCenter,
+                            { color: colors.termsLinkColor },
+                          ]}
                         >
-                          <Text
-                            style={[
-                              fonts.size_14,
-                              fonts.fontWeignt_600,
-                              fonts.alignCenter,
-                              { color: colors.termsLinkColor },
-                            ]}
-                          >
-                            {seeMaxStudent === 5 ? 'See More' : 'See Less'}
-                          </Text>
-                        </TouchableOpacity>
-                      )}
+                          {seeMaxStudent === 5 ? 'See More' : 'See Less'}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   </TouchableOpacity>
                 );
               })}

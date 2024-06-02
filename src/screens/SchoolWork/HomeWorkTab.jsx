@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Image,
   ScrollView,
@@ -31,14 +32,6 @@ import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
 
-const leaderboardData = [
-  { name: 'Rahul K.', progress: 88, achievable: 87 },
-  { name: 'Sanya M.', progress: 85, achievable: 81 },
-  { name: 'Karan K.', progress: 74, achievable: 78 },
-  { name: 'Piyush K.', progress: 81, achievable: 87 },
-  { name: 'Anmol S.', progress: 78, achievable: 84 },
-];
-
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
@@ -64,6 +57,7 @@ const HomeWorkTab = () => {
   const [topicWiseResponse, setTopicWiseResponse] = useState([]);
   const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [topicsLoading, setTopicsLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -145,14 +139,14 @@ const HomeWorkTab = () => {
       chapterId: chapterId,
       topicId: topicId,
     };
-    setIsLoading(true);
+    setTopicsLoading(true);
     getStudentHomeworkReports(params)
       .then((res) => {
-        setIsLoading(false);
+        setTopicsLoading(false);
         setTopicWiseResponse(res.data);
       })
       .catch((error) => {
-        setIsLoading(false);
+        setTopicsLoading(false);
         console.log('error', error);
       });
   };
@@ -279,24 +273,24 @@ const HomeWorkTab = () => {
                           { paddingBottom: '0%' },
                         ]}
                       >
-                        <View style={{ width: '55%' }}>
+                        <View style={{ width: '62%', marginBottom: '4%' }}>
                           <Text
                             numberOfLines={1}
-                            style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
+                            style={[fonts.size_14, fonts.bold, { color: colors.white }]}
                           >
                             {getTopicDescById(chapList, ele.topicId)}
                           </Text>
                           <Text
                             style={[
-                              fonts.size_10,
+                              fonts.size_12,
                               fonts.fontWeight_small,
-                              { color: colors.backButtonColor, marginBottom: '8%' },
+                              { color: colors.backButtonColor },
                             ]}
                           >
                             Student Completed The Homework
                           </Text>
                         </View>
-                        <View style={{ width: isTablet ? '0%' : '20%', top: -5 }}>
+                        <View style={{ width: isTablet ? '0%' : '8%', top: -5 }}>
                           <Circularprogressbar
                             total={ele.totalStudentCount}
                             progress={ele.totalStudentCompletionCount}
@@ -327,6 +321,7 @@ const HomeWorkTab = () => {
                         ]}
                       >
                         <TouchableOpacity
+                          disabled={ele.remindOn !== null}
                           onPress={() => {
                             setOpenRemindStudentBottomSheet(true);
                             setTopicId(ele.topicId);
@@ -339,7 +334,6 @@ const HomeWorkTab = () => {
                               {
                                 color: colors.termsLinkColor,
                                 textDecorationLine: 'underline',
-                                marginTop: -18,
                               },
                             ]}
                           >
@@ -347,121 +341,148 @@ const HomeWorkTab = () => {
                           </Text>
                         </TouchableOpacity>
                       </View>
-
                       {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                         <View>
-                          <View style={[layout.paddingForCard, isTablet && { marginTop: '-6%' }]}>
-                            {ele.remindOn !== null ? (
-                              <Text
-                                style={[
-                                  fonts.size_12,
-                                  fonts.fontWeight_small,
-                                  {
-                                    color: '#7A7A82',
-                                  },
-                                ]}
-                              >
-                                Reminded on {moment(ele.remindOn).format('MMM DD, YYYY')}
-                              </Text>
-                            ) : null}
-                            <View style={[layout.itemsCenter]}>
-                              <Divider
-                                style={{
-                                  width: '100%',
-                                  backgroundColor: colors.lineBackgroundColor,
-                                }}
-                              />
+                          {topicsLoading ? (
+                            <View style={{ paddingVertical: '2%' }}>
+                              <ActivityIndicator size="large" color={colors.termsLinkColor} />
                             </View>
-                          </View>
-                          <View>
-                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length === 0 ? (
+                          ) : (
+                            <>
                               <View
                                 style={[
-                                  layout.justifyCenter,
-                                  layout.itemsCenter,
-                                  { marginVertical: '3%' },
+                                  layout.paddingForCard,
+                                  { marginTop: isTablet ? '-6%' : '-7%' },
                                 ]}
                               >
-                                <Text
-                                  style={[
-                                    fonts.fontWeight_small,
-                                    fonts.size_14,
-                                    { color: colors.gray100 },
-                                  ]}
-                                >
-                                  No Data Found
-                                </Text>
+                                {ele.remindOn !== null ? (
+                                  <Text
+                                    style={[
+                                      fonts.size_12,
+                                      fonts.fontWeight_small,
+                                      {
+                                        color: '#7A7A82',
+                                      },
+                                    ]}
+                                  >
+                                    Reminded on {moment(ele.remindOn).format('MMM DD, YYYY')}
+                                  </Text>
+                                ) : null}
+                                <View style={[layout.itemsCenter]}>
+                                  <Divider
+                                    style={{
+                                      width: '100%',
+                                      backgroundColor: colors.lineBackgroundColor,
+                                    }}
+                                  />
+                                </View>
                               </View>
-                            ) : (
-                              <View style={styles.header}>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Name
-                                </Text>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Home Work Time
-                                </Text>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Progress
-                                </Text>
-                              </View>
-                            )}
-                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
-                              (item, index) => (
-                                <>
-                                  {index < seeMaxStudent && (
+                              <View>
+                                {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length ===
+                                0 ? (
                                     <View
-                                      key={item.studentName}
                                       style={[
-                                        styles.row,
-                                        index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                        index === leaderboardData.length - 1 && styles.lastRow,
-                                        { borderRadius: 14 },
+                                        layout.justifyCenter,
+                                        layout.itemsCenter,
+                                        { marginVertical: '3%' },
                                       ]}
                                     >
                                       <Text
                                         style={[
-                                          fonts.size_14,
                                           fonts.fontWeight_small,
-                                          { color: colors.white, opacity: 0.7 },
+                                          fonts.size_14,
+                                          { color: colors.gray100 },
                                         ]}
                                       >
-                                        {item.studentName}
+                                      No Data Found
                                       </Text>
-                                      <View
-                                        style={[
-                                          layout.row,
-                                          layout.itemsCenter,
-                                          {
-                                            width: '55%',
-                                            justifyContent: 'space-between',
-                                          },
-                                        ]}
+                                    </View>
+                                  ) : (
+                                    <View style={styles.header}>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
                                       >
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.fontWeight_small,
-                                            { color: colors.white, opacity: 0.7 },
-                                          ]}
-                                        >
-                                          {item.timeSpent}
-                                        </Text>
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.fontWeight_small,
-                                            { color: colors.white, opacity: 0.7 },
-                                          ]}
-                                        >
-                                          {item.completionPercentage} %
-                                        </Text>
-                                      </View>
+                                      Name
+                                      </Text>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                                      >
+                                      Home Work Time
+                                      </Text>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                                      >
+                                      Progress
+                                      </Text>
                                     </View>
                                   )}
-                                </>
-                              )
-                            )}
-                          </View>
+                                {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
+                                  (item, index) => (
+                                    <>
+                                      {index < seeMaxStudent && (
+                                        <View
+                                          key={item.studentName}
+                                          style={[
+                                            styles.row,
+                                            index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                            index ===
+                                              topicWiseResponse[0]?.b2BStudentHomeWorkReportList
+                                                ?.length -
+                                                1 && {
+                                              borderBottomLeftRadius: 14,
+                                              borderBottomRightRadius: 14,
+                                            },
+                                          ]}
+                                        >
+                                          <Text
+                                            style={[
+                                              fonts.size_14,
+                                              fonts.fontWeight_small,
+                                              { color: colors.white, opacity: 0.7 },
+                                            ]}
+                                          >
+                                            {item.studentName}
+                                          </Text>
+                                          <View
+                                            style={[
+                                              layout.row,
+                                              layout.itemsCenter,
+                                              {
+                                                width: '70%',
+                                                justifyContent: 'space-between',
+                                              },
+                                            ]}
+                                          >
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.fontWeight_small,
+                                                { color: colors.white, opacity: 0.7 },
+                                              ]}
+                                            >
+                                              {item?.timeSpent < 60
+                                                ? item?.timeSpent + ' Sec'
+                                                : Math.floor(item?.timeSpent / 60) + ' Min'}
+                                            </Text>
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.fontWeight_small,
+                                                !isTablet && { opacity: 0.7, right: 24 },
+                                                { color: colors.white },
+                                              ]}
+                                            >
+                                              {item.completionPercentage} %
+                                            </Text>
+                                          </View>
+                                        </View>
+                                      )}
+                                    </>
+                                  )
+                                )}
+                              </View>
+                            </>
+                          )}
                         </View>
                       ) : null}
                       {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length > 5 && (

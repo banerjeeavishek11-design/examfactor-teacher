@@ -76,17 +76,6 @@ const DiagnosticTab = () => {
     }, [])
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setSearchValue('');
-    }, [])
-  );
-
-  useEffect(() => {
-    getAllChaptersDetails(selectedSubjectId);
-    getDiagnostics();
-  }, [selectedSubjectId, sectionId, gradeId]);
-
   useEffect(() => {
     if (chapList[chapListIndex]?.unitId) {
       setUnitId(chapList[chapListIndex]?.unitId);

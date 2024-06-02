@@ -140,6 +140,7 @@ const TabBar = (props) => {
 const SchoolWorkTopTabNavigator = () => {
   return (
     <Tab.Navigator
+      initialRouteName="HomeWorkTab"
       screenOptions={{
         headerShown: false,
       }}
