@@ -90,6 +90,7 @@ const RateUsBottomSheet = (props) => {
   const submitRating = (rating) => {
     ratingApp(rating)
       .then((res) => {
+        console.log('res.data', res.data);
         setSubmittedRating(res.data);
         setRateUsModalVisible(false);
         setSelectedIssues([]);
@@ -102,6 +103,7 @@ const RateUsBottomSheet = (props) => {
         }, 2000);
       })
       .catch((error) => {
+        console.log('error from rate us', error);
         setRateUsModalVisible(false);
         notifyMessage('Something went wrong while rating your app', error);
       });
@@ -297,8 +299,8 @@ const RateUsBottomSheet = (props) => {
                             rating: selectedRating,
                             comment: comment,
                             feedbacks: selectedIssues,
-                            functionPoint: 'string',
-                            functionPointId: 'string',
+                            functionPoint: 'PROFILE',
+                            // functionPointId: 'string',
                           })
                         }
                         style={isTablet && { width: '30%', alignSelf: 'center' }}

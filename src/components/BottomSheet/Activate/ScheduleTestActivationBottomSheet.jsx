@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import React, { useState, useEffect } from 'react';
@@ -135,253 +136,257 @@ const ScheduleTestActivationBottomSheet = ({
   return (
     <View style={styles.container}>
       <Modal visible={visible} animationType="slide" transparent={true}>
-        <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
-          <View
-            style={[
-              styles.bottomSheetContent,
-              isTablet && {
-                width: '55%',
-                alignSelf: 'center',
-                borderBottomEndRadius: 10,
-                borderBottomStartRadius: 10,
-              },
-              {
-                backgroundColor: colors.bottomSheetBackgroundColor,
-                height: showCalendar ? 550 : 350,
-              },
-            ]}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                setActivateConfirmationModalVisible(false);
-                setSelectedDate(null);
-                setSelectedFromTime(null);
-                setSelectedToTime(null);
-              }}
-              style={[{ position: 'absolute', top: -35, left: '92%' }]}
+        <TouchableWithoutFeedback>
+          <View style={isTablet ? styles.modalTabContainer : styles.modalContainer}>
+            <View
+              style={[
+                styles.bottomSheetContent,
+                isTablet && {
+                  width: '55%',
+                  alignSelf: 'center',
+                  borderBottomEndRadius: 10,
+                  borderBottomStartRadius: 10,
+                },
+                {
+                  backgroundColor: colors.bottomSheetBackgroundColor,
+                  height: showCalendar ? 550 : 350,
+                },
+              ]}
             >
-              <ImageVariant
-                testID="brand-img"
-                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
-                source={Cross}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <View style={styles.center}>
               <TouchableOpacity
-                style={styles.slideIndicator}
                 onPress={() => {
                   setActivateConfirmationModalVisible(false);
+                  setSelectedDate(null);
+                  setSelectedFromTime(null);
+                  setSelectedToTime(null);
                 }}
-              ></TouchableOpacity>
-            </View>
-            <View style={[layout.paddingForCard, styles.scrollContainer]}>
-              <View style={{ width: '80%' }}>
-                <Text
-                  style={[fonts.size_20, fonts.bold, { color: colors.white, textAlign: 'left' }]}
-                >
-                  Schedule Test Activation
-                </Text>
-                <Text
-                  style={[
-                    fonts.size_14,
-                    fonts.fontWeight_small,
-                    { color: '#E2E2E2', marginVertical: isTablet ? '1%' : '4%' },
-                  ]}
-                >
-                  Test timing : {totalTime} Min
-                </Text>
-              </View>
-              <View style={isTablet && [layout.row, { gap: 20 }]}>
-                <View style={isTablet && { marginTop: '5%' }}>
-                  {!showCalendar && (
-                    <View
-                      style={[
-                        !isTablet && layout.fullWidth,
-                        layout.paddingForCard,
-                        layout.display,
-                        layout.rowHCenter,
-                        layout.justifyBetween,
-                        isTablet && {
-                          gap: 10,
-                          padding: 12,
-                        },
-                        {
-                          backgroundColor: colors.screenBackgroundColor,
-                          height: !isTablet && 50,
-                          borderRadius: 12,
-                        },
-                      ]}
-                    >
-                      <Text style={[fonts.size_12, fonts.fontWeignt_600, { color: colors.white }]}>
-                        {selectedDate ? selectedDate : 'Select Date'}
-                      </Text>
-
-                      <TouchableOpacity onPress={handleCalendarToggle}>
-                        <ImageVariant
-                          testID="brand-img"
-                          style={{ width: 16, height: 16, tintColor: 'white' }}
-                          source={Calender}
-                          resizeMode="contain"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-
-                  {showCalendar && (
-                    <Calendar
-                      style={{
-                        height: 'auto',
-                        borderRadius: 12,
-                      }}
-                      onDayPress={(day) => handleDateSelect(day.dateString)}
-                      // theme={customTheme}
-                      theme={{
-                        backgroundColor: 'black',
-                        calendarBackground: 'black',
-                        textSectionTitleColor: 'gray',
-                        selectedDayBackgroundColor: '#00adf5',
-                        selectedDayTextColor: '#ffffff',
-                        todayTextColor: 'white',
-                        dayTextColor: 'white',
-                        textDisabledColor: 'gray',
-                        dotColor: '#00adf5',
-                        selectedDotColor: '#ffffff',
-                        arrowColor: '#0084FF',
-                        monthTextColor: 'white',
-                        indicatorColor: 'blue',
-                        textDayFontFamily: 'monospace',
-                        textMonthFontFamily: 'monospace',
-                        textDayHeaderFontFamily: 'monospace',
-                        textDayFontWeight: '300',
-                        textMonthFontWeight: 'bold',
-                        textDayHeaderFontWeight: '300',
-                        textDayFontSize: 16,
-                        textMonthFontSize: 16,
-                        textDayHeaderFontSize: 16,
-                        todayBackgroundColor: '#0084FF',
-                      }}
-                      // minDate={new Date().toISOString().split('T')[0]}
-                      minDate={today.toISOString().split('T')[0]}
-                    />
-                  )}
-                </View>
-
-                <View
-                  style={[
-                    layout.display,
-                    layout.rowHCenter,
-                    layout.justifyBetween,
-                    isTablet && { gap: 20 },
-                    { marginTop: '5%' },
-                  ]}
-                >
-                  <Pressable
-                    style={[
-                      layout.justifyCenter,
-                      {
-                        backgroundColor: colors.screenBackgroundColor,
-                        borderRadius: 12,
-                        height: 42,
-                        width: 130,
-                      },
-                    ]}
-                    onPress={() => setFromModalVisible(true)}
-                  >
-                    <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                      {selectedFromTime ? selectedFromTime : 'Select from Time'}
-                    </Text>
-                  </Pressable>
-                  <View
-                    style={{
-                      width: 10,
-                      height: 2,
-                      backgroundColor: colors.white,
-                    }}
-                  />
-                  <Pressable
-                    style={[
-                      layout.justifyCenter,
-                      {
-                        backgroundColor: colors.screenBackgroundColor,
-                        borderRadius: 12,
-                        height: 42,
-                        width: 130,
-                      },
-                    ]}
-                    onPress={() => setToModalVisible(true)}
-                  >
-                    <Text style={[fonts.alignCenter, { color: 'white' }]}>
-                      {selectedToTime ? selectedToTime : 'Select to Time'}
-                    </Text>
-                  </Pressable>
-                </View>
-              </View>
-
-              <View style={styles.footer}>
+                style={[{ position: 'absolute', top: -35, left: '92%' }]}
+              >
+                <ImageVariant
+                  testID="brand-img"
+                  style={{ width: 16, height: 16, tintColor: colors.gray200 }}
+                  source={Cross}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+              <View style={styles.center}>
                 <TouchableOpacity
+                  style={styles.slideIndicator}
                   onPress={() => {
                     setActivateConfirmationModalVisible(false);
-                    setSelectedDate(null);
-                    setSelectedFromTime(null);
-                    setSelectedToTime(null);
                   }}
-                  style={[
-                    layout.justifyCenter,
-                    styles.footerButton,
-                    {
-                      backgroundColor: colors.cardBackgroundColor,
-                    },
-                  ]}
-                >
+                ></TouchableOpacity>
+              </View>
+              <View style={[layout.paddingForCard, styles.scrollContainer]}>
+                <View style={{ width: '80%' }}>
+                  <Text
+                    style={[fonts.size_20, fonts.bold, { color: colors.white, textAlign: 'left' }]}
+                  >
+                    Schedule Test Activation
+                  </Text>
                   <Text
                     style={[
-                      fonts.size_16,
-                      fonts.bold,
-                      fonts.alignCenter,
-                      { color: colors.termsLinkColor },
+                      fonts.size_14,
+                      fonts.fontWeight_small,
+                      { color: '#E2E2E2', marginVertical: isTablet ? '1%' : '4%' },
                     ]}
                   >
-                    Cancel
+                    Test timing : {totalTime} Min
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  disabled={!selectedFromTime || !selectedToTime || !selectedDate}
-                  style={[
-                    layout.justifyCenter,
-                    styles.footerButton,
-                    {
-                      backgroundColor: colors.termsLinkColor,
-                      opacity: !selectedFromTime || !selectedToTime || !selectedDate ? 0.4 : 1,
-                    },
-                  ]}
-                  onPress={topicActivated}
-                >
-                  <PrimaryGradient
-                    styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
-                  >
-                    {isLoading ? (
-                      <View>
-                        <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
-                      </View>
-                    ) : (
-                      <Text
+                </View>
+                <View style={isTablet && [layout.row, { gap: 20 }]}>
+                  <View style={isTablet && { marginTop: '5%' }}>
+                    {!showCalendar && (
+                      <View
                         style={[
-                          fonts.size_16,
-                          fonts.bold,
-                          fonts.alignCenter,
-                          { color: colors.loginBtnTextColor },
+                          !isTablet && layout.fullWidth,
+                          layout.paddingForCard,
+                          layout.display,
+                          layout.rowHCenter,
+                          layout.justifyBetween,
+                          isTablet && {
+                            gap: 10,
+                            padding: 12,
+                          },
+                          {
+                            backgroundColor: colors.screenBackgroundColor,
+                            height: !isTablet && 50,
+                            borderRadius: 12,
+                          },
                         ]}
                       >
-                        Yes, Schedule
-                      </Text>
+                        <Text
+                          style={[fonts.size_12, fonts.fontWeignt_600, { color: colors.white }]}
+                        >
+                          {selectedDate ? selectedDate : 'Select Date'}
+                        </Text>
+
+                        <TouchableOpacity onPress={handleCalendarToggle}>
+                          <ImageVariant
+                            testID="brand-img"
+                            style={{ width: 16, height: 16, tintColor: 'white' }}
+                            source={Calender}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                      </View>
                     )}
-                  </PrimaryGradient>
-                </TouchableOpacity>
+
+                    {showCalendar && (
+                      <Calendar
+                        style={{
+                          height: 'auto',
+                          borderRadius: 12,
+                        }}
+                        onDayPress={(day) => handleDateSelect(day.dateString)}
+                        // theme={customTheme}
+                        theme={{
+                          backgroundColor: 'black',
+                          calendarBackground: 'black',
+                          textSectionTitleColor: 'gray',
+                          selectedDayBackgroundColor: '#00adf5',
+                          selectedDayTextColor: '#ffffff',
+                          todayTextColor: 'white',
+                          dayTextColor: 'white',
+                          textDisabledColor: 'gray',
+                          dotColor: '#00adf5',
+                          selectedDotColor: '#ffffff',
+                          arrowColor: '#0084FF',
+                          monthTextColor: 'white',
+                          indicatorColor: 'blue',
+                          textDayFontFamily: 'monospace',
+                          textMonthFontFamily: 'monospace',
+                          textDayHeaderFontFamily: 'monospace',
+                          textDayFontWeight: '300',
+                          textMonthFontWeight: 'bold',
+                          textDayHeaderFontWeight: '300',
+                          textDayFontSize: 16,
+                          textMonthFontSize: 16,
+                          textDayHeaderFontSize: 16,
+                          todayBackgroundColor: '#0084FF',
+                        }}
+                        // minDate={new Date().toISOString().split('T')[0]}
+                        minDate={today.toISOString().split('T')[0]}
+                      />
+                    )}
+                  </View>
+
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      isTablet && { gap: 20 },
+                      { marginTop: '5%' },
+                    ]}
+                  >
+                    <Pressable
+                      style={[
+                        layout.justifyCenter,
+                        {
+                          backgroundColor: colors.screenBackgroundColor,
+                          borderRadius: 12,
+                          height: 42,
+                          width: 130,
+                        },
+                      ]}
+                      onPress={() => setFromModalVisible(true)}
+                    >
+                      <Text style={[fonts.alignCenter, { color: 'white' }]}>
+                        {selectedFromTime ? selectedFromTime : 'Select from Time'}
+                      </Text>
+                    </Pressable>
+                    <View
+                      style={{
+                        width: 10,
+                        height: 2,
+                        backgroundColor: colors.white,
+                      }}
+                    />
+                    <Pressable
+                      style={[
+                        layout.justifyCenter,
+                        {
+                          backgroundColor: colors.screenBackgroundColor,
+                          borderRadius: 12,
+                          height: 42,
+                          width: 130,
+                        },
+                      ]}
+                      onPress={() => setToModalVisible(true)}
+                    >
+                      <Text style={[fonts.alignCenter, { color: 'white' }]}>
+                        {selectedToTime ? selectedToTime : 'Select to Time'}
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+
+                <View style={styles.footer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setActivateConfirmationModalVisible(false);
+                      setSelectedDate(null);
+                      setSelectedFromTime(null);
+                      setSelectedToTime(null);
+                    }}
+                    style={[
+                      layout.justifyCenter,
+                      styles.footerButton,
+                      {
+                        backgroundColor: colors.cardBackgroundColor,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        fonts.size_16,
+                        fonts.bold,
+                        fonts.alignCenter,
+                        { color: colors.termsLinkColor },
+                      ]}
+                    >
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={!selectedFromTime || !selectedToTime || !selectedDate}
+                    style={[
+                      layout.justifyCenter,
+                      styles.footerButton,
+                      {
+                        backgroundColor: colors.termsLinkColor,
+                        opacity: !selectedFromTime || !selectedToTime || !selectedDate ? 0.4 : 1,
+                      },
+                    ]}
+                    onPress={topicActivated}
+                  >
+                    <PrimaryGradient
+                      styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}
+                    >
+                      {isLoading ? (
+                        <View>
+                          <ActivityIndicator size="small" color={colors.loginBtnTextColor} />
+                        </View>
+                      ) : (
+                        <Text
+                          style={[
+                            fonts.size_16,
+                            fonts.bold,
+                            fonts.alignCenter,
+                            { color: colors.loginBtnTextColor },
+                          ]}
+                        >
+                          Yes, Schedule
+                        </Text>
+                      )}
+                    </PrimaryGradient>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
       <ScheduleTimeBottomSheet
         fromModalVisible={fromModalVisible}
@@ -391,6 +396,7 @@ const ScheduleTestActivationBottomSheet = ({
         setToModalVisible={setToModalVisible}
         setSelectedFromTime={setSelectedFromTime}
         totalTime={totalTime}
+        setActivateConfirmationModalVisible={setActivateConfirmationModalVisible}
       />
       <ClassSuccessfullySelectedBottomSheet
         setOpenClassSuccessfullySelectedBottomSheet={setOpenClassSuccessfullySelectedBottomSheet}
