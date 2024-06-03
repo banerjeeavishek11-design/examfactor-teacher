@@ -106,11 +106,15 @@ const HomeWorkTab = () => {
       });
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getStudentHomeworks();
-    }, [chapterId])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getStudentHomeworks();
+  //   }, [chapterId, chapListIndex])
+  // );
+
+  useEffect(() => {
+    getStudentHomeworks();
+  }, []);
 
   const getStudentHomeworks = () => {
     let params = {
@@ -121,7 +125,17 @@ const HomeWorkTab = () => {
     setIsLoading(true);
     getStudentHomeworkReports(params)
       .then((res) => {
-        setData(res.data);
+        const sortedData = res.data.sort((a, b) => {
+          if (a.topicId < b.topicId) {
+            return -1;
+          }
+          if (a.topicId > b.topicId) {
+            return 1;
+          }
+          return 0;
+        });
+        setData(sortedData);
+        console.log('res.data', res.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -255,11 +269,11 @@ const HomeWorkTab = () => {
                     </Text>
                   </View>
                 )}
-                {data.map((ele, index) => {
+                {data?.map((ele) => {
                   return (
                     <TouchableOpacity
                       onPress={() => toggleContent(ele.topicId)}
-                      key={index}
+                      key={ele.topicId}
                       style={[
                         layout.fullWidth,
                         {
@@ -405,12 +419,13 @@ const HomeWorkTab = () => {
                                 </Text>
                               </View>
                             )}
-                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
-                              (item, index) => (
+                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList
+                              ?.sort((a, b) => b.completionPercentage - a.completionPercentage)
+                              ?.map((item, index) => (
                                 <>
                                   {index < seeMaxStudent && (
                                     <View
-                                      key={item.studentName}
+                                      key={item?.studentId}
                                       style={[
                                         styles.row,
                                         index % 2 === 0 ? styles.evenRow : styles.oddRow,
@@ -422,7 +437,7 @@ const HomeWorkTab = () => {
                                         style={[
                                           fonts.size_14,
                                           fonts.fontWeight_small,
-                                          { color: colors.white, opacity: 0.7 },
+                                          { color: colors.white, opacity: 0.7, width: '20%' },
                                         ]}
                                       >
                                         {item.studentName}
@@ -459,8 +474,7 @@ const HomeWorkTab = () => {
                                     </View>
                                   )}
                                 </>
-                              )
-                            )}
+                              ))}
                           </View>
                         </View>
                       ) : null}

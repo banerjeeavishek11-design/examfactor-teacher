@@ -144,6 +144,7 @@ const SchoolWorkTopTabNavigator = () => {
         headerShown: false,
       }}
       tabBar={(props) => <TabBar {...props} />}
+      initialRouteName="HomeWorkTab"
     >
       <Tab.Screen name="HomeWorkTab" component={HomeWorkTab} />
       <Tab.Screen name="DiagnosticTab" component={DiagnosticTab} />

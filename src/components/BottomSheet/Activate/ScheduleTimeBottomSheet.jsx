@@ -10,6 +10,8 @@ import {
 import React from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
+import { ImageVariant } from '../../atoms';
+import Cross from '@/theme/assets/images/cross.png';
 
 const fromTimeData = [
   { id: 1, time: '10:00 am' },
@@ -132,6 +134,19 @@ const ScheduleTimeBottomSheet = (props) => {
       <Modal animationType="slide" transparent={true} visible={fromModalVisible}>
         <TouchableWithoutFeedback onPress={() => setFromModalVisible(false)}>
           <View style={isTablet ? styles.fromTabModalView : styles.fromModalView}>
+            <TouchableOpacity
+              onPress={() => {
+                setFromModalVisible(false);
+              }}
+              style={[{ position: 'absolute', top: -20, left: '95%' }]}
+            >
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
+                source={Cross}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator={false}>
               {fromTimeData?.map((ele) => {
                 return (
@@ -168,6 +183,19 @@ const ScheduleTimeBottomSheet = (props) => {
       <Modal animationType="slide" transparent={true} visible={toModalVisible}>
         <TouchableWithoutFeedback onPress={() => setToModalVisible(false)}>
           <View style={isTablet ? styles.toTabModalView : styles.toModalView}>
+            <TouchableOpacity
+              onPress={() => {
+                setToModalVisible(false);
+              }}
+              style={[{ position: 'absolute', top: -20, left: '95%' }]}
+            >
+              <ImageVariant
+                testID="brand-img"
+                style={{ width: 16, height: 16, tintColor: colors.gray200 }}
+                source={Cross}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator={false}>
               {toTimeData?.map((ele) => {
                 return (
