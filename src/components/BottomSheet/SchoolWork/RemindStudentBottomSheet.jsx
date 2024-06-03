@@ -93,7 +93,7 @@ const RemindStudentBottomSheet = (props) => {
                   { color: '#E2E2E2', paddingBottom: '2%' },
                 ]}
               >
-                Are you sure you want to remind students to complete homework
+                All students with pending homework will get reminded.
               </Text>
             </View>
             <View style={styles.footer}>

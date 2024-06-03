@@ -290,8 +290,8 @@ const DiagnosticTab = () => {
                                         ]}
                                       >
                                         {item.diagnosticChapterCompletionPercentage === 100
-                                          ? 'YES'
-                                          : 'NO'}
+                                          ? 'Yes'
+                                          : 'No'}
                                       </Text>
                                     </View>
                                     <View
