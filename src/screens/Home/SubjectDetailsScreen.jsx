@@ -126,9 +126,9 @@ const SubjectDetailsScreen = () => {
           </LinearGradient>
         )}
         {!searchChapterName && (
-          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 600 }]}>
+          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 500 }]}>
             <Text style={[fonts.fontWeignt_600, fonts.size_20, { color: colors.white }]}>
-              No Data
+              No Chapters Found
             </Text>
           </View>
         )}

@@ -118,7 +118,7 @@ const Header = () => {
             layout.rowHCenter,
             layout.justifyBetween,
             layout.display,
-            { paddingHorizontal: '4%' },
+            { paddingHorizontal: '0%' },
           ]}
         >
           <View>
@@ -203,20 +203,18 @@ const Header = () => {
             width: '100%',
           }}
         >
-          <ScrollView
-            ref={scrollViewRef}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[
-              layout.paddingForFullScreen,
-              { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
-            ]}
-          >
-            <View style={[layout.display, layout.rowHCenter]}>
+          {subjects?.length <= 2 ? (
+            <View
+              style={[
+                layout.paddingForFullScreen,
+                layout.rowHCenter,
+                { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
+              ]}
+            >
               {subjects?.map((ele, i) => {
                 return (
                   <TouchableOpacity
-                    key={i}
+                    key={ele.subjectId}
                     style={[
                       styles.button,
                       {
@@ -242,7 +240,50 @@ const Header = () => {
                 );
               })}
             </View>
-          </ScrollView>
+          ) : (
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                layout.paddingForFullScreen,
+                { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
+              ]}
+            >
+              <View style={[layout.display, layout.rowHCenter]}>
+                {subjects?.map((ele, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={i}
+                      style={[
+                        styles.button,
+                        {
+                          borderColor: selectedSubject === ele.subjectId ? '#27D4FA' : '#22222F',
+                          borderWidth: selectedSubject === ele.subjectId ? 2 : 0,
+                        },
+                      ]}
+                      onPress={() => {
+                        handleButtonPress(i, ele.subjectId, ele.subjectName);
+                      }}
+                    >
+                      <Text
+                        style={[
+                          selectedSubject === ele.subjectId
+                            ? styles.activeButton
+                            : styles.buttonText,
+                          fonts.size_14,
+                          fonts.bold,
+                        ]}
+                      >
+                        {/* {ele.subjectId.split('_')[1].toLowerCase()} */}
+                        {ele.subjectName}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          )}
         </View>
         <SelectClassBottomSheet
           openSelectClassBottmSheet={openSelectClassBottmSheet}

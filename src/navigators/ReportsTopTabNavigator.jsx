@@ -40,7 +40,7 @@ const TabBar = (props) => {
               layout.itemsCenter,
               { width: '20%' },
               props.state.index !== 0 && {
-                borderBottomWidth: 4,
+                borderBottomWidth: 2,
                 borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
@@ -56,7 +56,7 @@ const TabBar = (props) => {
                   fontWeight: props.state.index === 0 ? '700' : '500',
                   color: props.state.index === 0 ? colors.linearGradientColor : colors.white,
                   lineHeight: 18,
-                  borderBottomWidth: props.state.index === 0 ? 4 : 0,
+                  borderBottomWidth: props.state.index === 0 ? 3 : 0,
                   borderBottomColor: colors.linearGradientColor,
                   width: '100%',
                   paddingBottom: 5,
@@ -72,7 +72,7 @@ const TabBar = (props) => {
               layout.itemsCenter,
               { width: '50%' },
               props.state.index !== 1 && {
-                borderBottomWidth: 4,
+                borderBottomWidth: 2,
                 borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
@@ -88,7 +88,7 @@ const TabBar = (props) => {
                   fontWeight: props.state.index === 1 ? '700' : '500',
                   color: props.state.index === 1 ? colors.linearGradientColor : colors.white,
                   lineHeight: 18,
-                  borderBottomWidth: props.state.index === 1 ? 4 : 0,
+                  borderBottomWidth: props.state.index === 1 ? 3 : 0,
                   borderBottomColor: colors.linearGradientColor,
                   width: '100%',
                   paddingBottom: 5,
@@ -104,7 +104,7 @@ const TabBar = (props) => {
               layout.itemsCenter,
               { width: '30%' },
               props.state.index !== 2 && {
-                borderBottomWidth: 4,
+                borderBottomWidth: 2,
                 borderBottomColor: colors.lineBackgroundColor,
               },
             ]}
@@ -120,7 +120,7 @@ const TabBar = (props) => {
                   fontWeight: props.state.index === 2 ? '700' : '500',
                   color: props.state.index === 2 ? colors.linearGradientColor : colors.white,
                   lineHeight: 18,
-                  borderBottomWidth: props.state.index === 2 ? 4 : 0,
+                  borderBottomWidth: props.state.index === 2 ? 3 : 0,
                   borderBottomColor: colors.linearGradientColor,
                   width: '100%',
                   paddingBottom: 5,

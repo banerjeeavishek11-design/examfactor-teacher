@@ -1,4 +1,12 @@
-import { Modal, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
@@ -122,70 +130,75 @@ const ScheduleTimeBottomSheet = (props) => {
   return (
     <View>
       <Modal animationType="slide" transparent={true} visible={fromModalVisible}>
-        <View style={isTablet ? styles.fromTabModalView : styles.fromModalView}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {fromTimeData?.map((ele) => {
-              return (
-                <View
-                  key={ele.id}
-                  style={{
-                    width: 150,
-                    backgroundColor: '#22222F',
-                    height: 42,
-                    borderRadius: 12,
-                    marginTop: '3%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <TouchableOpacity onPress={() => handleFromTimeSelection(ele.time)}>
-                    <Text
-                      style={[
-                        fonts.size_12,
-                        fonts.fontWeignt_600,
-                        { color: colors.white, left: 8 },
-                      ]}
-                    >
-                      {ele.time}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
+        <TouchableWithoutFeedback onPress={() => setFromModalVisible(false)}>
+          <View style={isTablet ? styles.fromTabModalView : styles.fromModalView}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {fromTimeData?.map((ele) => {
+                return (
+                  <View
+                    key={ele.id}
+                    style={{
+                      width: 150,
+                      backgroundColor: '#22222F',
+                      height: 42,
+                      borderRadius: 12,
+                      marginTop: '3%',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <TouchableOpacity onPress={() => handleFromTimeSelection(ele.time)}>
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeignt_600,
+                          { color: colors.white, left: 8 },
+                        ]}
+                      >
+                        {ele.time}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
+
       <Modal animationType="slide" transparent={true} visible={toModalVisible}>
-        <View style={isTablet ? styles.toTabModalView : styles.toModalView}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {toTimeData?.map((ele) => {
-              return (
-                <View
-                  key={ele.id}
-                  style={{
-                    width: 150,
-                    backgroundColor: '#22222F',
-                    height: 42,
-                    borderRadius: 12,
-                    marginTop: '3%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <TouchableOpacity onPress={() => handleToTimeSelection(ele.time)}>
-                    <Text
-                      style={[
-                        fonts.size_12,
-                        fonts.fontWeignt_600,
-                        { color: colors.white, left: 8 },
-                      ]}
-                    >
-                      {ele.time}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
+        <TouchableWithoutFeedback onPress={() => setToModalVisible(false)}>
+          <View style={isTablet ? styles.toTabModalView : styles.toModalView}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {toTimeData?.map((ele) => {
+                return (
+                  <View
+                    key={ele.id}
+                    style={{
+                      width: 150,
+                      backgroundColor: '#22222F',
+                      height: 42,
+                      borderRadius: 12,
+                      marginTop: '3%',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <TouchableOpacity onPress={() => handleToTimeSelection(ele.time)}>
+                      <Text
+                        style={[
+                          fonts.size_12,
+                          fonts.fontWeignt_600,
+                          { color: colors.white, left: 8 },
+                        ]}
+                      >
+                        {ele.time}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
