@@ -143,6 +143,7 @@ const ReportsTopTabNavigator = () => {
         headerShown: false,
       }}
       tabBar={(props) => <TabBar {...props} />}
+      initialRouteName="InsightsTab"
     >
       <Tab.Screen name="InsightsTab" component={InsightsScreen} />
       <Tab.Screen name="QuestionAnalysisTab" component={QuestionAnalysisScreen} />

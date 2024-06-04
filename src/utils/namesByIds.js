@@ -8,10 +8,10 @@ export function getChapterDescById(chapList, chapterId) {
 }
 
 export function getTopicDescById(chapList, topicId) {
-  const topicsArrays = chapList.map((chap) => chap.topics);
+  const topicsArrays = chapList?.map((chap) => chap.topics);
   const allTopics = [].concat(...topicsArrays);
-  const matchedTopic = allTopics.filter((topic) => topic.topicId === topicId);
-  return matchedTopic.length > 0 ? matchedTopic[0].topicDesc : null;
+  const matchedTopic = allTopics?.find((topic) => topic.topicId === topicId);
+  return matchedTopic.topicDesc ? matchedTopic.topicDesc : null;
 }
 
 export function getSubTopicDescById(chapList, subTopicId) {

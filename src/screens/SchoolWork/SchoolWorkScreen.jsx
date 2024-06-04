@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeScreen } from '@/components/template';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,8 @@ import {
 } from '../../store/redux-slice/SelectedChapterSlice';
 
 import SchoolWorkTopTabNavigator from '@/navigators/SchoolWorkTopTabNavigator';
+import { useNavigation } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 
 const SchoolWorkScreen = () => {
   const { colors, layout, fonts } = useTheme();
@@ -86,6 +88,20 @@ const SchoolWorkScreen = () => {
       }
     }
   };
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'HomeWorkTab' }],
+        })
+      );
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <SafeScreen>
