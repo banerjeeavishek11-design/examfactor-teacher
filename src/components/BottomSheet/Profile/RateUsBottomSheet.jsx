@@ -16,7 +16,7 @@ import { ImageVariant } from '../../atoms';
 import { useSelector } from 'react-redux';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
-import { ratingApp } from '../../../services/FAQ/FaqService';
+import { rateUsService, getRateUs } from '../../../services/FAQ/RatingService';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '../../../utils/toast.config';
@@ -88,15 +88,26 @@ const RateUsBottomSheet = (props) => {
   };
 
   const submitRating = (rating) => {
-    ratingApp(rating)
+    const reqBody = {
+      rating: rating.rating,
+      comment: rating.comment,
+      feedbacks: rating.feedbacks,
+      functionPoint: rating.functionPoint,
+    };
+    rateUsService(reqBody)
       .then((res) => {
         console.log('res.data', res.data);
-        setSubmittedRating(res.data);
         setRateUsModalVisible(false);
         setSelectedIssues([]);
-        setSubmittedRating(0);
         setSelectedRating(0);
         setComment('');
+        getRateUs()
+          .then((res) => {
+            console.log('respose fron get rate', res.data);
+          })
+          .catch((error) => {
+            console.log('error', error);
+          });
         setThanksForYourFeedbackBottomSheetVisible(true);
         setTimeout(() => {
           setThanksForYourFeedbackBottomSheetVisible(false);

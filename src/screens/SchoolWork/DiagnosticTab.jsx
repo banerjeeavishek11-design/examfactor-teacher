@@ -155,9 +155,10 @@ const DiagnosticTab = () => {
                           >
                             No. of Students
                           </Text>
+                          {console.log('ele', ele)}
                           <View style={{ width: '70%', left: 10 }}>
                             <Progressbar
-                              progress={ele.noOfStudentCompletionCount / 100}
+                              progress={ele.noOfStudentCompletionCount / ele.totalNoOfStudents}
                               color="#3DD598"
                             />
                           </View>
@@ -168,7 +169,7 @@ const DiagnosticTab = () => {
                               { color: colors.white, left: 20 },
                             ]}
                           >
-                            {ele.noOfStudentCompletionCount}/30
+                            {ele.noOfStudentCompletionCount}/{ele.totalNoOfStudents}
                           </Text>
                         </View>
                       </View>
@@ -244,7 +245,7 @@ const DiagnosticTab = () => {
                                   <TouchableOpacity
                                     onPress={() => {
                                       // setShowWeakSubtopics(!showWeakSubtopics);
-                                      toggleDiagnosticDetails(item.chapterId);
+                                      toggleDiagnosticDetails(item.fullName);
                                     }}
                                     key={item.chapterId}
                                     style={[
@@ -267,7 +268,11 @@ const DiagnosticTab = () => {
                                         style={[
                                           fonts.size_14,
                                           fonts.fontWeight_small,
-                                          { color: colors.white, opacity: 0.7 },
+                                          {
+                                            color: colors.white,
+                                            opacity: 0.7,
+                                            paddingRight: '28%',
+                                          },
                                         ]}
                                       >
                                         {item.fullName}
@@ -328,46 +333,48 @@ const DiagnosticTab = () => {
                                 )}
 
                                 <View style={{ flexDirection: 'column' }}>
-                                  {expandedDiagnosticId === item.chapterId &&
-                                  expandedDiagnosticCards[item.chapterId] &&
-                                  item.dignosticWeakTopicSummary.length > 0 ? (
-                                    <View
-                                      style={[
-                                        {
-                                          backgroundColor: '#2C2C39',
-                                          marginTop: -1,
-                                          height: 'auto',
-                                        },
-                                      ]}
-                                    >
-                                      {item.dignosticWeakTopicSummary.map((topic) => (
-                                        <View style={{ marginBottom: 10 }} key={topic.topicId}>
-                                          <Text
-                                            style={[
-                                              fonts.size_14,
-                                              fonts.bold,
-                                              { color: colors.white, paddingHorizontal: 20 },
-                                            ]}
-                                          >
-                                            {getTopicDescById(chapList, topic.topicId)}
-                                          </Text>
-                                          {topic.subTopicIds.map((subTopic) => (
-                                            <View style={{ paddingLeft: 30 }} key={subTopic}>
-                                              <Text
-                                                style={[
-                                                  fonts.size_12,
-                                                  fonts.fontWeignt_600,
-                                                  { color: colors.gray200 },
-                                                ]}
-                                              >
-                                                {getSubTopicDescById(chapList, subTopic)}
-                                              </Text>
-                                            </View>
-                                          ))}
-                                        </View>
-                                      ))}
-                                    </View>
-                                  ) : null}
+                                  {
+                                    // expandedDiagnosticId === item.chapterId &&
+                                    expandedDiagnosticCards[item.fullName] &&
+                                    item.dignosticWeakTopicSummary.length > 0 ? (
+                                      <View
+                                        style={[
+                                          {
+                                            backgroundColor: '#2C2C39',
+                                            marginTop: -1,
+                                            height: 'auto',
+                                          },
+                                        ]}
+                                      >
+                                        {item.dignosticWeakTopicSummary.map((topic) => (
+                                          <View style={{ marginBottom: 10 }} key={topic.topicId}>
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.bold,
+                                                { color: colors.white, paddingHorizontal: 20 },
+                                              ]}
+                                            >
+                                              {getTopicDescById(chapList, topic.topicId)}
+                                            </Text>
+                                            {topic.subTopicIds.map((subTopic) => (
+                                              <View style={{ paddingLeft: 30 }} key={subTopic}>
+                                                <Text
+                                                  style={[
+                                                    fonts.size_12,
+                                                    fonts.fontWeignt_600,
+                                                    { color: colors.gray200 },
+                                                  ]}
+                                                >
+                                                  {getSubTopicDescById(chapList, subTopic)}
+                                                </Text>
+                                              </View>
+                                            ))}
+                                          </View>
+                                        ))}
+                                      </View>
+                                    ) : null
+                                  }
                                 </View>
                               </>
                             ))}

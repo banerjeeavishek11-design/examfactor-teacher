@@ -296,7 +296,7 @@ const HomeWorkTab = () => {
                                   const assignedObj = getAssigned(ele.chapterId, item.topicId);
                                   return (
                                     <View key={item.topicId}>
-                                      {topicList.filter(
+                                      {topicList?.filter(
                                         (topics) => topics.topicCode === item.topicId
                                       ).length > 0 && (
                                         <>
