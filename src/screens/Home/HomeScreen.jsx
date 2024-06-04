@@ -153,44 +153,31 @@ const HomeScreen = () => {
 
   const getClassworks = () => {
     let params = {
-      // gradeId: gradeId,
-      // sectionId: sectionId,
       subjectId: selectedSubjectId,
     };
-    // setIsLoading(true);
     getClasswoksByTeacher(params)
       .then((res) => {
-        // setClassworkData(res.data);
         storage.set('activateClasswork', JSON.stringify(res.data));
-        // setIsLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Failed to fetch classwork Data' + error);
         }
-        // setIsLoading(false);
       });
   };
 
   const getDiagnostics = () => {
     let params = {
-      // gradeId: gradeId,
-      // sectionId: sectionId,
       subjectId: selectedSubjectId,
     };
-    // setIsLoading(true);
     getDiagnosticsByTeacher(params)
       .then((res) => {
         storage.set('activateDiagnostic', JSON.stringify(res.data));
-
-        // setDiagnosticData(res.data);
-        // setIsLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to get diagnostic details', error);
         }
-        // setIsLoading(false);
       });
   };
 
@@ -200,18 +187,14 @@ const HomeScreen = () => {
       sectionId: sectionId,
       subjectId: selectedSubjectId,
     };
-    // setIsLoading(true);
     getHomeworkByTeacher(params)
       .then((res) => {
         storage.set('activateHomework', JSON.stringify(res.data));
-        // setHomeworkData(res.data);
-        // setIsLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unabled to get Homework details', error);
         }
-        // setIsLoading(false);
       });
   };
 
@@ -309,7 +292,7 @@ const HomeScreen = () => {
     const result = [[0, 0, 0, 0], []];
 
     data.forEach((entry) => {
-      const value = entry.studyTime || entry.score; // Get the value to compare
+      const value = entry.studyTime || entry.score;
       let foundGroup = false;
 
       for (let index = 0; index < 4; index++) {

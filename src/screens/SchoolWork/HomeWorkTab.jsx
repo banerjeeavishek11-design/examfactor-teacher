@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Image,
   ScrollView,
@@ -16,28 +17,16 @@ import { SafeScreen } from '@/components/template';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
-import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
-import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
 import ActivatedHomeWork from '@/theme/assets/images/homework.png';
 import { Divider } from 'react-native-paper';
 import RemindStudentBottomSheet from '@/components/BottomSheet/SchoolWork/RemindStudentBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { getStudentHomeworkReports } from '../../services/SchoolWorkServices/schoolWorkServices';
-import { getChaptersBySubjectId } from '../../services/chapterListService';
-import { notifyMessage } from '../../utils/error-toast-API';
 import { getTopicDescById } from '../../utils/namesByIds';
 import moment from 'moment';
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
-
-const leaderboardData = [
-  { name: 'Rahul K.', progress: 88, achievable: 87 },
-  { name: 'Sanya M.', progress: 85, achievable: 81 },
-  { name: 'Karan K.', progress: 74, achievable: 78 },
-  { name: 'Piyush K.', progress: 81, achievable: 87 },
-  { name: 'Anmol S.', progress: 78, achievable: 84 },
-];
 
 const HomeWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
@@ -45,6 +34,9 @@ const HomeWorkTab = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const chapterId = useSelector((state) => state.selectedChapter.chapterId);
+  const chapList = useSelector((state) => state.selectedChapter.chapList);
+
   const homeFromMMKV = storage.getString('activateHomework');
   const homework = homeFromMMKV ? JSON.parse(homeFromMMKV) : [];
   const resFromMMKV = storage.getString('teacherDetails');
@@ -52,18 +44,14 @@ const HomeWorkTab = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [expandCardId, setExpandedCardId] = useState('');
   const [openRemindStudentBottomSheet, setOpenRemindStudentBottomSheet] = useState(false);
-  // const [activatedHomeWork, setActivatedHomeWork] = useState(false);
-  const [showChapterName, setShowChapterName] = useState();
   const [sectionId, setSectionId] = useState();
-  const [chapList, setChapList] = useState([]);
-  const [chapListIndex, setChapListIndex] = useState(0);
-  const [chapterId, setChapterId] = useState();
   const [gradeId, setGradeId] = useState();
   const [topicId, setTopicId] = useState('');
   const [data, setData] = useState([]);
   const [topicWiseResponse, setTopicWiseResponse] = useState([]);
   const [seeMaxStudent, setSeeMaxStudent] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [topicsLoading, setTopicsLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -79,37 +67,8 @@ const HomeWorkTab = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getAllChaptersDetails(selectedSubjectId);
-    }, [selectedSubjectId])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setShowChapterName(chapList[chapListIndex]?.chapterDesc);
-    }, [chapList[chapListIndex]])
-  );
-
-  const getAllChaptersDetails = (subjectId) => {
-    setIsLoading(true);
-    getChaptersBySubjectId(subjectId)
-      .then((res) => {
-        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
-        setChapList(res.data.chapters);
-        setChapterId(res.data.chapters[0].chapterId);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error?.response?.status === 400 || error.code === 'ERR-10') {
-          notifyMessage('unabled to get chapter details');
-        }
-        setIsLoading(false);
-      });
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
       getStudentHomeworks();
-    }, [chapterId])
+    }, [sectionId, chapterId])
   );
 
   const getStudentHomeworks = () => {
@@ -121,7 +80,16 @@ const HomeWorkTab = () => {
     setIsLoading(true);
     getStudentHomeworkReports(params)
       .then((res) => {
-        setData(res.data);
+        const sortedData = res.data.sort((a, b) => {
+          if (a.topicId < b.topicId) {
+            return -1;
+          }
+          if (a.topicId > b.topicId) {
+            return 1;
+          }
+          return 0;
+        });
+        setData(sortedData);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -145,14 +113,14 @@ const HomeWorkTab = () => {
       chapterId: chapterId,
       topicId: topicId,
     };
-    setIsLoading(true);
+    setTopicsLoading(true);
     getStudentHomeworkReports(params)
       .then((res) => {
-        setIsLoading(false);
+        setTopicsLoading(false);
         setTopicWiseResponse(res.data);
       })
       .catch((error) => {
-        setIsLoading(false);
+        setTopicsLoading(false);
         console.log('error', error);
       });
   };
@@ -160,27 +128,6 @@ const HomeWorkTab = () => {
   const handleActiveHomework = () => {
     // setActivatedHomeWork(true);
     navigation.navigate('ActivateHomeWorkTab');
-  };
-
-  const handleChapterChangePress = (type) => {
-    const index = chapListIndex;
-    if (type === 'right') {
-      if (index + 1 >= chapList.length) {
-        setChapListIndex(0);
-        setChapterId(chapList[0].chapterId);
-      } else {
-        setChapListIndex((prev) => prev + 1);
-        setChapterId(chapList[index + 1].chapterId);
-      }
-    } else {
-      if (index - 1 < 0) {
-        setChapListIndex(chapList.length - 1);
-        setChapterId(chapList[chapList.length - 1].chapterId);
-      } else {
-        setChapListIndex((prev) => prev - 1);
-        setChapterId(chapList[index - 1].chapterId);
-      }
-    }
   };
 
   let payloadForReminder = {
@@ -200,41 +147,6 @@ const HomeWorkTab = () => {
           </View>
         ) : (
           <>
-            {homework.length > 0 && (
-              <View
-                style={[
-                  layout.row,
-                  layout.justifyBetween,
-                  { marginTop: '4%', marginHorizontal: '2%' },
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() => handleChapterChangePress('left')}
-                  disabled={chapListIndex === 0}
-                  style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
-                >
-                  <Image source={leftArrow} style={{ width: 28, height: 16 }} />
-                </TouchableOpacity>
-                <Text
-                  style={[
-                    fonts.size_13,
-                    fonts.bold,
-                    { color: colors.white, width: '80%', textAlign: 'center' },
-                  ]}
-                >
-                  C{chapListIndex + 1} : {showChapterName}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => handleChapterChangePress('right')}
-                  style={{
-                    opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
-                  }}
-                  disabled={chapListIndex === chapList.length - 1}
-                >
-                  <Image source={rightArrow} style={{ width: 28, height: 16 }} />
-                </TouchableOpacity>
-              </View>
-            )}
             {homework.length > 0 ? (
               <>
                 {data.length !== 0 && (
@@ -279,24 +191,24 @@ const HomeWorkTab = () => {
                           { paddingBottom: '0%' },
                         ]}
                       >
-                        <View style={{ width: '55%' }}>
+                        <View style={{ width: '63%', marginBottom: '4%' }}>
                           <Text
                             numberOfLines={1}
-                            style={[fonts.size_14, fonts.bold, { color: colors.white, top: -6 }]}
+                            style={[fonts.size_14, fonts.bold, { color: colors.white }]}
                           >
                             {getTopicDescById(chapList, ele.topicId)}
                           </Text>
                           <Text
                             style={[
-                              fonts.size_10,
+                              fonts.size_12,
                               fonts.fontWeight_small,
-                              { color: colors.backButtonColor, marginBottom: '8%' },
+                              { color: colors.backButtonColor },
                             ]}
                           >
                             Student Completed The Homework
                           </Text>
                         </View>
-                        <View style={{ width: isTablet ? '0%' : '20%', top: -5 }}>
+                        <View style={{ width: isTablet ? '0%' : '8%', top: -5 }}>
                           <Circularprogressbar
                             total={ele.totalStudentCount}
                             progress={ele.totalStudentCompletionCount}
@@ -327,6 +239,7 @@ const HomeWorkTab = () => {
                         ]}
                       >
                         <TouchableOpacity
+                          disabled={ele.remindOn !== null}
                           onPress={() => {
                             setOpenRemindStudentBottomSheet(true);
                             setTopicId(ele.topicId);
@@ -339,7 +252,6 @@ const HomeWorkTab = () => {
                               {
                                 color: colors.termsLinkColor,
                                 textDecorationLine: 'underline',
-                                marginTop: -18,
                               },
                             ]}
                           >
@@ -347,121 +259,148 @@ const HomeWorkTab = () => {
                           </Text>
                         </TouchableOpacity>
                       </View>
-
                       {expandCardId === ele.topicId && expandedCards[ele.topicId] ? (
                         <View>
-                          <View style={[layout.paddingForCard, isTablet && { marginTop: '-6%' }]}>
-                            {ele.remindOn !== null ? (
-                              <Text
-                                style={[
-                                  fonts.size_12,
-                                  fonts.fontWeight_small,
-                                  {
-                                    color: '#7A7A82',
-                                  },
-                                ]}
-                              >
-                                Reminded on {moment(ele.remindOn).format('MMM DD, YYYY')}
-                              </Text>
-                            ) : null}
-                            <View style={[layout.itemsCenter]}>
-                              <Divider
-                                style={{
-                                  width: '100%',
-                                  backgroundColor: colors.lineBackgroundColor,
-                                }}
-                              />
+                          {topicsLoading ? (
+                            <View style={{ paddingVertical: '2%' }}>
+                              <ActivityIndicator size="large" color={colors.termsLinkColor} />
                             </View>
-                          </View>
-                          <View>
-                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length === 0 ? (
+                          ) : (
+                            <>
                               <View
                                 style={[
-                                  layout.justifyCenter,
-                                  layout.itemsCenter,
-                                  { marginVertical: '3%' },
+                                  layout.paddingForCard,
+                                  { marginTop: isTablet ? '-6%' : '-7%' },
                                 ]}
                               >
-                                <Text
-                                  style={[
-                                    fonts.fontWeight_small,
-                                    fonts.size_14,
-                                    { color: colors.gray100 },
-                                  ]}
-                                >
-                                  No Data Found
-                                </Text>
+                                {ele.remindOn !== null ? (
+                                  <Text
+                                    style={[
+                                      fonts.size_12,
+                                      fonts.fontWeight_small,
+                                      {
+                                        color: '#7A7A82',
+                                      },
+                                    ]}
+                                  >
+                                    Reminded on {moment(ele.remindOn).format('MMM DD, YYYY')}
+                                  </Text>
+                                ) : null}
+                                <View style={[layout.itemsCenter]}>
+                                  <Divider
+                                    style={{
+                                      width: '100%',
+                                      backgroundColor: colors.lineBackgroundColor,
+                                    }}
+                                  />
+                                </View>
                               </View>
-                            ) : (
-                              <View style={styles.header}>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Name
-                                </Text>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Home Work Time
-                                </Text>
-                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                                  Progress
-                                </Text>
-                              </View>
-                            )}
-                            {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
-                              (item, index) => (
-                                <>
-                                  {index < seeMaxStudent && (
+                              <View>
+                                {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length ===
+                                0 ? (
                                     <View
-                                      key={item.studentName}
                                       style={[
-                                        styles.row,
-                                        index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                        index === leaderboardData.length - 1 && styles.lastRow,
-                                        { borderRadius: 14 },
+                                        layout.justifyCenter,
+                                        layout.itemsCenter,
+                                        { marginVertical: '3%' },
                                       ]}
                                     >
                                       <Text
                                         style={[
-                                          fonts.size_14,
                                           fonts.fontWeight_small,
-                                          { color: colors.white, opacity: 0.7 },
+                                          fonts.size_14,
+                                          { color: colors.gray100 },
                                         ]}
                                       >
-                                        {item.studentName}
+                                      No Data Found
                                       </Text>
-                                      <View
-                                        style={[
-                                          layout.row,
-                                          layout.itemsCenter,
-                                          {
-                                            width: '55%',
-                                            justifyContent: 'space-between',
-                                          },
-                                        ]}
+                                    </View>
+                                  ) : (
+                                    <View style={styles.header}>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
                                       >
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.fontWeight_small,
-                                            { color: colors.white, opacity: 0.7 },
-                                          ]}
-                                        >
-                                          {item.timeSpent}
-                                        </Text>
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.fontWeight_small,
-                                            { color: colors.white, opacity: 0.7 },
-                                          ]}
-                                        >
-                                          {item.completionPercentage} %
-                                        </Text>
-                                      </View>
+                                      Name
+                                      </Text>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                                      >
+                                      Home Work Time
+                                      </Text>
+                                      <Text
+                                        style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                                      >
+                                      Progress
+                                      </Text>
                                     </View>
                                   )}
-                                </>
-                              )
-                            )}
-                          </View>
+                                {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
+                                  (item, index) => (
+                                    <>
+                                      {index < seeMaxStudent && (
+                                        <View
+                                          key={item.studentName}
+                                          style={[
+                                            styles.row,
+                                            index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                            index ===
+                                              topicWiseResponse[0]?.b2BStudentHomeWorkReportList
+                                                ?.length -
+                                                1 && {
+                                              borderBottomLeftRadius: 14,
+                                              borderBottomRightRadius: 14,
+                                            },
+                                          ]}
+                                        >
+                                          <Text
+                                            style={[
+                                              fonts.size_14,
+                                              fonts.fontWeight_small,
+                                              { color: colors.white, opacity: 0.7 },
+                                            ]}
+                                          >
+                                            {item.studentName}
+                                          </Text>
+                                          <View
+                                            style={[
+                                              layout.row,
+                                              layout.itemsCenter,
+                                              {
+                                                width: '70%',
+                                                justifyContent: 'space-between',
+                                              },
+                                            ]}
+                                          >
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.fontWeight_small,
+                                                { color: colors.white, opacity: 0.7 },
+                                              ]}
+                                            >
+                                              {item?.timeSpent < 60
+                                                ? item?.timeSpent + ' Sec'
+                                                : Math.floor(item?.timeSpent / 60) + ' Min'}
+                                            </Text>
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.fontWeight_small,
+                                                !isTablet && { opacity: 0.7, right: 24 },
+                                                { color: colors.white },
+                                              ]}
+                                            >
+                                              {item.completionPercentage} %
+                                            </Text>
+                                          </View>
+                                        </View>
+                                      )}
+                                    </>
+                                  )
+                                )}
+                              </View>
+                            </>
+                          )}
                         </View>
                       ) : null}
                       {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.length > 5 && (

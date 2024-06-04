@@ -17,12 +17,12 @@ const Circularprogressbar = (props) => {
     <View>
       <CircularProgress
         value={progress}
-        radius={isTablet ? 35 : 40}
+        radius={isTablet ? 35 : 32}
         progressValueColor={'#ecf0f1'}
         activeStrokeColor={'#3DD598'}
         inActiveStrokeColor="#474752"
         inActiveStrokeOpacity={0.4}
-        // inActiveStrokeWidth={20}
+        inActiveStrokeWidth={6}
         valueSuffix={<SuffixText total={total} />}
         progressValueStyle={{ fontSize: 12 }}
         //   activeStrokeWidth={40}

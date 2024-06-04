@@ -16,14 +16,6 @@ import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
 
-const leaderboardData = [
-  { name: 'Rahul K.', progress: 88, achievable: 87 },
-  { name: 'Sanya M.', progress: 85, achievable: 81 },
-  { name: 'Karan K.', progress: 74, achievable: 78 },
-  { name: 'Piyush K.', progress: 81, achievable: 87 },
-  { name: 'Anmol S.', progress: 78, achievable: 84 },
-];
-
 const TopicWiseDetailsScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
@@ -235,7 +227,10 @@ const TopicWiseDetailsScreen = () => {
                             style={[
                               styles.row,
                               index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                              index === leaderboardData.length - 1 && styles.lastRow,
+                              index === homeworkReportData.length - 1 && {
+                                borderBottomLeftRadius: 14,
+                                borderBottomRightRadius: 14,
+                              },
                             ]}
                           >
                             <Text
@@ -283,7 +278,7 @@ const TopicWiseDetailsScreen = () => {
                   </View>
                 </View>
               ) : null}
-              {expandedCards[ele.topicId] && (
+              {homeworkReportData.length > 5 && expandedCards[ele.topicId] && (
                 <TouchableOpacity
                   onPress={() => {
                     setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);
