@@ -80,7 +80,16 @@ const HomeWorkTab = () => {
     setIsLoading(true);
     getStudentHomeworkReports(params)
       .then((res) => {
-        setData(res.data);
+        const sortedData = res.data.sort((a, b) => {
+          if (a.topicId < b.topicId) {
+            return -1;
+          }
+          if (a.topicId > b.topicId) {
+            return 1;
+          }
+          return 0;
+        });
+        setData(sortedData);
         setIsLoading(false);
       })
       .catch((error) => {
