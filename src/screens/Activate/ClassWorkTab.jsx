@@ -53,6 +53,7 @@ const ClassWorkTab = () => {
   const [forDate, setForDate] = useState();
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTestLoading, setIsTestLoading] = useState(false);
 
   const formattedDate = moment(forDate).format('DD MMM YYYY');
 
@@ -76,11 +77,11 @@ const ClassWorkTab = () => {
     }, [selectedSubjectId, sectionId, gradeId])
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setSearchValue('');
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setSearchValue('');
+  //   }, [])
+  // );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -88,7 +89,7 @@ const ClassWorkTab = () => {
     }, [])
   );
 
-  useEffect(() => {}, [searchChapterName]);
+  // useEffect(() => {}, [searchChapterName]);
 
   useEffect(() => {
     getAllChaptersDetails(selectedSubjectId);
@@ -117,11 +118,11 @@ const ClassWorkTab = () => {
       gradeId: gradeId,
       partnerId: partnerId,
     };
-    setIsLoading(true);
+    setIsTestLoading(true);
     getAssessmentDetails(params)
       .then((res) => {
         if (res.data.content.length == 0) {
-          setIsLoading(false);
+          setIsTestLoading(false);
           // notifyMessage('No tests found');
           return;
         }
@@ -135,13 +136,13 @@ const ClassWorkTab = () => {
           return ele;
         });
         setSearchChapterName(chap);
-        setIsLoading(false);
+        setIsTestLoading(false);
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('something went wrong fetching assessments' + error);
         }
-        setIsLoading(false);
+        setIsTestLoading(false);
       });
   };
 
@@ -303,118 +304,126 @@ const ClassWorkTab = () => {
                         </View>
                         <View>
                           {expandCardId === ele.chapterId && expandedCards[ele.chapterId] ? (
-                            <>
-                              {(ele?.assessments === undefined ||
-                                ele?.assessments?.length === 0) && (
-                                <View
-                                  style={[
-                                    layout.itemsCenter,
-                                    {
-                                      borderTopColor: colors.gray400,
-                                      borderTopWidth: 1,
-                                      paddingVertical: '5%',
-                                      marginTop: '2%',
-                                    },
-                                  ]}
-                                >
-                                  <Text
-                                    style={[
-                                      fonts.fontWeight_small,
-                                      fonts.size_14,
-                                      fonts.alignCenter,
-                                      { color: colors.white },
-                                    ]}
-                                  >
-                                    No Tests Found
-                                  </Text>
+                            <View>
+                              {isTestLoading ? (
+                                <View style={{ paddingVertical: '2%' }}>
+                                  <ActivityIndicator size="large" color={colors.termsLinkColor} />
                                 </View>
-                              )}
-                              {ele?.assessments?.map((element) => {
-                                const assignedObj = getAssigned(ele.chapterId, element.id);
-                                return (
-                                  <View
-                                    key={element.id}
-                                    style={[
-                                      layout.row,
-                                      layout.justifyBetween,
-                                      layout.itemsCenter,
-                                      {
-                                        borderTopColor: colors.gray400,
-                                        borderTopWidth: 1,
-                                        paddingVertical: isTablet ? '3%' : '5%',
-                                        marginTop: '2%',
-                                      },
-                                    ]}
-                                  >
-                                    <View style={{ width: '70%' }}>
+                              ) : (
+                                <>
+                                  {(ele?.assessments === undefined ||
+                                    ele?.assessments?.length === 0) && (
+                                    <View
+                                      style={[
+                                        layout.itemsCenter,
+                                        {
+                                          borderTopColor: colors.gray400,
+                                          borderTopWidth: 1,
+                                          paddingVertical: '5%',
+                                          marginTop: '2%',
+                                        },
+                                      ]}
+                                    >
                                       <Text
                                         style={[
-                                          fonts.size_16,
                                           fonts.fontWeight_small,
+                                          fonts.size_14,
+                                          fonts.alignCenter,
+                                          { color: colors.white },
+                                        ]}
+                                      >
+                                        No Tests Found
+                                      </Text>
+                                    </View>
+                                  )}
+                                  {ele?.assessments?.map((element) => {
+                                    const assignedObj = getAssigned(ele.chapterId, element.id);
+                                    return (
+                                      <View
+                                        key={element.id}
+                                        style={[
+                                          layout.row,
+                                          layout.justifyBetween,
+                                          layout.itemsCenter,
                                           {
-                                            color: colors.white,
-                                            marginBottom: isTablet ? '2%' : '4%',
+                                            borderTopColor: colors.gray400,
+                                            borderTopWidth: 1,
+                                            paddingVertical: isTablet ? '3%' : '5%',
+                                            marginTop: '2%',
                                           },
                                         ]}
                                       >
-                                        {element.assessmentName}
-                                      </Text>
-                                      {assignedObj ? (
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.fontWeight_small,
-                                            { color: colors.gray200 },
-                                          ]}
-                                        >
-                                          Activated on{' '}
-                                          {moment(assignedObj.assignmentDate).format(
-                                            'MMM DD, YYYY'
+                                        <View style={{ width: '70%' }}>
+                                          <Text
+                                            style={[
+                                              fonts.size_16,
+                                              fonts.fontWeight_small,
+                                              {
+                                                color: colors.white,
+                                                marginBottom: isTablet ? '2%' : '4%',
+                                              },
+                                            ]}
+                                          >
+                                            {element.assessmentName}
+                                          </Text>
+                                          {assignedObj ? (
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.fontWeight_small,
+                                                { color: colors.gray200 },
+                                              ]}
+                                            >
+                                              Activated on{' '}
+                                              {moment(assignedObj.assignmentDate).format(
+                                                'MMM DD, YYYY'
+                                              )}
+                                            </Text>
+                                          ) : null}
+                                          {formattedDate && (
+                                            <Text
+                                              style={[
+                                                fonts.size_14,
+                                                fonts.bold,
+                                                { color: colors.white },
+                                              ]}
+                                            >
+                                              For {formattedDate}
+                                            </Text>
                                           )}
-                                        </Text>
-                                      ) : null}
-                                      {formattedDate && (
-                                        <Text
-                                          style={[
-                                            fonts.size_14,
-                                            fonts.bold,
-                                            { color: colors.white },
-                                          ]}
+                                        </View>
+                                        <View
+                                          style={{
+                                            width: '0%',
+                                          }}
                                         >
-                                          For {formattedDate}
-                                        </Text>
-                                      )}
-                                    </View>
-                                    <View
-                                      style={{
-                                        width: '0%',
-                                      }}
-                                    >
-                                      <ToggleButton
-                                        setActivateConfirmationModalVisible={
-                                          setActivateConfirmationModalVisible
-                                        }
-                                        chapterId={ele.chapterId}
-                                        totalTime={element.totalTime}
-                                        assessmentId={element.id}
-                                        assessmentName={element.assessmentName}
-                                        totalQuestions={element.totalNoOfQuestions}
-                                        onToggleClick={() => {
-                                          handleToggleClick(
-                                            ele.chapterId,
-                                            element.totalTime,
-                                            element.id,
-                                            element.assessmentName,
-                                            element.totalNoOfQuestions
-                                          );
-                                        }}
-                                        isEnabled={isAlreadyAssigned(ele.chapterId, element.id)}
-                                      />
-                                    </View>
-                                  </View>
-                                );
-                              })}
-                            </>
+                                          <ToggleButton
+                                            setActivateConfirmationModalVisible={
+                                              setActivateConfirmationModalVisible
+                                            }
+                                            chapterId={ele.chapterId}
+                                            totalTime={element.totalTime}
+                                            assessmentId={element.id}
+                                            assessmentName={element.assessmentName}
+                                            totalQuestions={element.totalNoOfQuestions}
+                                            onToggleClick={() => {
+                                              handleToggleClick(
+                                                ele.chapterId,
+                                                element.totalTime,
+                                                element.id,
+                                                element.assessmentName,
+                                                element.totalNoOfQuestions
+                                              );
+                                            }}
+                                            isEnabled={isAlreadyAssigned(ele.chapterId, element.id)}
+                                          />
+                                        </View>
+                                      </View>
+                                    );
+                                  })}
+                                </>
+                              )}
+                            </View>
                           ) : null}
                         </View>
                       </TouchableOpacity>

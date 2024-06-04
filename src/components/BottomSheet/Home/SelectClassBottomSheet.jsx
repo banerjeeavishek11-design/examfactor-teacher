@@ -25,8 +25,8 @@ const ReferandearnBottomsheet = (props) => {
   const currentSection = useSelector((state) => state.selectedSubject.sectionName);
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
-  // const teacherDetails = useSelector((state) => state.teacherClass.classesDataContainer);
-  const [option, setOption] = useState('first');
+  const [option, setOption] = useState(null);
+  const [lastConfirmedOption, setLastConfirmedOption] = useState(null);
   const [classes, setClasses] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
 
@@ -44,6 +44,7 @@ const ReferandearnBottomsheet = (props) => {
       if (isFirst) {
         setOption(teacherDetails[0]?.sectionName);
         setShowSelectedClass(teacherDetails[0]?.sectionName);
+        setLastConfirmedOption(teacherDetails[0]?.sectionName);
         setIsFirst(false);
       }
     }
@@ -59,10 +60,16 @@ const ReferandearnBottomsheet = (props) => {
   };
 
   const handleApply = () => {
+    setLastConfirmedOption(option);
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
     dispatch(selectSectionName(option));
     setOpenClassSuccessfullySelectedBottomSheet(true);
+  };
+
+  const handleCancel = () => {
+    setOption(lastConfirmedOption);
+    setOpenSelectClassBottomSheet(false);
   };
 
   return (
@@ -128,7 +135,7 @@ const ReferandearnBottomsheet = (props) => {
             </View>
             <View style={styles.footer}>
               <TouchableOpacity
-                onPress={() => setOpenSelectClassBottomSheet(false)}
+                onPress={handleCancel}
                 style={[
                   layout.justifyCenter,
                   styles.footerButton,

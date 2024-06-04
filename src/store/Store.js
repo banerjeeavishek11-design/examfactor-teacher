@@ -1,34 +1,9 @@
-// import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import { persistStore, persistReducer } from 'redux-persist';
-// import storage from "redux-persist/lib/storage";
-// import { thunk } from "redux-thunk";
-// import LoginSlice from "./redux-slice/LoginSlice";
-
-// const persistConfig = {
-//     key: 'root',
-//     storage:storage ,
-// };
-
-// const reducer = combineReducers({
-//     LoginSlice
-// });
-
-// const persistedReducer = persistReducer(persistConfig, reducer);
-
-//  const store = configureStore({
-//     reducer: persistedReducer,
-//     devTools: process.env.NODE_ENV !== 'production',
-//     middleware: () => [thunk]
-// });
-
-// const persistor = persistStore(store);
-// export { store, persistor };
-
 import { configureStore } from '@reduxjs/toolkit';
 import loginSlice from './redux-slice/LoginSlice';
 import screenDimensionsSlice from './redux-slice/ScreenDimensionsSlice';
 import teacherClassSlice from './redux-slice/TeacherClassSlice';
 import selectedSubjectSlice from './redux-slice/SelectedSubjectSlice';
+import selectedChapterSlice from './redux-slice/SelectedChapterSlice';
 
 const store = configureStore({
   reducer: {
@@ -36,6 +11,7 @@ const store = configureStore({
     screenDimensions: screenDimensionsSlice,
     teacherClass: teacherClassSlice,
     selectedSubject: selectedSubjectSlice,
+    selectedChapter: selectedChapterSlice,
   },
 });
 export default store;

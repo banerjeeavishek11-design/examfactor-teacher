@@ -33,9 +33,6 @@ const SubjectDetailsScreen = () => {
     });
     setSearchChapterName(searchItem);
   };
-  // console.log('searchChapterName', searchChapterName);
-
-  console.log('chapters', chapters);
 
   return (
     <SafeScreen>
@@ -91,45 +88,47 @@ const SubjectDetailsScreen = () => {
       </View>
 
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen]}>
-        <LinearGradient
-          colors={['#2E554E', '#22222D']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={[
-            layout.fullWidth,
-            layout.display,
-            layout.rowHCenter,
-            layout.justifyBetween,
-            isTablet ? { padding: 20 } : layout.paddingForCard,
-            {
-              height: 'auto',
-              borderRadius: 14,
-            },
-          ]}
-        >
-          <View>
-            <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-              Average Achievable Score
-            </Text>
-            <Text
-              style={[
-                fonts.size_12,
-                fonts.fontWeight_small,
-                { color: colors.backButtonColor, marginTop: '6%' },
-              ]}
-            >
-              Based on concepts covered till date
-            </Text>
-          </View>
+        {searchChapterName && (
+          <LinearGradient
+            colors={['#2E554E', '#22222D']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              layout.fullWidth,
+              layout.display,
+              layout.rowHCenter,
+              layout.justifyBetween,
+              isTablet ? { padding: 20 } : layout.paddingForCard,
+              {
+                height: 'auto',
+                borderRadius: 14,
+              },
+            ]}
+          >
+            <View>
+              <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                Average Achievable Score
+              </Text>
+              <Text
+                style={[
+                  fonts.size_12,
+                  fonts.fontWeight_small,
+                  { color: colors.backButtonColor, marginTop: '6%' },
+                ]}
+              >
+                Based on concepts covered till date
+              </Text>
+            </View>
 
-          <View>
-            <Circularprogressbar progress={avgAchivableScore || 0} />
-          </View>
-        </LinearGradient>
+            <View>
+              <Circularprogressbar progress={avgAchivableScore || 0} />
+            </View>
+          </LinearGradient>
+        )}
         {!searchChapterName && (
-          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 600 }]}>
+          <View style={[layout.itemsCenter, layout.justifyCenter, { height: 500 }]}>
             <Text style={[fonts.fontWeignt_600, fonts.size_20, { color: colors.white }]}>
-              No Data
+              No Chapters Found
             </Text>
           </View>
         )}

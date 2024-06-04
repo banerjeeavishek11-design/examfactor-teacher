@@ -8,7 +8,7 @@ import rightArrow from '@/theme/assets/images/rightarrow.png';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 
-const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
+const ThanksForFeedbackBottomSheet = ({ visible, setThanksForYourFeedbackBottomSheetVisible }) => {
   const { fonts, colors, layout } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
@@ -30,7 +30,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => setThanksForYourFeedbackBottomSheetVisible(false)}
               style={{ position: 'absolute', top: -35, left: isTablet ? '107%' : '98%' }}
             >
               <ImageVariant
@@ -42,7 +42,10 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
             </TouchableOpacity>
             {!isTablet && (
               <View>
-                <TouchableOpacity style={styles.slideIndicator} onPress={closeModal}>
+                <TouchableOpacity
+                  style={styles.slideIndicator}
+                  onPress={() => setThanksForYourFeedbackBottomSheetVisible(false)}
+                >
                   <Text style={[fonts.size_18, { color: 'white' }]}>-</Text>
                 </TouchableOpacity>
               </View>
@@ -91,7 +94,7 @@ const ThanksForFeedbackBottomSheet = ({ visible, closeModal }) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  closeModal();
+                  setThanksForYourFeedbackBottomSheetVisible(false);
                 }}
               >
                 <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>

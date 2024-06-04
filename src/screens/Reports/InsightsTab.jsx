@@ -114,10 +114,8 @@ const InsightsScreen = () => {
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
         <View>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[
+          <View
+            style={[
               layout.display,
               layout.rowHCenter,
               { marginTop: isTablet ? null : '3%', gap: 4 },
@@ -188,7 +186,7 @@ const InsightsScreen = () => {
                   borderColor: selectedArea !== null ? colors.termsLinkColor : null,
                   width:
                     selectedArea !== null
-                      ? Math.min(isTablet ? 160 : 145, Math.max(45, selectedArea.length * 10.2))
+                      ? Math.min(isTablet ? 160 : 145, Math.max(45, selectedArea?.length * 10.2))
                       : isTablet
                         ? 72
                         : 65,
@@ -224,7 +222,7 @@ const InsightsScreen = () => {
                 resizeMode="contain"
               />
             </TouchableOpacity>
-          </ScrollView>
+          </View>
           {Object.keys(groupedData).length === 0 && selectedChapter !== null && (
             <View style={(styles.loader, { marginTop: isTablet ? '20%' : '50%' })}>
               <Text

@@ -9,6 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import SelectClassBottomSheet from '@/components/BottomSheet/Home/SelectClassBottomSheet';
+import { getUserDetailsByUserId } from '../../../services/teacherService';
 import { MMKV } from 'react-native-mmkv';
 import {
   selectSubjectAction,
@@ -31,6 +32,7 @@ const Header = () => {
   const [openSelectClassBottmSheet, setOpenSelectClassBottomSheet] = useState(false);
   const [showSelecTedClass, setShowSelectedClass] = useState('');
   const [subjects, setSubjects] = useState([]);
+  const [userDetails, setUserDetails] = useState();
   const [selectedSubject, setSelectedSubject] = useState();
 
   useFocusEffect(
@@ -40,9 +42,13 @@ const Header = () => {
     })
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getTeacheDetails();
+    }, [])
+  );
+
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     if (teacherDetails && teacherDetails.length > 0) {
       setShowSelectedClass(teacherDetails[0]?.sectionName);
       dispatch(selectSectionName(teacherDetails[0]?.sectionName));
@@ -50,8 +56,6 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
     subject?.sort((a, b) => a.displaySeq - b.displaySeq);
@@ -88,6 +92,17 @@ const Header = () => {
     }
   };
 
+  const getTeacheDetails = () => {
+    const userName = storage.getString('username');
+    getUserDetailsByUserId(userName)
+      .then((res) => {
+        setUserDetails(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <View
       style={{
@@ -103,7 +118,7 @@ const Header = () => {
             layout.rowHCenter,
             layout.justifyBetween,
             layout.display,
-            { paddingHorizontal: '4%' },
+            { paddingHorizontal: '0%' },
           ]}
         >
           <View>
@@ -139,7 +154,7 @@ const Header = () => {
               {teacherDetails[0]?.profileImageUrl ? (
                 <ImageVariant
                   testID="brand-img"
-                  style={{ width: 44, height: 44, left: 5, borderRadius: 100, marginBottom: '8%' }}
+                  style={{ width: 50, height: 50, left: 5, borderRadius: 100, marginBottom: '8%' }}
                   source={{ uri: teacherDetails[0]?.profileImageUrl }}
                   resizeMode="cover"
                 />
@@ -158,10 +173,10 @@ const Header = () => {
                 onPress={() => handleOpenDrawer()}
                 style={[layout.rowHCenter, layout.justifyBetween, { width: '10%' }]}
               >
-                {teacherDetails[0]?.profileImageUrl ? (
+                {userDetails?.profileImageUrl ? (
                   <Image
                     style={[{ width: 23, height: 23, borderRadius: 100 }]}
-                    source={{ uri: teacherDetails[0]?.profileImageUrl }}
+                    source={{ uri: userDetails?.profileImageUrl }}
                     resizeMode="cover"
                   />
                 ) : (
@@ -188,20 +203,18 @@ const Header = () => {
             width: '100%',
           }}
         >
-          <ScrollView
-            ref={scrollViewRef}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[
-              layout.paddingForFullScreen,
-              { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
-            ]}
-          >
-            <View style={[layout.display, layout.rowHCenter]}>
+          {subjects?.length <= 2 ? (
+            <View
+              style={[
+                layout.paddingForFullScreen,
+                layout.rowHCenter,
+                { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
+              ]}
+            >
               {subjects?.map((ele, i) => {
                 return (
                   <TouchableOpacity
-                    key={i}
+                    key={ele.subjectId}
                     style={[
                       styles.button,
                       {
@@ -227,7 +240,50 @@ const Header = () => {
                 );
               })}
             </View>
-          </ScrollView>
+          ) : (
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                layout.paddingForFullScreen,
+                { paddingTop: '0%', paddingBottom: '2%', marginTop: isTablet ? '2%' : '8%' },
+              ]}
+            >
+              <View style={[layout.display, layout.rowHCenter]}>
+                {subjects?.map((ele, i) => {
+                  return (
+                    <TouchableOpacity
+                      key={i}
+                      style={[
+                        styles.button,
+                        {
+                          borderColor: selectedSubject === ele.subjectId ? '#27D4FA' : '#22222F',
+                          borderWidth: selectedSubject === ele.subjectId ? 2 : 0,
+                        },
+                      ]}
+                      onPress={() => {
+                        handleButtonPress(i, ele.subjectId, ele.subjectName);
+                      }}
+                    >
+                      <Text
+                        style={[
+                          selectedSubject === ele.subjectId
+                            ? styles.activeButton
+                            : styles.buttonText,
+                          fonts.size_14,
+                          fonts.bold,
+                        ]}
+                      >
+                        {/* {ele.subjectId.split('_')[1].toLowerCase()} */}
+                        {ele.subjectName}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          )}
         </View>
         <SelectClassBottomSheet
           openSelectClassBottmSheet={openSelectClassBottmSheet}

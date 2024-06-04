@@ -25,7 +25,7 @@ const NewPasswordStatusScreen = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('ProfileDetailsScreen', {
+            navigation.navigate('LoginScreen', {
               userDetails: route.params?.userDetails,
             });
           }}
@@ -34,7 +34,7 @@ const NewPasswordStatusScreen = ({ navigation }) => {
           <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
             <View style={[layout.display, layout.rowHCenter]}>
               <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                Go To Profile
+                Go To Login
               </Text>
               <ImageVariant
                 testID="brand-img"

@@ -102,7 +102,7 @@ const StudentLevelScreen = () => {
           }}
         >
           <Searchbar
-            placeholder="Search Chapters"
+            placeholder="Search Students"
             placeholderTextColor="rgba(275, 275, 275, 0.5)"
             iconColor="rgba(275, 275, 275, 0.5)"
             inputStyle={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white, right: 10 }]}

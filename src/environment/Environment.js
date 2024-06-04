@@ -1,5 +1,7 @@
 import dev from '../../env.dev.json';
 // import uat from '../../env.uat.json';
+// import prod from '../../env.prod.json';
+
 import current from '../../env.current.json';
 const env = current.current === 'dev' ? dev : null;
 export const host = env.HOST;
@@ -10,3 +12,4 @@ export const masterDataService = `${rootApiUrl}/master-data-service`;
 export const b2bStudentService = `${rootApiUrl}/b2b-student-service`;
 export const assessmentService = `${rootApiUrl}/assessment-service`;
 export const faqService = `${rootApiUrl}/faq-service`;
+export const questionnaireService = `${rootApiUrl}/questionnaire-service`;

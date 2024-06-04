@@ -19,7 +19,7 @@ import Logo from '@/theme/assets/images/examfactorlogo.png';
 import rightArrow from '@/theme/assets/images/rightarrow.png';
 import { ImageVariant } from '@/components/atoms';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
@@ -41,6 +41,8 @@ const LoginScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const navigation = useNavigation();
+  const route = useRoute();
+  const sessionExpire = route.params?.sessionExpire || null;
   const dispatch = useDispatch();
   const {
     control,
@@ -150,6 +152,11 @@ const LoginScreen = () => {
                 <Text style={[fonts.size_32, fonts.bold, styles.heading, { color: colors.white }]}>
                   ExamFactor
                 </Text>
+                {sessionExpire && (
+                  <Text style={[fonts.fontWeight_small, fonts.size_12, { color: 'orange' }]}>
+                    {sessionExpire}
+                  </Text>
+                )}
                 <Text
                   style={[
                     fonts.size_16,
@@ -208,7 +215,7 @@ const LoginScreen = () => {
                                 userName: value,
                               }));
                             }}
-                            value={textInputValues.username}
+                            value={textInputValues.userName}
                           />
                         </View>
                       )}
@@ -241,7 +248,7 @@ const LoginScreen = () => {
                             styles.mobileNumberInput,
                             {
                               paddingHorizontal: 10,
-                              borderColor: errors.username ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
+                              borderColor: errors.password ? '#FF575F' : 'rgba(255, 255, 255, 0.3)',
                             },
                           ]}
                         >

@@ -10,35 +10,22 @@ import {
 import React, { useState, useEffect } from 'react';
 import { SafeScreen } from '@/components/template';
 import { useTheme } from '@/theme';
-import { useFocusEffect } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Classwork from '@/theme/assets/images/classwork.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import Progressbar from '@/components/template/Progressbar/Progressbar';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
-import leftArrow from '../../theme/assets/images/gradientlefttarrow.png';
-import rightArrow from '../../theme/assets/images/gradientrightarrow.png';
 import Circularprogressbar from '@/components/template/CircularProgressBar/Circularprogressbar';
-import { getChaptersBySubjectId } from '../../services/chapterListService';
 import {
   getStudentClassworkReports,
   getStudentWiseClassworkReports,
 } from '../../services/SchoolWorkServices/schoolWorkServices';
 import { Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
 
 const storage = new MMKV();
-
-const leaderboardData = [
-  { name: 'Rahul K.', progress: 88, achievable: 87 },
-  { name: 'Sanya M.', progress: 85, achievable: 81 },
-  { name: 'Karan K.', progress: 74, achievable: 78 },
-  { name: 'Piyush K.', progress: 81, achievable: 87 },
-  { name: 'Anmol S.', progress: 78, achievable: 84 },
-];
 
 const ClassWorkTab = () => {
   const { colors, layout, fonts } = useTheme();
@@ -46,21 +33,19 @@ const ClassWorkTab = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const selectedSubjectId = useSelector((state) => state.selectedSubject.subject);
+  const chapterId = useSelector((state) => state.selectedChapter.chapterId);
   const classFromMMKV = storage.getString('activateClasswork');
   const classwork = classFromMMKV ? JSON.parse(classFromMMKV) : [];
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [expandedCards, setExpandedCards] = useState({});
   const [expandCardId, setExpandedCardId] = useState('');
-  const [showChapterName, setShowChapterName] = useState();
-  const [chapList, setChapList] = useState([]);
-  const [chapListIndex, setChapListIndex] = useState(0);
   const [sectionId, setSectionId] = useState();
-  const [chapterId, setChapterId] = useState();
   const [assessmentWiseReport, setAssessmentWiseReport] = useState([]);
   const [data, setData] = useState([]);
   const [maxStudentNumber, setMaxStudentNumber] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClassworkLoading, setIsClassworkLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -75,36 +60,6 @@ const ClassWorkTab = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getAllChaptersDetails(selectedSubjectId);
-      setChapListIndex(0);
-    }, [selectedSubjectId])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setShowChapterName(chapList[chapListIndex]?.chapterDesc);
-    }, [chapList[chapListIndex]])
-  );
-
-  const getAllChaptersDetails = (subjectId) => {
-    // setIsLoading(true);
-    getChaptersBySubjectId(subjectId)
-      .then((res) => {
-        res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
-        setChapList(res.data.chapters);
-        setChapterId(res.data.chapters[0].chapterId);
-        // setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error?.response?.status === 400 || error.code === 'ERR-10') {
-          notifyMessage('unabled to get chapter details');
-        }
-        // setIsLoading(false);
-      });
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
       getStudentClasswork();
     }, [chapterId])
   );
@@ -115,18 +70,19 @@ const ClassWorkTab = () => {
       subjectId: selectedSubjectId,
       chapterId: chapterId,
     };
+    setIsLoading(true);
     getStudentClassworkReports(params)
       .then((res) => {
         setData(res.data);
-        // setAssessmentId(res.data[0].assessmentId);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log('error', error);
+        setIsLoading(false);
       });
   };
 
   const handleActiveChapter = () => {
-    // navigation.navigate('ActivateClassWorkTab');
     navigation.navigate('ActivateTab', {
       screen: 'ActivateClassWorkTab',
     });
@@ -143,74 +99,21 @@ const ClassWorkTab = () => {
       chapterId: chapterId,
       assessmentId: id,
     };
-    setIsLoading(true);
+    setIsClassworkLoading(true);
     getStudentWiseClassworkReports(params)
       .then((res) => {
         setAssessmentWiseReport(res.data);
-        setIsLoading(false);
+        setIsClassworkLoading(false);
       })
       .catch((error) => {
-        setIsLoading(false);
+        setIsClassworkLoading(false);
         console.log('error', error);
       });
-  };
-
-  const handleChapterChangePress = (type) => {
-    const index = chapListIndex;
-    if (type === 'right') {
-      if (index + 1 >= chapList.length) {
-        setChapListIndex(0);
-        setChapterId(chapList[0].chapterId);
-      } else {
-        setChapListIndex((prev) => prev + 1);
-        setChapterId(chapList[index + 1].chapterId);
-      }
-    } else {
-      if (index - 1 < 0) {
-        setChapListIndex(chapList.length - 1);
-        setChapterId(chapList[chapList.length - 1].chapterId);
-      } else {
-        setChapListIndex((prev) => prev - 1);
-        setChapterId(chapList[index - 1].chapterId);
-      }
-    }
   };
 
   return (
     <SafeScreen>
       <ScrollView contentContainerStyle={[layout.paddingForFullScreen, {}]}>
-        {classwork.length > 0 && (
-          <View
-            style={[layout.row, layout.justifyBetween, { marginTop: '4%', marginHorizontal: '2%' }]}
-          >
-            <TouchableOpacity
-              onPress={() => handleChapterChangePress('left')}
-              disabled={chapListIndex === 0}
-              style={{ opacity: chapListIndex === 0 ? 0.5 : 1 }}
-            >
-              <Image source={leftArrow} style={{ width: 28, height: 16 }} />
-            </TouchableOpacity>
-            <Text
-              style={[
-                fonts.size_13,
-                fonts.bold,
-                { color: colors.white, width: '80%', textAlign: 'center' },
-              ]}
-            >
-              C{chapListIndex + 1} : {showChapterName}
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleChapterChangePress('right')}
-              style={{
-                opacity: chapListIndex === chapList.length - 1 ? 0.5 : 1,
-              }}
-              disabled={chapListIndex === chapList.length - 1}
-            >
-              <Image source={rightArrow} style={{ width: 28, height: 16 }} />
-            </TouchableOpacity>
-          </View>
-        )}
-
         {classwork.length > 0 ? (
           <>
             {data.length === 0 && (
@@ -220,7 +123,7 @@ const ClassWorkTab = () => {
                 </Text>
               </View>
             )}
-            {data?.map((ele) => {
+            {data?.map((ele, index) => {
               return isLoading ? (
                 <View style={styles.loader}>
                   <ActivityIndicator size="large" color={colors.termsLinkColor} />
@@ -228,7 +131,7 @@ const ClassWorkTab = () => {
               ) : (
                 <TouchableOpacity
                   onPress={() => toggleContent(ele.assessmentId)}
-                  key={ele.assessmentId}
+                  key={index}
                   style={[
                     layout.fullWidth,
                     {
@@ -257,7 +160,7 @@ const ClassWorkTab = () => {
                       </Text>
                       <Text
                         style={[
-                          fonts.size_10,
+                          fonts.size_12,
                           fonts.fontWeight_small,
                           { color: colors.backButtonColor, marginBottom: '5%' },
                         ]}
@@ -322,85 +225,120 @@ const ClassWorkTab = () => {
 
                   {expandCardId === ele.assessmentId && expandedCards[ele.assessmentId] ? (
                     <View>
-                      <View
-                        style={[layout.itemsCenter, layout.paddingForCard, { paddingTop: '0%' }]}
-                      >
-                        <Divider
-                          style={{
-                            width: '100%',
-                            backgroundColor: colors.lineBackgroundColor,
-                          }}
-                        />
-                      </View>
-                      <View>
-                        <View style={styles.header}>
-                          <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                            Name
-                          </Text>
-                          <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                            Score
-                          </Text>
-                          <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                            Accuracy
-                          </Text>
+                      {isClassworkLoading ? (
+                        <View style={{ paddingVertical: '2%' }}>
+                          <ActivityIndicator size="large" color={colors.termsLinkColor} />
                         </View>
-                        {assessmentWiseReport?.map((item, index) => (
-                          <>
-                            {index < maxStudentNumber ? (
+                      ) : (
+                        <>
+                          <View
+                            style={[
+                              layout.itemsCenter,
+                              layout.paddingForCard,
+                              { paddingTop: '0%' },
+                            ]}
+                          >
+                            <Divider
+                              style={{
+                                width: '100%',
+                                backgroundColor: colors.lineBackgroundColor,
+                              }}
+                            />
+                          </View>
+                          <View>
+                            {assessmentWiseReport.length === 0 ? (
                               <View
-                                key={item.studentName}
                                 style={[
-                                  styles.row,
-                                  index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                  index === leaderboardData.length - 1 && styles.lastRow,
+                                  layout.justifyCenter,
+                                  layout.itemsCenter,
+                                  { marginVertical: '3%' },
                                 ]}
                               >
                                 <Text
                                   style={[
-                                    fonts.size_14,
                                     fonts.fontWeight_small,
-                                    { color: colors.white, opacity: 0.7 },
+                                    fonts.size_14,
+                                    { color: colors.gray100 },
                                   ]}
                                 >
-                                  {item.studentName}
+                                  No Data Found
                                 </Text>
-                                <View
-                                  style={[
-                                    layout.row,
-                                    layout.itemsCenter,
-                                    {
-                                      width: '55%',
-                                      justifyContent: 'space-between',
-                                    },
-                                  ]}
-                                >
-                                  <Text
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, opacity: 0.7 },
-                                    ]}
-                                  >
-                                    {item.score}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, opacity: 0.7 },
-                                    ]}
-                                  >
-                                    {item.accuracy} %
-                                  </Text>
-                                </View>
                               </View>
-                            ) : null}
-                          </>
-                        ))}
-                      </View>
+                            ) : (
+                              <View style={styles.header}>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Name
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Score
+                                </Text>
+                                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                                  Accuracy
+                                </Text>
+                              </View>
+                            )}
+                            {assessmentWiseReport?.map((item, index) => (
+                              <>
+                                {index < maxStudentNumber ? (
+                                  <View
+                                    key={item.studentName}
+                                    style={[
+                                      styles.row,
+                                      index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                      index + 1 == assessmentWiseReport.length && {
+                                        borderBottomLeftRadius: 14,
+                                        borderBottomRightRadius: 14,
+                                      },
+                                    ]}
+                                  >
+                                    <Text
+                                      style={[
+                                        fonts.size_14,
+                                        fonts.fontWeight_small,
+                                        { color: colors.white, opacity: 0.7 },
+                                      ]}
+                                    >
+                                      {item.studentName}
+                                    </Text>
+                                    <View
+                                      style={[
+                                        layout.row,
+                                        layout.itemsCenter,
+                                        {
+                                          width: '55%',
+                                          justifyContent: 'space-between',
+                                        },
+                                      ]}
+                                    >
+                                      <Text
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.white, opacity: 0.7 },
+                                        ]}
+                                      >
+                                        {item.score}
+                                      </Text>
+                                      <Text
+                                        style={[
+                                          fonts.size_14,
+                                          fonts.fontWeight_small,
+                                          { color: colors.white, opacity: 0.7 },
+                                        ]}
+                                      >
+                                        {item.accuracy} %
+                                      </Text>
+                                    </View>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+                        </>
+                      )}
                     </View>
                   ) : null}
-                  {expandedCards[ele.assessmentId] && (
+                  {assessmentWiseReport.length > 5 && expandedCards[ele.assessmentId] && (
                     <TouchableOpacity
                       onPress={() => {
                         maxStudentNumber === 2 ? setMaxStudentNumber(1000) : setMaxStudentNumber(5);

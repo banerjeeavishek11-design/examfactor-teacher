@@ -19,7 +19,10 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import UpArrow from '@/theme/assets/images/uparrow.png';
 import Cross from '@/theme/assets/images/cross.png';
 import ActiveHomeworkConfirmBottomSheet from '@/components/BottomSheet/Activate/ActiveHomeworkConfirmBottomSheet';
-import { getChaptersBySubjectId } from '../../services/chapterListService';
+import {
+  getChaptersBySubjectId,
+  getQuestionNumberOfChapter,
+} from '../../services/chapterListService';
 import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
 import { notifyMessage } from '../../utils/error-toast-API';
 import { MMKV } from 'react-native-mmkv';
@@ -47,6 +50,8 @@ const HomeWorkTab = () => {
   const [homeworkData, setHomeworkData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [topicList, setTopicList] = useState([]);
+  const [topicsLoading, setTopicsLoading] = useState(false);
 
   useEffect(() => {
     if (teacherDetails && teacherDetails.length > 0) {
@@ -78,10 +83,10 @@ const HomeWorkTab = () => {
     }, [selectedSubjectId, sectionId, gradeId])
   );
 
-  useEffect(() => {
-    getAllChaptersDetails(selectedSubjectId);
-    getHomeworks();
-  }, [selectedSubjectId, sectionId, gradeId]);
+  // useEffect(() => {
+  //   getAllChaptersDetails(selectedSubjectId);
+  //   getHomeworks();
+  // }, [selectedSubjectId, sectionId, gradeId]);
 
   const onSearchChapters = (search) => {
     const searchItem = chapterDetails.filter((ele) =>
@@ -91,7 +96,8 @@ const HomeWorkTab = () => {
     setSearchValue(search);
   };
 
-  const toggleContent = (id) => {
+  const toggleContent = (id, unitId) => {
+    getQuestionNumbers(id, unitId);
     setExpandedCards((prevState) => ({
       [id]: !prevState[id],
     }));
@@ -117,6 +123,7 @@ const HomeWorkTab = () => {
         res.data.chapters.sort((a, b) => a.displaySeq - b.displaySeq);
         setChapterDetails(res.data.chapters);
         setSearchChapterName(res.data.chapters);
+        getQuestionNumbers(res.data.chapters[0].chapterId, res.data.chapters[0].unitId);
         setIsLoading(false);
         setExpandedCards(() => ({
           [res.data.chapters[0].chapterId]: [res.data.chapters[0].chapterId],
@@ -148,6 +155,26 @@ const HomeWorkTab = () => {
           notifyMessage('unabled to get Homework details', error);
         }
         setIsLoading(false);
+      });
+  };
+
+  const getQuestionNumbers = (chapterCode, unitCode) => {
+    setTopicsLoading(true);
+    let params = {
+      subjectCode: subjectId,
+      unitCode: unitCode,
+      chapterCode: chapterCode,
+      query: 'questionCount',
+    };
+
+    getQuestionNumberOfChapter(params)
+      .then((res) => {
+        setTopicList(res.data);
+        setTopicsLoading(false);
+      })
+      .catch((error) => {
+        console.log('errorr', error);
+        setTopicsLoading(false);
       });
   };
 
@@ -208,7 +235,7 @@ const HomeWorkTab = () => {
                 {searchChapterName.map((ele) => {
                   return (
                     <TouchableOpacity
-                      onPress={() => toggleContent(ele.chapterId)}
+                      onPress={() => toggleContent(ele.chapterId, ele.unitId)}
                       key={ele.chapterId}
                       style={[
                         layout.fullWidth,
@@ -244,62 +271,93 @@ const HomeWorkTab = () => {
                       </View>
                       {expandedCards[ele.chapterId] ? (
                         <>
-                          {ele.topics
-                            .sort((a, b) => a.displaySeq - b.displaySeq)
-                            .map((item) => {
-                              const assignedObj = getAssigned(ele.chapterId, item.topicId);
-                              return (
-                                <View key={item.topicId}>
-                                  <View
+                          {topicsLoading ? (
+                            <View style={{ paddingVertical: '2%' }}>
+                              <ActivityIndicator size="large" color={colors.termsLinkColor} />
+                            </View>
+                          ) : (
+                            <>
+                              {topicList.length === 0 && (
+                                <View style={[{ marginVertical: '3%' }]}>
+                                  <Text
                                     style={[
-                                      layout.display,
-                                      layout.rowHCenter,
-                                      layout.justifyBetween,
-                                      {
-                                        borderTopColor: colors.gray400,
-                                        borderTopWidth: 1,
-                                        paddingVertical: isTablet ? '2%' : '5%',
-                                        marginTop: '2%',
-                                      },
+                                      fonts.size_14,
+                                      fonts.fontWeight_small,
+                                      { color: colors.gray200 },
                                     ]}
                                   >
-                                    <View style={{ width: '70%' }}>
-                                      <Text
-                                        style={[
-                                          fonts.size_14,
-                                          fonts.fontWeight_small,
-                                          { color: '#D5D5D7' },
-                                        ]}
-                                      >
-                                        {item.topicDesc}
-                                      </Text>
-                                    </View>
-                                    <View style={{ width: '0%' }}>
-                                      <ToggleButton
-                                        chapterId={ele.chapterId}
-                                        topicId={item.topicId}
-                                        topics={ele.topics}
-                                        onToggleClick={(chapterId, topicId, topics) =>
-                                          handleToggleClick(chapterId, topicId, topics)
-                                        }
-                                        isEnabled={isAlreadyAssigned(ele.chapterId, item.topicId)}
-                                      />
-                                    </View>
-                                  </View>
-                                  {assignedObj ? (
-                                    <Text
-                                      style={[
-                                        fonts.size_12,
-                                        fonts.fontWeight_small,
-                                        { color: colors.gray200, marginTop: -10 },
-                                      ]}
-                                    >
-                                      Activated on {moment(assignedObj.date).format('MMM DD, YYYY')}
-                                    </Text>
-                                  ) : null}
+                                    No Topics to Assign
+                                  </Text>
                                 </View>
-                              );
-                            })}
+                              )}
+                              {ele.topics
+                                .sort((a, b) => a.displaySeq - b.displaySeq)
+                                .map((item) => {
+                                  const assignedObj = getAssigned(ele.chapterId, item.topicId);
+                                  return (
+                                    <View key={item.topicId}>
+                                      {topicList?.filter(
+                                        (topics) => topics.topicCode === item.topicId
+                                      ).length > 0 && (
+                                        <>
+                                          <View
+                                            style={[
+                                              layout.display,
+                                              layout.rowHCenter,
+                                              layout.justifyBetween,
+                                              {
+                                                borderTopColor: colors.gray400,
+                                                borderTopWidth: 1,
+                                                paddingVertical: isTablet ? '2%' : '5%',
+                                                marginTop: '2%',
+                                              },
+                                            ]}
+                                          >
+                                            <View style={{ width: '70%' }}>
+                                              <Text
+                                                style={[
+                                                  fonts.size_14,
+                                                  fonts.fontWeight_small,
+                                                  { color: '#D5D5D7' },
+                                                ]}
+                                              >
+                                                {item.topicDesc}
+                                              </Text>
+                                            </View>
+                                            <View style={{ width: '0%' }}>
+                                              <ToggleButton
+                                                chapterId={ele.chapterId}
+                                                topicId={item.topicId}
+                                                topics={ele.topics}
+                                                onToggleClick={(chapterId, topicId, topics) =>
+                                                  handleToggleClick(chapterId, topicId, topics)
+                                                }
+                                                isEnabled={isAlreadyAssigned(
+                                                  ele.chapterId,
+                                                  item.topicId
+                                                )}
+                                              />
+                                            </View>
+                                          </View>
+                                          {assignedObj ? (
+                                            <Text
+                                              style={[
+                                                fonts.size_12,
+                                                fonts.fontWeight_small,
+                                                { color: colors.gray200, marginTop: -10 },
+                                              ]}
+                                            >
+                                              Activated on{' '}
+                                              {moment(assignedObj.date).format('MMM DD, YYYY')}
+                                            </Text>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </View>
+                                  );
+                                })}
+                            </>
+                          )}
                         </>
                       ) : null}
                     </TouchableOpacity>
