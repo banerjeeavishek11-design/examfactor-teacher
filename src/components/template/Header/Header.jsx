@@ -118,7 +118,7 @@ const Header = () => {
             layout.rowHCenter,
             layout.justifyBetween,
             layout.display,
-            { paddingHorizontal: '0%' },
+            { paddingHorizontal: isTablet ? '3%' : '0%' },
           ]}
         >
           <View>

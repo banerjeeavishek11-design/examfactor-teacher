@@ -13,21 +13,15 @@ import SchoolWorkTab from '@/theme/assets/images/Schoolworktab.png';
 import ReportsTab from '@/theme/assets/images/Reportstab.png';
 import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
-// import Header from '../components/template/Header/Header';
+import { useSelector } from 'react-redux';
 
 const TabSideBarNavigator = () => {
   const { fonts, colors } = useTheme();
   const Drawer = createDrawerNavigator();
+  const userRole = useSelector((state) => state.login.userRole);
+
   return (
     <>
-      {/* <View
-        style={{
-          width: '79%',
-          alignSelf: 'flex-end',
-        }}
-      >
-        <Header />
-      </View> */}
       <Drawer.Navigator
         drawerContent={(props) => <CustomSideBar {...props} />}
         screenOptions={{
@@ -95,23 +89,25 @@ const TabSideBarNavigator = () => {
             ),
           }}
         />
-        <Drawer.Screen
-          name="Activate"
-          component={ActivateScreen}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Image
-                source={ActivateTab}
-                style={[
-                  styles.drawerIcons,
-                  {
-                    tintColor: focused ? colors.termsLinkColor : colors.gray100,
-                  },
-                ]}
-              />
-            ),
-          }}
-        />
+        {userRole === 'TEACHER' && (
+          <Drawer.Screen
+            name="Activate"
+            component={ActivateScreen}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Image
+                  source={ActivateTab}
+                  style={[
+                    styles.drawerIcons,
+                    {
+                      tintColor: focused ? colors.termsLinkColor : colors.gray100,
+                    },
+                  ]}
+                />
+              ),
+            }}
+          />
+        )}
       </Drawer.Navigator>
     </>
   );
