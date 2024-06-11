@@ -10,6 +10,8 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { MMKV } from 'react-native-mmkv';
 import { selectSectionName } from '../../../store/redux-slice/SelectedSubjectSlice';
+import { changeTeacherViewMode } from '../../../services/teacherService';
+import { updateUserRole } from '../../../store/redux-slice/LoginSlice';
 
 const storage = new MMKV();
 const ReferandearnBottomsheet = (props) => {
@@ -37,8 +39,8 @@ const ReferandearnBottomsheet = (props) => {
   );
 
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+    const resFromMMKV = storage.getString('teacherProfileDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV).teacherSectionMapDtoList : null;
     if (teacherDetails != null) {
       setClasses(teacherDetails);
       if (isFirst) {
@@ -49,6 +51,20 @@ const ReferandearnBottomsheet = (props) => {
       }
     }
   }, [openSelectClassBottmSheet]);
+
+  const changeViewMode = () => {
+    const reqBody = {
+      viewMode: 'TEACHER',
+    };
+
+    changeTeacherViewMode(reqBody)
+      .then((res) => {
+        console.log('res', res.data);
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
+  };
 
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);
@@ -64,6 +80,8 @@ const ReferandearnBottomsheet = (props) => {
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
     dispatch(selectSectionName(option));
+    changeViewMode();
+    dispatch(updateUserRole('TEACHER'));
     setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 

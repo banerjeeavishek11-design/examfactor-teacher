@@ -31,10 +31,12 @@ const SideBarAuthedScreen = (props) => {
   const userName = storage.getString('username');
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState('TEACHER');
+  const [userRole, setUserRole] = useState();
   const [userDetails, setUserDetails] = useState();
+  const [currentSection, setCurrentSection] = useState({});
 
   const initialUserRole = useSelector((state) => state.login.userRole);
+  const selectedClass = useSelector((state) => state.selectedSubject.sectionName);
 
   useEffect(() => {
     setUserRole(initialUserRole);
@@ -74,6 +76,9 @@ const SideBarAuthedScreen = (props) => {
     getUserDetailsByUserId(userName)
       .then((res) => {
         setUserDetails(res.data);
+        setCurrentSection(
+          res.data.teacherSectionMapDtoList.find((ele) => ele.sectionName === selectedClass)
+        );
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
@@ -260,7 +265,7 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                   </View>
-                  {userDetails?.teacherRole === 'TEACHER' ? null : (
+                  {currentSection.assignedAsClassTeacher && currentSection.assignedAsTeacher ? (
                     <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
                       <Text
                         style={[
@@ -275,7 +280,7 @@ const SideBarAuthedScreen = (props) => {
                         Change Role
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  ) : null}
                 </View>
               </View>
               <Text

@@ -10,6 +10,7 @@ import Teacher from '@/theme/assets/images/teacher.png';
 import ClassTeacher from '@/theme/assets/images/classteacher.png';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { updateUserRole } from '../../../store/redux-slice/LoginSlice';
+import { changeTeacherViewMode } from '../../../services/teacherService';
 
 const ChangeRoleBottomSheet = (props) => {
   const { setChangeRoleBottomSheetVisible, changeRoleBottomSheetVisible, setUserRole } = props;
@@ -17,11 +18,30 @@ const ChangeRoleBottomSheet = (props) => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const dispatch = useDispatch();
   const initialUserRole = useSelector((state) => state.login.userRole);
-  const [option, setOption] = useState('TEACHER');
+  const [option, setOption] = useState();
+  const [selectedViewMode, setSelectedViewMode] = useState();
 
   useEffect(() => {
     setOption(initialUserRole);
   }, [initialUserRole]);
+
+  // useEffect(() => {
+  //   changeViewMode();
+  // }, [selectedViewMode]);
+
+  const changeViewMode = () => {
+    const reqBody = {
+      viewMode: selectedViewMode,
+    };
+
+    changeTeacherViewMode(reqBody)
+      .then((res) => {
+        console.log('res', res.data);
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
+  };
 
   const handleSlideDown = () => {
     setChangeRoleBottomSheetVisible(false);
@@ -30,12 +50,14 @@ const ChangeRoleBottomSheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
+    setSelectedViewMode(op);
   };
 
   const handleApply = () => {
     setChangeRoleBottomSheetVisible(false);
     setUserRole(option);
     dispatch(updateUserRole(option));
+    changeViewMode();
   };
 
   return (
