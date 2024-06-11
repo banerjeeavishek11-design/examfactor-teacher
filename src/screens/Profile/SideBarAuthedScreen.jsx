@@ -145,7 +145,7 @@ const SideBarAuthedScreen = (props) => {
                             width: 42,
                             borderRadius: 100,
                             opacity: 0.5,
-                            backgroundColor: colors.white,
+                            backgroundColor: '#888484',
                           },
                         ]}
                       >
