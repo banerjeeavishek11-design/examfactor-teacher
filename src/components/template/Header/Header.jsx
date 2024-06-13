@@ -37,13 +37,6 @@ const Header = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setSelectedSubject(currentSub);
-      setShowSelectedClass(currentSection);
-    })
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
       getTeacheDetails();
     }, [])
   );
@@ -72,6 +65,15 @@ const Header = () => {
       dispatch(selectSubjectName(subjectList[0].subjectName));
     }
   }, [showSelecTedClass]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSelectedSubject(currentSub);
+      if (currentSection !== '') {
+        setShowSelectedClass(currentSection);
+      }
+    })
+  );
 
   const handleOpenDrawer = () => {
     if (isTablet) {
