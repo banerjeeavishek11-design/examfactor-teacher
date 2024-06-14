@@ -1,9 +1,9 @@
-// import dev from '../../env.dev.json';
+import dev from '../../env.dev.json';
 // import uat from '../../env.uat.json';
-import prod from '../../env.prod.json';
+// import prod from '../../env.prod.json';
 
 import current from '../../env.current.json';
-const env = current.current === 'prod' ? prod : null;
+const env = current.current === 'dev' ? dev : null;
 export const host = env.HOST;
 export const rootApiUrl = env.ROOT_API_URL;
 export const authService = `${rootApiUrl}/auth-service`;
