@@ -92,7 +92,6 @@ const LoginScreen = () => {
       });
   };
   const getTeacheDetails = (userName) => {
-    // const accessToken = storage.getString('access_token');
     getTeacherDetailsById(userName)
       .then((res) => {
         storage.set('teacherDetails', JSON.stringify(res.data));

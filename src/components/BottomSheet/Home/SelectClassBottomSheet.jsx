@@ -25,12 +25,16 @@ const ReferandearnBottomsheet = (props) => {
   const { colors, layout, fonts } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const currentSection = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherdetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
   const [option, setOption] = useState(null);
   const [lastConfirmedOption, setLastConfirmedOption] = useState(null);
   const [classes, setClasses] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
+  const [viewModePayload, setViewModePayload] = useState('');
+  const [userRole, setUserRole] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -54,7 +58,7 @@ const ReferandearnBottomsheet = (props) => {
 
   const changeViewMode = () => {
     const reqBody = {
-      viewMode: 'TEACHER',
+      viewMode: viewModePayload,
     };
 
     changeTeacherViewMode(reqBody)
@@ -73,6 +77,24 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
+    const classSelected = teacherdetails.find((ele) => ele.sectionName === op);
+    if (classSelected.assignedAsClassTeacher == true) {
+      if (classSelected.assignedAsTeacher == true) {
+        setViewModePayload('TEACHER');
+        setUserRole('TEACHER');
+      } else {
+        setViewModePayload('CLASS_TEACHER');
+        setUserRole('CLASS_TEACHER');
+      }
+    } else {
+      if (classSelected.assignedAsTeacher == true) {
+        setViewModePayload('TEACHER');
+        setUserRole('TEACHER');
+      } else {
+        setViewModePayload(null);
+        setUserRole(null);
+      }
+    }
   };
 
   const handleApply = () => {
@@ -80,8 +102,10 @@ const ReferandearnBottomsheet = (props) => {
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
     dispatch(selectSectionName(option));
-    changeViewMode();
-    dispatch(updateUserRole('TEACHER'));
+    if (viewModePayload && userRole) {
+      changeViewMode();
+      dispatch(updateUserRole(userRole));
+    }
     setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 

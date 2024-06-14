@@ -8,7 +8,7 @@ import { ImageVariant } from '@/components/atoms';
 import { MMKV } from 'react-native-mmkv';
 import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import DownArrow from '@/theme/assets/images/Downarrow.png';
 import Line from '@/theme/assets/images/line.png';
 import Info from '@/theme/assets/images/info.png';
@@ -19,7 +19,7 @@ import SortbyBottomSheet from '@/components/BottomSheet/Home/SortbyBottomSheet';
 import PracticeDurationBottomSheet from '@/components/BottomSheet/Home/PracticeDurationBottomSheet';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { getStudentProgress } from '../../services/subjectWiseReportService';
-// import { updateUserRole } from '../../store/redux-slice/LoginSlice';
+import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 import {
   getSubjectWiseReport,
   get7daysScoreForChart,
@@ -56,7 +56,7 @@ const HomeScreen = () => {
   const { colors, layout, fonts } = useTheme();
   const navigation = useNavigation();
   const userName = storage.getString('username');
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   // const selectedClasses = useSelector((state)=> state.teacherClass.classesDataContainer)
   const subjectName = useSelector((state) => state.selectedSubject.subjectName);
@@ -218,7 +218,7 @@ const HomeScreen = () => {
     getUserDetailsByUserId(userName)
       .then((res) => {
         if (res.data) {
-          // dispatch(updateUserRole(res.data.teacherRole));
+          dispatch(updateUserRole(res.data.teacherViewMode));
           storage.set('oldPassword', res.data.password);
         }
       })

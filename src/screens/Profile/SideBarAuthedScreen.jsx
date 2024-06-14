@@ -226,7 +226,10 @@ const SideBarAuthedScreen = (props) => {
                       layout.rowHCenter,
                       layout.justifyBetween,
                       {
-                        width: userRole === 'TEACHER' ? '35%' : '50%',
+                        width:
+                          userRole === 'TEACHER' && currentSection.assignedAsTeacher
+                            ? '35%'
+                            : '46%',
                         height: 35,
                         backgroundColor: 'green',
                         borderRadius: 4,
@@ -235,7 +238,7 @@ const SideBarAuthedScreen = (props) => {
                     ]}
                   >
                     <View style={{ width: '5%' }}>
-                      {userRole === 'TEACHER' ? (
+                      {userRole === 'TEACHER' && currentSection.assignedAsTeacher ? (
                         <Image
                           style={{ width: 20, height: 25 }}
                           source={Teacher}
@@ -250,7 +253,7 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                     <View>
-                      {userRole === 'TEACHER' ? (
+                      {userRole === 'TEACHER' && currentSection.assignedAsTeacher == true ? (
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                         >
