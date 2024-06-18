@@ -38,6 +38,7 @@ const QuestionAnalysisScreen = () => {
   const [gradeId, setGradeId] = useState(null);
   const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [qaData, setQaData] = useState([]);
 
   const closeFilterModal = () => {
     setFilterModalVisible(false);
@@ -100,6 +101,7 @@ const QuestionAnalysisScreen = () => {
     };
     getQuestionAnalysis(params)
       .then((res) => {
+        setQaData(res.data);
         console.log('response of Q Analysis', res.data);
       })
       .catch((error) => {
@@ -279,102 +281,125 @@ const QuestionAnalysisScreen = () => {
 
           <View>
             {selectedChapter !== null ? (
-              <View>
-                {questions[0].data.map((ele) => {
-                  return (
-                    <View key={ele.qNo}>
-                      <View
-                        style={[
-                          layout.fullWidth,
-                          isTablet ? { padding: '2%' } : layout.paddingForCard,
-                          {
-                            height: 'auto',
-                            backgroundColor: colors.cardBackgroundColor,
-                            borderRadius: 16,
-                            marginTop: '5%',
-                          },
-                        ]}
-                      >
-                        <View style={[layout.row, { width: isTablet ? '95%' : '80%', gap: 10 }]}>
-                          <Text
-                            style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
+              <>
+                {!qaData || qaData.length === 0 ? (
+                  <View style={(styles.loader, { marginTop: isTablet ? '20%' : '50%' })}>
+                    <Text
+                      style={[
+                        fonts.size_20,
+                        fonts.fontWeight_small,
+                        fonts.alignCenter,
+                        { color: colors.white },
+                      ]}
+                    >
+                      No Data Available
+                    </Text>
+                  </View>
+                ) : (
+                  <View>
+                    {questions[0].data.map((ele) => {
+                      return (
+                        <View key={ele.qNo}>
+                          <View
+                            style={[
+                              layout.fullWidth,
+                              isTablet ? { padding: '2%' } : layout.paddingForCard,
+                              {
+                                height: 'auto',
+                                backgroundColor: colors.cardBackgroundColor,
+                                borderRadius: 16,
+                                marginTop: '5%',
+                              },
+                            ]}
                           >
-                            {ele.qNo}.
-                          </Text>
-                          <View>
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.fontWeight_small,
-                                { color: colors.white },
-                              ]}
-                            >
-                              {ele.question}
-                            </Text>
                             <View
-                              style={[
-                                layout.rowHCenter,
-                                layout.itemsCenter,
-                                { marginTop: isTablet ? '2%' : '4%', gap: 8 },
-                              ]}
+                              style={[layout.row, { width: isTablet ? '95%' : '80%', gap: 10 }]}
                             >
-                              <Image source={Weak} style={{ width: 20, height: 20 }} />
                               <Text
                                 style={[
-                                  fonts.size_12,
+                                  fonts.size_14,
                                   fonts.fontWeight_small,
-                                  { color: colors.gray100 },
+                                  { color: colors.white },
                                 ]}
                               >
-                                Weak for 68% of the student
+                                {ele.qNo}.
                               </Text>
-                            </View>
-                            <View
-                              style={[
-                                layout.row,
-                                layout.justifyBetween,
-                                { marginTop: isTablet ? '2%' : '5%' },
-                              ]}
-                            >
-                              <TouchableOpacity
-                                style={[layout.rowHCenter, { gap: 2 }]}
-                                onPress={() =>
-                                  navigation.navigate('QuestionSolutionScreen', {
-                                    AllQuestions: chapterQuestions,
-                                    currentQuestionId: ele.qNo,
-                                    currentQuestion: ele.question,
-                                  })
-                                }
-                              >
+                              <View>
                                 <Text
                                   style={[
-                                    fonts.size_12,
+                                    fonts.size_14,
                                     fonts.fontWeight_small,
-                                    { color: colors.termsLinkColor },
+                                    { color: colors.white },
                                   ]}
                                 >
-                                  View Solution
+                                  {ele.question}
                                 </Text>
-                                <Image
-                                  style={{
-                                    width: 10,
-                                    height: 8,
-                                    tintColor: colors.termsLinkColor,
-                                  }}
-                                  source={RightArrow}
-                                />
+                                <View
+                                  style={[
+                                    layout.rowHCenter,
+                                    layout.itemsCenter,
+                                    { marginTop: isTablet ? '2%' : '4%', gap: 8 },
+                                  ]}
+                                >
+                                  <Image source={Weak} style={{ width: 20, height: 20 }} />
+                                  <Text
+                                    style={[
+                                      fonts.size_12,
+                                      fonts.fontWeight_small,
+                                      { color: colors.gray100 },
+                                    ]}
+                                  >
+                                    Weak for 68% of the student
+                                  </Text>
+                                </View>
+                                <View
+                                  style={[
+                                    layout.row,
+                                    layout.justifyBetween,
+                                    { marginTop: isTablet ? '2%' : '5%' },
+                                  ]}
+                                >
+                                  <TouchableOpacity
+                                    style={[layout.rowHCenter, { gap: 2 }]}
+                                    onPress={() =>
+                                      navigation.navigate('QuestionSolutionScreen', {
+                                        AllQuestions: chapterQuestions,
+                                        currentQuestionId: ele.qNo,
+                                        currentQuestion: ele.question,
+                                      })
+                                    }
+                                  >
+                                    <Text
+                                      style={[
+                                        fonts.size_12,
+                                        fonts.fontWeight_small,
+                                        { color: colors.termsLinkColor },
+                                      ]}
+                                    >
+                                      View Solution
+                                    </Text>
+                                    <Image
+                                      style={{
+                                        width: 10,
+                                        height: 8,
+                                        tintColor: colors.termsLinkColor,
+                                      }}
+                                      source={RightArrow}
+                                    />
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                              <TouchableOpacity style={[layout.justifyEnd]}>
+                                <Image source={Bookmark} />
                               </TouchableOpacity>
                             </View>
                           </View>
-                          <TouchableOpacity style={[layout.justifyEnd]}>
-                            <Image source={Bookmark} />
-                          </TouchableOpacity>
                         </View>
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
+                      );
+                    })}
+                  </View>
+                )}
+              </>
             ) : (
               <View
                 style={[

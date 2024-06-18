@@ -130,6 +130,23 @@ const HomeWorkTab = () => {
     navigation.navigate('ActivateHomeWorkTab');
   };
 
+  function formatNameWithInitial(fullName) {
+    fullName = fullName.trim();
+    const parts = fullName.split(' ');
+    if (parts.length === 1) {
+      return fullName;
+    }
+    const firstName = parts.shift();
+    const initials = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i].length > 0) {
+        initials.push(parts[i][0].toUpperCase() + '.');
+      }
+    }
+    const formattedName = [firstName, ...initials].join(' ');
+    return formattedName;
+  }
+
   let payloadForReminder = {
     gradeId: gradeId,
     sectionId: sectionId,
@@ -359,7 +376,7 @@ const HomeWorkTab = () => {
                                               { color: colors.white, opacity: 0.7 },
                                             ]}
                                           >
-                                            {item.studentName}
+                                            {formatNameWithInitial(item.studentName)}
                                           </Text>
                                           <View
                                             style={[

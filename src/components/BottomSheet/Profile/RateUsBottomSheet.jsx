@@ -49,7 +49,7 @@ const RateUsBottomSheet = (props) => {
   const { layout, fonts, colors } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [selectedRating, setSelectedRating] = useState(0);
-  const [setSubmittedRating] = useState(0);
+  // const [setSubmittedRating] = useState(0);
   const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
   const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
     useState(false);
@@ -70,7 +70,7 @@ const RateUsBottomSheet = (props) => {
 
   const handleSlideDown = () => {
     setRateUsModalVisible(false);
-    setSubmittedRating(0);
+    // setSubmittedRating(0);
     setSelectedRating(0);
   };
 

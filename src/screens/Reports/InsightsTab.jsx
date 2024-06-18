@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
@@ -11,7 +12,7 @@ import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradien
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
 import { getReportInsights } from '../../services/ReportsServices/reportsServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
-import { getTopicDescById, getSubTopicDescById } from '../../utils/namesByIds';
+import { getTopicDescById, getSubTopicDescById, getChapterDescById } from '../../utils/namesByIds';
 
 import { MMKV } from 'react-native-mmkv';
 
@@ -26,9 +27,9 @@ const InsightsScreen = () => {
 
   const [insightReportsData, setInsightReportsData] = useState([]);
   const [chapList, setChapList] = useState([]);
+  const [selectedChapterName, setSelectedChapterName] = useState(null);
 
   const [selectedChapter, setSelectedChapter] = useState(null);
-  const [selectedChapterName, setSelectedChapterName] = useState(null);
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedArea, setSelectedArea] = useState(null);
 
@@ -61,18 +62,6 @@ const InsightsScreen = () => {
   useEffect(() => {
     if (selectedChapter && chapterSelectionType) getInsights();
   }, [selectedSubjectId, selectedChapter, chapterSelectionType, selectedUnit]);
-
-  // useEffect(() => {
-  //   if (selectedChapter !== null) {
-  //     const result = chapList.find((chapter) => chapter.chapterId === selectedChapter);
-  //     //result.data may come undefined because project is using limited dummy data
-  //     if (result?.data === undefined) {
-  //       setInsightReportsData([]);
-  //       return;
-  //     }
-  //     setInsightReportsData(result?.data);
-  //   }
-  // }, [selectedChapter]);
 
   useEffect(() => {
     getChaptersBySubjectId(selectedSubjectId)
@@ -136,7 +125,13 @@ const InsightsScreen = () => {
                   borderColor: selectedChapter !== null ? colors.termsLinkColor : null,
                   width:
                     selectedChapter !== null
-                      ? Math.min(210, Math.max(90, selectedChapterName?.length * 8))
+                      ? Math.min(
+                          210,
+                          Math.max(
+                            90,
+                            getChapterDescById(chapList.chapters, selectedChapter).length * 7.5
+                          )
+                        )
                       : isTablet
                         ? 90
                         : 72,
@@ -158,7 +153,9 @@ const InsightsScreen = () => {
                   },
                 ]}
               >
-                {selectedChapter !== null ? selectedChapterName : 'Chapter'}
+                {selectedChapter !== null
+                  ? getChapterDescById(chapList.chapters, selectedChapter)
+                  : 'Chapter'}
               </Text>
               <ImageVariant
                 testID="brand-img"
@@ -427,8 +424,8 @@ const InsightsScreen = () => {
         visible={selectChapterModalVisible}
         closeModal={closeSelectChapterModal}
         setSelectedChapter={setSelectedChapter}
-        setSelectedChapterName={setSelectedChapterName}
         setSelectedUnit={setSelectedUnit}
+        setSelectedChapterName={setSelectedChapterName}
         setSelectAreaModalVisible={setSelectAreaModalVisible}
       />
       <SelectAreaBottomSheet
