@@ -35,12 +35,6 @@ export const mySubjectInsightScores = async (subjectId) => {
   return await api.get(`${b2bStudentService}/v1/my-subject-insight/${subjectId}/chapters?q=st`, {});
 };
 
-export const bookMarkedQuestionsList = async (params) => {
-  return api.get(`${b2bStudentService}/v1/my-bookmark`, {
-    params: params,
-  });
-};
-
 export const getQuestionAnalysis = async (params) => {
   return api.get(`${b2bStudentService}/v1/b2b-question-analysis-report`, {
     params: params,
@@ -54,4 +48,22 @@ export const myChapterDetails = async (subjectId, params) => {
       params: params,
     }
   );
+};
+
+export const bookMarkedQuestionsList = async (params) => {
+  return api.get(`${b2bStudentService}/v1/my-bookmark`, {
+    params: params,
+  });
+};
+
+export const getbookMarkedQuestionsListAfterSearch = async (queryParams) => {
+  return await api.get(`${b2bStudentService}/v1/my-bookmark`, {
+    params: queryParams,
+  });
+};
+
+export const getChaptersWithTopics = async (subjectId) => {
+  return await api.get(`${b2bStudentService}/v1/my-bookmark/subject-chapter/${subjectId}`, {
+    params: { action: 'all-chapter' },
+  });
 };

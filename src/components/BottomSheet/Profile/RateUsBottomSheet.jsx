@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   Modal,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   ScrollView,
   TextInput,
   Image,
+  Alert,
 } from 'react-native';
 import { useTheme } from '@/theme';
 import React, { useState, useEffect } from 'react';
@@ -16,7 +18,8 @@ import { ImageVariant } from '../../atoms';
 import { useSelector } from 'react-redux';
 import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import ThanksForFeedbackBottomSheet from './ThanksForFeedbackBottomSheet';
-import { rateUsService, getRateUs } from '../../../services/FAQ/RatingService';
+// import { rateUsService, getRateUs } from '../../../services/FAQ/RatingService';
+import { ratingApp } from '../../../services/FAQ/FaqService';
 import { notifyMessage } from '../../../utils/error-toast-API';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '../../../utils/toast.config';
@@ -49,13 +52,13 @@ const RateUsBottomSheet = (props) => {
   const { layout, fonts, colors } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const [selectedRating, setSelectedRating] = useState(0);
-  // const [setSubmittedRating] = useState(0);
   const [lessThanThreeOptions, setLessThanThreeOptions] = useState(lessThanThreeStarOptions);
   const [thanksForYourFeedbackBottomSheetVisible, setThanksForYourFeedbackBottomSheetVisible] =
     useState(false);
 
   const [comment, setComment] = useState('');
   const [selectedIssues, setSelectedIssues] = useState([]);
+  const isDisabled = selectedIssues.length === 0;
 
   useEffect(() => {
     // Update optionsData based on the selectedRating
@@ -70,8 +73,9 @@ const RateUsBottomSheet = (props) => {
 
   const handleSlideDown = () => {
     setRateUsModalVisible(false);
-    // setSubmittedRating(0);
     setSelectedRating(0);
+    setComment('');
+    setSelectedIssues([]);
   };
 
   const handleStarPress = (ratingId) => {
@@ -87,37 +91,35 @@ const RateUsBottomSheet = (props) => {
     }
   };
 
-  const submitRating = (rating) => {
-    const reqBody = {
-      rating: rating.rating,
-      comment: rating.comment,
-      feedbacks: rating.feedbacks,
-      functionPoint: rating.functionPoint,
-    };
-    rateUsService(reqBody)
-      .then((res) => {
-        console.log('res.data', res.data);
-        setRateUsModalVisible(false);
-        setSelectedIssues([]);
-        setSelectedRating(0);
-        setComment('');
-        getRateUs()
-          .then((res) => {
-            console.log('respose fron get rate', res.data);
-          })
-          .catch((error) => {
-            console.log('error', error);
-          });
-        setThanksForYourFeedbackBottomSheetVisible(true);
-        setTimeout(() => {
-          setThanksForYourFeedbackBottomSheetVisible(false);
-        }, 2000);
-      })
-      .catch((error) => {
-        console.log('error from rate us', error);
-        setRateUsModalVisible(false);
-        notifyMessage('Something went wrong while rating your app', error);
-      });
+  const handlePress = () => {
+    submitRating({
+      rating: selectedRating,
+      comment: comment,
+      feedbacks: selectedIssues,
+      functionPoint: 'PROFILE',
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+  };
+
+  const submitRating = async ({ rating }) => {
+    try {
+      await ratingApp(rating); // Assume ratingApp is an async function
+      setRateUsModalVisible(false);
+      setSelectedIssues([]);
+      setSelectedRating(0);
+      setComment('');
+      setThanksForYourFeedbackBottomSheetVisible(true);
+      setTimeout(() => {
+        setThanksForYourFeedbackBottomSheetVisible(false);
+      }, 2000);
+    } catch (error) {
+      if (error.response.status === 401) {
+        Alert.alert(error.message);
+      }
+      notifyMessage('Something went wrong while rating your app', error.message || error);
+      setRateUsModalVisible(false);
+    }
   };
 
   return (
@@ -304,16 +306,8 @@ const RateUsBottomSheet = (props) => {
                       </View>
 
                       <TouchableOpacity
-                        disabled={selectedIssues.length === 0}
-                        onPress={() =>
-                          submitRating({
-                            rating: selectedRating,
-                            comment: comment,
-                            feedbacks: selectedIssues,
-                            functionPoint: 'PROFILE',
-                            // functionPointId: 'string',
-                          })
-                        }
+                        disabled={isDisabled}
+                        onPress={handlePress}
                         style={isTablet && { width: '30%', alignSelf: 'center' }}
                       >
                         <PrimaryGradient
