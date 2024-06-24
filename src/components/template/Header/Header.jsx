@@ -16,6 +16,7 @@ import {
   selectSectionName,
   selectSubjectName,
 } from '../../../store/redux-slice/SelectedSubjectSlice';
+import { notifyMessage } from '../../../utils/error-toast-API';
 
 const storage = new MMKV();
 
@@ -26,6 +27,7 @@ const Header = () => {
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const currentSub = useSelector((state) => state.selectedSubject.subject);
   const currentSection = useSelector((state) => state.selectedSubject.sectionName);
+  const teacherRole = useSelector((state) => state.login.userRole);
   const dispatch = useDispatch();
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
@@ -37,9 +39,8 @@ const Header = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setSelectedSubject(currentSub);
-      setShowSelectedClass(currentSection);
-    })
+      getTeacheDetails();
+    }, [])
   );
 
   useFocusEffect(
@@ -59,19 +60,84 @@ const Header = () => {
     let sectionName = teacherDetails?.filter((ele) => ele.sectionName === showSelecTedClass);
     let subject = sectionName[0]?.subjectList;
     subject?.sort((a, b) => a.displaySeq - b.displaySeq);
-    let subjectList = subject?.map((ele) => ({
-      subjectName: ele.name,
-      subjectId: ele.subjectId,
-    }));
+
+    let subjectList;
+
+    if (
+      sectionName[0] &&
+      sectionName[0].assignedAsClassTeacher == true &&
+      sectionName[0].assignedAsTeacher == false
+    ) {
+      subjectList = subject?.map((ele) => ({
+        subjectName: ele.name,
+        subjectId: ele.subjectId,
+      }));
+    }
+
+    if (
+      sectionName[0] &&
+      sectionName[0].assignedAsClassTeacher == true &&
+      sectionName[0].assignedAsTeacher == true
+    ) {
+      if (teacherRole == 'TEACHER') {
+        const filteredList = subject?.filter(
+          (ele) => ele.assigned == true && ele.assignedStudentCount > 0
+        );
+        subjectList = filteredList?.map((ele) => ({
+          subjectName: ele.name,
+          subjectId: ele.subjectId,
+        }));
+      }
+      if (teacherRole == 'CLASS_TEACHER') {
+        const filteredList = subject?.filter((ele) => ele.assignedStudentCount > 0);
+        subjectList = filteredList?.map((ele) => ({
+          subjectName: ele.name,
+          subjectId: ele.subjectId,
+        }));
+      }
+    }
+
+    if (
+      sectionName[0] &&
+      sectionName[0].assignedAsClassTeacher == false &&
+      sectionName[0].assignedAsTeacher == true
+    ) {
+      const filteredList = subject?.filter(
+        (ele) => ele.assigned == true && ele.assignedStudentCount > 0
+      );
+      subjectList = filteredList?.map((ele) => ({
+        subjectName: ele.name,
+        subjectId: ele.subjectId,
+      }));
+    }
+
+    if (
+      sectionName[0] &&
+      sectionName[0].assignedAsClassTeacher == false &&
+      sectionName[0].assignedAsTeacher == false
+    ) {
+      subjectList = [];
+      notifyMessage('Teacher has not been yet assigned as teacher');
+    }
+
     setSubjects(subjectList);
-    if (subjectList) {
+    if (subjectList && subjectList.length > 0) {
       setSelectedSubject(subjectList[0].subjectId);
     }
     if (subjectList && subjectList.length > 0) {
       dispatch(selectSubjectAction(subjectList[0].subjectId));
       dispatch(selectSubjectName(subjectList[0].subjectName));
     }
-  }, [showSelecTedClass]);
+  }, [showSelecTedClass, teacherRole, currentSection]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSelectedSubject(currentSub);
+      if (currentSection !== '') {
+        setShowSelectedClass(currentSection);
+      }
+    })
+  );
 
   const handleOpenDrawer = () => {
     if (isTablet) {
@@ -118,7 +184,7 @@ const Header = () => {
             layout.rowHCenter,
             layout.justifyBetween,
             layout.display,
-            { paddingHorizontal: '0%' },
+            { paddingHorizontal: isTablet ? '3%' : '0%' },
           ]}
         >
           <View>

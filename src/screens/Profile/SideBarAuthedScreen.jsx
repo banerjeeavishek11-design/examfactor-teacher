@@ -31,10 +31,12 @@ const SideBarAuthedScreen = (props) => {
   const userName = storage.getString('username');
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState('TEACHER');
+  const [userRole, setUserRole] = useState();
   const [userDetails, setUserDetails] = useState();
+  const [currentSection, setCurrentSection] = useState({});
 
   const initialUserRole = useSelector((state) => state.login.userRole);
+  const selectedClass = useSelector((state) => state.selectedSubject.sectionName);
 
   useEffect(() => {
     setUserRole(initialUserRole);
@@ -74,6 +76,9 @@ const SideBarAuthedScreen = (props) => {
     getUserDetailsByUserId(userName)
       .then((res) => {
         setUserDetails(res.data);
+        setCurrentSection(
+          res.data.teacherSectionMapDtoList.find((ele) => ele.sectionName === selectedClass)
+        );
       })
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
@@ -145,7 +150,7 @@ const SideBarAuthedScreen = (props) => {
                             width: 42,
                             borderRadius: 100,
                             opacity: 0.5,
-                            backgroundColor: colors.white,
+                            backgroundColor: '#888484',
                           },
                         ]}
                       >
@@ -221,7 +226,10 @@ const SideBarAuthedScreen = (props) => {
                       layout.rowHCenter,
                       layout.justifyBetween,
                       {
-                        width: userRole === 'TEACHER' ? '35%' : '50%',
+                        width:
+                          userRole === 'TEACHER' && currentSection.assignedAsTeacher
+                            ? '35%'
+                            : '46%',
                         height: 35,
                         backgroundColor: 'green',
                         borderRadius: 4,
@@ -230,7 +238,7 @@ const SideBarAuthedScreen = (props) => {
                     ]}
                   >
                     <View style={{ width: '5%' }}>
-                      {userRole === 'TEACHER' ? (
+                      {userRole === 'TEACHER' && currentSection.assignedAsTeacher ? (
                         <Image
                           style={{ width: 20, height: 25 }}
                           source={Teacher}
@@ -245,7 +253,7 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                     <View>
-                      {userRole === 'TEACHER' ? (
+                      {userRole === 'TEACHER' && currentSection.assignedAsTeacher == true ? (
                         <Text
                           style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}
                         >
@@ -260,7 +268,7 @@ const SideBarAuthedScreen = (props) => {
                       )}
                     </View>
                   </View>
-                  {userDetails?.teacherRole === 'TEACHER' ? null : (
+                  {currentSection.assignedAsClassTeacher && currentSection.assignedAsTeacher ? (
                     <TouchableOpacity onPress={() => setChangeRoleBottomSheetVisible(true)}>
                       <Text
                         style={[
@@ -275,7 +283,7 @@ const SideBarAuthedScreen = (props) => {
                         Change Role
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  ) : null}
                 </View>
               </View>
               <Text

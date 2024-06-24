@@ -35,7 +35,7 @@ const TabProfileScreen = (props) => {
   //   const [profileData, setProfileData] = useState(userDetails);
   const [changeRoleBottomSheetVisible, setChangeRoleBottomSheetVisible] = useState(false);
   const [rateUsModalVisible, setRateUsModalVisible] = useState(false);
-  const [userRole, setUserRole] = useState('TEACHER');
+  const [userRole, setUserRole] = useState();
   const [personalDetailBottomSheetVisible, setPersonalDetailBottomSheetVisible] = useState(false);
   const [changePasswordBottomSheetVisible, setChangePasswordBottomSheetVisible] = useState(false);
   const [userDetails, setUserDetails] = useState();

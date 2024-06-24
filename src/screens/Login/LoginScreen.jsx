@@ -32,9 +32,10 @@ import { loginByUsername } from '../../services/authService';
 import hidePasswordIcon from '../../theme/assets/images/hidePassword.png';
 import showPasswordIcon from '../../theme/assets/images/showPassword.png';
 import { jwtDecode } from 'jwt-decode';
-import { getTeacherDetailsById } from '../../services/teacherService';
+import { getTeacherDetailsById, getUserDetailsByUserId } from '../../services/teacherService';
 import SetNewPasswordBottomSheet from '../../components/BottomSheet/Login/SetNewPasswordBottomSheet';
 import { notifyMessage } from '../../utils/error-toast-API';
+import { updateUserRole } from '../../store/redux-slice/LoginSlice';
 
 const storage = new MMKV();
 const LoginScreen = () => {
@@ -78,6 +79,7 @@ const LoginScreen = () => {
         } else {
           const decodedPayload = jwtDecode(res.data.access_token);
           getTeacheDetails(decodedPayload.preferred_username);
+          getProfileDetails(decodedPayload.preferred_username);
           setShowInvalidPassword(false);
         }
         setIsLoading(false);
@@ -90,7 +92,6 @@ const LoginScreen = () => {
       });
   };
   const getTeacheDetails = (userName) => {
-    // const accessToken = storage.getString('access_token');
     getTeacherDetailsById(userName)
       .then((res) => {
         storage.set('teacherDetails', JSON.stringify(res.data));
@@ -104,6 +105,17 @@ const LoginScreen = () => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('Something Went Wrong', error);
         }
+      });
+  };
+
+  const getProfileDetails = (username) => {
+    getUserDetailsByUserId(username)
+      .then((res) => {
+        storage.set('teacherProfileDetails', JSON.stringify(res.data));
+        dispatch(updateUserRole(res.data?.teacherViewMode));
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 

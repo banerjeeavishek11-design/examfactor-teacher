@@ -59,7 +59,7 @@ const LandingScreen = ({ navigation }) => {
             </Text>
             <View style={[layout.itemsCenter, { position: 'absolute', bottom: '-35%' }]}>
               <Text style={[fonts.size_12, fonts.fontWeight_small, { color: 'white' }]}>
-                {appVersion.version} ({env.current})
+                {appVersion.version} {env.current === 'prod' ? null : '(' + env.current + ')'}
               </Text>
             </View>
           </View>

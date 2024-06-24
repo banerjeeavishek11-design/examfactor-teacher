@@ -10,6 +10,8 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { MMKV } from 'react-native-mmkv';
 import { selectSectionName } from '../../../store/redux-slice/SelectedSubjectSlice';
+import { changeTeacherViewMode } from '../../../services/teacherService';
+import { updateUserRole } from '../../../store/redux-slice/LoginSlice';
 
 const storage = new MMKV();
 const ReferandearnBottomsheet = (props) => {
@@ -23,12 +25,16 @@ const ReferandearnBottomsheet = (props) => {
   const { colors, layout, fonts } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
   const currentSection = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherdetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const [openClassSuccessfullySelectedBottomSheet, setOpenClassSuccessfullySelectedBottomSheet] =
     useState(false);
   const [option, setOption] = useState(null);
   const [lastConfirmedOption, setLastConfirmedOption] = useState(null);
   const [classes, setClasses] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
+  const [viewModePayload, setViewModePayload] = useState('');
+  const [userRole, setUserRole] = useState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -37,8 +43,8 @@ const ReferandearnBottomsheet = (props) => {
   );
 
   useEffect(() => {
-    const resFromMMKV = storage.getString('teacherDetails');
-    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
+    const resFromMMKV = storage.getString('teacherProfileDetails');
+    const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV).teacherSectionMapDtoList : null;
     if (teacherDetails != null) {
       setClasses(teacherDetails);
       if (isFirst) {
@@ -50,6 +56,20 @@ const ReferandearnBottomsheet = (props) => {
     }
   }, [openSelectClassBottmSheet]);
 
+  const changeViewMode = () => {
+    const reqBody = {
+      viewMode: viewModePayload,
+    };
+
+    changeTeacherViewMode(reqBody)
+      .then((res) => {
+        console.log('res', res.data);
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
+  };
+
   const handleSlideDown = () => {
     setOpenSelectClassBottomSheet(false);
     setOption((prev) => prev);
@@ -57,6 +77,24 @@ const ReferandearnBottomsheet = (props) => {
 
   const handleOptionChange = (op) => {
     setOption(op);
+    const classSelected = teacherdetails.find((ele) => ele.sectionName === op);
+    if (classSelected.assignedAsClassTeacher == true) {
+      if (classSelected.assignedAsTeacher == true) {
+        setViewModePayload('TEACHER');
+        setUserRole('TEACHER');
+      } else {
+        setViewModePayload('CLASS_TEACHER');
+        setUserRole('CLASS_TEACHER');
+      }
+    } else {
+      if (classSelected.assignedAsTeacher == true) {
+        setViewModePayload('TEACHER');
+        setUserRole('TEACHER');
+      } else {
+        setViewModePayload(null);
+        setUserRole(null);
+      }
+    }
   };
 
   const handleApply = () => {
@@ -64,6 +102,10 @@ const ReferandearnBottomsheet = (props) => {
     setOpenSelectClassBottomSheet(false);
     setShowSelectedClass(option);
     dispatch(selectSectionName(option));
+    if (viewModePayload && userRole) {
+      changeViewMode();
+      dispatch(updateUserRole(userRole));
+    }
     setOpenClassSuccessfullySelectedBottomSheet(true);
   };
 

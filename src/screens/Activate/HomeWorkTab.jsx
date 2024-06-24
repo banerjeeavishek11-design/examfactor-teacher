@@ -297,7 +297,9 @@ const HomeWorkTab = () => {
                                   return (
                                     <View key={item.topicId}>
                                       {topicList?.filter(
-                                        (topics) => topics.topicCode === item.topicId
+                                        (topics) =>
+                                          topics.topicCode === item.topicId &&
+                                          topics.questionCount > 0
                                       ).length > 0 && (
                                         <>
                                           <View

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ActivateScreen, HomeScreen, ReportsScreen, SchoolWorkScreen } from '@/screens';
 import { useTheme } from '@/theme';
@@ -10,6 +10,9 @@ import ActivateTab from '@/theme/assets/images/Activatetab.png';
 import { ImageVariant } from '@/components/atoms';
 import Header from '../components/template/Header/Header';
 import { useSelector } from 'react-redux';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const Tab = createBottomTabNavigator();
 const S = StyleSheet.create({
@@ -34,14 +37,29 @@ const S = StyleSheet.create({
 
 const TabBar = (props) => {
   const userRole = useSelector((state) => state.login.userRole);
+  const sectionName = useSelector((state) => state.selectedSubject.sectionName);
+  const resFromMMKV = storage.getString('teacherDetails');
+  const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
   const { layout, fonts } = useTheme();
+  const [selectedSection, setSelectedSection] = useState({});
+
+  useEffect(() => {
+    if (teacherDetails)
+      setSelectedSection(teacherDetails?.find((ele) => ele.sectionName === sectionName));
+  }, [sectionName]);
+
   return (
     <View style={S.container}>
       <TouchableOpacity
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
+          {
+            width:
+              userRole === 'TEACHER' && selectedSection?.assignedAsTeacher == true
+                ? '25%'
+                : '33.3%',
+          },
         ]}
         onPress={() => {
           props.navigation.jumpTo('HomeTab');
@@ -76,7 +94,12 @@ const TabBar = (props) => {
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
+          {
+            width:
+              userRole === 'TEACHER' && selectedSection?.assignedAsTeacher == true
+                ? '25%'
+                : '33.3%',
+          },
         ]}
         onPress={() => {
           props.navigation.jumpTo('SchoolWorkTab');
@@ -111,7 +134,12 @@ const TabBar = (props) => {
         style={[
           layout.justifyCenter,
           layout.itemsCenter,
-          { width: userRole === 'TEACHER' ? '25%' : '33.3%' },
+          {
+            width:
+              userRole === 'TEACHER' && selectedSection?.assignedAsTeacher == true
+                ? '25%'
+                : '33.3%',
+          },
         ]}
         onPress={() => {
           props.navigation.jumpTo('ReportsTab');
@@ -141,7 +169,7 @@ const TabBar = (props) => {
           Reports
         </Text>
       </TouchableOpacity>
-      {userRole === 'TEACHER' && (
+      {userRole === 'TEACHER' && selectedSection?.assignedAsTeacher == true && (
         <TouchableOpacity
           style={[layout.justifyCenter, layout.itemsCenter, { width: '25%' }]}
           onPress={() => {

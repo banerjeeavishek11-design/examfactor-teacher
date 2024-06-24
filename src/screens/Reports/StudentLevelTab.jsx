@@ -144,8 +144,11 @@ const StudentLevelScreen = () => {
                     onPress={() => goToStudentWiseReportScreen(ele)}
                   >
                     <View style={[layout.display, layout.rowHCenter, layout.justifyBetween]}>
-                      <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                        {ele?.firstName}
+                      <Text
+                        style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
+                        numberOfLines={1}
+                      >
+                        {ele?.firstName} {ele?.middleName} {ele?.lastName}
                       </Text>
                       <TouchableOpacity>
                         <Image

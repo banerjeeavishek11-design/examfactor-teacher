@@ -1,52 +1,42 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'react-native';
-
 import React from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
-
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { notifyMessage } from '../../../utils/error-toast-API';
 
-const chapters = [
-  {
-    id: 1,
-    topic: 'Introduction to Electric Feild',
-    subtopics: [
-      { id: 1, sub: 'Drift of electrons & origin of resistance.' },
-      { id: 2, sub: 'Electric current and voltage.' },
-      { id: 3, sub: "Resistivity, and Ohm's law." },
-      { id: 4, sub: 'Electric power and DC circuits.' },
-      { id: 5, sub: 'Combination of cells.' },
-    ],
-  },
-  {
-    id: 2,
-    topic: 'T2: Electric Feild',
-    subtopics: [
-      { id: 1, sub: 'Lorem ipsum dolor sit amet.' },
-      { id: 2, sub: 'Lorem ipsum dolor sit.' },
-      { id: 3, sub: 'Lorem ipsum dolor sit amet.' },
-      { id: 4, sub: 'Lorem, ipsum dolor.' },
-      { id: 5, sub: 'Lorem ipsum dolor sit.' },
-    ],
-  },
-  {
-    id: 3,
-    topic: 'Magnetic feild',
-    subtopics: [
-      { id: 1, sub: 'Lorem ipsum dolor sit amet.' },
-      { id: 2, sub: 'Lorem ipsum dolor sit.' },
-      { id: 3, sub: 'Lorem ipsum dolor sit amet.' },
-      { id: 4, sub: 'Lorem, ipsum dolor.' },
-      { id: 5, sub: 'Lorem ipsum dolor sit.' },
-    ],
-  },
-];
-
-const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
+const BookmarkedQuestionFilterBottomSheet = (props) => {
+  const {
+    visible,
+    closeModal,
+    allChapterWithTopics,
+    getBookmarkQuestionsAfterFilter,
+    setChapTopicList,
+    setSelectedItem,
+    selectedItem,
+  } = props;
   const { layout, colors, fonts } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
+
+  const handleApply = async () => {
+    try {
+      await getBookmarkQuestionsAfterFilter();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleToggle = (chapterCode, topicCode) => {
+    if (selectedItem.includes(topicCode)) {
+      setSelectedItem((prev) => prev.filter((e) => e !== topicCode));
+      setChapTopicList((prev) => prev.filter((e) => e !== `${chapterCode}:${topicCode}`));
+    } else {
+      setSelectedItem((prev) => [...prev, topicCode]);
+      setChapTopicList((prev) => [...prev, `${chapterCode}:${topicCode}`]);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -91,82 +81,91 @@ const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: '5%' }}
               >
-                {chapters.map((chapters) => {
-                  return (
-                    <View
-                      key={chapters.id}
-                      style={[
-                        layout.fullWidth,
-                        layout.paddingForCard,
-                        {
-                          height: 'auto',
-                          backgroundColor: colors.cardBackgroundColor,
-                          borderRadius: 16,
-                          marginTop: '3%',
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[fonts.size_18, fonts.fontWeignt_600, { color: colors.gray100 }]}
-                      >
-                        {chapters.topic}
-                      </Text>
-                      <View style={{ marginVertical: '1%' }}>
-                        {chapters.subtopics.map((subs) => {
-                          return (
-                            <View
-                              style={[
-                                layout.row,
-                                layout.justifyBetween,
-                                layout.itemsCenter,
-                                { marginVertical: '2%' },
-                              ]}
-                              key={subs.id}
-                            >
-                              <Text
-                                style={[
-                                  fonts.size_14,
-                                  fonts.fontWeight_small,
-                                  { color: colors.gray200 },
-                                ]}
-                              >
-                                {subs.sub}
-                              </Text>
-                              <TouchableOpacity
-                                // onPress={() =>
-                                //   handleToggle(
-                                //     item.chapterCode,
-                                //     topic.topicCode
-                                //   )
-                                // }
-                                activeOpacity={0.8}
-                              >
+                {allChapterWithTopics.length > 0 ? (
+                  <>
+                    {allChapterWithTopics?.map((item) => {
+                      return (
+                        <View
+                          key={item.chapterCode}
+                          style={[
+                            layout.fullWidth,
+                            layout.paddingForCard,
+                            {
+                              height: 'auto',
+                              backgroundColor: colors.cardBackgroundColor,
+                              borderRadius: 16,
+                              marginTop: '3%',
+                            },
+                          ]}
+                        >
+                          <Text
+                            style={[fonts.size_18, fonts.fontWeignt_600, { color: colors.gray100 }]}
+                          >
+                            {item?.chapterDesc}
+                          </Text>
+                          <View style={{ marginVertical: '1%' }}>
+                            {item?.bookmarkTopics?.map((topic) => {
+                              return (
                                 <View
                                   style={[
-                                    styles.checkbox,
-                                    layout.justifyCenter,
+                                    layout.row,
+                                    layout.justifyBetween,
                                     layout.itemsCenter,
-                                    { color: colors.white },
-                                    // selectedItem.includes(topic.topicCode) &&
-                                    //   styles.checked,
+                                    { marginVertical: '2%' },
                                   ]}
+                                  key={topic?.topicCode}
                                 >
-                                  {/* {selectedItem.includes(topic.topicCode) && (
+                                  <Text
+                                    style={[
+                                      fonts.size_14,
+                                      fonts.fontWeight_small,
+                                      { color: colors.gray200 },
+                                    ]}
+                                  >
+                                    {topic?.topicDesc}
+                                  </Text>
+                                  <TouchableOpacity
+                                    onPress={() => handleToggle(item.chapterCode, topic.topicCode)}
+                                    activeOpacity={0.8}
+                                  >
+                                    <View
+                                      style={[
+                                        styles.checkbox,
+                                        layout.justifyCenter,
+                                        layout.itemsCenter,
+                                        { color: colors.white },
+                                        selectedItem.includes(topic.topicCode) && styles.checked,
+                                      ]}
+                                    >
+                                      {/* {selectedItem.includes(topic.topicCode) && (
                                     <Ionicons
                                       name="checkmark-outline"
                                       size={18}
                                       color="white"
                                     />
                                   )} */}
+                                    </View>
+                                  </TouchableOpacity>
                                 </View>
-                              </TouchableOpacity>
-                            </View>
-                          );
-                        })}
-                      </View>
-                    </View>
-                  );
-                })}
+                              );
+                            })}
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <Text
+                    style={[
+                      fonts.size_16,
+                      fonts.fontWeight_small,
+                      fonts.alignCenter,
+                      { color: colors.white, marginTop: isTablet ? '20%' : '50%' },
+                    ]}
+                  >
+                    No Topics Found
+                  </Text>
+                )}
               </ScrollView>
               <View style={styles.footer}>
                 <TouchableOpacity
@@ -198,7 +197,9 @@ const BookmarkedQuestionFilterBottomSheet = ({ visible, closeModal }) => {
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                  //   onPress={handleApply}
+                  onPress={() => {
+                    handleApply().catch(notifyMessage);
+                  }}
                 >
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}

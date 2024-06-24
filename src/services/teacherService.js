@@ -25,3 +25,9 @@ export const uploadPicture = async (file) => {
     },
   });
 };
+
+export const changeTeacherViewMode = async (viewMode) => {
+  return await api.put(`${teacherService}/v1/teachers`, viewMode, {
+    params: { action: 'changeViewMode' },
+  });
+};

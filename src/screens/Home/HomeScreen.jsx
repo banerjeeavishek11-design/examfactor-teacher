@@ -218,7 +218,7 @@ const HomeScreen = () => {
     getUserDetailsByUserId(userName)
       .then((res) => {
         if (res.data) {
-          dispatch(updateUserRole(res.data.teacherRole));
+          dispatch(updateUserRole(res.data.teacherViewMode));
           storage.set('oldPassword', res.data.password);
         }
       })

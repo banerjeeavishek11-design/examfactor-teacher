@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useTheme } from '@/theme';
@@ -21,6 +22,8 @@ import PrimaryGradient from '../../template/LinearGradient/PrimaryGradient';
 import { MMKV } from 'react-native-mmkv';
 import { resetPassword } from '../../../services/authService';
 import { getUserDetailsByUserId } from '../../../services/teacherService';
+import hidePasswordIcon from '../../../theme/assets/images/hidePassword.png';
+import showPasswordIcon from '../../../theme/assets/images/showPassword.png';
 import * as Yup from 'yup';
 import { notifyMessage } from '../../../utils/error-toast-API';
 
@@ -39,6 +42,9 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
   const [passMatch, setPassMatch] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showRetypeNewPassword, setShowRetypeNewPassword] = useState(false);
 
   const validationSchema = Yup.object().shape({
     currentPassword: Yup.string()
@@ -150,25 +156,51 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                     <View>
                       <View style={{ marginTop: '4%' }}>
                         <View style={styles.inputContainer}>
-                          <TextInput
+                          <View
                             style={[
-                              styles.inputField,
-                              layout.fullWidth,
-                              layout.justifyCenter,
-                              // Fonts.textCenter,
-                              fonts.size_16,
-                              {
-                                color: colors.gray200,
-                                textAlign: 'left',
-                                paddingLeft: '3%',
-                                backgroundColor: '#22222F',
-                              },
+                              layout.display,
+                              layout.row,
+                              layout.itemsCenter,
+                              { width: '100%' },
                             ]}
-                            placeholder="Current Password"
-                            placeholderTextColor={colors.gray200}
-                            onChangeText={handleChange('currentPassword')}
-                            value={values.currentPassword}
-                          />
+                          >
+                            <TextInput
+                              style={[
+                                styles.inputField,
+                                layout.fullWidth,
+                                layout.justifyCenter,
+                                // Fonts.textCenter,
+                                fonts.size_16,
+                                {
+                                  color: colors.gray200,
+                                  textAlign: 'left',
+                                  paddingLeft: '3%',
+                                  backgroundColor: '#22222F',
+                                },
+                              ]}
+                              placeholder="Current Password"
+                              placeholderTextColor={colors.gray200}
+                              onChangeText={handleChange('currentPassword')}
+                              value={values.currentPassword}
+                              secureTextEntry={!showCurrentPassword}
+                            />
+                            <TouchableOpacity
+                              onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                              style={{ right: 30 }}
+                            >
+                              {showCurrentPassword ? (
+                                <Image
+                                  style={{ height: 16, width: 24, tintColor: '#94939B' }}
+                                  source={showPasswordIcon}
+                                />
+                              ) : (
+                                <Image
+                                  style={{ height: 20, width: 25, tintColor: '#94939B' }}
+                                  source={hidePasswordIcon}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          </View>
                           {touched.currentPassword && errors.currentPassword && (
                             <View>
                               <Text style={{ color: '#FF575F', marginTop: '2%' }}>
@@ -190,25 +222,51 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                           )}
                         </View>
                         <View style={styles.inputContainer}>
-                          <TextInput
+                          <View
                             style={[
-                              styles.inputField,
-                              layout.fullWidth,
-                              layout.justifyCenter,
-                              // Fonts.textCenter,
-                              fonts.size_16,
-                              {
-                                color: colors.gray200,
-                                textAlign: 'left',
-                                paddingLeft: '3%',
-                                backgroundColor: '#22222F',
-                              },
+                              layout.display,
+                              layout.row,
+                              layout.itemsCenter,
+                              { width: '100%' },
                             ]}
-                            placeholder="New Password"
-                            placeholderTextColor={colors.gray200}
-                            onChangeText={handleChange('newPassword')}
-                            value={values.newPassword}
-                          />
+                          >
+                            <TextInput
+                              style={[
+                                styles.inputField,
+                                layout.fullWidth,
+                                layout.justifyCenter,
+                                // Fonts.textCenter,
+                                fonts.size_16,
+                                {
+                                  color: colors.gray200,
+                                  textAlign: 'left',
+                                  paddingLeft: '3%',
+                                  backgroundColor: '#22222F',
+                                },
+                              ]}
+                              placeholder="New Password"
+                              placeholderTextColor={colors.gray200}
+                              onChangeText={handleChange('newPassword')}
+                              value={values.newPassword}
+                              secureTextEntry={!showNewPassword}
+                            />
+                            <TouchableOpacity
+                              onPress={() => setShowNewPassword(!showNewPassword)}
+                              style={{ right: 30 }}
+                            >
+                              {showNewPassword ? (
+                                <Image
+                                  style={{ height: 16, width: 24, tintColor: '#94939B' }}
+                                  source={showPasswordIcon}
+                                />
+                              ) : (
+                                <Image
+                                  style={{ height: 20, width: 25, tintColor: '#94939B' }}
+                                  source={hidePasswordIcon}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          </View>
                           {touched.newPassword && errors.newPassword && (
                             <View>
                               <Text style={{ color: '#FF575F', marginTop: '2%' }}>
@@ -218,25 +276,51 @@ const ChangePasswordBottomSheet = ({ visible, closeModal }) => {
                           )}
                         </View>
                         <View style={styles.inputContainer}>
-                          <TextInput
+                          <View
                             style={[
-                              styles.inputField,
-                              layout.fullWidth,
-                              layout.justifyCenter,
-                              // Fonts.textCenter,
-                              fonts.size_16,
-                              {
-                                color: colors.gray200,
-                                textAlign: 'left',
-                                paddingLeft: '3%',
-                                backgroundColor: '#22222F',
-                              },
+                              layout.display,
+                              layout.row,
+                              layout.itemsCenter,
+                              { width: '100%' },
                             ]}
-                            placeholder="Retype new Password"
-                            placeholderTextColor={colors.gray200}
-                            onChangeText={handleChange('retypePassword')}
-                            value={values.retypePassword}
-                          />
+                          >
+                            <TextInput
+                              style={[
+                                styles.inputField,
+                                layout.fullWidth,
+                                layout.justifyCenter,
+                                // Fonts.textCenter,
+                                fonts.size_16,
+                                {
+                                  color: colors.gray200,
+                                  textAlign: 'left',
+                                  paddingLeft: '3%',
+                                  backgroundColor: '#22222F',
+                                },
+                              ]}
+                              placeholder="Retype new Password"
+                              placeholderTextColor={colors.gray200}
+                              onChangeText={handleChange('retypePassword')}
+                              value={values.retypePassword}
+                              secureTextEntry={!showRetypeNewPassword}
+                            />
+                            <TouchableOpacity
+                              onPress={() => setShowRetypeNewPassword(!showRetypeNewPassword)}
+                              style={{ right: 30 }}
+                            >
+                              {showRetypeNewPassword ? (
+                                <Image
+                                  style={{ height: 16, width: 24, tintColor: '#94939B' }}
+                                  source={showPasswordIcon}
+                                />
+                              ) : (
+                                <Image
+                                  style={{ height: 20, width: 25, tintColor: '#94939B' }}
+                                  source={hidePasswordIcon}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          </View>
                           {touched.retypePassword && errors.retypePassword && (
                             <View>
                               <Text style={{ color: '#FF575F', marginTop: '2%' }}>

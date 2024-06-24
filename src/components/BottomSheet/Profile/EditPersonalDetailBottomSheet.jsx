@@ -118,7 +118,6 @@ const EditPersonalDetailBottomSheet = ({
         })
         .toISOString(),
       gender: values.gender,
-      teacherRole: 'TEACHER',
       emergencyContactNumber: values.emergencyContactNumber,
       temporary: true,
     };
