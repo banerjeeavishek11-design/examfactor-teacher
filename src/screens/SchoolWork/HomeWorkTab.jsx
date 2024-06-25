@@ -352,39 +352,22 @@ const HomeWorkTab = () => {
                                     </View>
                                   )}
                                 {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
-                                  (item, index) => (
-                                    <>
-                                      {index < seeMaxStudent && (
-                                        <View
-                                          key={item.studentName}
-                                          style={[
-                                            styles.row,
-                                            index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                                            index ===
-                                              topicWiseResponse[0]?.b2BStudentHomeWorkReportList
-                                                ?.length -
-                                                1 && {
-                                              borderBottomLeftRadius: 14,
-                                              borderBottomRightRadius: 14,
-                                            },
-                                          ]}
-                                        >
-                                          <Text
-                                            style={[
-                                              fonts.size_14,
-                                              fonts.fontWeight_small,
-                                              { color: colors.white, opacity: 0.7 },
-                                            ]}
-                                          >
-                                            {formatNameWithInitial(item.studentName)}
-                                          </Text>
+                                  (item, index) => {
+                                    console.log('item', item);
+                                    return (
+                                      <>
+                                        {index < seeMaxStudent && (
                                           <View
+                                            key={item.studentName}
                                             style={[
-                                              layout.row,
-                                              layout.itemsCenter,
-                                              {
-                                                width: '70%',
-                                                justifyContent: 'space-between',
+                                              styles.row,
+                                              index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                                              index ===
+                                                topicWiseResponse[0]?.b2BStudentHomeWorkReportList
+                                                  ?.length -
+                                                  1 && {
+                                                borderBottomLeftRadius: 14,
+                                                borderBottomRightRadius: 14,
                                               },
                                             ]}
                                           >
@@ -395,25 +378,45 @@ const HomeWorkTab = () => {
                                                 { color: colors.white, opacity: 0.7 },
                                               ]}
                                             >
-                                              {item?.timeSpent < 60
-                                                ? item?.timeSpent + ' Sec'
-                                                : Math.floor(item?.timeSpent / 60) + ' Min'}
+                                              {formatNameWithInitial(item.studentName)}
                                             </Text>
-                                            <Text
+                                            <View
                                               style={[
-                                                fonts.size_14,
-                                                fonts.fontWeight_small,
-                                                !isTablet && { opacity: 0.7, right: 24 },
-                                                { color: colors.white },
+                                                layout.row,
+                                                layout.itemsCenter,
+                                                {
+                                                  width: '70%',
+                                                  justifyContent: 'space-between',
+                                                },
                                               ]}
                                             >
-                                              {item.completionPercentage} %
-                                            </Text>
+                                              <Text
+                                                style={[
+                                                  fonts.size_14,
+                                                  fonts.fontWeight_small,
+                                                  { color: colors.white, opacity: 0.7 },
+                                                ]}
+                                              >
+                                                {item?.timeSpent < 60
+                                                  ? item?.timeSpent + ' Sec'
+                                                  : Math.floor(item?.timeSpent / 60) + ' Min'}
+                                              </Text>
+                                              <Text
+                                                style={[
+                                                  fonts.size_14,
+                                                  fonts.fontWeight_small,
+                                                  !isTablet && { opacity: 0.7, right: 24 },
+                                                  { color: colors.white },
+                                                ]}
+                                              >
+                                                {item.completionPercentage} %
+                                              </Text>
+                                            </View>
                                           </View>
-                                        </View>
-                                      )}
-                                    </>
-                                  )
+                                        )}
+                                      </>
+                                    );
+                                  }
                                 )}
                               </View>
                             </>

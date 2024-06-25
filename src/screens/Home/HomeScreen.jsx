@@ -207,6 +207,7 @@ const HomeScreen = () => {
     getSubjectWiseReport(params)
       .then((res) => {
         setConsolidatedReportData(res.data);
+        console.log('res from consolidate', res.data);
       })
       .catch((error) => {
         if (error?.response?.status === 404 && error?.response?.status !== 401)
@@ -332,7 +333,9 @@ const HomeScreen = () => {
                 chapters: consolidatedReportData?.chapters,
                 subjectName: subjectName,
                 chapList: chapList,
-                avgAchivableScore: consolidatedReportData?.score,
+                avgAchivableScore: consolidatedReportData?.score
+                  ? consolidatedReportData?.score
+                  : 0,
               })
             }
           >
@@ -686,205 +689,215 @@ const HomeScreen = () => {
           </View>
         )}
 
-        {studentProgressData.map((ele) => (
-          <TouchableOpacity
-            key={ele.studentId}
-            onPress={() => toggleContent(ele.studentId)}
-            style={[
-              layout.fullWidth,
-              isTablet ? { padding: 20 } : layout.paddingForCard,
-              {
-                backgroundColor: colors.cardBackgroundColor,
-                height: 'auto',
-                marginTop: '4%',
-                borderRadius: 14,
-              },
-            ]}
-          >
-            <View style={[layout.display, layout.rowHCenter]}>
-              <View style={{ width: '30%' }}>
-                <Text
-                  style={[fonts.size_14, fonts.bold, { color: colors.white }]}
-                >{`${ele?.score} %`}</Text>
-                <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
-                  Achievable Score
-                </Text>
-              </View>
-              <ImageVariant
-                testID="brand-img"
-                style={{
-                  // width: 60,
-                  height: 70,
-                  tintColor: colors.lineBackgroundColor,
-                  right: 6,
-                }}
-                source={Line}
-                resizeMode="contain"
-              />
-              <View style={{ width: '65%' }}>
-                <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
-                  {ele?.fullName}
-                </Text>
-                <View style={[layout.display, layout.rowHCenter]}>
-                  <View style={{ width: '30%' }}>
-                    <Text
-                      style={[
-                        fonts.size_10,
-                        fonts.fontWeight_small,
-                        { color: colors.backButtonColor },
-                      ]}
-                    >
-                      Home Work
-                    </Text>
-                  </View>
-                  <View style={{ width: '50%' }}>
-                    <Progressbar
-                      progress={ele?.practiceCompletionPercentage / 100}
-                      color={
-                        ele?.practiceCompletionPercentage <= 25
-                          ? '#FF575F'
-                          : ele?.practiceCompletionPercentage <= 60
-                            ? '#BBA041'
-                            : '#3DD598'
-                      }
-                    />
-                  </View>
-                  <View style={{ width: '20%' }}>
-                    <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                      {ele?.practiceCompletionPercentage} %
-                    </Text>
-                  </View>
+        {studentProgressData.map((ele) => {
+          return (
+            <TouchableOpacity
+              key={ele.studentId}
+              onPress={() => toggleContent(ele.studentId)}
+              style={[
+                layout.fullWidth,
+                isTablet ? { padding: 20 } : layout.paddingForCard,
+                {
+                  backgroundColor: colors.cardBackgroundColor,
+                  height: 'auto',
+                  marginTop: '4%',
+                  borderRadius: 14,
+                },
+              ]}
+            >
+              <View style={[layout.display, layout.rowHCenter, { width: '100%' }]}>
+                <View style={{ width: '25%' }}>
+                  <Text
+                    style={[fonts.size_14, fonts.bold, { color: colors.white }]}
+                  >{`${ele?.score} %`}</Text>
+                  <Text style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}>
+                    Achievable Score
+                  </Text>
                 </View>
-
-                <View style={[layout.display, layout.rowHCenter]}>
-                  <View style={{ width: '30%' }}>
-                    <Text
-                      style={[
-                        fonts.size_10,
-                        fonts.fontWeight_small,
-                        { color: colors.backButtonColor },
-                      ]}
-                    >
-                      Diagnostic
-                    </Text>
-                  </View>
-                  <View style={{ width: '50%' }}>
-                    <Progressbar
-                      progress={ele?.diagnosticCompletionPercentage / 100}
-                      color={
-                        ele?.diagnosticCompletionPercentage <= 25
-                          ? '#FF575F'
-                          : ele?.diagnosticCompletionPercentage <= 60
-                            ? '#BBA041'
-                            : '#3DD598'
-                      }
-                    />
-                  </View>
-                  <View style={{ width: '20%' }}>
-                    <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
-                      {ele?.diagnosticCompletionPercentage} %
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View style={{ width: '10%' }}>
-                <TouchableOpacity>
-                  {expandedCards[ele.studentId] ? (
-                    <Image style={{ width: 12, height: 8 }} source={UpArrow} resizeMode="contain" />
-                  ) : (
-                    <Image
-                      style={{ width: 12, height: 8 }}
-                      source={DownArrow}
-                      resizeMode="contain"
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-            {expandedCards[ele.studentId] && (
-              <>
-                <Divider
+                <ImageVariant
+                  testID="brand-img"
                   style={{
-                    marginTop: '2%',
-                    width: '100%',
-                    backgroundColor: colors.lineBackgroundColor,
+                    // width: 60,
+                    height: 70,
+                    tintColor: colors.lineBackgroundColor,
+                    right: 6,
                   }}
+                  source={Line}
+                  resizeMode="contain"
                 />
-                <View
-                  style={[
-                    layout.display,
-                    layout.rowHCenter,
-                    layout.justifyBetween,
-                    { marginTop: '2%' },
-                  ]}
-                >
-                  <View style={{ width: '35%' }}>
-                    {ele?.lastPracticeDateSince !== -1 ? (
-                      <>
+                <View style={{ width: '70%' }}>
+                  <Text style={[fonts.size_14, fonts.bold, { color: colors.white }]}>
+                    {ele?.fullName}
+                  </Text>
+                  <View style={[layout.display, layout.rowHCenter]}>
+                    <View style={{ width: '30%' }}>
+                      <Text
+                        style={[
+                          fonts.size_10,
+                          fonts.fontWeight_small,
+                          { color: colors.backButtonColor },
+                        ]}
+                      >
+                        Home Work
+                      </Text>
+                    </View>
+                    <View style={{ width: '50%' }}>
+                      <Progressbar
+                        progress={ele?.practiceCompletionPercentage / 100}
+                        color={
+                          ele?.practiceCompletionPercentage <= 25
+                            ? '#FF575F'
+                            : ele?.practiceCompletionPercentage <= 60
+                              ? '#BBA041'
+                              : '#3DD598'
+                        }
+                      />
+                    </View>
+                    <View style={{ width: '20%' }}>
+                      <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
+                        {ele?.practiceCompletionPercentage?.toFixed(2)} %
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={[layout.display, layout.rowHCenter]}>
+                    <View style={{ width: '30%' }}>
+                      <Text
+                        style={[
+                          fonts.size_10,
+                          fonts.fontWeight_small,
+                          { color: colors.backButtonColor },
+                        ]}
+                      >
+                        Diagnostic
+                      </Text>
+                    </View>
+                    <View style={{ width: '50%' }}>
+                      <Progressbar
+                        progress={ele?.diagnosticCompletionPercentage / 100}
+                        color={
+                          ele?.diagnosticCompletionPercentage <= 25
+                            ? '#FF575F'
+                            : ele?.diagnosticCompletionPercentage <= 60
+                              ? '#BBA041'
+                              : '#3DD598'
+                        }
+                      />
+                    </View>
+                    <View style={{ width: '20%' }}>
+                      <Text style={[fonts.size_10, fonts.bold, { color: colors.white, left: 5 }]}>
+                        {ele?.diagnosticCompletionPercentage?.toFixed(2)} %
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ width: '0%', left: '8%' }}>
+                  <TouchableOpacity>
+                    {expandedCards[ele.studentId] ? (
+                      <Image
+                        style={{ width: 12, height: 8 }}
+                        source={UpArrow}
+                        resizeMode="contain"
+                      />
+                    ) : (
+                      <Image
+                        style={{ width: 12, height: 8 }}
+                        source={DownArrow}
+                        resizeMode="contain"
+                      />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {expandedCards[ele.studentId] && (
+                <>
+                  <Divider
+                    style={{
+                      marginTop: '2%',
+                      width: '100%',
+                      backgroundColor: colors.lineBackgroundColor,
+                    }}
+                  />
+                  <View
+                    style={[
+                      layout.display,
+                      layout.rowHCenter,
+                      layout.justifyBetween,
+                      { marginTop: '2%' },
+                    ]}
+                  >
+                    <View style={{ width: '35%' }}>
+                      {ele?.lastPracticeDateSince !== -1 ? (
+                        <>
+                          <Text
+                            style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
+                          >
+                            {ele.lastPracticeDateSince != null ? ele.lastPracticeDateSince : '0'}{' '}
+                            days ago
+                          </Text>
+                          <Text
+                            style={[
+                              fonts.size_10,
+                              fonts.fontWeight_small,
+                              { color: colors.gray200 },
+                            ]}
+                          >
+                            Last practice
+                          </Text>
+                        </>
+                      ) : (
                         <Text
-                          style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}
+                          style={[
+                            fonts.size_13,
+                            fonts.fontWeignt_600,
+                            { color: colors.white, width: '90%' },
+                          ]}
                         >
-                          {ele.lastPracticeDateSince != null ? ele.lastPracticeDateSince : '0'} days
-                          ago
+                          Not Yet Practiced
                         </Text>
+                      )}
+                    </View>
+                    <View style={{ width: '45%' }}>
+                      <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                        {ele?.avgStudyTime < 60
+                          ? ele?.avgStudyTime + ' Sec'
+                          : Math.floor(ele?.avgStudyTime / 60) + ' Min'}
+                      </Text>
+                      <View style={[layout.display, layout.rowHCenter]}>
                         <Text
                           style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
                         >
-                          Last practice
+                          Avg. Study Time
                         </Text>
-                      </>
-                    ) : (
-                      <Text
-                        style={[
-                          fonts.size_13,
-                          fonts.fontWeignt_600,
-                          { color: colors.white, width: '90%' },
-                        ]}
-                      >
-                        Not Yet Practiced
+                        <ImageVariant
+                          testID="brand-img"
+                          style={{
+                            width: 10,
+                            height: 10,
+                            tintColor: '#A9A9AD',
+                            left: 6,
+                          }}
+                          source={Info}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    </View>
+                    <View style={{ width: '25%' }}>
+                      <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
+                        {ele?.lastTestScore}%
                       </Text>
-                    )}
-                  </View>
-                  <View style={{ width: '45%' }}>
-                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.avgStudyTime < 60
-                        ? ele?.avgStudyTime + ' Sec'
-                        : Math.floor(ele?.avgStudyTime / 60) + ' Min'}
-                    </Text>
-                    <View style={[layout.display, layout.rowHCenter]}>
                       <Text
                         style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
                       >
-                        Avg. Study Time
+                        Last test score
                       </Text>
-                      <ImageVariant
-                        testID="brand-img"
-                        style={{
-                          width: 10,
-                          height: 10,
-                          tintColor: '#A9A9AD',
-                          left: 6,
-                        }}
-                        source={Info}
-                        resizeMode="contain"
-                      />
                     </View>
                   </View>
-                  <View style={{ width: '25%' }}>
-                    <Text style={[fonts.size_14, fonts.fontWeignt_600, { color: colors.white }]}>
-                      {ele?.lastTestScore}%
-                    </Text>
-                    <Text
-                      style={[fonts.size_10, fonts.fontWeight_small, { color: colors.gray200 }]}
-                    >
-                      Last test score
-                    </Text>
-                  </View>
-                </View>
-              </>
-            )}
-          </TouchableOpacity>
-        ))}
+                </>
+              )}
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
       <SortbyBottomSheet
         visible={sortbyModalVisible}

@@ -4,8 +4,8 @@ import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
 import { ImageVariant } from '@/components/atoms';
 import Cross from '@/theme/assets/images/cross.png';
+import Right from '@/theme/assets/images/tick.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
-import { notifyMessage } from '../../../utils/error-toast-API';
 
 const BookmarkedQuestionFilterBottomSheet = (props) => {
   const {
@@ -20,22 +20,26 @@ const BookmarkedQuestionFilterBottomSheet = (props) => {
   const { layout, colors, fonts } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
-  const handleApply = async () => {
-    try {
-      await getBookmarkQuestionsAfterFilter();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleApply = async () => {
+  //   try {
+  //     await getBookmarkQuestionsAfterFilter();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleToggle = (chapterCode, topicCode) => {
-    if (selectedItem.includes(topicCode)) {
+    if (selectedItem?.includes(topicCode)) {
       setSelectedItem((prev) => prev.filter((e) => e !== topicCode));
       setChapTopicList((prev) => prev.filter((e) => e !== `${chapterCode}:${topicCode}`));
     } else {
       setSelectedItem((prev) => [...prev, topicCode]);
       setChapTopicList((prev) => [...prev, `${chapterCode}:${topicCode}`]);
     }
+  };
+
+  const handleApply = () => {
+    getBookmarkQuestionsAfterFilter();
   };
 
   return (
@@ -119,7 +123,7 @@ const BookmarkedQuestionFilterBottomSheet = (props) => {
                                     style={[
                                       fonts.size_14,
                                       fonts.fontWeight_small,
-                                      { color: colors.gray200 },
+                                      { color: colors.gray200, width: '80%' },
                                     ]}
                                   >
                                     {topic?.topicDesc}
@@ -134,16 +138,21 @@ const BookmarkedQuestionFilterBottomSheet = (props) => {
                                         layout.justifyCenter,
                                         layout.itemsCenter,
                                         { color: colors.white },
-                                        selectedItem.includes(topic.topicCode) && styles.checked,
+                                        selectedItem?.includes(topic.topicCode) && styles.checked,
                                       ]}
                                     >
-                                      {/* {selectedItem.includes(topic.topicCode) && (
-                                    <Ionicons
-                                      name="checkmark-outline"
-                                      size={18}
-                                      color="white"
-                                    />
-                                  )} */}
+                                      {selectedItem?.includes(topic.topicCode) && (
+                                        <ImageVariant
+                                          testID="brand-img"
+                                          style={{
+                                            width: 16,
+                                            height: 16,
+                                            // tintColor: colors.gray200,
+                                          }}
+                                          source={Right}
+                                          resizeMode="contain"
+                                        />
+                                      )}
                                     </View>
                                   </TouchableOpacity>
                                 </View>
@@ -197,9 +206,7 @@ const BookmarkedQuestionFilterBottomSheet = (props) => {
                       backgroundColor: colors.termsLinkColor,
                     },
                   ]}
-                  onPress={() => {
-                    handleApply().catch(notifyMessage);
-                  }}
+                  onPress={handleApply}
                 >
                   <PrimaryGradient
                     styleProp={[layout.justifyCenter, { height: '100%', borderRadius: 8 }]}

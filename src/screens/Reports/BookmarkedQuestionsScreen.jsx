@@ -40,6 +40,7 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalTabs, setTotalTabs] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([]);
   const startIndex = currentPage * questionsPerPage;
   const endIndex = Math.min(
     startIndex + questionsPerPage,
@@ -116,8 +117,11 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
   const goToFilterScreen = async () => {
     setIsLoading(true);
     try {
-      let res = await getChaptersWithTopics(subjectIdOfBookmarkSubject);
-      console.log('res from filter', res.data);
+      let params = {
+        action: 'all-chapter',
+        studentId: studentDetails?.userName,
+      };
+      let res = await getChaptersWithTopics(params, subjectIdOfBookmarkSubject);
       setAllChapterWithTopics(res.data);
       setBookmarkFilterVisible(true);
       setIsLoading(false);
@@ -138,10 +142,8 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
   const getBookmarkQuestionsAfterFilter = async () => {
     setIsLoading(true);
     let queryParams = {
-      page: 0,
-      size: 5,
-      active: true,
       subjectCode: selectedSubjectId,
+      studentId: studentDetails?.userName,
       chapterKey: chapTopicList
         .map((chapter, index) => (index === 0 ? chapter : `chapterKey=${chapter}`))
         .join('&'),
@@ -149,14 +151,13 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
     await getbookMarkedQuestionsListAfterSearch(queryParams)
       .then((res) => {
         setAllBookmarkedQuestionsAfterFilter(res.data.content);
-        setBookmarkFilterVisible(true);
+        setBookmarkFilterVisible(false);
         setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
         if (error.code === 'invalid_grant') {
           console.log('Bookmark Questions Error', error, error.code);
-
           notifyMessage('Login required');
         } else {
           notifyMessage('Something went wrong while fetching Bookmark Questions');
@@ -210,156 +211,166 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
               <View style={styles.loader}>
                 <ActivityIndicator size="large" color={colors.termsLinkColor} />
               </View>
+            ) : allBookmarkedQuestionsDetails?.length === 0 ? (
+              <View style={[layout.justifyContent, { flex: 1 }]}>
+                <Text
+                  style={[
+                    fonts.size_16,
+                    fonts.fontWeight_small,
+                    fonts.alignCenter,
+                    { color: colors.white, marginTop: isTablet ? '20%' : '90%' },
+                  ]}
+                >
+                  No Bookmarked Questions Found
+                </Text>
+              </View>
+            ) : allBookmarkedQuestionsAfterFilter.length === 0 ? (
+              <View style={[layout.justifyContent, { flex: 1, alignItems: 'center' }]}>
+                <Text
+                  style={[
+                    fonts.size_16,
+                    fonts.fontWeight_small,
+                    fonts.alignCenter,
+                    { color: colors.white, marginTop: isTablet ? '20%' : '90%', width: '60%' },
+                  ]}
+                >
+                  No Bookmarked Questions Found For This Filter
+                </Text>
+              </View>
             ) : (
               <>
-                {allBookmarkedQuestionsDetails?.length > 0 ? (
-                  <>
-                    {allBookmarkedQuestionsAfterFilter &&
-                      allBookmarkedQuestionsAfterFilter
-                        ?.slice(startIndex, endIndex)
-                        ?.map((questions, i) => {
-                          const concatenatedData = questions?.question?.questionContents
-                            .filter((ele) => ele.contentType === 'TEXT')
-                            .map((ele) => ele.data)
-                            .join(' ');
-                          return (
-                            <View key={questions.questionId}>
-                              <View
+                {allBookmarkedQuestionsAfterFilter &&
+                  allBookmarkedQuestionsAfterFilter
+                    ?.slice(startIndex, endIndex)
+                    ?.map((questions, i) => {
+                      const concatenatedData = questions?.question?.questionContents
+                        .filter((ele) => ele.contentType === 'TEXT')
+                        .map((ele) => ele.data)
+                        .join(' ');
+                      return (
+                        <View key={questions.questionId}>
+                          <View
+                            style={[
+                              layout.fullWidth,
+                              isTablet ? { padding: 20 } : layout.paddingForCard,
+                              {
+                                height: 'auto',
+                                backgroundColor: colors.cardBackgroundColor,
+                                borderRadius: 16,
+                                marginTop: '3%',
+                                gap: 10,
+                              },
+                            ]}
+                          >
+                            <View style={[layout.row]}>
+                              <Text
                                 style={[
-                                  layout.fullWidth,
-                                  isTablet ? { padding: 20 } : layout.paddingForCard,
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.white, width: '5%' },
+                                ]}
+                              >
+                                {i + 1}
+                              </Text>
+
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
                                   {
-                                    height: 'auto',
-                                    backgroundColor: colors.cardBackgroundColor,
-                                    borderRadius: 16,
-                                    marginTop: '3%',
-                                    gap: 10,
+                                    color: colors.white,
+                                    width: '90%',
+                                    textAlign: 'justify',
+                                    top: -2,
                                   },
                                 ]}
                               >
-                                <View style={[layout.row]}>
-                                  <Text
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      { color: colors.white, width: '5%' },
-                                    ]}
-                                  >
-                                    {i + 1}
-                                  </Text>
-
-                                  <Text
-                                    style={[
-                                      fonts.size_14,
-                                      fonts.fontWeight_small,
-                                      {
-                                        color: colors.white,
-                                        width: '90%',
-                                        textAlign: 'justify',
-                                        top: -2,
-                                      },
-                                    ]}
-                                  >
-                                    {questions?.question?.subTopic}
-                                  </Text>
-                                </View>
-                                <View style={isTablet && { marginLeft: '4%' }} pointerEvents="none">
-                                  <MathJax
-                                    mathJaxOptions={mmlOptions}
-                                    html={`<div>${concatenatedData}</div>`}
-                                    style={[mathjaxStyles.mathjaxContainer]}
-                                  />
-                                </View>
-
-                                <TouchableOpacity
-                                  onPress={() => goToSolutionScreen(questions?.question)}
-                                  style={[
-                                    layout.row,
-                                    layout.itemsCenter,
-                                    { marginTop: isTablet ? '1%' : '3%', marginLeft: '5%' },
-                                  ]}
-                                >
-                                  <Text
-                                    style={[
-                                      fonts.size_12,
-                                      fonts.fontWeight_small,
-                                      { color: colors.termsLinkColor },
-                                    ]}
-                                  >
-                                    View Solution
-                                  </Text>
-                                  <Image
-                                    style={{
-                                      width: 6,
-                                      height: 8,
-                                      left: 3,
-                                      tintColor: colors.termsLinkColor,
-                                    }}
-                                    source={RightArrow}
-                                  />
-                                </TouchableOpacity>
-                              </View>
+                                {questions?.question?.subTopic}
+                              </Text>
                             </View>
-                          );
-                        })}
-                    <View
-                      style={[
-                        layout.row,
-                        {
-                          justifyContent: 'center',
-                          gap: 8,
-                          marginBottom: '20%',
-                          marginTop: '5%',
-                        },
-                      ]}
-                    >
-                      {totalTabs.map((index) => {
-                        return (
-                          <TouchableOpacity onPress={() => setCurrentPage(index)} key={index}>
-                            <View
+                            <View style={isTablet && { marginLeft: '4%' }} pointerEvents="none">
+                              <MathJax
+                                mathJaxOptions={mmlOptions}
+                                html={`<div>${concatenatedData}</div>`}
+                                style={[mathjaxStyles.mathjaxContainer]}
+                              />
+                            </View>
+
+                            <TouchableOpacity
+                              onPress={() => goToSolutionScreen(questions?.question)}
                               style={[
-                                layout.justifyCenter,
+                                layout.row,
                                 layout.itemsCenter,
-                                {
-                                  width: 45,
-                                  height: 45,
-                                  borderWidth: currentPage === index ? 1 : 0,
-                                  borderColor: currentPage === index ? colors.termsLinkColor : null,
-                                  borderRadius: 8,
-                                  backgroundColor:
-                                    currentPage === index ? 'black' : colors.cardBackgroundColor,
-                                },
+                                { marginTop: isTablet ? '1%' : '3%', marginLeft: '5%' },
                               ]}
                             >
                               <Text
                                 style={[
-                                  fonts.bold,
-                                  {
-                                    color:
-                                      currentPage === index ? colors.termsLinkColor : colors.white,
-                                  },
+                                  fonts.size_12,
+                                  fonts.fontWeight_small,
+                                  { color: colors.termsLinkColor },
                                 ]}
                               >
-                                {index + 1}
+                                View Solution
                               </Text>
-                            </View>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  </>
-                ) : (
-                  <Text
-                    style={[
-                      fonts.size_16,
-                      fonts.fontWeight_small,
-                      fonts.alignCenter,
-                      { color: colors.white, marginTop: isTablet ? '20%' : '90%' },
-                    ]}
-                  >
-                    No Bookmarked Questions Found
-                  </Text>
-                )}
+                              <Image
+                                style={{
+                                  width: 6,
+                                  height: 8,
+                                  left: 3,
+                                  tintColor: colors.termsLinkColor,
+                                }}
+                                source={RightArrow}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      );
+                    })}
+                <View
+                  style={[
+                    layout.row,
+                    {
+                      justifyContent: 'center',
+                      gap: 8,
+                      marginBottom: '20%',
+                      marginTop: '5%',
+                    },
+                  ]}
+                >
+                  {totalTabs.map((index) => {
+                    return (
+                      <TouchableOpacity onPress={() => setCurrentPage(index)} key={index}>
+                        <View
+                          style={[
+                            layout.justifyCenter,
+                            layout.itemsCenter,
+                            {
+                              width: 45,
+                              height: 45,
+                              borderWidth: currentPage === index ? 1 : 0,
+                              borderColor: currentPage === index ? colors.termsLinkColor : null,
+                              borderRadius: 8,
+                              backgroundColor:
+                                currentPage === index ? 'black' : colors.cardBackgroundColor,
+                            },
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              fonts.bold,
+                              {
+                                color: currentPage === index ? colors.termsLinkColor : colors.white,
+                              },
+                            ]}
+                          >
+                            {index + 1}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </>
             )}
           </ScrollView>
@@ -372,6 +383,8 @@ const BookmarkedQuestionsScreen = ({ navigation }) => {
         getBookmarkQuestionsAfterFilter={getBookmarkQuestionsAfterFilter}
         setChapTopicList={setChapTopicList}
         chapTopicList={chapTopicList}
+        setSelectedItem={setSelectedItem}
+        selectedItem={selectedItem}
       />
     </SafeScreen>
   );

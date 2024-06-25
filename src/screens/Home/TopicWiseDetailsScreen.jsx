@@ -233,21 +233,25 @@ const TopicWiseDetailsScreen = () => {
                               },
                             ]}
                           >
-                            <Text
-                              style={[
-                                fonts.size_14,
-                                fonts.fontWeight_small,
-                                { color: colors.gray200 },
-                              ]}
-                            >
-                              {item.studentName}
-                            </Text>
+                            <View style={{ width: '50%' }}>
+                              <Text
+                                style={[
+                                  fonts.size_14,
+                                  fonts.fontWeight_small,
+                                  { color: colors.gray200 },
+                                ]}
+                                numberOfLines={2}
+                              >
+                                {item.studentName}
+                              </Text>
+                            </View>
+
                             <View
                               style={[
                                 layout.row,
                                 layout.itemsCenter,
                                 {
-                                  width: '55%',
+                                  width: '50%',
                                   justifyContent: 'space-between',
                                 },
                               ]}
@@ -278,7 +282,7 @@ const TopicWiseDetailsScreen = () => {
                   </View>
                 </View>
               ) : null}
-              {homeworkReportData.length > 5 && expandedCards[ele.topicId] && (
+              {homeworkReportData?.length > 5 && expandedCards[ele.topicId] && (
                 <TouchableOpacity
                   onPress={() => {
                     setSeeMaxStudent(seeMaxStudent === 5 ? 500 : 5);

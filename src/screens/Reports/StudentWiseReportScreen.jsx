@@ -49,11 +49,14 @@ const StudentWiseReportScreen = () => {
     ? specificStudentDetails?.completionPercentage / 100
     : 0;
   const chaptersStatusInfo = specificStudentDetails?.chaptersStatusInfo || [];
+
   useEffect(() => {
-    mySubjectInsight();
-    mySubjectTimeSpend();
-    getBookmarkQuestions();
-    getMySubjectInsightData();
+    if (selectedSubjectId) {
+      mySubjectInsight();
+      mySubjectTimeSpend();
+      getBookmarkQuestions();
+      getMySubjectInsightData();
+    }
   }, [selectedSubjectId]);
 
   const mySubjectInsight = () => {
@@ -95,16 +98,6 @@ const StudentWiseReportScreen = () => {
       });
   };
 
-  const findTimePercent = (seconds, _maxTime) => {
-    if (!_maxTime || !seconds) return 0.1;
-    return Math.floor((seconds / _maxTime) * 100);
-  };
-
-  const thisWeek = timeSpentData?.thisWeek?.timeSpent;
-  const lastWeek = timeSpentData?.lastWeek?.timeSpent;
-  const peers = timeSpentData?.peers?.timeSpent;
-  const maxTime = Math.max(thisWeek || 0, lastWeek || 0, peers || 0);
-
   const goToClassWorkInsightScreen = () => {
     setIsLoading(true);
     let params = {
@@ -121,6 +114,24 @@ const StudentWiseReportScreen = () => {
       .catch((error) => {
         if (error?.response?.status === 400 || error.code === 'ERR-10') {
           notifyMessage('unable to fetch assessmentDetails');
+        }
+        setIsLoading(false);
+      });
+  };
+
+  const getMySubjectInsightData = () => {
+    let params = {
+      studentId: studentDetails?.userName,
+    };
+    mySubjectInsightScores(params, selectedSubjectId)
+      .then((res) => {
+        const chapterScoreMap = res.data.reduce((ac, ch) => ({ ...ac, [ch.chapterId]: ch }), {});
+        setChapterScoreMap(chapterScoreMap);
+      })
+      .catch((error) => {
+        console.log('error from chapter', error);
+        if (error?.response?.status === 400 || error.code === 'ERR-10') {
+          notifyMessage('unabled to fetch score and study time');
         }
         setIsLoading(false);
       });
@@ -150,20 +161,15 @@ const StudentWiseReportScreen = () => {
       });
   };
 
-  const getMySubjectInsightData = () => {
-    mySubjectInsightScores(selectedSubjectId)
-      .then((res) => {
-        const chapterScoreMap = res.data.reduce((ac, ch) => ({ ...ac, [ch.chapterId]: ch }), {});
-        setChapterScoreMap(chapterScoreMap);
-      })
-      .catch((error) => {
-        console.log('error from chapter', error);
-        if (error?.response?.status === 400 || error.code === 'ERR-10') {
-          notifyMessage('unabled to fetch score and study time');
-        }
-        setIsLoading(false);
-      });
+  const findTimePercent = (seconds, _maxTime) => {
+    if (!_maxTime || !seconds) return 0.1;
+    return Math.floor((seconds / _maxTime) * 100);
   };
+
+  const thisWeek = timeSpentData?.thisWeek?.timeSpent;
+  const lastWeek = timeSpentData?.lastWeek?.timeSpent;
+  const peers = timeSpentData?.peers?.timeSpent;
+  const maxTime = Math.max(thisWeek || 0, lastWeek || 0, peers || 0);
 
   let data = [];
   const scoreArray = [];
@@ -924,7 +930,7 @@ const StudentWiseReportScreen = () => {
                   Accuracy percentage
                 </Text>
                 <Text style={[fonts.size_14, fonts.fontWeight_small, { color: colors.white }]}>
-                  {classworkData?.accuracyPercentage || '--'}
+                  {classworkData?.accuracyPercentage?.toFixed(2) || '--'}
                 </Text>
               </View>
             </View>
