@@ -31,8 +31,10 @@ export const mySubjectInsightAssessmentDetails = async (subjectId, params) => {
   });
 };
 
-export const mySubjectInsightScores = async (subjectId) => {
-  return await api.get(`${b2bStudentService}/v1/my-subject-insight/${subjectId}/chapters?q=st`, {});
+export const mySubjectInsightScores = async (params, subjectId) => {
+  return await api.get(`${b2bStudentService}/v1/my-subject-insight/${subjectId}/chapters?q=st`, {
+    params: params,
+  });
 };
 
 export const getQuestionAnalysis = async (params) => {
@@ -62,8 +64,8 @@ export const getbookMarkedQuestionsListAfterSearch = async (queryParams) => {
   });
 };
 
-export const getChaptersWithTopics = async (subjectId) => {
+export const getChaptersWithTopics = async (params, subjectId) => {
   return await api.get(`${b2bStudentService}/v1/my-bookmark/subject-chapter/${subjectId}`, {
-    params: { action: 'all-chapter' },
+    params: params,
   });
 };

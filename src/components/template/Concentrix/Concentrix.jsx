@@ -6,6 +6,7 @@ import { useTheme } from '@/theme';
 const Concentrix = (props) => {
   const { colors, layout, fonts } = useTheme();
   const { scorePercentage } = props;
+  console.log('scorePercentage', scorePercentage);
   const strokeWidth = 5;
   const radius = 100;
   const targetRadius = 5;
@@ -140,21 +141,6 @@ const Concentrix = (props) => {
               </Text>
             </View>
           )}
-          {/* <Text
-            style={[
-              fonts.size_14,
-              fonts.fontWeight_small,
-              fonts.alignCenter,
-              {
-                color: colors.white,
-                marginTop: '2%',
-                fontFamily: 'Poppins-Regular',
-              },
-            ]}
-          >
-            Average
-          </Text> */}
-
           <Text
             style={[
               fonts.size_14,
