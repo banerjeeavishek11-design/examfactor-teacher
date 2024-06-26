@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useNavigation } from '@react-navigation/native';
 import { ImageVariant } from '@/components/atoms';
@@ -16,15 +16,20 @@ import Logo from '@/theme/assets/images/examfactorlogo.png';
 import rightArrow from '@/theme/assets/images/rightarrow.png';
 import { Controller, useForm } from 'react-hook-form';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
+import { forgotPassword } from '../../services/authService';
 
 const ForgotPasswordScreen = () => {
   const { colors, layout, fonts, backgrounds } = useTheme();
   const navigation = useNavigation();
   const {
     control,
+    handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const [textInputValues, setTextInputValues] = useState({
+    userName: '',
+  });
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
     return () => {
@@ -35,6 +40,19 @@ const ForgotPasswordScreen = () => {
   const handleBackPress = () => {
     navigation.navigate('LoginScreen');
     return true;
+  };
+
+  const handleForgetPassword = (value) => {
+    const reqBody = {
+      userName: value.email,
+      userType: 'TEACHER',
+    };
+    forgotPassword(reqBody)
+      .then((res) => {
+        console.log(res);
+        navigation.navigate('ForgotPasswordSuccessfulScreen');
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -72,7 +90,7 @@ const ForgotPasswordScreen = () => {
               rules={{
                 required: 'This feild is required',
               }}
-              render={({ field: { onBlur } }) => (
+              render={({ field: { onBlur, onChange } }) => (
                 <View
                   style={[
                     layout.display,
@@ -99,21 +117,21 @@ const ForgotPasswordScreen = () => {
                     placeholder="Email "
                     placeholderTextColor="#94939B"
                     onBlur={onBlur}
-                    // onChangeText={(value) => {
-                    //   onChange(value);
-                    //   setTextInputValues((prevState) => ({
-                    //     ...prevState,
-                    //     username: value,
-                    //   }));
-                    // }}
-                    // value={textInputValues.username}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      setTextInputValues((prevState) => ({
+                        ...prevState,
+                        username: value,
+                      }));
+                    }}
+                    value={textInputValues.username}
                   />
                 </View>
               )}
             />
           </View>
 
-          <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordSuccessfulScreen')}>
+          <TouchableOpacity onPress={() => handleSubmit(handleForgetPassword)}>
             <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
               <View style={[layout.display, layout.rowHCenter]}>
                 <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>

@@ -19,3 +19,6 @@ export const logOutService = async (refreshToken) => {
     refreshToken: refreshToken,
   });
 };
+export const forgotPassword = async (requiredBody) => {
+  return await api.put(`${authService}/v1/auth/forget-password`, requiredBody);
+};
