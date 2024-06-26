@@ -79,6 +79,23 @@ const TopicWiseDetailsScreen = () => {
       });
   };
 
+  function formatNameWithInitial(fullName) {
+    fullName = fullName.trim();
+    const parts = fullName.split(' ');
+    if (parts.length === 1) {
+      return fullName;
+    }
+    const firstName = parts.shift();
+    const initials = [];
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i].length > 0) {
+        initials.push(parts[i][0].toUpperCase() + '.');
+      }
+    }
+    const formattedName = [firstName, ...initials].join(' ');
+    return formattedName;
+  }
+
   return (
     <SafeScreen>
       <View
@@ -233,7 +250,7 @@ const TopicWiseDetailsScreen = () => {
                               },
                             ]}
                           >
-                            <View style={{ width: '50%' }}>
+                            <View style={{ width: '40%' }}>
                               <Text
                                 style={[
                                   fonts.size_14,
@@ -242,7 +259,7 @@ const TopicWiseDetailsScreen = () => {
                                 ]}
                                 numberOfLines={2}
                               >
-                                {item.studentName}
+                                {formatNameWithInitial(item.studentName)}
                               </Text>
                             </View>
 
@@ -251,7 +268,7 @@ const TopicWiseDetailsScreen = () => {
                                 layout.row,
                                 layout.itemsCenter,
                                 {
-                                  width: '50%',
+                                  width: '60%',
                                   justifyContent: 'space-between',
                                 },
                               ]}

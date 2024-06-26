@@ -35,6 +35,7 @@ const StudentLevelScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    studentDetails.sort((a, b) => a.firstName.localeCompare(b.firstName));
     setSearchStudentName(studentDetails);
   }, [studentDetails]);
 

@@ -903,6 +903,7 @@ const HomeScreen = () => {
         visible={sortbyModalVisible}
         closeModal={closeSortbyModal}
         setSortbyValue={setSortbyValue}
+        sortByValue={sortByValue}
         setSortByBody={setSortByBody}
       />
       <PracticeDurationBottomSheet

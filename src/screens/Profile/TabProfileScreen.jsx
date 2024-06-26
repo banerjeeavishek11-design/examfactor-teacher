@@ -12,7 +12,7 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import moment from 'moment';
 import { launchImageLibrary } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
-import User from '@/theme/assets/images/user.png';
+import User from '../../theme/assets/images/tabUserSidebar.png';
 import Teacher from '@/theme/assets/images/teacher.png';
 import ClassTeacher from '@/theme/assets/images/classteacher.png';
 import { Divider } from 'react-native-paper';
@@ -234,15 +234,15 @@ const TabProfileScreen = (props) => {
                             width: 75,
                             borderRadius: 100,
                             opacity: 0.5,
-                            backgroundColor: colors.white,
+                            // backgroundColor: colors.white,
                           },
                         ]}
                       >
                         <ImageVariant
                           testID="brand-img"
                           style={{
-                            width: 23,
-                            height: 23,
+                            width: 75,
+                            height: 75,
                             tintColor: colors.white,
                           }}
                           source={User}

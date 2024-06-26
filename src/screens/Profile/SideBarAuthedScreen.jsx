@@ -23,6 +23,7 @@ import appVersion from '../../../package.json';
 import { getUserDetailsByUserId } from '../../services/teacherService';
 import { notifyMessage } from '../../utils/error-toast-API';
 // import { logOutService } from '../../services/authService';
+import { moderateScale } from 'react-native-size-matters';
 
 const SideBarAuthedScreen = (props) => {
   const { colors, layout, fonts } = useTheme();
@@ -228,8 +229,8 @@ const SideBarAuthedScreen = (props) => {
                       {
                         width:
                           userRole === 'TEACHER' && currentSection.assignedAsTeacher
-                            ? '35%'
-                            : '46%',
+                            ? moderateScale(110)
+                            : moderateScale(150),
                         height: 35,
                         backgroundColor: 'green',
                         borderRadius: 4,

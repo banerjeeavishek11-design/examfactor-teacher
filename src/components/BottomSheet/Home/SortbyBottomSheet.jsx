@@ -16,7 +16,7 @@ const sortBy = [
   { id: 'lastTestScore asc', sortBy: 'Last Test Score: Low to High' },
 ];
 
-const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue, setSortByBody }) => {
+const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue, setSortByBody, sortByValue }) => {
   const { fonts, layout, colors } = useTheme();
   const [option, setOption] = useState('Practice Progress: High To Low');
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
@@ -48,7 +48,10 @@ const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue, setSortByBody 
             ]}
           >
             <TouchableOpacity
-              onPress={closeModal}
+              onPress={() => {
+                setOption(sortByValue);
+                closeModal();
+              }}
               style={[{ position: 'absolute', top: -35, left: '92%' }]}
             >
               <ImageVariant
@@ -93,7 +96,10 @@ const SortbyBottomSheet = ({ visible, closeModal, setSortbyValue, setSortByBody 
             </View>
             <View style={styles.footer}>
               <TouchableOpacity
-                onPress={closeModal}
+                onPress={() => {
+                  setOption(sortByValue);
+                  closeModal();
+                }}
                 style={[
                   layout.justifyCenter,
                   styles.footerButton,
