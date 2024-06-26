@@ -85,8 +85,8 @@ const QuestionAnalysisScreen = () => {
 
   const getQuestions = () => {
     let params = {
-      page: 1,
-      size: 5,
+      // page: 1,
+      // size: 5,
       // summary: true,
       // active: true,
       // sort: ['string']
