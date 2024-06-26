@@ -70,11 +70,6 @@ const ReferandearnBottomsheet = (props) => {
       });
   };
 
-  const handleSlideDown = () => {
-    setOpenSelectClassBottomSheet(false);
-    setOption((prev) => prev);
-  };
-
   const handleOptionChange = (op) => {
     setOption(op);
     const classSelected = teacherdetails.find((ele) => ele.sectionName === op);
@@ -110,6 +105,11 @@ const ReferandearnBottomsheet = (props) => {
   };
 
   const handleCancel = () => {
+    setOption(lastConfirmedOption);
+    setOpenSelectClassBottomSheet(false);
+  };
+
+  const handleSlideDown = () => {
     setOption(lastConfirmedOption);
     setOpenSelectClassBottomSheet(false);
   };

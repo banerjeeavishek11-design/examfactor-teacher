@@ -303,7 +303,7 @@ const EditPersonalDetailBottomSheet = ({
                                 layout.itemsCenter,
                                 {
                                   backgroundColor:
-                                    profileData.gender === 'Male'
+                                    profileData.gender === 'MALE'
                                       ? '#2F2B39'
                                       : colors.bottomTabBackground,
                                   width: '45%',
@@ -312,7 +312,7 @@ const EditPersonalDetailBottomSheet = ({
                                   borderRadius: 14,
                                   borderWidth: 1,
                                   borderColor:
-                                    profileData.gender === 'Male' ? colors.gray400 : 'transparent',
+                                    profileData.gender === 'MALE' ? colors.gray400 : 'transparent',
                                 },
                               ]}
                               onPress={() => {}}
@@ -323,7 +323,7 @@ const EditPersonalDetailBottomSheet = ({
                                   fonts.bold,
                                   layout.textCenter,
                                   {
-                                    color: profileData.gender === 'Male' ? '#7AF4FC' : '#7A7A82',
+                                    color: profileData.gender === 'MALE' ? '#7AF4FC' : '#7A7A82',
                                   },
                                 ]}
                               >
@@ -336,7 +336,7 @@ const EditPersonalDetailBottomSheet = ({
                                 layout.itemsCenter,
                                 {
                                   backgroundColor:
-                                    profileData.gender !== 'Male'
+                                    profileData.gender === 'FEMALE'
                                       ? '#2F2B39'
                                       : colors.bottomTabBackground,
                                   width: '45%',
@@ -344,7 +344,9 @@ const EditPersonalDetailBottomSheet = ({
                                   borderRadius: 14,
                                   borderWidth: 1,
                                   borderColor:
-                                    profileData.gender !== 'Male' ? colors.gray400 : 'transparent',
+                                    profileData.gender === 'FEMALE'
+                                      ? colors.gray400
+                                      : 'transparent',
                                 },
                               ]}
                               onPress={() => {}}
@@ -355,7 +357,7 @@ const EditPersonalDetailBottomSheet = ({
                                   fonts.bold,
                                   layout.textCenter,
                                   {
-                                    color: profileData.gender !== 'Male' ? '#7AF4FC' : '#7A7A82',
+                                    color: profileData.gender === 'FEMALE' ? '#7AF4FC' : '#7A7A82',
                                   },
                                 ]}
                               >
@@ -363,6 +365,40 @@ const EditPersonalDetailBottomSheet = ({
                               </Text>
                             </TouchableOpacity>
                           </View>
+                          <TouchableOpacity
+                            style={[
+                              layout.justifyCenter,
+                              layout.itemsCenter,
+                              {
+                                backgroundColor:
+                                  profileData.gender === 'OTHER'
+                                    ? '#2F2B39'
+                                    : colors.bottomTabBackground,
+                                width: '100%',
+                                height: 42,
+                                marginTop: '4%',
+                                paddingHorizontal: 12,
+                                borderRadius: 14,
+                                borderWidth: 1,
+                                borderColor:
+                                  profileData.gender === 'OTHER' ? colors.gray400 : 'transparent',
+                              },
+                            ]}
+                            onPress={() => {}}
+                          >
+                            <Text
+                              style={[
+                                fonts.size_14,
+                                fonts.bold,
+                                layout.textCenter,
+                                {
+                                  color: profileData.gender === 'OTHER' ? '#7AF4FC' : '#7A7A82',
+                                },
+                              ]}
+                            >
+                              Other
+                            </Text>
+                          </TouchableOpacity>
                         </View>
 
                         <View style={styles.inputContainer}>

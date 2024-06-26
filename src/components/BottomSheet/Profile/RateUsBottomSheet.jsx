@@ -59,7 +59,7 @@ const RateUsBottomSheet = (props) => {
 
   const [comment, setComment] = useState('');
   const [selectedIssues, setSelectedIssues] = useState([]);
-  const isDisabled = selectedIssues.length === 0;
+  const isDisabled = selectedIssues?.length === 0;
 
   useEffect(() => {
     // Update optionsData based on the selectedRating

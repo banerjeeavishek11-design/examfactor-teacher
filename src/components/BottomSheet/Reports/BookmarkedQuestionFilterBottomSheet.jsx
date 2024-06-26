@@ -20,14 +20,6 @@ const BookmarkedQuestionFilterBottomSheet = (props) => {
   const { layout, colors, fonts } = useTheme();
   const isTablet = useSelector((state) => state.screenDimensions.isTablet);
 
-  // const handleApply = async () => {
-  //   try {
-  //     await getBookmarkQuestionsAfterFilter();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const handleToggle = (chapterCode, topicCode) => {
     if (selectedItem?.includes(topicCode)) {
       setSelectedItem((prev) => prev.filter((e) => e !== topicCode));
