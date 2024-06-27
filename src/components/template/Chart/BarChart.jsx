@@ -24,7 +24,10 @@ const GradientBarChart = ({
   const singleBarWidth = 16;
 
   // Calculate y-axis labels
-  const yAxisLabels = Array.from({ length: 5 }, (_, i) => maxValue * (5 - i));
+  const yAxisLabels = Array.from({ length: 5 }, (_, i) => (maxValue / 4) * (4 - i));
+  console.log('yAxisLabels', yAxisLabels);
+  console.log('max Val', maxValue);
+  console.log('max arr', maxArr);
   return (
     <View
       style={{
@@ -92,7 +95,7 @@ const GradientBarChart = ({
               color: '#96A7AF',
             }}
           >
-            {label.toFixed(0) - 1}
+            {maxValue < 2 ? label.toFixed(1) : label.toFixed(0)}
           </Text>
         ))}
       </View>
