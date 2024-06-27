@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { useSelector } from 'react-redux';
@@ -30,8 +30,8 @@ import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getClasswoksByTeacher } from '../../services/ActivateServices/activeClassworkServices';
 import { getDiagnosticsByTeacher } from '../../services/activateDiagnosticService';
 import { getHomeworkByTeacher } from '../../services/activateHomeworkService';
-import Caraosal from './Caraosal';
 import Header from '../../components/template/Header/Header';
+import BarchartCaraosel from '../../components/carousel/BarchartCaraosel';
 
 const configForScore = [
   { groupName: '<60', from: 0, to: 60 },
@@ -207,7 +207,6 @@ const HomeScreen = () => {
     getSubjectWiseReport(params)
       .then((res) => {
         setConsolidatedReportData(res.data);
-        console.log('res from consolidate', res.data);
       })
       .catch((error) => {
         if (error?.response?.status === 404 && error?.response?.status !== 401)
@@ -314,6 +313,9 @@ const HomeScreen = () => {
 
   const resultScr = categorizeData(scoreChartData, configForScore);
   const resultStudtim = categorizeData(studyTimeChartData, configForStudyTime);
+
+  const data = [[...resultScr[0]], [...resultStudtim[0]]];
+  const labels = [[...resultScr[1]], [...resultStudtim[1]]];
 
   return (
     <SafeScreen>
@@ -515,7 +517,20 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} />
+        {/* <Caraosal scoreChartData={resultScr} studyTimeChartData={resultStudtim} /> */}
+        <View style={{ marginVertical: '2%' }}>
+          <BarchartCaraosel
+            data={data}
+            labels={labels}
+            colors={[['#7af4fc', '#27d4fa']]}
+            width={Dimensions.get('window').width - 30}
+            otherStyles={{ borderRadius: 6, marginTop: '4%', paddingTop: 30 }}
+            barBorderRadius={3}
+            height={220}
+            xAxisTitle={'No. Of Students'}
+            yAxisTitle={'Achievable Score %'}
+          />
+        </View>
 
         <View
           style={[layout.display, layout.rowHCenter, layout.justifyBetween, { marginTop: '6%' }]}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { View, Dimensions, StyleSheet, FlatList } from 'react-native';
 import React from 'react';
-import ChapterInsightBarCard from '../card/ChapterInsightBarCard';
+import HomeBarCard from '../card/HomeBarCard';
 import { useTheme } from '../../theme';
 
 // const storage = new MMKV();
@@ -11,7 +11,7 @@ import { useTheme } from '../../theme';
 const { width } = Dimensions.get('window');
 const ITEM_LENGTH = width * 0.92;
 
-const ChapterInsightCarousel = ({
+const BarchartCaraosel = ({
   data,
   colors,
   width,
@@ -25,8 +25,6 @@ const ChapterInsightCarousel = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { layout } = useTheme();
-
-  console.log('labelsss', labels);
 
   return (
     <View style={styles.container}>
@@ -43,7 +41,7 @@ const ChapterInsightCarousel = ({
                 alignItems: 'center',
               }}
             >
-              <ChapterInsightBarCard
+              <HomeBarCard
                 data={[item]}
                 colors={colors}
                 width={width}
@@ -87,7 +85,7 @@ const ChapterInsightCarousel = ({
   );
 };
 
-export default ChapterInsightCarousel;
+export default BarchartCaraosel;
 
 const styles = StyleSheet.create({
   container: {

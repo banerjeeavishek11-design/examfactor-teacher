@@ -183,6 +183,9 @@ const StudentWiseReportScreen = () => {
   });
   data.push(scoreArray, timeSpentArray);
 
+  console.log('daraaa', data);
+  console.log('stattatat', chaptersStatusInfo);
+
   return (
     <SafeScreen>
       <View
