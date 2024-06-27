@@ -1,4 +1,13 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from '@/theme';
 import { SafeScreen } from '@/components/template';
@@ -9,15 +18,16 @@ import DownArrow from '@/theme/assets/images/Downarrow.png';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import Filter from '@/theme/assets/images/questionAnalysisFilter.png';
 import SelectChapterQABottomSheet from '@/components/BottomSheet/Reports/SelectChapterQABottomSheet';
-import questions from './QuestionAnalysisDummyQuestions';
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
-import Bookmark from '@/theme/assets/images/questionBookmark.png';
+import Bookmark from '@/theme/assets/images/bookmark.png';
 import MostlyFilterBottomSheet from '@/components/BottomSheet/Reports/MostlyFilterBottomSheet';
 import Cross from '@/theme/assets/images/cross.png';
 import { useNavigation } from '@react-navigation/native';
 import { getQuestionAnalysis } from '../../services/ReportsServices/reportsServices';
 import { MMKV } from 'react-native-mmkv';
 import SelectQuestionTypeBottomSheet from '../../components/BottomSheet/Reports/SelectQuestionTypeBottomSheet';
+import ContentParser from '../../components/ContentParser/ContentParser';
+import { notifyMessage } from '../../utils/error-toast-API';
 
 const storage = new MMKV();
 
@@ -28,7 +38,6 @@ const QuestionAnalysisScreen = () => {
   const sectionName = useSelector((state) => state.selectedSubject.sectionName);
   const resFromMMKV = storage.getString('teacherDetails');
   const teacherDetails = resFromMMKV ? JSON.parse(resFromMMKV) : null;
-  const [chapterQuestions, setChapterQuestions] = useState([]);
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [chapterOption, setChapterOption] = useState(null);
   const [selectChapterQAModalVisible, setSelectChapterQAModalVisible] = useState(false);
@@ -39,6 +48,7 @@ const QuestionAnalysisScreen = () => {
   const [openQuestionTypeModal, setOpenQuestionTypeModal] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [qaData, setQaData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeFilterModal = () => {
     setFilterModalVisible(false);
@@ -65,17 +75,6 @@ const QuestionAnalysisScreen = () => {
   }, [sectionName, teacherDetails]);
 
   useEffect(() => {
-    if (selectedChapter !== null) {
-      const result = questions.find((chapter) => chapter.chapterId === selectedChapter?.chapterId);
-      if (result?.data === undefined) {
-        setChapterQuestions([]);
-        return;
-      }
-      setChapterQuestions(result?.data);
-    }
-  }, [selectedChapter]);
-
-  useEffect(() => {
     if (chapterOption && questionActivityType) getQuestions();
   }, [subjectId, chapterOption, questionActivityType]);
 
@@ -84,15 +83,10 @@ const QuestionAnalysisScreen = () => {
   };
 
   const getQuestions = () => {
+    setIsLoading(true);
     let params = {
-      // page: 1,
-      // size: 5,
-      // summary: true,
-      // active: true,
-      // sort: ['string']
-      // searchKey: 'string',
-      // countOnly: true,
-      // eventType: 'string',
+      page: 1,
+      size: 5,
       chapterId: chapterOption,
       subjectId: subjectId,
       gradeId: gradeId,
@@ -101,16 +95,31 @@ const QuestionAnalysisScreen = () => {
     };
     getQuestionAnalysis(params)
       .then((res) => {
-        setQaData(res.data);
-        console.log('response of Q Analysis', res.data);
+        setQaData(res.data.content);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log('error', error);
+        setIsLoading(false);
+        if (
+          error?.response?.status === 400 ||
+          error.code === 'ERR-10' ||
+          error?.response?.status === 401
+        ) {
+          notifyMessage('unable to fetch Questionlist');
+        }
       });
   };
+
+  const goToSolutionScreen = (questions) => {
+    navigation.navigate('QuestionSolutionScreen', { questions: questions });
+  };
+
   return (
     <SafeScreen>
-      <ScrollView contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}>
+      <ScrollView
+        contentContainerStyle={[layout.paddingForFullScreen, { paddingTop: '2%' }]}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <View style={[layout.row, layout.itemsCenter, layout.justifyBetween]}>
             <View
@@ -282,122 +291,148 @@ const QuestionAnalysisScreen = () => {
           <View>
             {selectedChapter !== null ? (
               <>
-                {!qaData || qaData.length === 0 ? (
-                  <View style={(styles.loader, { marginTop: isTablet ? '20%' : '50%' })}>
-                    <Text
-                      style={[
-                        fonts.size_20,
-                        fonts.fontWeight_small,
-                        fonts.alignCenter,
-                        { color: colors.white },
-                      ]}
-                    >
-                      No Data Available
-                    </Text>
+                {isLoading ? (
+                  <View style={styles.loader}>
+                    <ActivityIndicator size="large" color={colors.termsLinkColor} />
                   </View>
                 ) : (
-                  <View>
-                    {questions[0].data.map((ele) => {
-                      return (
-                        <View key={ele.qNo}>
-                          <View
-                            style={[
-                              layout.fullWidth,
-                              isTablet ? { padding: '2%' } : layout.paddingForCard,
-                              {
-                                height: 'auto',
-                                backgroundColor: colors.cardBackgroundColor,
-                                borderRadius: 16,
-                                marginTop: '5%',
-                              },
-                            ]}
-                          >
-                            <View
-                              style={[layout.row, { width: isTablet ? '95%' : '80%', gap: 10 }]}
-                            >
-                              <Text
+                  <>
+                    {qaData?.length === 0 ? (
+                      <View style={(styles.loader, { marginTop: isTablet ? '20%' : '50%' })}>
+                        <Text
+                          style={[
+                            fonts.size_20,
+                            fonts.fontWeight_small,
+                            fonts.alignCenter,
+                            { color: colors.white },
+                          ]}
+                        >
+                          No Data Available
+                        </Text>
+                      </View>
+                    ) : (
+                      <View>
+                        {qaData?.map((ele, i) => {
+                          return (
+                            <View key={ele?.id}>
+                              <View
                                 style={[
-                                  fonts.size_14,
-                                  fonts.fontWeight_small,
-                                  { color: colors.white },
+                                  layout.fullWidth,
+                                  isTablet ? { padding: '2%' } : layout.paddingForCard,
+                                  {
+                                    height: 'auto',
+                                    backgroundColor: colors.cardBackgroundColor,
+                                    borderRadius: 16,
+                                    marginTop: '5%',
+                                  },
                                 ]}
                               >
-                                {ele.qNo}.
-                              </Text>
-                              <View>
-                                <Text
-                                  style={[
-                                    fonts.size_14,
-                                    fonts.fontWeight_small,
-                                    { color: colors.white },
-                                  ]}
-                                >
-                                  {ele.question}
-                                </Text>
-                                <View
-                                  style={[
-                                    layout.rowHCenter,
-                                    layout.itemsCenter,
-                                    { marginTop: isTablet ? '2%' : '4%', gap: 8 },
-                                  ]}
-                                >
-                                  <Image source={Weak} style={{ width: 20, height: 20 }} />
-                                  <Text
-                                    style={[
-                                      fonts.size_12,
-                                      fonts.fontWeight_small,
-                                      { color: colors.gray100 },
-                                    ]}
-                                  >
-                                    Weak for 68% of the student
-                                  </Text>
-                                </View>
                                 <View
                                   style={[
                                     layout.row,
-                                    layout.justifyBetween,
-                                    { marginTop: isTablet ? '2%' : '5%' },
+                                    { width: isTablet ? '95%' : '100%', gap: 10 },
                                   ]}
                                 >
-                                  <TouchableOpacity
-                                    style={[layout.rowHCenter, { gap: 2 }]}
-                                    onPress={() =>
-                                      navigation.navigate('QuestionSolutionScreen', {
-                                        AllQuestions: chapterQuestions,
-                                        currentQuestionId: ele.qNo,
-                                        currentQuestion: ele.question,
-                                      })
-                                    }
+                                  <Text
+                                    style={[
+                                      fonts.size_14,
+                                      fonts.fontWeight_small,
+                                      { color: colors.white },
+                                    ]}
                                   >
-                                    <Text
+                                    {i + 1}.
+                                  </Text>
+                                  <View style={{ marginTop: '-3%', width: '90%' }}>
+                                    <View pointerEvents="none">
+                                      <ContentParser
+                                        content={ele?.question?.question.questionContents}
+                                      />
+                                    </View>
+                                    <View
                                       style={[
-                                        fonts.size_12,
-                                        fonts.fontWeight_small,
-                                        { color: colors.termsLinkColor },
+                                        layout.rowHCenter,
+                                        layout.itemsCenter,
+                                        { marginTop: isTablet ? '2%' : '4%', gap: 8 },
                                       ]}
                                     >
-                                      View Solution
-                                    </Text>
-                                    <Image
-                                      style={{
-                                        width: 10,
-                                        height: 8,
-                                        tintColor: colors.termsLinkColor,
-                                      }}
-                                      source={RightArrow}
-                                    />
-                                  </TouchableOpacity>
+                                      <Image source={Weak} style={{ width: 20, height: 20 }} />
+                                      <Text
+                                        style={[
+                                          fonts.size_12,
+                                          fonts.fontWeight_small,
+                                          { color: colors.gray100 },
+                                        ]}
+                                      >
+                                        {`Weak for ${ele?.weakPercentage}% of the student!`}
+                                      </Text>
+                                    </View>
+
+                                    <View
+                                      style={[
+                                        layout.rowHCenter,
+                                        layout.justifyBetween,
+                                        { width: '100%' },
+                                      ]}
+                                    >
+                                      <View
+                                        style={[
+                                          layout.row,
+                                          layout.justifyBetween,
+                                          { marginTop: isTablet ? '2%' : '5%' },
+                                        ]}
+                                      >
+                                        <TouchableOpacity
+                                          style={[layout.rowHCenter, { gap: 2, width: '95%' }]}
+                                          onPress={() =>
+                                            goToSolutionScreen(ele?.question?.question)
+                                          }
+                                        >
+                                          <Text
+                                            style={[
+                                              fonts.size_12,
+                                              fonts.fontWeight_small,
+                                              { color: colors.termsLinkColor },
+                                            ]}
+                                          >
+                                            View Solution
+                                          </Text>
+                                          <Image
+                                            style={{
+                                              width: 10,
+                                              height: 8,
+                                              tintColor: colors.termsLinkColor,
+                                            }}
+                                            source={RightArrow}
+                                          />
+                                        </TouchableOpacity>
+                                      </View>
+                                      <TouchableOpacity style={[layout.justifyEnd, {}]}>
+                                        <ImageBackground
+                                          source={Bookmark}
+                                          style={{ width: 30, height: 25 }}
+                                        >
+                                          <Text
+                                            style={[
+                                              fonts.size_14,
+                                              fonts.fontWeight_small,
+                                              fonts.alignCenter,
+                                              { color: colors.white },
+                                            ]}
+                                          >
+                                            {ele?.bookmarkCount}
+                                          </Text>
+                                        </ImageBackground>
+                                      </TouchableOpacity>
+                                    </View>
+                                  </View>
                                 </View>
                               </View>
-                              <TouchableOpacity style={[layout.justifyEnd]}>
-                                <Image source={Bookmark} />
-                              </TouchableOpacity>
                             </View>
-                          </View>
-                        </View>
-                      );
-                    })}
-                  </View>
+                          );
+                        })}
+                      </View>
+                    )}
+                  </>
                 )}
               </>
             ) : (
@@ -482,17 +517,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  loader: {
+    marginTop: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
-
-// import { Text, View } from 'react-native';
-// import React from 'react';
-
-// const QuestionAnalysisTab = () => {
-//   return (
-//     <View>
-//       <Text>QuestionAnalysisTab</Text>
-//     </View>
-//   );
-// };
-
-// export default QuestionAnalysisTab;
