@@ -31,7 +31,7 @@ const BarchartCaraosel = ({
       <FlatList
         data={data}
         renderItem={({ item, index }) => {
-          const dynamicYAxisTitle = index === 0 ? 'Achievable Score %' : 'Achievable Time Spent %';
+          const dynamicXAxisTitle = index === 0 ? 'Achievable Score %' : 'Achievable Time Spent %';
           return (
             <View
               key={index}
@@ -48,8 +48,8 @@ const BarchartCaraosel = ({
                 height={height}
                 otherStyles={otherStyles}
                 barBorderRadius={barBorderRadius}
-                xAxisTitle={xAxisTitle}
-                yAxisTitle={dynamicYAxisTitle}
+                xAxisTitle={dynamicXAxisTitle}
+                yAxisTitle={yAxisTitle}
                 labels={labels}
               />
             </View>

@@ -527,8 +527,8 @@ const HomeScreen = () => {
             otherStyles={{ borderRadius: 6, marginTop: '4%', paddingTop: 30 }}
             barBorderRadius={3}
             height={220}
-            xAxisTitle={'No. Of Students'}
-            yAxisTitle={'Achievable Score %'}
+            xAxisTitle={'Achievable Score %'}
+            yAxisTitle={'No. Of Students'}
           />
         </View>
 

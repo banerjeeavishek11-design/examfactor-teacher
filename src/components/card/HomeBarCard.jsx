@@ -21,7 +21,7 @@ const HomeBarCard = ({
     return <Text>No data</Text>;
   }
 
-  const actLAb = yAxisTitle === 'Achievable Score %' ? labels[0] : labels[1];
+  const actLAb = xAxisTitle === 'Achievable Score %' ? labels[0] : labels[1];
 
   const innerHeight = height - 30;
   const innerWidth = width - 30;
