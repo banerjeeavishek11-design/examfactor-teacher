@@ -133,6 +133,8 @@ const SubjectDetailsScreen = () => {
           </View>
         )}
         {searchChapterName?.map((ele) => {
+          const selectedChapter = chapList.find((element) => element.chapterId === ele.chapterId);
+          const totalTopicCount = selectedChapter?.topics.length;
           return (
             <View
               key={ele.chapterId}
@@ -240,7 +242,7 @@ const SubjectDetailsScreen = () => {
                         },
                       ]}
                     >
-                      {`${ele.activatedTopicCount}/${ele.topicCount}`}
+                      {`${ele.activatedTopicCount}/${totalTopicCount}`}
                     </Text>
                   </View>
                   {isTablet && (
