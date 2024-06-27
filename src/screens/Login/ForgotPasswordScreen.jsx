@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   BackHandler,
   KeyboardAvoidingView,
@@ -131,11 +132,11 @@ const ForgotPasswordScreen = () => {
             />
           </View>
 
-          <TouchableOpacity onPress={() => handleSubmit(handleForgetPassword)}>
+          <TouchableOpacity onPress={handleSubmit(handleForgetPassword)}>
             <PrimaryGradient styleProp={[styles.loginButton, layout.justifyCenter]}>
               <View style={[layout.display, layout.rowHCenter]}>
                 <Text style={[fonts.size_16, fonts.bold, { color: colors.loginBtnTextColor }]}>
-                  GET OTP
+                  GET PASSWORD
                 </Text>
                 <ImageVariant
                   testID="brand-img"

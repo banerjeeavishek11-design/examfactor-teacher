@@ -1,5 +1,6 @@
 import { authService } from '../environment/Environment';
 import api from '../utils/axios.config';
+import axios from 'axios';
 
 export const loginByUsername = async (requiredBody) => {
   return await api.post(`${authService}/v1/auth/login`, requiredBody);
@@ -20,5 +21,5 @@ export const logOutService = async (refreshToken) => {
   });
 };
 export const forgotPassword = async (requiredBody) => {
-  return await api.put(`${authService}/v1/auth/forget-password`, requiredBody);
+  return await axios.put(`${authService}/v1/auth/forgot-password`, requiredBody);
 };
