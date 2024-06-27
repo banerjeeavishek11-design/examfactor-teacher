@@ -10,6 +10,7 @@ import SelectChapterBottomSheet from '@/components/BottomSheet/Reports/SelectCha
 import SelectAreaBottomSheet from '@/components/BottomSheet/Reports/SelectAreaBottomSheet';
 import PrimaryGradient from '@/components/template/LinearGradient/PrimaryGradient';
 import Weak from '@/theme/assets/images/subtopicWeakIcon.png';
+import Strong from '@/theme/assets/images/strong.png';
 import { getReportInsights } from '../../services/ReportsServices/reportsServices';
 import { getChaptersBySubjectId } from '../../services/chapterListService';
 import { getTopicDescById, getSubTopicDescById, getChapterDescById } from '../../utils/namesByIds';
@@ -303,7 +304,7 @@ const InsightsScreen = () => {
                                     { marginTop: isTablet ? '1%' : '4%', gap: 8 },
                                   ]}
                                 >
-                                  <Image source={Weak} style={{ width: 25, height: 25 }} />
+                                  <Image source={Strong} style={{ width: 25, height: 25 }} />
                                   <Text
                                     style={[
                                       fonts.size_12,
