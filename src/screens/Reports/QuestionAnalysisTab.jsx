@@ -49,6 +49,7 @@ const QuestionAnalysisScreen = () => {
   const [selectedValue, setSelectedValue] = useState(null);
   const [qaData, setQaData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0);
 
   const closeFilterModal = () => {
     setFilterModalVisible(false);
@@ -74,28 +75,61 @@ const QuestionAnalysisScreen = () => {
     }
   }, [sectionName, teacherDetails]);
 
+  // useEffect(() => {
+  //   if (chapterOption && questionActivityType) getQuestions();
+  // }, [subjectId, chapterOption, questionActivityType]);
+
   useEffect(() => {
-    if (chapterOption && questionActivityType) getQuestions();
+    if (chapterOption && questionActivityType) {
+      setPage(0); // Reset page to 0 when dependencies change
+      getQuestions(0, true);
+    }
   }, [subjectId, chapterOption, questionActivityType]);
 
-  const changeQuestionType = (option) => {
-    setSelectedQuestionType(option);
-  };
+  // const getQuestions = () => {
+  //   setIsLoading(true);
+  //   let params = {
+  //     page: 2,
+  //     size: 5,
+  //     chapterId: chapterOption,
+  //     subjectId: subjectId,
+  //     gradeId: gradeId,
+  //     activityType: questionActivityType,
+  //     processFlag: false,
+  //   };
+  //   getQuestionAnalysis(params)
+  //     .then((res) => {
+  //       setQaData(res.data.content);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false);
+  //       if (
+  //         error?.response?.status === 400 ||
+  //         error.code === 'ERR-10' ||
+  //         error?.response?.status === 401
+  //       ) {
+  //         notifyMessage('unable to fetch Questionlist');
+  //       }
+  //     });
+  // };
 
-  const getQuestions = () => {
+  const getQuestions = (page, processFlag) => {
     setIsLoading(true);
-    let params = {
-      page: 1,
+    const params = {
+      page: page,
       size: 5,
       chapterId: chapterOption,
       subjectId: subjectId,
       gradeId: gradeId,
       activityType: questionActivityType,
-      processFlag: true,
+      processFlag: processFlag,
     };
     getQuestionAnalysis(params)
       .then((res) => {
-        setQaData(res.data.content);
+        setQaData((prevQaData) =>
+          page === 0 ? res.data.content : [...prevQaData, ...res.data.content]
+        );
         setIsLoading(false);
       })
       .catch((error) => {
@@ -105,13 +139,23 @@ const QuestionAnalysisScreen = () => {
           error.code === 'ERR-10' ||
           error?.response?.status === 401
         ) {
-          notifyMessage('unable to fetch Questionlist');
+          notifyMessage('Unable to fetch question list');
         }
       });
   };
 
   const goToSolutionScreen = (questions) => {
     navigation.navigate('QuestionSolutionScreen', { questions: questions });
+  };
+
+  const loadMoreQuestions = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    getQuestions(nextPage, false);
+  };
+
+  const changeQuestionType = (option) => {
+    setSelectedQuestionType(option);
   };
 
   return (
@@ -430,6 +474,32 @@ const QuestionAnalysisScreen = () => {
                             </View>
                           );
                         })}
+                        {isLoading ? (
+                          <ActivityIndicator size="large" color="#0000ff" />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={loadMoreQuestions}
+                            style={{
+                              backgroundColor: colors.cardBackgroundColor,
+                              width: '100%',
+                              height: 42,
+                              borderRadius: 16,
+                              marginTop: '2%',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: colors.termsLinkColor,
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
+                              SEE MORE
+                            </Text>
+                          </TouchableOpacity>
+                        )}
                       </View>
                     )}
                   </>

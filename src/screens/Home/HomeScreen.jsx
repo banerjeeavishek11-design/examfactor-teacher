@@ -207,7 +207,6 @@ const HomeScreen = () => {
     getSubjectWiseReport(params)
       .then((res) => {
         setConsolidatedReportData(res.data);
-        console.log('res from consolidate', res.data);
       })
       .catch((error) => {
         if (error?.response?.status === 404 && error?.response?.status !== 401)
