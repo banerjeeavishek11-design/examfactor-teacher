@@ -84,35 +84,7 @@ const QuestionAnalysisScreen = () => {
       setPage(0); // Reset page to 0 when dependencies change
       getQuestions(0, true);
     }
-  }, [subjectId, chapterOption, questionActivityType]);
-
-  // const getQuestions = () => {
-  //   setIsLoading(true);
-  //   let params = {
-  //     page: 2,
-  //     size: 5,
-  //     chapterId: chapterOption,
-  //     subjectId: subjectId,
-  //     gradeId: gradeId,
-  //     activityType: questionActivityType,
-  //     processFlag: false,
-  //   };
-  //   getQuestionAnalysis(params)
-  //     .then((res) => {
-  //       setQaData(res.data.content);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       setIsLoading(false);
-  //       if (
-  //         error?.response?.status === 400 ||
-  //         error.code === 'ERR-10' ||
-  //         error?.response?.status === 401
-  //       ) {
-  //         notifyMessage('unable to fetch Questionlist');
-  //       }
-  //     });
-  // };
+  }, [subjectId, chapterOption, questionActivityType, selectedFilter]);
 
   const getQuestions = (page, processFlag) => {
     setIsLoading(true);
