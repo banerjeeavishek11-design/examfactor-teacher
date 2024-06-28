@@ -26,8 +26,6 @@ const ChapterInsightCarousel = ({
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { layout } = useTheme();
 
-  console.log('labelsss', labels);
-
   return (
     <View style={styles.container}>
       <FlatList

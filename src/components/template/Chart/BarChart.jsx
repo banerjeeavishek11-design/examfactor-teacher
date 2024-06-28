@@ -25,9 +25,6 @@ const GradientBarChart = ({
 
   // Calculate y-axis labels
   const yAxisLabels = Array.from({ length: 5 }, (_, i) => (maxValue / 4) * (4 - i));
-  console.log('yAxisLabels', yAxisLabels);
-  console.log('max Val', maxValue);
-  console.log('max arr', maxArr);
   return (
     <View
       style={{

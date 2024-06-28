@@ -76,7 +76,7 @@ const QuestionAnalysisScreen = () => {
 
   useEffect(() => {
     if (chapterOption && questionActivityType) getQuestions();
-  }, [subjectId, chapterOption, questionActivityType]);
+  }, [subjectId, chapterOption, questionActivityType, selectedFilter]);
 
   const changeQuestionType = (option) => {
     setSelectedQuestionType(option);
@@ -84,11 +84,14 @@ const QuestionAnalysisScreen = () => {
 
   const getQuestions = () => {
     setIsLoading(true);
+    const filterString =
+      selectedFilter === 'Mostly Incorrect' ? 'incorrectCount dsc' : 'bookmarkCount dsc';
     let params = {
       page: 1,
       size: 5,
       chapterId: chapterOption,
       subjectId: subjectId,
+      sort: selectedFilter && filterString,
       gradeId: gradeId,
       activityType: questionActivityType,
       processFlag: true,

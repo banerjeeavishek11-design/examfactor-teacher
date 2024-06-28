@@ -59,7 +59,6 @@ export const bookMarkedQuestionsList = async (params) => {
 };
 
 export const getbookMarkedQuestionsListAfterSearch = async (queryParams) => {
-  console.log('queryParams', queryParams);
   return await api.get(`${b2bStudentService}/v1/my-bookmark`, {
     params: queryParams,
   });

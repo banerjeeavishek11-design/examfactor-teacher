@@ -353,7 +353,6 @@ const HomeWorkTab = () => {
                                   )}
                                 {topicWiseResponse[0]?.b2BStudentHomeWorkReportList?.map(
                                   (item, index) => {
-                                    console.log('item', item);
                                     return (
                                       <>
                                         {index < seeMaxStudent && (
