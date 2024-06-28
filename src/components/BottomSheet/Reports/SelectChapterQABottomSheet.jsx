@@ -103,7 +103,7 @@ const SelectChapterQABottomSheet = ({
                   <TouchableOpacity
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
-                    onPress={() => handleOptionChange(ele.chapterId, ele.chapterDesc, i)}
+                    onPress={() => handleOptionChange(ele?.chapterId, ele?.chapterDesc, i)}
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
@@ -113,7 +113,7 @@ const SelectChapterQABottomSheet = ({
                       {ele.chapterId}:
                     </Text> */}
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.chapterDesc}
+                      {ele?.chapterDesc}
                     </Text>
                   </TouchableOpacity>
                 ))}

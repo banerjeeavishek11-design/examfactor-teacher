@@ -103,18 +103,18 @@ const SelectChapterBottomSheet = ({
                     key={ele.chapterId}
                     style={styles.radioButtonContainer}
                     onPress={() =>
-                      handleOptionChange(ele.chapterId, ele.unitId, ele.chapterDesc, index)
+                      handleOptionChange(ele?.chapterId, ele?.unitId, ele?.chapterDesc, index)
                     }
                     activeOpacity={1}
                   >
                     <View style={{ marginLeft: 10 }}>
-                      <RadioButton isActive={chapOption === ele.chapterId} />
+                      <RadioButton isActive={chapOption === ele?.chapterId} />
                     </View>
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
                       {`C${index + 1}`}:
                     </Text>
                     <Text style={[styles.radioButtonText, fonts.size_14, fonts.fontWeignt_600]}>
-                      {ele.chapterDesc}
+                      {ele?.chapterDesc}
                     </Text>
                   </TouchableOpacity>
                 ))}
